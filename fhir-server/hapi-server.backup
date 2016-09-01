@@ -1,0 +1,2485 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
+
+-- Started on 2016-08-22 12:49:07
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2492 (class 1262 OID 16689)
+-- Name: hapi; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE hapi WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'English_United States.1252' LC_CTYPE = 'English_United States.1252';
+
+
+ALTER DATABASE hapi OWNER TO postgres;
+
+\connect hapi
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12355)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2495 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 181 (class 1259 OID 16690)
+-- Name: allergy_intolerance; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE allergy_intolerance (
+    id integer NOT NULL,
+    identifier_system character(100),
+    identifier_value character(100),
+    patient integer,
+    recorder integer,
+    substance_code character(100),
+    substance_display character(100),
+    status character(100),
+    criticality character(100),
+    category character(100),
+    reaction json,
+    substance_system character varying
+);
+
+
+ALTER TABLE allergy_intolerance OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1259 OID 16696)
+-- Name: auth_temp; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE auth_temp (
+    id integer NOT NULL,
+    client_id character varying(255),
+    client_secret character varying(255),
+    auth_code character varying(255),
+    access_token character varying(255),
+    aud character varying(255),
+    expiry character varying(255),
+    scope character varying(255),
+    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
+    redirect_uri character(255),
+    state character(255),
+    transaction_id character(255),
+    refresh_token character varying(255),
+    launch_patient_id integer
+);
+
+
+ALTER TABLE auth_temp OWNER TO postgres;
+
+--
+-- TOC entry 183 (class 1259 OID 16703)
+-- Name: auth_temp_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE auth_temp_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE auth_temp_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2496 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: auth_temp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE auth_temp_id_seq OWNED BY auth_temp.id;
+
+
+--
+-- TOC entry 184 (class 1259 OID 16705)
+-- Name: authenticator; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE authenticator (
+    id integer NOT NULL,
+    name character varying(100)
+);
+
+
+ALTER TABLE authenticator OWNER TO postgres;
+
+--
+-- TOC entry 185 (class 1259 OID 16708)
+-- Name: authenticator_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE authenticator_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE authenticator_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2497 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: authenticator_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE authenticator_id_seq OWNED BY authenticator.id;
+
+
+--
+-- TOC entry 186 (class 1259 OID 16710)
+-- Name: author; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE author (
+    id integer NOT NULL,
+    name character varying(100)
+);
+
+
+ALTER TABLE author OWNER TO postgres;
+
+--
+-- TOC entry 187 (class 1259 OID 16713)
+-- Name: author_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE author_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE author_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2498 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: author_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE author_id_seq OWNED BY author.id;
+
+
+--
+-- TOC entry 188 (class 1259 OID 16715)
+-- Name: careteam; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE careteam (
+    id integer NOT NULL,
+    patient integer,
+    status character varying(150),
+    cat_code character varying(255),
+    cat_system character varying(255)
+);
+
+
+ALTER TABLE careteam OWNER TO postgres;
+
+--
+-- TOC entry 189 (class 1259 OID 16721)
+-- Name: careteam_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE careteam_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE careteam_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2499 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: careteam_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE careteam_id_seq OWNED BY careteam.id;
+
+
+--
+-- TOC entry 190 (class 1259 OID 16723)
+-- Name: careteam_participant; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE careteam_participant (
+    id integer NOT NULL,
+    careteam integer,
+    role_system character varying(255),
+    role_code character varying(255),
+    role_display character varying(255),
+    member_reference character varying(255),
+    member_display character varying(255)
+);
+
+
+ALTER TABLE careteam_participant OWNER TO postgres;
+
+--
+-- TOC entry 191 (class 1259 OID 16729)
+-- Name: careteam_participant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE careteam_participant_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE careteam_participant_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2500 (class 0 OID 0)
+-- Dependencies: 191
+-- Name: careteam_participant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE careteam_participant_id_seq OWNED BY careteam_participant.id;
+
+
+--
+-- TOC entry 192 (class 1259 OID 16731)
+-- Name: clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE clients (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    client_id character varying(255) NOT NULL,
+    client_secret character varying(255) NOT NULL,
+    register_token character varying(255),
+    name character varying(255),
+    org_name character varying(255),
+    contact_name character varying(255),
+    contact_mail character varying(255),
+    scope character varying(255),
+    redirect_uri character varying(255),
+    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
+    status boolean
+);
+
+
+ALTER TABLE clients OWNER TO postgres;
+
+--
+-- TOC entry 193 (class 1259 OID 16738)
+-- Name: clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE clients_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE clients_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2501 (class 0 OID 0)
+-- Dependencies: 193
+-- Name: clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE clients_id_seq OWNED BY clients.id;
+
+
+--
+-- TOC entry 194 (class 1259 OID 16740)
+-- Name: condition; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE condition (
+    id integer NOT NULL,
+    identifier_system character(100),
+    identifier_value character(100),
+    patient integer,
+    asserter integer,
+    code character(100),
+    code_display character(100),
+    category_code character(100),
+    clinical_status character(100),
+    severity_code character(100),
+    onset json,
+    date_recorded date,
+    severity_display character(100),
+    code_system character varying,
+    category_display character varying(100),
+    category_system character varying(100),
+    verification_status character varying(100)
+);
+
+
+ALTER TABLE condition OWNER TO postgres;
+
+--
+-- TOC entry 195 (class 1259 OID 16746)
+-- Name: confidentiality; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE confidentiality (
+    id integer NOT NULL,
+    code character varying(100),
+    display character varying(200),
+    system character varying(100)
+);
+
+
+ALTER TABLE confidentiality OWNER TO postgres;
+
+--
+-- TOC entry 196 (class 1259 OID 16749)
+-- Name: confidentiality_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE confidentiality_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE confidentiality_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2502 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: confidentiality_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE confidentiality_id_seq OWNED BY confidentiality.id;
+
+
+--
+-- TOC entry 197 (class 1259 OID 16751)
+-- Name: content; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE content (
+    id integer NOT NULL,
+    content_type character varying(30),
+    language character varying(10),
+    url character varying(100),
+    content_size integer,
+    title character varying(100)
+);
+
+
+ALTER TABLE content OWNER TO postgres;
+
+--
+-- TOC entry 198 (class 1259 OID 16754)
+-- Name: content_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE content_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE content_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2503 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: content_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE content_id_seq OWNED BY content.id;
+
+
+--
+-- TOC entry 199 (class 1259 OID 16756)
+-- Name: context_event; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE context_event (
+    id integer NOT NULL,
+    code character varying(100),
+    display character varying(200),
+    system character varying(100)
+);
+
+
+ALTER TABLE context_event OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 16759)
+-- Name: context_event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE context_event_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE context_event_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2504 (class 0 OID 0)
+-- Dependencies: 200
+-- Name: context_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE context_event_id_seq OWNED BY context_event.id;
+
+
+--
+-- TOC entry 201 (class 1259 OID 16761)
+-- Name: context_facility_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE context_facility_type (
+    id integer NOT NULL,
+    code character varying(100),
+    display character varying(200),
+    system character varying(100)
+);
+
+
+ALTER TABLE context_facility_type OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 16764)
+-- Name: context_facility_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE context_facility_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE context_facility_type_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2505 (class 0 OID 0)
+-- Dependencies: 202
+-- Name: context_facility_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE context_facility_type_id_seq OWNED BY context_facility_type.id;
+
+
+--
+-- TOC entry 203 (class 1259 OID 16766)
+-- Name: context_period; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE context_period (
+    id integer NOT NULL,
+    start timestamp with time zone,
+    "end" timestamp with time zone
+);
+
+
+ALTER TABLE context_period OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 16769)
+-- Name: custodian; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE custodian (
+    id integer NOT NULL,
+    name character varying(100)
+);
+
+
+ALTER TABLE custodian OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 16772)
+-- Name: custodian_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE custodian_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE custodian_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2506 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: custodian_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE custodian_id_seq OWNED BY custodian.id;
+
+
+--
+-- TOC entry 206 (class 1259 OID 16774)
+-- Name: device; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE device (
+    id integer NOT NULL,
+    status character varying(150),
+    udi text,
+    patient integer,
+    type_code character varying(255),
+    type_system character varying(255),
+    type_display character varying(255),
+    text_status character varying(255),
+    text_div text,
+    identifier_value character varying(255),
+    identifier_system character varying(255),
+    identifier_type_code character varying(255),
+    identifier_type_system character varying(255),
+    identifier_type_text character varying(255),
+    identifier_type_value character varying(255)
+);
+
+
+ALTER TABLE device OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 16780)
+-- Name: device_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE device_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE device_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2507 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: device_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE device_id_seq OWNED BY device.id;
+
+
+--
+-- TOC entry 208 (class 1259 OID 16782)
+-- Name: diagnosticreport; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE diagnosticreport (
+    id integer NOT NULL,
+    status character varying(255),
+    cat_code character varying(255),
+    cat_system character varying(255),
+    cat_display character varying(255),
+    cat_text character varying(255),
+    code character varying(255),
+    code_system character varying(255),
+    code_display character varying(255),
+    code_text character varying(255),
+    patient integer,
+    effectivedate date,
+    issued date,
+    performer integer,
+    result integer,
+    identifier_system character varying(255),
+    identifier_value character varying(255),
+    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL
+);
+
+
+ALTER TABLE diagnosticreport OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 16789)
+-- Name: diagnosticreport_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE diagnosticreport_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE diagnosticreport_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2508 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: diagnosticreport_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE diagnosticreport_id_seq OWNED BY diagnosticreport.id;
+
+
+--
+-- TOC entry 210 (class 1259 OID 16791)
+-- Name: doc_class_codes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE doc_class_codes (
+    id integer NOT NULL,
+    code character varying(100),
+    display character varying(200),
+    system character varying(100)
+);
+
+
+ALTER TABLE doc_class_codes OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 16794)
+-- Name: doc_class_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE doc_class_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE doc_class_codes_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2509 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: doc_class_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE doc_class_codes_id_seq OWNED BY doc_class_codes.id;
+
+
+--
+-- TOC entry 212 (class 1259 OID 16796)
+-- Name: doc_type_codes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE doc_type_codes (
+    id integer NOT NULL,
+    code character varying(100),
+    display character varying(200),
+    system character varying(100)
+);
+
+
+ALTER TABLE doc_type_codes OWNER TO postgres;
+
+--
+-- TOC entry 213 (class 1259 OID 16799)
+-- Name: doc_type_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE doc_type_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE doc_type_codes_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2510 (class 0 OID 0)
+-- Dependencies: 213
+-- Name: doc_type_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE doc_type_codes_id_seq OWNED BY doc_type_codes.id;
+
+
+--
+-- TOC entry 214 (class 1259 OID 16801)
+-- Name: document_reference; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE document_reference (
+    id integer NOT NULL,
+    master_dentifier_system character varying(100),
+    master_dentifier_value character varying(100),
+    identifier_use character varying(100),
+    identifier_system character varying(100),
+    identifier_value character varying(100),
+    subject integer,
+    type integer,
+    class_code integer,
+    document_format character varying(100),
+    author integer,
+    custodian integer,
+    authenticator integer,
+    created timestamp without time zone,
+    indexed timestamp with time zone,
+    status character varying(50),
+    doc_status character varying(50),
+    description character varying(1000),
+    confidentiality integer,
+    content integer,
+    context_event integer,
+    context_period integer,
+    context_facility_type integer
+);
+
+
+ALTER TABLE document_reference OWNER TO postgres;
+
+--
+-- TOC entry 215 (class 1259 OID 16807)
+-- Name: document_reference_json; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE document_reference_json (
+    id integer NOT NULL,
+    master_dentifier json,
+    identifier json,
+    subject integer,
+    type integer,
+    class_code integer,
+    document_format character varying(100)
+);
+
+
+ALTER TABLE document_reference_json OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 16813)
+-- Name: document_reference_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE document_reference_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE document_reference_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2511 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: document_reference_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE document_reference_id_seq OWNED BY document_reference_json.id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 16815)
+-- Name: document_reference_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE document_reference_id_seq1
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE document_reference_id_seq1 OWNER TO postgres;
+
+--
+-- TOC entry 2512 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: document_reference_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE document_reference_id_seq1 OWNED BY document_reference.id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 16817)
+-- Name: event_period_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE event_period_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE event_period_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2513 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: event_period_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE event_period_id_seq OWNED BY context_period.id;
+
+
+--
+-- TOC entry 219 (class 1259 OID 16819)
+-- Name: goals; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE goals (
+    id integer NOT NULL,
+    status character varying(150),
+    date date,
+    patient integer,
+    description text,
+    textstatus character varying(255)
+);
+
+
+ALTER TABLE goals OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 16825)
+-- Name: goals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE goals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE goals_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2514 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: goals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE goals_id_seq OWNED BY goals.id;
+
+
+--
+-- TOC entry 221 (class 1259 OID 16827)
+-- Name: immunization; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE immunization (
+    id integer NOT NULL,
+    status character varying(150),
+    date date,
+    vaccine_system character varying(255),
+    vaccine_code character varying(255),
+    vaccine_display character varying(255),
+    patient integer,
+    wasnotgiven boolean,
+    reported boolean
+);
+
+
+ALTER TABLE immunization OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 16833)
+-- Name: immunization_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE immunization_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE immunization_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2515 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: immunization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE immunization_id_seq OWNED BY immunization.id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 16835)
+-- Name: manufacturer; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE manufacturer (
+    id integer NOT NULL,
+    name character(100)
+);
+
+
+ALTER TABLE manufacturer OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 16838)
+-- Name: marital_status; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE marital_status (
+    code character(1) NOT NULL,
+    display character varying(30)
+);
+
+
+ALTER TABLE marital_status OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 16841)
+-- Name: medication; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE medication (
+    id integer NOT NULL,
+    med_code character varying(100),
+    med_isbrand boolean,
+    med_form character varying(100),
+    med_ingredient json,
+    med_manufacturer integer,
+    med_display character(100),
+    med_system character varying
+);
+
+
+ALTER TABLE medication OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 16847)
+-- Name: medication_administration; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE medication_administration (
+    id integer NOT NULL,
+    identifier_system character(100),
+    identifier_value character(100),
+    status character(50),
+    patient integer,
+    practitioner integer,
+    prescription integer,
+    wasnotgiven boolean,
+    reasonnotgiven character(255),
+    medicationcodeableconcept json,
+    medicationreference integer,
+    dosage json
+);
+
+
+ALTER TABLE medication_administration OWNER TO postgres;
+
+--
+-- TOC entry 227 (class 1259 OID 16853)
+-- Name: medication_dispense; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE medication_dispense (
+    id integer NOT NULL,
+    identifier_system character(100),
+    identifier_value character(100),
+    patient integer,
+    dispenser integer,
+    authorizingprescription integer,
+    medicationreference integer,
+    dosageinstruction json,
+    status character(100)
+);
+
+
+ALTER TABLE medication_dispense OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 16859)
+-- Name: medication_order; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE medication_order (
+    id integer NOT NULL,
+    datewritten date,
+    patient integer,
+    prescriber integer,
+    medicationcodeableconcept json,
+    medicationreference integer,
+    dosageinstruction json,
+    dispencerequest json,
+    status character(50),
+    identifier_system character(100),
+    identifier_value character(100)
+);
+
+
+ALTER TABLE medication_order OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 16865)
+-- Name: medication_statement; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE medication_statement (
+    id integer NOT NULL,
+    patient integer,
+    wasnottaken boolean,
+    reasonnottaken character(100),
+    effectiveperiod date,
+    medicationcodeableconcept json,
+    medicationreference integer,
+    dosage json,
+    identifier_system character(100),
+    identifier_value character(100),
+    status character(50)
+);
+
+
+ALTER TABLE medication_statement OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 16871)
+-- Name: observation; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE observation (
+    id integer NOT NULL,
+    code character varying(255),
+    code_system character varying(100),
+    code_display character varying(255),
+    code_text character varying(255),
+    cat_code character varying(255),
+    cat_system character varying(255),
+    cat_display character varying(255),
+    cat_text character varying(255),
+    val_code character varying(255),
+    val_system character varying(255),
+    val_display character varying(255),
+    val_text character varying(255),
+    status character varying(255),
+    patient integer,
+    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
+    val_quan_value double precision,
+    val_quan_sys character varying(100),
+    val_quan_unit character varying(100),
+    effective_date timestamp without time zone,
+    val_quan_code character varying(100),
+    bp_code character varying(255),
+    issued_date date,
+    identifier_system character varying(255),
+    identifier_value character varying(255)
+);
+
+
+ALTER TABLE observation OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 16878)
+-- Name: observation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE observation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE observation_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2516 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: observation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE observation_id_seq OWNED BY observation.id;
+
+
+--
+-- TOC entry 232 (class 1259 OID 16880)
+-- Name: organization; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE organization (
+    id integer NOT NULL,
+    identifier json,
+    active boolean,
+    telecom json,
+    address_line1 character varying(100),
+    address_line2 character varying(100),
+    address_city character varying(100),
+    address_state character varying(100),
+    address_zip character varying(100),
+    address_country character varying(100),
+    address_line_1 character varying(255),
+    address_line_2 character varying(255),
+    address_use character varying(255)
+);
+
+
+ALTER TABLE organization OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 16886)
+-- Name: patient; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE patient (
+    id integer NOT NULL,
+    identifier_system character varying(100),
+    identifier_value character varying(100),
+    name character varying(100)
+);
+
+
+ALTER TABLE patient OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 16889)
+-- Name: patient_contact; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE patient_contact (
+    id integer NOT NULL,
+    patient_id integer,
+    relationship character varying(20),
+    contact_name character varying(100),
+    phone character varying(15),
+    address_use character varying(10),
+    address_line_1 character varying(100),
+    address_line_2 character varying(100),
+    address_city character varying(50),
+    address_state character varying(50),
+    address_zip character varying(10),
+    address_country character varying
+);
+
+
+ALTER TABLE patient_contact OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1259 OID 16895)
+-- Name: patient_contact_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE patient_contact_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE patient_contact_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2517 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: patient_contact_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE patient_contact_id_seq OWNED BY patient_contact.id;
+
+
+--
+-- TOC entry 236 (class 1259 OID 16897)
+-- Name: patient_json; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE patient_json (
+    id integer NOT NULL,
+    identifier json,
+    full_name character varying(100),
+    telecom json,
+    gender character varying(10),
+    birth_date date,
+    marital_status character(1),
+    communication_language character varying(100),
+    active boolean,
+    race character varying(10),
+    ethnicity character varying(10),
+    religion character varying(10),
+    mothers_maiden_name character varying(100),
+    address_line1 character varying(100),
+    address_line2 character varying(100),
+    address_city character varying(50),
+    address_state character varying(50),
+    address_zip character varying(15),
+    address_country character varying(100),
+    family_name character varying(100),
+    given_name character varying(50),
+    birth_place json,
+    birthsex character varying
+);
+
+
+ALTER TABLE patient_json OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1259 OID 16903)
+-- Name: patient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE patient_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE patient_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2518 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: patient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE patient_id_seq OWNED BY patient_json.id;
+
+
+--
+-- TOC entry 238 (class 1259 OID 16905)
+-- Name: patient_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE patient_id_seq1
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE patient_id_seq1 OWNER TO postgres;
+
+--
+-- TOC entry 2519 (class 0 OID 0)
+-- Dependencies: 238
+-- Name: patient_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE patient_id_seq1 OWNED BY patient.id;
+
+
+--
+-- TOC entry 239 (class 1259 OID 16907)
+-- Name: practitioner; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE practitioner (
+    id integer NOT NULL,
+    telecom json,
+    practitionerrole character(100),
+    text json,
+    identifier json,
+    family_name character(100),
+    given_name character(100)
+);
+
+
+ALTER TABLE practitioner OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1259 OID 16913)
+-- Name: register; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE register (
+    id integer NOT NULL,
+    client_id character varying(255),
+    client_secret character varying(255),
+    contact_mail character varying(255),
+    contact_name character varying(255),
+    name character varying(255),
+    org_name character varying(255),
+    redirect_uri character varying(255),
+    register_token character varying(255),
+    scope character varying(255)
+);
+
+
+ALTER TABLE register OWNER TO postgres;
+
+--
+-- TOC entry 241 (class 1259 OID 16919)
+-- Name: register_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE register_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE register_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2520 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: register_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE register_id_seq OWNED BY register.id;
+
+
+--
+-- TOC entry 242 (class 1259 OID 16921)
+-- Name: us_core_birthsex; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE us_core_birthsex (
+    code character varying(10) NOT NULL,
+    display character varying(200),
+    code_system character varying(255)
+);
+
+
+ALTER TABLE us_core_birthsex OWNER TO postgres;
+
+--
+-- TOC entry 243 (class 1259 OID 16924)
+-- Name: us_core_ethnicity; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE us_core_ethnicity (
+    code character varying(10) NOT NULL,
+    display character varying(200)
+);
+
+
+ALTER TABLE us_core_ethnicity OWNER TO postgres;
+
+--
+-- TOC entry 244 (class 1259 OID 16927)
+-- Name: us_core_race; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE us_core_race (
+    code character varying(10) NOT NULL,
+    display character varying(200)
+);
+
+
+ALTER TABLE us_core_race OWNER TO postgres;
+
+--
+-- TOC entry 245 (class 1259 OID 16930)
+-- Name: us_core_religion; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE us_core_religion (
+    code character varying(10) NOT NULL,
+    display character varying(200)
+);
+
+
+ALTER TABLE us_core_religion OWNER TO postgres;
+
+--
+-- TOC entry 246 (class 1259 OID 16933)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE users (
+    user_id integer NOT NULL,
+    user_name character varying(255),
+    user_email character varying(150),
+    user_full_name character varying(255),
+    user_password character varying(100) NOT NULL,
+    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL
+);
+
+
+ALTER TABLE users OWNER TO postgres;
+
+--
+-- TOC entry 247 (class 1259 OID 16940)
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE users_user_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2521 (class 0 OID 0)
+-- Dependencies: 247
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
+
+
+--
+-- TOC entry 2216 (class 2604 OID 16942)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY auth_temp ALTER COLUMN id SET DEFAULT nextval('auth_temp_id_seq'::regclass);
+
+
+--
+-- TOC entry 2217 (class 2604 OID 16943)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY authenticator ALTER COLUMN id SET DEFAULT nextval('authenticator_id_seq'::regclass);
+
+
+--
+-- TOC entry 2218 (class 2604 OID 16944)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY author ALTER COLUMN id SET DEFAULT nextval('author_id_seq'::regclass);
+
+
+--
+-- TOC entry 2219 (class 2604 OID 16945)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY careteam ALTER COLUMN id SET DEFAULT nextval('careteam_id_seq'::regclass);
+
+
+--
+-- TOC entry 2220 (class 2604 OID 16946)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY careteam_participant ALTER COLUMN id SET DEFAULT nextval('careteam_participant_id_seq'::regclass);
+
+
+--
+-- TOC entry 2222 (class 2604 OID 16947)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY clients ALTER COLUMN id SET DEFAULT nextval('clients_id_seq'::regclass);
+
+
+--
+-- TOC entry 2223 (class 2604 OID 16948)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY confidentiality ALTER COLUMN id SET DEFAULT nextval('confidentiality_id_seq'::regclass);
+
+
+--
+-- TOC entry 2224 (class 2604 OID 16949)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY content ALTER COLUMN id SET DEFAULT nextval('content_id_seq'::regclass);
+
+
+--
+-- TOC entry 2225 (class 2604 OID 16950)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY context_event ALTER COLUMN id SET DEFAULT nextval('context_event_id_seq'::regclass);
+
+
+--
+-- TOC entry 2226 (class 2604 OID 16951)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY context_facility_type ALTER COLUMN id SET DEFAULT nextval('context_facility_type_id_seq'::regclass);
+
+
+--
+-- TOC entry 2227 (class 2604 OID 16952)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY context_period ALTER COLUMN id SET DEFAULT nextval('event_period_id_seq'::regclass);
+
+
+--
+-- TOC entry 2228 (class 2604 OID 16953)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY custodian ALTER COLUMN id SET DEFAULT nextval('custodian_id_seq'::regclass);
+
+
+--
+-- TOC entry 2229 (class 2604 OID 16954)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY device ALTER COLUMN id SET DEFAULT nextval('device_id_seq'::regclass);
+
+
+--
+-- TOC entry 2231 (class 2604 OID 16955)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diagnosticreport ALTER COLUMN id SET DEFAULT nextval('diagnosticreport_id_seq'::regclass);
+
+
+--
+-- TOC entry 2232 (class 2604 OID 16956)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY doc_class_codes ALTER COLUMN id SET DEFAULT nextval('doc_class_codes_id_seq'::regclass);
+
+
+--
+-- TOC entry 2233 (class 2604 OID 16957)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY doc_type_codes ALTER COLUMN id SET DEFAULT nextval('doc_type_codes_id_seq'::regclass);
+
+
+--
+-- TOC entry 2234 (class 2604 OID 16958)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference ALTER COLUMN id SET DEFAULT nextval('document_reference_id_seq1'::regclass);
+
+
+--
+-- TOC entry 2235 (class 2604 OID 16959)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference_json ALTER COLUMN id SET DEFAULT nextval('document_reference_id_seq'::regclass);
+
+
+--
+-- TOC entry 2236 (class 2604 OID 16960)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY goals ALTER COLUMN id SET DEFAULT nextval('goals_id_seq'::regclass);
+
+
+--
+-- TOC entry 2237 (class 2604 OID 16961)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY immunization ALTER COLUMN id SET DEFAULT nextval('immunization_id_seq'::regclass);
+
+
+--
+-- TOC entry 2239 (class 2604 OID 16962)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY observation ALTER COLUMN id SET DEFAULT nextval('observation_id_seq'::regclass);
+
+
+--
+-- TOC entry 2240 (class 2604 OID 16963)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient ALTER COLUMN id SET DEFAULT nextval('patient_id_seq1'::regclass);
+
+
+--
+-- TOC entry 2241 (class 2604 OID 16964)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_contact ALTER COLUMN id SET DEFAULT nextval('patient_contact_id_seq'::regclass);
+
+
+--
+-- TOC entry 2242 (class 2604 OID 16965)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json ALTER COLUMN id SET DEFAULT nextval('patient_id_seq'::regclass);
+
+
+--
+-- TOC entry 2243 (class 2604 OID 16966)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY register ALTER COLUMN id SET DEFAULT nextval('register_id_seq'::regclass);
+
+
+--
+-- TOC entry 2245 (class 2604 OID 16967)
+-- Name: user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_seq'::regclass);
+
+
+--
+-- TOC entry 2247 (class 2606 OID 16969)
+-- Name: allergy_intolerance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY allergy_intolerance
+    ADD CONSTRAINT allergy_intolerance_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2249 (class 2606 OID 16971)
+-- Name: auth_temp_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY auth_temp
+    ADD CONSTRAINT auth_temp_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2251 (class 2606 OID 16973)
+-- Name: authenticator_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY authenticator
+    ADD CONSTRAINT authenticator_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2253 (class 2606 OID 16975)
+-- Name: author_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY author
+    ADD CONSTRAINT author_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2257 (class 2606 OID 16977)
+-- Name: careteam_participant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY careteam_participant
+    ADD CONSTRAINT careteam_participant_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2255 (class 2606 OID 16979)
+-- Name: careteam_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY careteam
+    ADD CONSTRAINT careteam_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2259 (class 2606 OID 16981)
+-- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY clients
+    ADD CONSTRAINT clients_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2261 (class 2606 OID 16983)
+-- Name: condition_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY condition
+    ADD CONSTRAINT condition_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2263 (class 2606 OID 16985)
+-- Name: confidentiality_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY confidentiality
+    ADD CONSTRAINT confidentiality_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2265 (class 2606 OID 16987)
+-- Name: content_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY content
+    ADD CONSTRAINT content_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2267 (class 2606 OID 16989)
+-- Name: context_event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY context_event
+    ADD CONSTRAINT context_event_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2269 (class 2606 OID 16991)
+-- Name: context_facility_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY context_facility_type
+    ADD CONSTRAINT context_facility_type_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2271 (class 2606 OID 16993)
+-- Name: context_period_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY context_period
+    ADD CONSTRAINT context_period_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2273 (class 2606 OID 16995)
+-- Name: custodian_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY custodian
+    ADD CONSTRAINT custodian_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2275 (class 2606 OID 16997)
+-- Name: device_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY device
+    ADD CONSTRAINT device_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2277 (class 2606 OID 16999)
+-- Name: diagnosticreport_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diagnosticreport
+    ADD CONSTRAINT diagnosticreport_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2280 (class 2606 OID 17001)
+-- Name: doc_class_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY doc_class_codes
+    ADD CONSTRAINT doc_class_codes_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2282 (class 2606 OID 17003)
+-- Name: doc_type_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY doc_type_codes
+    ADD CONSTRAINT doc_type_codes_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2286 (class 2606 OID 17005)
+-- Name: document_reference_json_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference_json
+    ADD CONSTRAINT document_reference_json_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2284 (class 2606 OID 17007)
+-- Name: document_reference_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT document_reference_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2288 (class 2606 OID 17009)
+-- Name: goals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY goals
+    ADD CONSTRAINT goals_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2290 (class 2606 OID 17011)
+-- Name: immunization_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY immunization
+    ADD CONSTRAINT immunization_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2292 (class 2606 OID 17013)
+-- Name: manufacturer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY manufacturer
+    ADD CONSTRAINT manufacturer_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2294 (class 2606 OID 17015)
+-- Name: marital_status_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY marital_status
+    ADD CONSTRAINT marital_status_pkey PRIMARY KEY (code);
+
+
+--
+-- TOC entry 2298 (class 2606 OID 17017)
+-- Name: medication_administration_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_administration
+    ADD CONSTRAINT medication_administration_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2300 (class 2606 OID 17019)
+-- Name: medication_dispense_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_dispense
+    ADD CONSTRAINT medication_dispense_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2302 (class 2606 OID 17021)
+-- Name: medication_order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_order
+    ADD CONSTRAINT medication_order_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2296 (class 2606 OID 17023)
+-- Name: medication_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication
+    ADD CONSTRAINT medication_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2304 (class 2606 OID 17025)
+-- Name: medication_statement_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_statement
+    ADD CONSTRAINT medication_statement_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2306 (class 2606 OID 17027)
+-- Name: observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY observation
+    ADD CONSTRAINT observation_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2309 (class 2606 OID 17029)
+-- Name: organization_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY organization
+    ADD CONSTRAINT organization_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2314 (class 2606 OID 17031)
+-- Name: patient_contact_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_contact
+    ADD CONSTRAINT patient_contact_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2311 (class 2606 OID 17033)
+-- Name: patient_doc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient
+    ADD CONSTRAINT patient_doc_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2316 (class 2606 OID 17035)
+-- Name: patient_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json
+    ADD CONSTRAINT patient_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2318 (class 2606 OID 17037)
+-- Name: practitioner_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY practitioner
+    ADD CONSTRAINT practitioner_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2320 (class 2606 OID 17039)
+-- Name: register_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY register
+    ADD CONSTRAINT register_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2322 (class 2606 OID 17041)
+-- Name: us_core_birthsex_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY us_core_birthsex
+    ADD CONSTRAINT us_core_birthsex_pkey PRIMARY KEY (code);
+
+
+--
+-- TOC entry 2324 (class 2606 OID 17043)
+-- Name: us_core_ethnicity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY us_core_ethnicity
+    ADD CONSTRAINT us_core_ethnicity_pkey PRIMARY KEY (code);
+
+
+--
+-- TOC entry 2326 (class 2606 OID 17045)
+-- Name: us_core_race_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY us_core_race
+    ADD CONSTRAINT us_core_race_pkey PRIMARY KEY (code);
+
+
+--
+-- TOC entry 2328 (class 2606 OID 17047)
+-- Name: us_core_religion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY us_core_religion
+    ADD CONSTRAINT us_core_religion_pkey PRIMARY KEY (code);
+
+
+--
+-- TOC entry 2330 (class 2606 OID 17049)
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 2312 (class 1259 OID 17050)
+-- Name: fki_pk_patient; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_pk_patient ON patient_contact USING btree (patient_id);
+
+
+--
+-- TOC entry 2278 (class 1259 OID 17051)
+-- Name: xpkdiagnosticreport; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX xpkdiagnosticreport ON diagnosticreport USING btree (id);
+
+
+--
+-- TOC entry 2307 (class 1259 OID 17052)
+-- Name: xpkobservation; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX xpkobservation ON observation USING btree (id);
+
+
+--
+-- TOC entry 2331 (class 1259 OID 17053)
+-- Name: xpkusers; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX xpkusers ON users USING btree (user_name);
+
+
+--
+-- TOC entry 2332 (class 2606 OID 17054)
+-- Name: allergy_intolerance_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY allergy_intolerance
+    ADD CONSTRAINT allergy_intolerance_patient_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2333 (class 2606 OID 17059)
+-- Name: allergy_intolerance_recorder_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY allergy_intolerance
+    ADD CONSTRAINT allergy_intolerance_recorder_fkey FOREIGN KEY (recorder) REFERENCES practitioner(id);
+
+
+--
+-- TOC entry 2334 (class 2606 OID 17064)
+-- Name: careteam_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY careteam
+    ADD CONSTRAINT careteam_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2335 (class 2606 OID 17069)
+-- Name: careteam_participant_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY careteam_participant
+    ADD CONSTRAINT careteam_participant_fkey FOREIGN KEY (careteam) REFERENCES careteam(id);
+
+
+--
+-- TOC entry 2337 (class 2606 OID 17074)
+-- Name: condition_asserter_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY condition
+    ADD CONSTRAINT condition_asserter_fkey FOREIGN KEY (asserter) REFERENCES practitioner(id);
+
+
+--
+-- TOC entry 2338 (class 2606 OID 17079)
+-- Name: condition_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY condition
+    ADD CONSTRAINT condition_patient_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2339 (class 2606 OID 17084)
+-- Name: d_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diagnosticreport
+    ADD CONSTRAINT d_1 FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2340 (class 2606 OID 17089)
+-- Name: d_2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diagnosticreport
+    ADD CONSTRAINT d_2 FOREIGN KEY (performer) REFERENCES practitioner(id);
+
+
+--
+-- TOC entry 2341 (class 2606 OID 17094)
+-- Name: d_3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY diagnosticreport
+    ADD CONSTRAINT d_3 FOREIGN KEY (result) REFERENCES observation(id);
+
+
+--
+-- TOC entry 2342 (class 2606 OID 17099)
+-- Name: fk_1q8mubdgsfl88xgdt750e560x; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_1q8mubdgsfl88xgdt750e560x FOREIGN KEY (custodian) REFERENCES author(id);
+
+
+--
+-- TOC entry 2343 (class 2606 OID 17104)
+-- Name: fk_1tahe0pbr48tgj7xc4ulobsig; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_1tahe0pbr48tgj7xc4ulobsig FOREIGN KEY (context_facility_type) REFERENCES context_facility_type(id);
+
+
+--
+-- TOC entry 2344 (class 2606 OID 17109)
+-- Name: fk_3gk0pg0vulct3w40wi905ks16; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_3gk0pg0vulct3w40wi905ks16 FOREIGN KEY (content) REFERENCES content(id);
+
+
+--
+-- TOC entry 2345 (class 2606 OID 17114)
+-- Name: fk_3t1eqf1xm3b8lmxkpwnnp59gd; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_3t1eqf1xm3b8lmxkpwnnp59gd FOREIGN KEY (subject) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2346 (class 2606 OID 17119)
+-- Name: fk_42jdseen1dnvmjflubsm8rwi7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_42jdseen1dnvmjflubsm8rwi7 FOREIGN KEY (author) REFERENCES author(id);
+
+
+--
+-- TOC entry 2369 (class 2606 OID 17124)
+-- Name: fk_58gwuapkd08tmx6uf5k1cig59; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json
+    ADD CONSTRAINT fk_58gwuapkd08tmx6uf5k1cig59 FOREIGN KEY (religion) REFERENCES us_core_religion(code);
+
+
+--
+-- TOC entry 2347 (class 2606 OID 17129)
+-- Name: fk_bm380fauc5j7uwk7lqrodgs23; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_bm380fauc5j7uwk7lqrodgs23 FOREIGN KEY (type) REFERENCES doc_type_codes(id);
+
+
+--
+-- TOC entry 2348 (class 2606 OID 17134)
+-- Name: fk_c4l8hv3yg0v441sgp9qinq5rf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_c4l8hv3yg0v441sgp9qinq5rf FOREIGN KEY (context_event) REFERENCES context_event(id);
+
+
+--
+-- TOC entry 2349 (class 2606 OID 17139)
+-- Name: fk_cn20r185drl23h6pu3unu1b5s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_cn20r185drl23h6pu3unu1b5s FOREIGN KEY (context_period) REFERENCES context_period(id);
+
+
+--
+-- TOC entry 2350 (class 2606 OID 17144)
+-- Name: fk_driop6965u0ksfbo97k3cidxx; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_driop6965u0ksfbo97k3cidxx FOREIGN KEY (class_code) REFERENCES doc_class_codes(id);
+
+
+--
+-- TOC entry 2351 (class 2606 OID 17149)
+-- Name: fk_ev4f774kix0uty1dv54iscodl; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_ev4f774kix0uty1dv54iscodl FOREIGN KEY (authenticator) REFERENCES authenticator(id);
+
+
+--
+-- TOC entry 2352 (class 2606 OID 17154)
+-- Name: fk_l9kjioygwvrangj6e6bupdtf3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY document_reference
+    ADD CONSTRAINT fk_l9kjioygwvrangj6e6bupdtf3 FOREIGN KEY (confidentiality) REFERENCES confidentiality(id);
+
+
+--
+-- TOC entry 2370 (class 2606 OID 17159)
+-- Name: fk_pjbofgtkq12fic92k5jfma1j0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json
+    ADD CONSTRAINT fk_pjbofgtkq12fic92k5jfma1j0 FOREIGN KEY (marital_status) REFERENCES marital_status(code);
+
+
+--
+-- TOC entry 2371 (class 2606 OID 17164)
+-- Name: fk_pvkw0gqb5hv0ilubxj2hr1y0k; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json
+    ADD CONSTRAINT fk_pvkw0gqb5hv0ilubxj2hr1y0k FOREIGN KEY (ethnicity) REFERENCES us_core_ethnicity(code);
+
+
+--
+-- TOC entry 2372 (class 2606 OID 17169)
+-- Name: fk_rvpuetwi19rnx82s8a9n9130m; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json
+    ADD CONSTRAINT fk_rvpuetwi19rnx82s8a9n9130m FOREIGN KEY (race) REFERENCES us_core_race(code);
+
+
+--
+-- TOC entry 2373 (class 2606 OID 17174)
+-- Name: fk_usbirthsex; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_json
+    ADD CONSTRAINT fk_usbirthsex FOREIGN KEY (birthsex) REFERENCES us_core_birthsex(code) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 2354 (class 2606 OID 17179)
+-- Name: medication_administration_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_administration
+    ADD CONSTRAINT medication_administration_medicationreference_fkey FOREIGN KEY (medicationreference) REFERENCES medication(id);
+
+
+--
+-- TOC entry 2355 (class 2606 OID 17184)
+-- Name: medication_administration_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_administration
+    ADD CONSTRAINT medication_administration_patient_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2356 (class 2606 OID 17189)
+-- Name: medication_administration_practitioner_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_administration
+    ADD CONSTRAINT medication_administration_practitioner_fkey FOREIGN KEY (practitioner) REFERENCES practitioner(id);
+
+
+--
+-- TOC entry 2357 (class 2606 OID 17194)
+-- Name: medication_administration_prescription_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_administration
+    ADD CONSTRAINT medication_administration_prescription_fkey FOREIGN KEY (prescription) REFERENCES medication_order(id);
+
+
+--
+-- TOC entry 2358 (class 2606 OID 17199)
+-- Name: medication_dispense_authorizingprescription_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_dispense
+    ADD CONSTRAINT medication_dispense_authorizingprescription_fkey FOREIGN KEY (authorizingprescription) REFERENCES medication_order(id);
+
+
+--
+-- TOC entry 2359 (class 2606 OID 17204)
+-- Name: medication_dispense_dispenser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_dispense
+    ADD CONSTRAINT medication_dispense_dispenser_fkey FOREIGN KEY (dispenser) REFERENCES practitioner(id);
+
+
+--
+-- TOC entry 2360 (class 2606 OID 17209)
+-- Name: medication_dispense_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_dispense
+    ADD CONSTRAINT medication_dispense_medicationreference_fkey FOREIGN KEY (medicationreference) REFERENCES medication(id);
+
+
+--
+-- TOC entry 2361 (class 2606 OID 17214)
+-- Name: medication_dispense_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_dispense
+    ADD CONSTRAINT medication_dispense_patient_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2353 (class 2606 OID 17219)
+-- Name: medication_med_manufacturer_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication
+    ADD CONSTRAINT medication_med_manufacturer_fkey FOREIGN KEY (med_manufacturer) REFERENCES manufacturer(id);
+
+
+--
+-- TOC entry 2362 (class 2606 OID 17224)
+-- Name: medication_order_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_order
+    ADD CONSTRAINT medication_order_medicationreference_fkey FOREIGN KEY (medicationreference) REFERENCES medication(id);
+
+
+--
+-- TOC entry 2363 (class 2606 OID 17229)
+-- Name: medication_order_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_order
+    ADD CONSTRAINT medication_order_patient_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2364 (class 2606 OID 17234)
+-- Name: medication_order_prescriber_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_order
+    ADD CONSTRAINT medication_order_prescriber_fkey FOREIGN KEY (prescriber) REFERENCES practitioner(id);
+
+
+--
+-- TOC entry 2365 (class 2606 OID 17239)
+-- Name: medication_statement_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_statement
+    ADD CONSTRAINT medication_statement_medicationreference_fkey FOREIGN KEY (medicationreference) REFERENCES medication(id);
+
+
+--
+-- TOC entry 2366 (class 2606 OID 17244)
+-- Name: medication_statement_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY medication_statement
+    ADD CONSTRAINT medication_statement_patient_fkey FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2367 (class 2606 OID 17249)
+-- Name: o_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY observation
+    ADD CONSTRAINT o_1 FOREIGN KEY (patient) REFERENCES patient(id);
+
+
+--
+-- TOC entry 2368 (class 2606 OID 17254)
+-- Name: pk_patient; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY patient_contact
+    ADD CONSTRAINT pk_patient FOREIGN KEY (patient_id) REFERENCES patient_json(id);
+
+
+--
+-- TOC entry 2336 (class 2606 OID 17259)
+-- Name: r_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY clients
+    ADD CONSTRAINT r_1 FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+
+--
+-- TOC entry 2494 (class 0 OID 0)
+-- Dependencies: 7
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-08-22 12:49:09
+
+--
+-- PostgreSQL database dump complete
+--
+

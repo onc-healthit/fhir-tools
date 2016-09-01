@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+
+		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+		<link href="css/fhir.css" rel="stylesheet" type="text/css" />
+		<link href="css/ladda.min.css" rel="stylesheet" type="text/css" />
+	
+    	<title>FHIR Client</title>
+	</head>
+	<body>
+		<!--<nav class="navbar navbar-default navbar-fixed-top" style="height:70px;">
+	      	<div class="container" style="color:#777777;font-size:22px;padding-top:20px;">
+	        	SITE FHIR Server
+	      	</div>
+	    </nav>-->
+		<header> 
+			<div class="jumbotron"> 
+				<div class="container"></div> 
+			</div> 
+		</header>
+		<!-- <div class="container" style="margin-top:130px;"> -->
+			<!-- <div class="col-md-12">
+				<div class="col-md-1"></div>
+				<div class="col-md-10" align="center" style="font-size:16px;">
+					<p>This FHIR Client tool provides developers an ability to generate FHIR client requests to various servers and examine the response returned by the server in a JSON format. 
+	Please enter the various values and run a test.  </p>
+				</div>
+				<div class="col-md-1"></div>
+			</div> -->
+			<div class="container">
+			<div class="col-md-3"></div>
+			<div class="col-md-6" style="margin-top:30px;">
+				<div class="panel panel-default">
+  					<div class="panel-heading">New User Registration</div>
+  					<div class="panel-body">
+    					<form class="form-horizontal" id="userregistration">
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Username:</label>
+							    <div class="col-sm-8">
+							      	<input type="text" class="form-control" id="username" data-toggle="tooltip" data-original-title='' placeholder="user1">
+							    </div> 							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Email Address:</label>
+							    <div class="col-sm-8 tooltipright">
+							      	<input type="text" class="form-control" id="emailaddress" data-toggle="tooltip" data-original-title='' placeholder="user@example.com" name="email">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Full name:</label>
+							    <div class="col-sm-8 tooltipright">
+							      	<input type="text" class="form-control" id="fullname" data-toggle="tooltip" data-original-title='' placeholder="Mike Adams" >
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">New Password:</label>
+							    <div class="col-sm-8">
+							      	<input type="password" class="form-control" id="password" name="npassword">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label">Confirm Password:</label>
+							    <div class="col-sm-8">
+							      	<input type="password" class="form-control" id="cpassword" name="cpassword">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label"></label>
+							    <div class="col-sm-8">
+							      	<ul style="padding-left:15px;font-size:12px;">
+							      		<li>Password must be at least 8 characters long.</li>
+							      		<li>Must include one uppercase, one lowercase, one special character and one number.</li>
+							      	</ul>
+							    </div>    							
+    						</div>
+    						<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="registeruser();" id="registercli">Create</button>
+    					</form>
+    					<h5 class="form-signin-heading" style="text-align:center"> Already registered? <a href="userlogin.html"> Click here </a> to Login</h5>
+  					</div>
+				</div>
+			</div>
+			<div class="col-md-3"></div>
+			</div>
+		<!-- </div> -->
+		<footer> <div role="contentinfo" class="container"> <div class="row"> <div> <p>This project was funded by a contract from the <a tabindex="100" href="http://www.healthit.gov">Office of the National Coordinator for Health Information Technology (ONC)</a></p> <p><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a></p> </div> </div> </div> </footer>
+
+		<div id="myModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Client Registered Successfully</h4>
+		      </div>
+		      <div class="modal-body">
+		        <h4>Client ID: XXXXXXXXXXXXXXXXXX</h4>
+		        <h4>Client Secret: XXXXXXXXXXXXXXXXXX</h4>
+		        <h4>Registration Token: XXXXXXXXXXXXXXXXXX</h4>
+		        <p>Please Save Client ID, Client Secret and Registration Token in safe place for future use.</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+
+		<script src="js/jquery/jquery-1.11.1.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/bootbox.js"></script>
+		<script src="js/FHIRresources.js"></script>
+		<script src="js/searchparameters.js"></script>
+		<script src="js/url.js"></script>
+		<script src="js/spin.js"></script>
+		<script src="js/formValidation.js"></script>
+		<script type="text/javascript" src="js/framework/bootstrap.js"></script>
+		<script src="js/users.js"></script>
+		<script src="js/ladda.js"></script>
+		<script src="js/ladda.jquery.js"></script>
+		<script src="js/clients.js"></script>
+	</body>
+</html>

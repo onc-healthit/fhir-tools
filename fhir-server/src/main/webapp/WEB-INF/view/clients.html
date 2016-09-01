@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+
+		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+		<link href="css/fhir.css" rel="stylesheet" type="text/css" />
+		<link href="css/ladda.min.css" rel="stylesheet" type="text/css" />
+	
+    	<title>FHIR Client</title>
+	</head>
+	<body onload="checkCookie();">
+		<!--<nav class="navbar navbar-default navbar-fixed-top" style="height:70px;">
+	      	<div class="container">
+	      		<div style="color:#777777;font-size:22px;width:300px;float:left;padding-top:20px;">SITE FHIR Server</div>
+
+	        	<div class="nav-collapse">
+	
+					<ul class="nav pull-right" style="padding-top:20px;">
+	                    
+						<li class="dropdown">
+							<a href="" data-toggle="dropdown" class="dropdown-toggle" id="userButton"></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a data-target=".nav-collapse" data-toggle="collapse" href="#" id="dropname"></a></li>
+								<li class="divider"></li>
+								<li><a data-target=".nav-collapse" data-toggle="collapse" href="userlogin.html"><i class="icon-remove"></i> Log out</a></li>
+							</ul>
+						</li>
+	                    
+	                    
+	                </ul>
+	                    
+	            </div>
+	      	</div>
+	    </nav> -->
+		<header> 
+			<div class="jumbotron"> 
+				<div class="container">
+					<div class="nav-collapse">
+	
+					<ul class="nav pull-right" style="padding-top:100px;">
+	                    
+						<li class="dropdown">
+							<a href="" data-toggle="dropdown" class="dropdown-toggle" id="userButton" style="color:#fff"></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a data-target=".nav-collapse" data-toggle="collapse" href="#" id="dropname"></a></li>
+								<li class="divider"></li>
+								<li><a data-target=".nav-collapse" data-toggle="collapse" href="userlogin.html"><i class="icon-remove"></i> Log out</a></li>
+							</ul>
+						</li>
+	                    
+	                    
+	                </ul>
+	                    
+	            </div>
+				</div> 
+			</div> 
+		</header>
+		<div class="container" style="margin-top:30px;width:100%">
+			<div class="col-md-2" style="padding-right:0px;">
+				<div class="well sidebar-nav">
+					<ul class="nav nav-list">
+						<li class="nav-header">PERSONAL</li>
+						<li>
+							<a href="#">Manage Approved Sites</a>
+						</li>
+						<li>
+							<a href="#" id="profileinfo">View Profile Information</a>
+						</li>
+						<li class="nav-divider"></li>
+						<li class="nav-header">DEVELOPER</li>
+						<li class="active">
+							<a href="#" id="selfclient">Self-service client registration</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-10" id="homecontent">
+				<div class="col-md-5">
+					<div class="well">
+						<button class="btn btn-large" id="shownewclient">Register New client</button>
+					</div>
+				</div>
+				<div class="col-md-1" style="font-weight:bold;">-OR-</div>
+				<div class="col-md-6">
+					<div class="well">
+						<form class="form-horizontal">	
+							<div class="form-group">
+							    <div class="col-sm-8">
+							      	<input type="text" class="form-control" placeholder="Enter Client ID" id="clientId">
+							    </div> 		
+							    <label for="inputEmail3" class="col-sm-4 control-label"></label>					
+    						</div>
+    						<div class="form-group">
+							    <div class="col-sm-8">
+							      	<input type="text" class="form-control" placeholder="Enter Registration Access Token" id="regtoken">
+							    </div> 		
+							    <label for="inputEmail3" class="col-sm-4 control-label"></label>					
+    						</div>
+					        <button class="btn btn-large" id="editreg" onclick="getClientDetails();" type="button">Edit an existing client</button>
+					    </form>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-10" id="clientregform">
+				<div class="panel panel-default">
+  					<div class="panel-heading">Client Registration</div>
+  					<div class="panel-body">
+    					<form class="form-horizontal">
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Contact Name:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="contactname" data-toggle="tooltip" data-original-title=''>
+							    </div> 							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Contact Email:</label>
+							    <div class="col-sm-5 tooltipright">
+							      	<input type="text" class="form-control" id="contactemail" data-toggle="tooltip" data-original-title=''>
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Organization Name:</label>
+							    <div class="col-sm-5 tooltipright">
+							      	<input type="text" class="form-control" id="orgName" data-toggle="tooltip" data-original-title=''>
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Client Name:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="clientname">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="redirecturi">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+							    <div class="col-sm-5">
+							      	<select id="clientscope" class="form-control" data-toggle="tooltip" data-original-title='' multiple="multiple">
+							      		<option value="launch">launch</option>
+										<option value="launch/patient">launch/patient</option>
+										<option value="patient/*.read">patient/*.read</option>
+										<option value="patient/Patient.read">patient/Patient.read</option>
+										<option value="patient/DocumentReference.read">patient/DocumentReference.read</option>
+										<option value="patient/MedicationOrder.read">patient/MedicationOrder.read</option>
+										<option value="patient/MedicationStatement.read">patient/MedicationStatement.read</option>
+										<option value="fhir_complete">fhir_complete</option>
+										<option value="openid profile">openid profile</option>
+										<option value="offline_access">offline_access</option>
+										<option value="online_access">online_access</option>
+							      		<option value="profile">profile</option>
+							      		<option value="email">email</option>
+							      		<option value="address">address</option>
+							      		<option value="phone">phone</option>
+							      		<option value="user/Patient.read">user/Patient.read</option>
+									  	<option value="user/*.read">user/*.read</option>
+									  	<option value="user/*.*">user/*.*</option>
+									</select>
+							    </div> 
+							    <p class="col-md-4">(Please select Multiple Scopes to Register.)</p>							
+    						</div>
+    						<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="registerclient();" id="registercli">Register</button>
+    					</form>
+  					</div>
+				</div>
+			</div>
+			<div class="col-md-10" id="editclientform">
+				<div class="panel panel-default">
+  					<div class="panel-heading">Edit Client Details</div>
+  					<div class="panel-body">
+    					<form class="form-horizontal">
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Contact Name:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="editcontactname" data-toggle="tooltip" data-original-title=''>
+							    </div> 							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Contact Email:</label>
+							    <div class="col-sm-5 tooltipright">
+							      	<input type="text" class="form-control" id="editcontactemail" data-toggle="tooltip" data-original-title=''>
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Organization Name:</label>
+							    <div class="col-sm-5 tooltipright">
+							      	<input type="text" class="form-control" id="editorgName" data-toggle="tooltip" data-original-title=''>
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Client Name:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="editclientname">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="editredirecturi">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+							    <div class="col-sm-5">
+							      	<select id="editclientscope" class="form-control" data-toggle="tooltip" data-original-title='' multiple="multiple">
+							      		<option value="launch">launch</option>
+										<option value="launch/patient">launch/patient</option>
+										<option value="patient/*.read">patient/*.read</option>
+										<option value="patient/Patient.read">patient/Patient.read</option>
+										<option value="patient/DocumentReference.read">patient/DocumentReference.read</option>
+										<option value="patient/MedicationOrder.read">patient/MedicationOrder.read</option>
+										<option value="patient/MedicationStatement.read">patient/MedicationStatement.read</option>
+										<option value="fhir_complete">fhir_complete</option>
+										<option value="openid profile">openid profile</option>
+										<option value="offline_access">offline_access</option>
+										<option value="online_access">online_access</option>
+							      		<option value="profile">profile</option>
+							      		<option value="email">email</option>
+							      		<option value="address">address</option>
+							      		<option value="phone">phone</option>
+							      		<option value="user/Patient.read">user/Patient.read</option>
+									  	<option value="user/*.read">user/*.read</option>
+									  	<option value="user/*.*">user/*.*</option>
+									</select>
+							    </div> 
+							    <p class="col-md-4">(Please select Multiple Scopes to Register.)</p>					
+							</div>
+							<input type="hidden" class="form-control" id="editclientid">
+							<input type="hidden" class="form-control" id="editclientIds">
+							<input type="hidden" class="form-control" id="editclientsecret">
+							<input type="hidden" class="form-control" id="editregtoken">
+    						<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="editclient();" id="editregistercli">Save</button>
+    					</form>
+  					</div>
+				</div>
+			</div>
+			<div class="col-md-10" id="profilecontent">
+				<div id="content">
+					<span>
+						<div>Your user profile has the following information:</div>
+					    <dl class="dl-horizontal">
+					        <dt>full name</dt>
+					        <dd id="userfullname"></dd>
+					        <dt>preferred_username</dt>
+					        <dd id="username"></dd>
+					        <dt>email</dt>
+					        <dd id="useremail"></dd>
+						</dl>
+					</span>
+				</div>
+			</div>
+		</div>
+		<footer style="background-color: #eee;position:fixed;bottom: 0;width: 100%;"> <div role="contentinfo" class="container"> <div class="row"> <div> <p>This project was funded by a contract from the <a tabindex="100" href="http://www.healthit.gov">Office of the National Coordinator for Health Information Technology (ONC)</a></p> <p><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a></p> </div> </div> </div> </footer>
+
+		<div id="myModal" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Client Registered Successfully</h4>
+		      </div>
+		      <div class="modal-body">
+		        <form class="form-horizontal">
+		        	<div class="form-group">
+						<label for="inputEmail3" class="col-sm-4 control-label">Client ID:</label>
+						<div class="col-sm-8 tooltipright" id="regclientid" style="word-wrap:break-word"></div>    							
+    				</div>
+    				<div class="form-group">
+						<label for="inputEmail3" class="col-sm-4 control-label">Client Secret:</label>
+						<div class="col-sm-8" id="regclientsecret" style="word-wrap:break-word"></div>    							
+    				</div>
+    				<div class="form-group">
+						<label for="inputEmail3" class="col-sm-4 control-label">Registration Token:</label>
+						<div class="col-sm-8" id="regregtoken" style="word-wrap:break-word"></div>    							
+    				</div>
+		        </form>
+		        <div><hr></div>
+		        <p>Please Save Client ID, Client Secret and Registration Token in safe place for future use.</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+
+		<script src="js/jquery/jquery-1.11.1.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<script src="js/bootbox.js"></script>
+		<script src="js/FHIRresources.js"></script>
+		<script src="js/searchparameters.js"></script>
+		<script src="js/url.js"></script>
+		<script src="js/spin.js"></script>
+		<script src="js/ladda.js"></script>
+		<script src="js/ladda.jquery.js"></script>
+		<script src="js/clients.js"></script>
+		<script type="text/javascript">
+		var userId = "";
+			$('#clientregform').hide();
+			$('#editclientform').hide();
+			$('#profilecontent').hide();
+			$(document).ready(function(){
+				$( "#shownewclient" ).click(function(){
+					$('#homecontent').hide();
+					$('#clientregform').show();
+					$('#editclientform').hide();
+					$('#profilecontent').hide();
+					$('footer').css('position', 'relative');
+				})
+				$("#selfclient").click(function(){
+					$('#clientregform').hide();
+					$('#homecontent').show();
+					$('#editclientform').hide();
+					$('#profilecontent').hide();
+					$('footer').css('position', 'fixed');
+				})
+				$('#profileinfo').click(function(){
+					$('#clientregform').hide();
+					$('#homecontent').hide();
+					$('#editclientform').hide();
+					$('#profilecontent').show();
+					$('footer').css('position', 'fixed');
+				})
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,28 @@
+package org.sitenv.spring.service;
+
+import org.sitenv.spring.model.DafMedicationStatement;
+
+import java.util.Date;
+import java.util.List;
+
+public interface MedicationStatementService {
+
+    public List<DafMedicationStatement> getAllMedicationStatement();
+
+    public DafMedicationStatement getMedicationStatementResourceById(int id);
+
+    public List<DafMedicationStatement> getMedicationStatementByPatient(String patient);
+
+    public List<DafMedicationStatement> getMedicationStatementByCode(String code);
+
+    public List<DafMedicationStatement> getMedicationStatementByIdentifier(String identifierSystem, String identifierValue);
+
+    public List<DafMedicationStatement> getMedicationStatementByEffectiveDate(String comparatorStr, Date effectiveDate);
+
+    public List<DafMedicationStatement> getMedicationStatementByMedication(String medication);
+
+    public List<DafMedicationStatement> getMedicationStatementByStatus(String status);
+
+    public List<DafMedicationStatement> getMedicationStatementByIdentifierValue(String identifierValue);
+
+}

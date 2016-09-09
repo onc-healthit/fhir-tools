@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+
+		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+		<link href="css/fhir.css" rel="stylesheet" type="text/css" />
+		<link href="css/site.css" rel="stylesheet" type="text/css" />
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+		<link href="css/ladda.min.css" rel="stylesheet" type="text/css" />
+		<link href="css/kelpjsonview.css" rel="stylesheet" type="text/css" />
+
+    	<title>FHIR Client</title>
+    	<script src="js/jquery-1.11.1.js"></script>
+	</head>
+	<body onload="checkparam();" >
+		<div id="spinner" class="spinner" style="display:none;">
+		    <img id="img-spinner" src="images/spinner.gif" alt="Loading"/>
+		</div>
+		<header> 
+			<div class="jumbotron">
+				<div class="container"></div> 
+			</div> 
+		</header>
+		<div class="top-navbar navbar-default"> 
+			<div role="navigation" class="navbar"> 
+				<div class="navbar-container container"> 
+					<div class="navbar-header"> 
+						<button tabindex="1" data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button"> 	
+							<span class="sr-only">Toggle navigation</span> 
+							<span class="icon-bar"></span> 
+							<span class="icon-bar"></span> 
+							<span class="icon-bar"></span> 
+						</button> 
+					</div> 
+					<nav id="navigation" class="sort-pages modify-pages navbar-collapse collapse"> 
+						<ul class="nav navbar-nav"> 
+							<li class="active dropdown-parent"> 
+								<a tabindex="1" href="http://sitenv.org/web/site/home">
+									<span> Home</span>
+								</a> 
+							</li> 
+							<li class="dropdown-parent"> 
+								<a tabindex="1" href="http://sitenv.org/web/site/learn">
+									<span> Learn</span>
+								</a> 
+							</li> 
+							<li class="dropdown-parent"> 
+								<a tabindex="1" href="http://sitenv.org/web/site/collaborate">
+									<span> Collaborate</span>
+								</a> 
+							</li> 
+							<li class="dropdown-parent"> 
+								<a tabindex="1" href="http://sitenv.org/web/site/test">
+									<span> Test</span>
+								</a> 
+							</li> 
+							<li> 
+								<a tabindex="1" href="http://sitenv.org/web/site/about-us">
+									<span> About Us</span></a> 
+							</li> 
+						</ul> 
+					</nav> 
+				</div> 
+			</div> 
+		</div>
+		<div class="container" style="margin-top:10px;">
+			<div class="col-md-12">
+				<div class="col-md-12" align="center" style="font-size:16px;">
+					<p>This FHIR Client tool provides developers an ability to generate FHIR client requests to various servers and examine the response returned by the server in a JSON format. Please Authorize the Server first and then enter the various values and run a test.  </p>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="panel panel-default">
+  					<div class="panel-heading">FHIR Client</div>
+  					<div class="panel-body">
+  						<div class="panel-group">
+  							<div class="row">
+  								<div class="col-md-3" id="authbtndiv">
+	  								<!-- <button type="button" class="btn btn-danger btn-lg" data-target="#authorize-modal" data-toggle="modal" data-original-title="" data-toggle="tooltip" id="authbtn">
+									  <span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Authorize Server
+									</button> -->
+	  							</div>
+	  							<div class="col-md-8" id="authsuccess">
+	  								<!-- <div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Authorize your FHIR Server and then enter the various values and run a test.</strong></div> -->
+	  							</div>
+  							</div>
+  						</div>
+    					
+						<div class="panel-group" id="testsaccordion" >
+						    <div class="panel panel-default">
+						      <div class="panel-heading">
+						        <h4 class="panel-title">
+						          <a data-toggle="collapse" data-parent="#testsaccordion" href="#runtest">Run Tests</a>
+						        </h4>
+						      </div>
+						      <div id="runtests" class="panel-collapse collapse in">
+						      	<div class="panel-body">
+						      		<form class="form-horizontal">
+						      			<div class="form-group">
+											<label for="inputEmail3" class="col-sm-2 control-label">Conformance Profile:</label>
+										    <div class="col-sm-4">
+										      	<select id="confprofname" class="form-control" onchange="loadfhirres();" data-toggle="tooltip" data-original-title=''>
+										      		<option>Select Conformance Profile Name</option>
+												  	<option value="DAF">DAF</option>
+												</select>
+										    </div> 	
+										    <label for="inputEmail3" class="col-sm-2 control-label">FHIR Profile Name:</label>
+										    <div class="col-sm-4">
+										      	<select class="form-control" id="fhirresources" onchange="loadsearchparam();" disabled="disabled" data-toggle="tooltip" data-original-title=''>
+										      	<option>Select FHIR Profile Name</option>
+												</select>
+										    </div> 						
+			    						</div>
+										<div class="form-group">
+				    							<div class="col-md-12">
+
+												  <ul class="nav nav-tabs" role="tablist" id="myTabs" style="margin-left:50px;">
+												    <li role="presentation" class="active"><a href="#search" aria-controls="search" role="tab" data-toggle="tab" style="padding:5px 8px;">Search Parameters</a></li>
+												    <li role="presentation"><a href="#read" aria-controls="read" role="tab" data-toggle="tab" style="padding:5px 8px;">Read</a></li>
+												  </ul>
+
+												  <div class="tab-content well" style="border:1px solid #ddd;border-radius:4px;margin-bottom:0px;padding:0px;">
+												    <div role="tabpanel" class="tab-pane active" id="search" style="padding:10px;">
+												    	
+												    </div>
+												    <div role="tabpanel" class="tab-pane" id="read" style="padding:10px;">
+												    	
+												    </div>
+												  </div>
+
+												</div>
+				    						</div>
+				    					<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="runresourcetest();" id="runtestbtn" disabled="disabled">Run Test</button>
+			    					</form>
+						      	</div>
+						      </div>
+						    </div>
+						</div>
+						
+  					</div>
+				</div>
+			</div>
+			
+		</div>
+		<footer> 
+			<div role="contentinfo" class="container"> 
+				<div class="row"> 
+					<div> 
+						<p>This project was funded by a contract from the <a tabindex="100" href="http://www.healthit.gov">Office of the National Coordinator for Health Information Technology (ONC)</a>
+						</p> 
+						<!-- <p><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a>
+						</p> --> 
+					</div> 
+					<div class="row"> <div class="col-md-8"> <p>For any inquiries or questions, please send an email to <a tabindex="100" href="mailto:TestingServices@sitenv.org">TestingServices@sitenv.org</a></p> </div> <div class="col-md-4"> <p style="float:right;"><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimers</a></p> </div> </div>
+				</div> 
+			</div> 
+		</footer>
+
+		<!-- Test Response Data Start-->
+			<div class="modal fade" tabindex="-1" role="dialog" id="responsedatamodal">
+				  <div class="modal-dialog" style="width:80%">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title">Test Results</h4>
+				      </div>
+				      <div class="modal-body" style="overflow:auto;">
+				        <!-- <p>One fine body&hellip;</p> -->
+							<div class="panel-group" id="jsonaccordion" >
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a id="resurl"></a>
+										</h4>
+									</div>
+									<div id="responseurlcollapse" class="panel">
+										<div class="panel-body">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" data-parent="#accordion" href="#requestheaderscollaps">Request Headers</a>
+														<span class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#requestheaderscollapse" style="cursor:pointer;" id="reqspan">
+															<i class="glyphicon glyphicon-plus"></i>
+														</span>
+													</h4>
+												</div>
+												<div id="requestheaderscollapse" class="panel-collapse collapse">
+													<div class="panel-body" id="reqhead">
+
+													</div>
+												</div>
+											</div>
+										    <div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" data-parent="#accordion" href="#responseheaderscollaps">Response Headers</a>
+														<span class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#responseheaderscollapse" style="cursor:pointer;" id="resspan">
+															<i class="glyphicon glyphicon-plus"></i>
+														</span>
+													</h4>
+												</div>
+												<div id="responseheaderscollapse" class="panel-collapse collapse">
+													<div class="panel-body" id="resphead">
+
+													</div>
+												</div>
+											</div>
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h4 class="panel-title">
+														<a data-toggle="collapse" data-parent="#accordion" href="#responsedatacollaps">Response Data</a>
+														<span class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#responsedatacollapse" style="cursor:pointer;" id="dataspan">
+															<i class="glyphicon glyphicon-minus"></i>
+														</span>
+													</h4>
+												</div>
+												<div id="responsedatacollapse" class="panel-collapse collapse in">
+													<div class="panel-body" id="resphead">
+													    <!-- <pre id="jsondata">
+											  				<code class="json" id="jsondata"></code>						
+											  			</pre> -->
+											  			<div class="">
+
+														  <ul class="nav nav-tabs" role="tablist" id="respTabs">
+														    <li role="presentation" class="active"><a href="#tableview" aria-controls="tableview" role="tab" data-toggle="tab" style="padding:5px 8px;">Table View</a></li>
+														    <li role="presentation"><a href="#jsonview" aria-controls="jsonview" role="tab" data-toggle="tab" style="padding:5px 8px;">JSON View</a></li>
+														  </ul>
+
+														  <div class="tab-content" style="border:1px solid #ddd;border-radius:4px;margin-bottom:0px;padding:0px;">
+														    <div role="tabpanel" class="tab-pane active" id="tableview">
+														    	<div class="col-md-12 table-responsive" style="padding:10px;border:1px solid #ddd;" id="tablediv"></div>
+														    </div>
+														    <div role="tabpanel" class="tab-pane" id="jsonview">
+														    	<pre id="jsondata">
+													  				<!-- <code class="json" id="jsondata"></code> -->						
+													  			</pre>
+														    </div>
+														  </div>
+
+														</div>
+														<!-- <pre id="">
+													  				<code class="json" id="jsondata"></code>						
+													  	</pre> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+		    <!-- Test Response Data  End-->
+		    <!-- Authorize Modal Start-->
+			<div class="modal fade" tabindex="-1" role="dialog" id="authorize-modal">
+				  <div class="modal-dialog" style="width:900px">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title">Authorize Server</h4>
+				      </div>
+				      <div class="modal-body" style="overflow:auto;">
+				      	<div class="row" align="center" style="font-size:14px;font-weight:bold;color:#233a52;">
+				      		<div class="col-md-12">Authorize the FHIR server by selecting Public Server or Confidential Server. Please enter the client ID and client Secret for the FHIR server being tested, these are supplied by the server administrator/single-sign-on application.</div>
+				      	</div>
+				      	<div class='row'><div class='span12'><hr style="margin:5px;"></div></div>
+				      	<div class="col-md-12">
+				      		<label class="checkbox-inline"><input id="rdb1" type="radio" name="toggler" value="1" style="margin-right:10px;margin-top:0px" />Public Server</label>
+							<label class="checkbox-inline"><input id="rdb2" type="radio" name="toggler" value="2" style="margin-right:10px;margin-top:0px" />Confidential Server</label>
+				      	</div>
+				      	
+
+						<div id="blk-1" class="toHide rows" style="display:none;padding-top:35px;">
+						    <form class="form-horizontal">
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">Client ID:</label>
+								    <div class="col-sm-8">
+								      	<input type="text" class="form-control" id="publicclientid">
+								    </div>    							
+	    						</div>
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">FHIR Server URL:</label>
+								    <div class="col-sm-8">
+								      	<input type="text" class="form-control" id="publicserverurl" data-toggle="tooltip" data-original-title=''>
+								    </div>    							
+	    						</div>
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+								    <div class="col-sm-5">
+										<select id="publicclientscope" class="form-control" data-toggle="tooltip" data-original-title='' multiple="multiple">
+								      		<option value="launch">launch</option>
+											<option value="launch/patient">launch/patient</option>
+											<option value="patient/*.read">patient/*.read</option>
+											<option value="patient/Patient.read">patient/Patient.read</option>
+											<option value="patient/DocumentReference.read">patient/DocumentReference.read</option>
+											<option value="patient/MedicationOrder.read">patient/MedicationOrder.read</option>
+											<option value="patient/MedicationStatement.read">patient/MedicationStatement.read</option>
+											<option value="fhir_complete">fhir_complete</option>
+											<option value="openid profile">openid profile</option>
+											<option value="offline_access">offline_access</option>
+											<option value="online_access">online_access</option>
+								      		<option value="profile">profile</option>
+								      		<option value="email">email</option>
+								      		<option value="address">address</option>
+								      		<option value="phone">phone</option>
+								      		<option value="user/Patient.read">user/Patient.read</option>
+										  	<option value="user/*.read">user/*.read</option>
+										  	<option value="user/*.*">user/*.*</option>
+										</select>
+								    </div> 							
+	    						</div>
+	    						<button type="button" class="btn btn-primary center-block"  onclick="publicserverauth();" id="publicruntestbtn">Authorize</button>
+	    					</form>
+	    					<!-- <div class="col-md-12" align="center" style="padding-top:10px;"> Don't have Client ID? <a href="#">Click here</a> to register a client.</div> -->
+						</div>
+						<div id="blk-2" class="toHide rows" style="display:none;padding-top:35px;">
+						    <form class="form-horizontal">
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">Client ID:</label>
+								    <div class="col-sm-8">
+								      	<input type="text" class="form-control" id="clientid">
+								    </div>    							
+	    						</div>
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">Client Secret:</label>
+								    <div class="col-sm-8">
+								      	<input type="password" class="form-control" id="clientsecret">
+								    </div>    							
+	    						</div>
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">FHIR Server URL:</label>
+								    <div class="col-sm-8">
+								      	<input type="text" class="form-control" id="serverurl" data-toggle="tooltip" data-original-title=''>
+								    </div>    							
+	    						</div>
+	    						<div class="form-group">
+									<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+								    <div class="col-sm-5">
+										<select id="clientscope" class="form-control" data-toggle="tooltip" data-original-title='' multiple="multiple">
+								      		<option value="launch">launch</option>
+											<option value="launch/patient">launch/patient</option>
+											<option value="patient/*.read">patient/*.read</option>
+											<option value="patient/Patient.read">patient/Patient.read</option>
+											<option value="patient/DocumentReference.read">patient/DocumentReference.read</option>
+											<option value="patient/MedicationOrder.read">patient/MedicationOrder.read</option>
+											<option value="patient/MedicationStatement.read">patient/MedicationStatement.read</option>
+											<option value="fhir_complete">fhir_complete</option>
+											<option value="openid profile">openid profile</option>
+											<option value="offline_access">offline_access</option>
+											<option value="online_access">online_access</option>
+								      		<option value="profile">profile</option>
+								      		<option value="email">email</option>
+								      		<option value="address">address</option>
+								      		<option value="phone">phone</option>
+								      		<option value="user/Patient.read">user/Patient.read</option>
+										  	<option value="user/*.read">user/*.read</option>
+										  	<option value="user/*.*">user/*.*</option>
+										</select>
+								    </div> 							
+	    						</div>
+	    						<button type="button" class="btn btn-primary center-block" onclick="authorizeserver();" id="authorizebtn">Authorize</button>
+	    					</form>
+	    					<div class="col-md-12" align="center" style="padding-top:10px;"> Don't have Client ID and Client Secret? <a href="#">Click here</a> to register a client.</div>
+						</div>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+		    <!-- Authorize Modal End-->
+
+		<!--<script src="js/jquery/jquery-1.11.1.js"></script>-->
+		<script src="js/bootstrap.js"></script>
+		<script src="js/bootbox.js"></script>
+		<script src="js/FHIRresources.js"></script>
+		<script src="js/searchparameters.js"></script>
+		<script src="js/spin.js"></script>
+		<script src="js/ladda.js"></script>
+		<script src="js/ladda.jquery.js"></script>
+		<script src="js/fhir.js"></script>
+		<script src="js/publicfhir.js"></script>
+		<script src="js/loadtableview.js"></script>
+		<script src="js/kelpjsonview.js"></script>
+		<script type="text/javascript">
+		$('#search').load("search.html");
+		$('#read').load("read.html");
+		var searchvals = [];
+		var currenttab = '#search';
+		var paramvar = checkcode("code");
+		var access_token, resourceid, fhirresourcename = '';
+		$('#serverurl').tooltip({'trigger':'focus','title':"This is the base URL of your FHIR Server. The request submitted will be of the form Base URL + /fhir/{Resource}..",'placement':'top'});
+		$('#confprofname').tooltip({'trigger':'focus','title':"Select a Conformance Profile that is implemented by your server",'placement':'top'});
+		$('#fhirresources').tooltip({'trigger':'focus','title':"Select the FHIR profile that you want to test",'placement':'top'});
+		$('#authbtn').tooltip({'trigger':'hover','title':"Authorize your FHIR server by selecting Public or Confidential",'placement':'top'});
+
+		$('#myTabs a').click(function (e) {
+		  e.preventDefault()
+		  /*$(this).tab('show');*/
+		  currenttab = $(this).attr('href');
+		});
+
+		$(document).ready(function(){
+		    $('[data-toggle="tooltip"]').tooltip();  
+		});
+		$("[name=toggler]").click(function(){
+            $('.toHide').hide();
+            $("#blk-"+$(this).val()).show('slow');
+    	});
+    	$('#searchparamcollapse').on('hidden.bs.collapse', function () {
+		  	console.log("yes");
+		});
+		$('#authorize-modal').on('hidden.bs.modal', function () {
+			 $('input[type="text"],input[type="password"]').val('');
+			 document.getElementById("clientscope").selectedIndex = -1;
+			 $("[name=toggler]").attr('checked', false);
+			 $('.toHide').hide();
+		});
+		$('#responsedatamodal').on('hidden.bs.modal', function () {
+			if (!$('#responsedatacollapse').hasClass('in')) {
+		        $('#responsedatacollapse').collapse('toggle');
+		    }
+		    if ($('#responseheaderscollapse').hasClass('in')) {
+		        $('#responseheaderscollapse').collapse('toggle');
+		    }
+		    if ($('#requestheaderscollapse').hasClass('in')) {
+		        $('#requestheaderscollapse').collapse('toggle');
+		    }
+
+		    if($('#dataspan').children().hasClass('glyphicon-plus')){
+		    	$('#dataspan').children().toggleClass("glyphicon-plus glyphicon-minus");
+		    }
+
+		    if($('#reqspan').children().hasClass('glyphicon-minus')){
+		    	$('#reqspan').children().toggleClass("glyphicon-minus glyphicon-plus");
+		    }
+
+		    if($('#resspan').children().hasClass('glyphicon-minus')){
+		    	$('#resspan').children().toggleClass("glyphicon-minus glyphicon-plus");
+		    }
+
+		    if(!$('#respTabs li').first().hasClass('active')){
+		    	$('#respTabs li').toggleClass("active");
+		    	$('#tableview').toggleClass("active");
+		    	$('#jsonview').toggleClass("active");	
+		    }
+		});
+
+	    $('#dataspan').on('click', function(e) {
+	      $(this).children().toggleClass("glyphicon-minus glyphicon-plus");
+	      e.preventDefault();
+	    });
+	    $('#reqspan').on('click', function(e) {
+	      $(this).children().toggleClass("glyphicon-plus glyphicon-minus");
+	      e.preventDefault();
+	    });
+	    $('#resspan').on('click', function(e) {
+	      $(this).children().toggleClass("glyphicon-plus glyphicon-minus");
+	      e.preventDefault();
+	    });
+
+	    /*$('#respTabs li').on('click',function(e){
+	    	$(this).toggleClass("active");
+	    });*/
+		</script>
+	</body>
+</html>

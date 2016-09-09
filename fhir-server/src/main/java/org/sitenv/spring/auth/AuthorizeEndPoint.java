@@ -76,8 +76,12 @@ public class AuthorizeEndPoint extends HttpServlet {
         String state = request.getParameter("state");
         
         DafClientRegister client = service.getClient(client_id);
+        //Newly added code to resolve scopes issue
+        if(client != null){
+            
+            String registeredScopes = client.getScope().replace(" ", ",");
         
-        List<String> scopes = Arrays.asList(client.getScope().split(","));
+        List<String> scopes = Arrays.asList(registeredScopes.split(","));
         logger.info("Scopes: "+scope);
         scope = scope.replace(" ", ",");
         List<String> reqScopes = Arrays.asList(scope.split(","));
@@ -146,6 +150,10 @@ public class AuthorizeEndPoint extends HttpServlet {
         } else {
             String url = redirect_uri + "?error=invalid_scope&error_description=Unauthorized - Requested Scope not authorized for Client&state=" + state + "&scope=" + client.getScope();
             response.sendRedirect(url);
+        }
+        //Newly added code to resolve scopes issue
+        }else{
+        	response.sendRedirect(redirect_uri+"?error=invalid_client_id&error_description=Unauthorized - Invalid client_id&state="+state);
         }
     }
 	

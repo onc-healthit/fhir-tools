@@ -1,23 +1,24 @@
 package org.sitenv.spring.query;
 
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
-
-import java.util.Date;
 
 /**
  * Created by Prabhushankar.Byrapp on 8/23/2015.
  */
 public class PatientSearchCriteria extends SearchCriteria {
 
-    private String fullName;
+    private StringParam fullName;
     private String searchText;
     private String familyName;
     private String givenName;
     private TokenParam identifier;
     private String language;
     private String telecom;
-    private String gender;
-    private Date birthDate;
+    private StringParam gender;
+    private DateParam birthDate;
     private String city;
     private String postalCode;
     private String state;
@@ -28,11 +29,11 @@ public class PatientSearchCriteria extends SearchCriteria {
     public PatientSearchCriteria() {
     }
 
-    public String getFullName() {
+    public StringParam getFullName() {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public void setFullName(StringParam fullName) {
         this.fullName = fullName;
     }
 
@@ -84,19 +85,19 @@ public class PatientSearchCriteria extends SearchCriteria {
         this.telecom = telecom;
     }
 
-    public String getGender() {
+    public StringParam getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(StringParam gender) {
         this.gender = gender;
     }
 
-    public Date getBirthDate() {
+    public DateParam getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(DateParam birthDate) {
         this.birthDate = birthDate;
     }
 

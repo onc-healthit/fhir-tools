@@ -11,7 +11,11 @@ import org.sitenv.spring.model.PatientList;
 import org.sitenv.spring.query.PatientSearchCriteria;
 import org.springframework.stereotype.Repository;
 
+import ca.uhn.fhir.rest.param.ParamPrefixEnum;
+
 import javax.transaction.Transactional;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,12 +58,19 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
         }
 
         //Full name
-        if (StringUtils.isNotBlank(searchOptions.getFullName())) {
+        if (searchOptions.getFullName() != null && StringUtils.isNotBlank(searchOptions.getFullName().getValue())) {
+        	if(searchOptions.getFullName().isContains()){
             Disjunction disjunction = Restrictions.disjunction();
-            disjunction.add(Restrictions.ilike("fullName", searchOptions.getFullName(), MatchMode.ANYWHERE));
-            disjunction.add(Restrictions.ilike("familyName", searchOptions.getFullName(), MatchMode.ANYWHERE));
-            disjunction.add(Restrictions.ilike("givenName", searchOptions.getFullName(), MatchMode.ANYWHERE));
+           // disjunction.add(Restrictions.ilike("fullName", searchOptions.getFullName(), MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("familyName", searchOptions.getFullName().getValue(), MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("givenName", searchOptions.getFullName().getValue(), MatchMode.ANYWHERE));
             criteria.add(disjunction);
+        	}else{
+        		Disjunction disjunction = Restrictions.disjunction();
+                disjunction.add(Restrictions.eq("familyName", searchOptions.getFullName().getValue()).ignoreCase());
+                disjunction.add(Restrictions.eq("givenName", searchOptions.getFullName().getValue()).ignoreCase());
+                criteria.add(disjunction);
+        	}
         }
 
         //familyName
@@ -85,15 +96,56 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
         }
 
         //gender
-        if (StringUtils.isNotBlank(searchOptions.getGender())) {
+        if(searchOptions.getGender()!= null){
+        	if(searchOptions.getGender().getMissing()!= null && searchOptions.getGender().getMissing()){
+        		 Disjunction disjunction = Restrictions.disjunction();
+        		disjunction.add(Restrictions.eq("gender",""));
+        		disjunction.add(Restrictions.isNull("gender"));
+        		criteria.add(disjunction);
+        	}else if(searchOptions.getGender().getMissing()!= null && !searchOptions.getGender().getMissing()){
+            //criteria.add(Restrictions.ilike("gender", searchOptions.getGender(), MatchMode.ANYWHERE));
+        		//System.out.println("value : "+searchOptions.getGender().getValue());
+        		//criteria.add(Restrictions.isNotEmpty("Gender"));
+        		Disjunction disjunction = Restrictions.disjunction();
+        		disjunction.add(Restrictions.isNotNull("gender"));
+        		disjunction.add(Restrictions.ne("gender", ""));
+        		criteria.add(disjunction);
+        	}
+        	if(StringUtils.isNotBlank(searchOptions.getGender().getValue())){
+        		criteria.add(Expression.eq("gender", searchOptions.getGender().getValue()).ignoreCase());
+        	}
+        }
+       /* if (StringUtils.isNotBlank(searchOptions.getGender())) {
             //criteria.add(Restrictions.ilike("gender", searchOptions.getGender(), MatchMode.ANYWHERE));
             criteria.add(Expression.eq("gender", searchOptions.getGender()).ignoreCase());
-        }
+        }*/
 
         //birthDate
-        if (searchOptions.getBirthDate() != null) {
-            criteria.add(Restrictions.eq("birthDate", searchOptions.getBirthDate()));
+        if (searchOptions.getBirthDate() != null){
+    		Date birthDate = null;
+    		ParamPrefixEnum paramPrefixEnum = null;
+    		if(searchOptions.getBirthDate() != null){
+    			paramPrefixEnum = searchOptions.getBirthDate().getPrefix();
+    			birthDate = searchOptions.getBirthDate().getValue();
+    		}
+    		
+    		if(paramPrefixEnum != null){
+    			if(paramPrefixEnum.getValue() == "lt"){
+    				criteria.add(Restrictions.lt("birthDate", birthDate));
+    			}else if(paramPrefixEnum.getValue() == "gt"){
+    				criteria.add(Restrictions.gt("birthDate", birthDate));
+    			}else if(paramPrefixEnum.getValue() == "le"){
+    				criteria.add(Restrictions.le("birthDate", birthDate));
+    			}else if(paramPrefixEnum.getValue() == "ge"){
+    				criteria.add(Restrictions.ge("birthDate", birthDate));
+    			}else if(paramPrefixEnum.getValue() == "ne"){
+    				criteria.add(Restrictions.ne("birthDate", birthDate));
+    			}
+    		}else{
+				criteria.add(Restrictions.eq("birthDate", birthDate));
+			}
         }
+       
 
         //city
         if (StringUtils.isNotBlank(searchOptions.getCity())) {

@@ -14,8 +14,11 @@ import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.model.primitive.UriDt;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringOrListParam;
+import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -140,13 +143,13 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      */
     @Search()
     public List<Patient> findPatientsByGivenName(@RequiredParam(name = Patient.SP_GIVEN) StringDt theGivenName,
-                                                 @OptionalParam(name = Patient.SP_GENDER) StringDt theGender,
+                                                 @OptionalParam(name = Patient.SP_GENDER) StringParam theGender,
                                                  @OptionalParam(name = Patient.SP_FAMILY) StringDt theFamily,
                                                  @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
         searchOption.setGivenName(theGivenName.getValue());
         if (theGender != null) {
-            searchOption.setGender(theGender.getValue());
+            searchOption.setGender(theGender);
         }
         if (theFamily != null) {
             searchOption.setFamilyName(theFamily.getValue());
@@ -170,12 +173,12 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      */
     @Search()
     public List<Patient> findPatientsByFamilyName(@RequiredParam(name = Patient.SP_FAMILY) StringDt theFamilyName,
-                                                  @OptionalParam(name = Patient.SP_GENDER) StringDt theGender,
+                                                  @OptionalParam(name = Patient.SP_GENDER) StringParam theGender,
                                                   @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
         searchOption.setFamilyName(theFamilyName.getValue());
         if (theGender != null) {
-            searchOption.setGender(theGender.getValue());
+            searchOption.setGender(theGender);
         }
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 
@@ -195,22 +198,23 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      * @return This method returns a list of Patients. This list may contain multiple matching resources, or it may also be empty.
      */
     @Search()
-    public List<Patient> findPatientsByName(@RequiredParam(name = Patient.SP_NAME) StringDt theName,
-                                            @OptionalParam(name = Patient.SP_GENDER) StringDt theGender,
-                                            @OptionalParam(name = Patient.SP_BIRTHDATE) StringDt theBirthDate,
+    public List<Patient> findPatientsByName(@RequiredParam(name = Patient.SP_NAME) StringParam theName,
+                                            @OptionalParam(name = Patient.SP_GENDER) StringParam theGender,
+                                            @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam theBirthDate,
                                             @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
-        searchOption.setFullName(theName.getValue());
+        searchOption.setFullName(theName);
         if (theGender != null) {
-            searchOption.setGender(theGender.getValue());
+            searchOption.setGender(theGender);
         }
         if (theBirthDate != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	searchOption.setBirthDate(theBirthDate);
+           /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
             } catch (ParseException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 
@@ -230,16 +234,16 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      * @return This method returns a list of Patients. This list may contain multiple matching resources, or it may also be empty.
      */
     @Search()
-    public List<Patient> findPatientsByBirthDate(@RequiredParam(name = Patient.SP_BIRTHDATE) StringDt theBirthDate,
+    public List<Patient> findPatientsByBirthDate(@RequiredParam(name = Patient.SP_BIRTHDATE) DateParam theBirthDate,
                                                  @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        searchOption.setBirthDate(theBirthDate);
+        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
         } catch (Exception e) {
 
-        }
+        }*/
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 
         List<Patient> patientList = new ArrayList<Patient>();
@@ -283,18 +287,19 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      */
 
     @Search()
-    public List<Patient> findPatientsByGenderType(@RequiredParam(name = Patient.SP_GENDER) StringDt theGenderType,
-                                                  @OptionalParam(name = Patient.SP_BIRTHDATE) StringDt theBirthDate,
+    public List<Patient> findPatientsByGenderType(@RequiredParam(name = Patient.SP_GENDER) StringParam theGenderType,
+                                                  @OptionalParam(name = Patient.SP_BIRTHDATE) DateParam theBirthDate,
                                                   @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
-        searchOption.setGender(theGenderType.toString());
+        searchOption.setGender(theGenderType);
         if (theBirthDate != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        	searchOption.setBirthDate(theBirthDate);
+           /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
             } catch (Exception e) {
 
-            }
+            }*/
         }
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 

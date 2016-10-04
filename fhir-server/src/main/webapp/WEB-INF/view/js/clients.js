@@ -1,7 +1,4 @@
 (function(){
-	//var main_url ="http://localhost:8000/hapi";
-	//var main_url = "https://fhirtest.direct.sitenv.org/hapi";
-	//var main_url = "https://fhirtest.sitenv.org/hapi-resprint";
 	var main_url = geturl();
 	registerclient = function(){
 		var contactname = $('#contactname').val();

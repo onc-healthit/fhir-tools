@@ -13,6 +13,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringOrListParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafObservation;
@@ -62,9 +63,10 @@ public class ObservationResourceProvider implements IResourceProvider {
 
         List<Observation> observationList = new ArrayList<Observation>();
 
-        for (DafObservation dafObservations : dafObservationsList) {
-            
-            observationList.add(createObservationObject(dafObservations));
+        for (DafObservation dafObservation : dafObservationsList) {
+        	if(dafObservation.getPatient() != null){
+        		observationList.add(createObservationObject(dafObservation));
+        	}
         }
 
         return observationList;
@@ -82,11 +84,21 @@ public class ObservationResourceProvider implements IResourceProvider {
     @Read()
     public Observation getObservationResourceById(@IdParam IdDt theId) {
 
-        DafObservation dafObservation = service.getObservationResourceById(theId.getIdPartAsLong().intValue());
-
-        Observation observation = createObservationObject(dafObservation);
-
-        return observation;
+        try{
+    		Integer observationId = theId.getIdPartAsLong().intValue();
+        DafObservation dafObservation = service.getObservationResourceById(observationId);
+        if(dafObservation.getPatient()!= null){
+        	Observation observation = createObservationObject(dafObservation);
+        	return observation;
+        }else{
+        	throw new ResourceNotFoundException(theId);
+        }
+    	} catch (Exception e) {
+			/*
+			 * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+			 */
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**
@@ -134,7 +146,9 @@ public class ObservationResourceProvider implements IResourceProvider {
         List<Observation> observationList = new ArrayList<Observation>();
 
         for (DafObservation dafObservation : dafObservationList) {
-            observationList.add(createObservationObject(dafObservation));
+        	if(dafObservation.getPatient() != null){
+        		observationList.add(createObservationObject(dafObservation));
+        	}
         }
         return observationList;
     }

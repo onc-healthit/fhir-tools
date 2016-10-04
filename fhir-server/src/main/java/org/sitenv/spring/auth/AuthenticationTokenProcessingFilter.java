@@ -70,6 +70,9 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
             }
 
 
+        } else if (httpRequest.getRequestURI().contains("/open/")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);

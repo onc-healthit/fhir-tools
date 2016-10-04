@@ -262,3 +262,61 @@ header .navbar .nav li a:hover {
     font-size: 14px;
     text-align: center;
 }
+
+.hiddenText {
+    border: 0 none;
+    clip: rect(0px, 0px, 0px, 0px);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+a.ext-icon {
+    background: rgba(0, 0, 0, 0) url("../images/extlink.png") no-repeat scroll right center;
+    display: inline-block;
+    height: 10px;
+    padding: 0 2px 0 1px;
+    width: 10px;
+}
+
+.dropdown-menu > li > a {
+    clear: both;
+    color: #333333;
+    display: block;
+    font-weight: normal;
+    left: 0;
+    line-height: 1.42857;
+    padding: 3px 20px;
+    position: relative;
+    top: 0;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.external-page {
+    position: absolute;
+    right: 5px;
+    top: 1px;
+}
+
+.firefox_fix {
+    position: relative;
+}
+
+.modify-pages li {
+    position: relative;
+}
+
+ul {
+    list-style: outside none disc;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus{
+    background-color: #e8e8e8;
+    /*background-image: linear-gradient(to bottom,#f5f5f5 0%,#e8e8e8 100%);
+    background-repeat: repeat-x;*/
+}

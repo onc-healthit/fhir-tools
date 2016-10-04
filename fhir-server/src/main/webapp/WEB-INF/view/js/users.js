@@ -1,7 +1,4 @@
 (function(){
-    //var main_url = "http://localhost:8000/hapi";
-	//var main_url = "https://fhirtest.direct.sitenv.org/hapi";
-	//var main_url = "https://fhirtest.sitenv.org/hapi-resprint";
 	var main_url = geturl();
 	var emailregex = /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
 	var regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/;

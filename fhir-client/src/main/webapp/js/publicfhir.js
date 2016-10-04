@@ -18,12 +18,21 @@
 		}
 		console.log(publicclientid);
 		var publicclientsecret = '';
-		var publicscopes = [];
+		/*var publicscopes = [];
         $.each($("#publicclientscope option:selected"), function(){            
             publicscopes.push($(this).val());
+        });*/
+        var val = [];
+        $('.publicscopes :checkbox:checked').each(function(i){
+          val[i] = $(this).val();
         });
-        var publicclientscope = publicscopes.join(",");
-
+        console.log(val);
+        if(val.length <= 0){
+        	bootbox.alert("Please select atleast one Scope");
+        	return false;
+        }
+        var publicclientscope = val.join(",");
+        console.log(publicclientscope);
         var redirecturi = location.protocol + '//' + location.host + location.pathname;
 		$.ajax({
 			url:baseurl+"/metadata?_format=json",

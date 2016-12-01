@@ -1,5 +1,7 @@
 package org.sitenv.spring.dao;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -16,14 +18,37 @@ public class UserRegistrationDaoImpl extends AbstractDao implements UserRegistra
     public String register(DafUserRegister user) {
 
         session = getSession();
-        int i = (Integer) session.save(user);
-        if (i > 0) {
-            return "Success";
+        
+        Criteria criteria = getSession().createCriteria(DafUserRegister.class)
+                .add(Restrictions.eq("user_name", user.getUser_name()).ignoreCase());
+        @SuppressWarnings("unchecked")
+		List<DafUserRegister> existedUser =  criteria.list();
+        if(existedUser != null && existedUser.size()>0){
+        	return "Username already exists. Please use a different Username.";
+        }else {
+        	int i = (Integer) session.save(user);
+            if (i > 0) {
+                return "User Registerd Successfully. Please Login to register Clients.";
 
-        } else {
-            return "Failed";
-        }
+            } else {
+                return "User Registration failed. Please contact Admin.";
+            }
+		}
+        
+        
 
+    }
+    
+    public String updateUser(DafUserRegister user){
+    	session = getSession();
+    	try{
+    	session.update(user);
+    	return "User details updated.";
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return "Failed to update User details. Please contact Admin.";
+    	}
+    	
     }
 
     @Override

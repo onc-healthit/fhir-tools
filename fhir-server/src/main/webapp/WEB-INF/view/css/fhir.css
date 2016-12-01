@@ -320,3 +320,24 @@ ul {
    /* background-image: linear-gradient(to bottom,#f5f5f5 0%,#e8e8e8 100%);
     background-repeat: repeat-x;*/
 }
+
+#loginerror{
+    color:#a94442;
+    text-align: center;
+}
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-all;
+}
+
+table th, table td { overflow: hidden;word-wrap: break-word; }
+
+.editanchor{
+    cursor: pointer;
+}

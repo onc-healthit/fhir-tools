@@ -541,6 +541,11 @@
 	  								<!-- <div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Authorize your FHIR Server and then enter the various values and run a test.</strong></div> -->
 	  							</div>
   							</div>
+                            <div class="row">
+                                <div class="col-md-12" id="serverResponse" style="padding-top: 10px;">
+
+                                </div>
+                            </div>
   					</div>
 				</div>
 				<div class="panel panel-default">
@@ -553,14 +558,14 @@
 						<div class="panel-body">
 						    <form class="form-horizontal">
 						      	<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Select Implementation Guide:</label>
+									<label for="confprofname" class="col-sm-3 control-label">Select Implementation Guide:</label>
 									<div class="col-sm-3">
 										<select id="confprofname" class="form-control" onchange="loadfhirres();" data-toggle="tooltip" data-original-title=''>
 										    <option>Select Implementation Guide</option>
 											<option value="DAF">DAF</option>
 										</select>
 									</div>
-									<label for="inputEmail3" class="col-sm-2 control-label">Select FHIR Profile:</label>
+									<label for="fhirresources" class="col-sm-2 control-label">Select FHIR Profile:</label>
 									<div class="col-sm-4">
 										<select class="form-control" id="fhirresources" onchange="loadsearchparam();" disabled="disabled" data-toggle="tooltip" data-original-title=''>
 										   	<option>Select FHIR Profile</option>
@@ -624,7 +629,7 @@
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h4 class="panel-title">
-														<a data-toggle="collapse" data-parent="#accordion" href="#requestheaderscollaps">Request Headers</a>
+														<a data-toggle="collapse" data-parent="#accordion" href="#requestheaderscollaps" class="headclass">Request Headers</a>
 														<span class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#requestheaderscollapse" style="cursor:pointer;" id="reqspan">
 															<i class="glyphicon glyphicon-plus"></i>
 														</span>
@@ -639,7 +644,7 @@
 										    <div class="panel panel-default">
 												<div class="panel-heading">
 													<h4 class="panel-title">
-														<a data-toggle="collapse" data-parent="#accordion" href="#responseheaderscollaps">Response Headers</a>
+														<a data-toggle="collapse" data-parent="#accordion" href="#responseheaderscollaps" class="headclass">Response Headers</a>
 														<span class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#responseheaderscollapse" style="cursor:pointer;" id="resspan">
 															<i class="glyphicon glyphicon-plus"></i>
 														</span>
@@ -654,7 +659,7 @@
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h4 class="panel-title">
-														<a data-toggle="collapse" data-parent="#accordion" href="#responsedatacollaps">Response Data</a>
+														<a data-toggle="collapse" data-parent="#accordion" href="#responsedatacollaps" class="headclass">Response Data</a>
 														<span class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#responsedatacollapse" style="cursor:pointer;" id="dataspan">
 															<i class="glyphicon glyphicon-minus"></i>
 														</span>
@@ -662,9 +667,6 @@
 												</div>
 												<div id="responsedatacollapse" class="panel-collapse collapse in">
 													<div class="panel-body" id="resphead">
-													    <!-- <pre id="jsondata">
-											  				<code class="json" id="jsondata"></code>
-											  			</pre> -->
 											  			<div class="">
 
 														  <ul class="nav nav-tabs" role="tablist" id="respTabs">
@@ -724,64 +726,64 @@
 						<div id="blk-1" class="toHide rows" style="display:none;padding-top:35px;">
 						    <form class="form-horizontal">
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Client ID:</label>
+									<label for="publicclientid" class="col-sm-3 control-label">Client ID:</label>
 								    <div class="col-sm-8">
 								      	<input type="text" class="form-control" id="publicclientid">
 								    </div>
 	    						</div>
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">FHIR Server URL:</label>
+									<label for="publicserverurl" class="col-sm-3 control-label">FHIR Server URL:</label>
 								    <div class="col-sm-8">
 								      	<input type="text" class="form-control" id="publicserverurl" data-toggle="tooltip" data-original-title=''>
 								    </div>
 	    						</div>
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+									<label for="scope" class="col-sm-3 control-label">Scope:</label>
 								    <div class="col-sm-9">
-								    	<div class="col-sm-5 publicscopes">
+								    	<div class="col-sm-5 publicscopes" id="scope">
 								    		<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="launch">launch</label>
+												<label><input class="publicscopesclass" type="checkbox" name="launch" value="launch">launch</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="launch/patient">launch/patient</label>
+												<label><input class="publicscopesclass" type="checkbox" name="launch/patient" value="launch/patient">launch/patient</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="patient/*.read">patient/*.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="patient/*.read" value="patient/*.read">patient/*.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="patient/Patient.read">patient/Patient.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="patient/Patient.read" value="patient/Patient.read">patient/Patient.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="patient/DocumentReference.read">patient/DocumentReference.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="patient/DocumentReference.read" value="patient/DocumentReference.read">patient/DocumentReference.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="patient/MedicationOrder.read">patient/MedicationOrder.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="patient/MedicationOrder.read" value="patient/MedicationOrder.read">patient/MedicationOrder.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="patient/MedicationStatement.read">patient/MedicationStatement.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="patient/MedicationStatement.read" value="patient/MedicationStatement.read">patient/MedicationStatement.read</label>
 											</div>
 								    	</div>
 								    	<div class="col-sm-5 publicscopes">
 								    		<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="fhir_complete">fhir_complete</label>
+												<label><input class="publicscopesclass" type="checkbox" name="fhir_complete" value="fhir_complete">fhir_complete</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="user/Patient.read">user/Patient.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="user/Patient.read" value="user/Patient.read">user/Patient.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="user/*.read">user/*.read</label>
+												<label><input class="publicscopesclass" type="checkbox" name="user/*.read" value="user/*.read">user/*.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="user/*.*">user/*.*</label>
+												<label><input class="publicscopesclass" type="checkbox" name="user/*.*" value="user/*.*">user/*.*</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="openid">openid</label>
+												<label><input class="publicscopesclass" type="checkbox" name="openid" value="openid">openid</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="publicscopesclass" type="checkbox" value="offline_access">offline_access</label>
+												<label><input class="publicscopesclass" type="checkbox" name="offline_access" value="offline_access">offline_access</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="online_access">online_access</label>
+												<label><input class="confscopesclass" type="checkbox" name="online_access" value="online_access">online_access</label>
 											</div>
 								    	</div>
 								    </div>
@@ -793,70 +795,70 @@
 						<div id="blk-2" class="toHide rows" style="display:none;padding-top:35px;">
 						    <form class="form-horizontal">
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Client ID:</label>
+									<label for="clientid" class="col-sm-3 control-label">Client ID:</label>
 								    <div class="col-sm-8">
 								      	<input type="text" class="form-control" id="clientid">
 								    </div>
 	    						</div>
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Client Secret:</label>
+									<label for="clientsecret" class="col-sm-3 control-label">Client Secret:</label>
 								    <div class="col-sm-8">
 								      	<input type="password" class="form-control" id="clientsecret">
 								    </div>
 	    						</div>
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">FHIR Server URL:</label>
+									<label for="serverurl" class="col-sm-3 control-label">FHIR Server URL:</label>
 								    <div class="col-sm-8">
 								      	<input type="text" class="form-control" id="serverurl" data-toggle="tooltip" data-original-title=''>
 								    </div>
 	    						</div>
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
-								    <div class="col-sm-9">
+									<label for="authScope" class="col-sm-3 control-label">Scope:</label>
+								    <div class="col-sm-9" id="authScope">
 								    	<div class="col-sm-5 confscopes">
 								    		<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="launch">launch</label>
+												<label><input class="confscopesclass" type="checkbox" name="launch" value="launch">launch</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="launch/patient">launch/patient</label>
+												<label><input class="confscopesclass" type="checkbox" name="launch/patient" value="launch/patient">launch/patient</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="patient/*.read">patient/*.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="patient/*.read" value="patient/*.read">patient/*.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="patient/Patient.read">patient/Patient.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="patient/Patient.read" value="patient/Patient.read">patient/Patient.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="patient/DocumentReference.read">patient/DocumentReference.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="patient/DocumentReference.read" value="patient/DocumentReference.read">patient/DocumentReference.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="patient/MedicationOrder.read">patient/MedicationOrder.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="patient/MedicationOrder.read" value="patient/MedicationOrder.read">patient/MedicationOrder.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="patient/MedicationStatement.read">patient/MedicationStatement.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="patient/MedicationStatement.read" value="patient/MedicationStatement.read">patient/MedicationStatement.read</label>
 											</div>
 								    	</div>
 								    	<div class="col-sm-5 confscopes">
 								    		<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="fhir_complete">fhir_complete</label>
+												<label><input class="confscopesclass" type="checkbox" name="fhir_complete" value="fhir_complete">fhir_complete</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="user/Patient.read">user/Patient.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="user/Patient.read" value="user/Patient.read">user/Patient.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="user/*.read">user/*.read</label>
+												<label><input class="confscopesclass" type="checkbox" name="user/*.read" value="user/*.read">user/*.read</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="user/*.*">user/*.*</label>
+												<label><input class="confscopesclass" type="checkbox" name="user/*.*" value="user/*.*">user/*.*</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="openid">openid</label>
+												<label><input class="confscopesclass" type="checkbox" name="openid" value="openid">openid</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="offline_access">offline_access</label>
+												<label><input class="confscopesclass" type="checkbox" name="offline_access" value="offline_access">offline_access</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="confscopesclass" type="checkbox" value="online_access">online_access</label>
+												<label><input class="confscopesclass" type="checkbox" name="online_access" value="online_access">online_access</label>
 											</div>
 								    	</div>
 								    </div>
@@ -891,14 +893,14 @@
 						<div class="rows" style="padding-top:35px;">
 						    <form class="form-horizontal">
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">FHIR Server URL:</label>
+									<label for="openserverurl" class="col-sm-3 control-label">FHIR Server URL:</label>
 								    <div class="col-sm-8">
 								      	<input type="text" class="form-control" id="openserverurl" data-toggle="tooltip" data-original-title=''>
 								    </div>
 	    						</div>
 	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
-								    <div class="col-sm-9">
+									<label for="openscopes" class="col-sm-3 control-label">Scope:</label>
+								    <div class="col-sm-9" id="openscopes">
 								    	<div class="col-sm-5 openscopes">
 								    		<div class="checkbox">
 												<label><input class="openscopesclass" type="checkbox" value="launch">launch</label>
@@ -974,7 +976,15 @@
 		<script src="js/loadtableview.js"></script>
 		<script src="js/kelpjsonview.js"></script>
 		<script type="text/javascript">
-		$('#search').load("search.html");
+		$('#search').load("search.html",function(){
+			$('#searchvalue').on('input',function(){
+		    	if($('#searchvalue').val() == ""){
+		    		$('#runtestbtn').attr('disabled','disabled');
+		    	}else{
+		    		$('#runtestbtn').attr('disabled',false);
+		    	}
+		    })
+		});
 		$('#read').load("read.html");
 		var searchvals = [];
 		var currenttab = '#search';
@@ -989,6 +999,21 @@
 		  e.preventDefault()
 		  /*$(this).tab('show');*/
 		  currenttab = $(this).attr('href');
+		  
+		  if(currenttab == "#search"){
+		  		if($('#searchvalue').val() == ""){
+		    		$('#runtestbtn').attr('disabled','disabled');
+		    	}else{
+		    		$('#runtestbtn').attr('disabled',false);
+		    	}
+		  }
+		  if(currenttab == "#read"){
+		  		if($('#fhirresources option:selected').attr('value') == "" || $('#fhirresources option:selected').attr('value') == undefined){
+		    		$('#runtestbtn').attr('disabled','disabled');
+		    	}else{
+		    		$('#runtestbtn').attr('disabled',false);
+		    	}
+		  }
 		});
 
 		$(document).ready(function(){
@@ -1002,14 +1027,14 @@
 		  	console.log("yes");
 		});
 		$('#authorize-modal').on('hidden.bs.modal', function () {
-			 $('input[type="text"]').val('');
-			 $("[type=checkbox]").attr('checked', false);
+			 /*$('input[type="text"]').val('');
+			 $("[type=checkbox]").attr('checked', false);*/
 			 $('.toHide').hide();
 		});
-		$('#noauthorize-modal').on('hidden.bs.modal', function () {
+		/*$('#noauthorize-modal').on('hidden.bs.modal', function () {
 			 $('input[type="text"],input[type="password"]').val('');
 			 $("[type=checkbox]").attr('checked', false);
-		});
+		});*/
 		$('#responsedatamodal').on('hidden.bs.modal', function () {
 			if (!$('#responsedatacollapse').hasClass('in')) {
 		        $('#responsedatacollapse').collapse('toggle');

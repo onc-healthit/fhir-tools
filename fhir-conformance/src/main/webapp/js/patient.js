@@ -49,6 +49,9 @@
 	          	patientByGivenandGender(strurl,data,patByGivenGender,colbyGivenGender);
 	          	patientByNameandBirthdate(strurl,data,patByNameBirthdate,colbyNameBirthdate);
 	          	//renderresults(data,strurl,xhr,patById,colbyId).done(patientByIdentifier(strurl,data,patByIdentifier,colbyIdentifier)).done(patientByNameandGender(strurl,data,patByNameGender,colbyNameGender)).done(patientByFamilyandGender(strurl,data,patByFamilyGender,colbyFamilyGender)).done(patientByGivenandGender(strurl,data,patByGivenGender,colbyGivenGender)).done(patientByNameandBirthdate(strurl,data,patByNameBirthdate,colbyNameBirthdate));
+	          	$('#authsuccess').html('');
+		  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized Successfully. Run a test by entering various values in the fileds.</strong></div>');
+		        $('#authsuccess').append(authsuccess);
 	          	renderresults(data,strurl,xhr,patById,colbyId,resType);
 	          	l.ladda( 'stop' );
 	        },
@@ -269,8 +272,8 @@
 	}
 
 	renderresults = function(data,strurl,xhr,trid,colbyIdentifier,resType){
-		
-			tr = $('<tr class="removabletr"></tr>');
+			/*$('.removabletr').remove();*/
+			tr = $('<tr class="patientremovabletr"></tr>');
 			td = $('<td colspan="6" class="hiddenRow"></td>');
 			collapsediv = $('<div class="accordian-body collapse" id='+colbyIdentifier+'><h5>Test Details</h5></div>');
 			// Resource
@@ -349,8 +352,9 @@
 	}
 
 	rendererror = function(e,trid){
+		console.log(e);
 		var authfail;
-		tr = $('<tr class="removabletr"></tr>');
+		tr = $('<tr class="patientremovabletr"></tr>');
 		td = $('<td colspan="6" class="hiddenRow"></td>');
 		if(e.status == '401'){
 	        localStorage.removeItem("access_token");

@@ -4,6 +4,7 @@
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('patientId');
 	    localStorage.removeItem('acctoken');
+	    localStorage.setItem("acctoken",false);
 	    localStorage.removeItem('strurl');
 		var state = Math.round(Math.random()*100000000).toString();
 		var strurl = baseurl = $('#serverurl').val().replace(/\/$/, '');
@@ -126,8 +127,8 @@
 	  		$('#authbtn').toggleClass('btn-danger btn-success');
 	  		$('#authsuccess').html('');
 	  		authbtndiv = $('<button type="button" class="btn btn-success" data-target="#authorize-modal" data-toggle="modal" data-original-title="" data-toggle="tooltip" id="authbtn" data-backdrop="static"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Authorize Server</button>');
-	  		/*authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Authentication Token is Present. Run a test by entering various values in the fileds.</strong></div>');
-	        $('#authsuccess').append(authsuccess);*/
+	  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized successfully. Run a test by entering various values in the fileds.</strong></div>');
+	        $('#authsuccess').append(authsuccess);
 	        $('#authbtndiv').append(authbtndiv);
 	    }else{
 	    	authbtndiv = $('<button type="button" class="btn btn-danger" data-target="#authorize-modal" data-toggle="modal" data-original-title="" data-toggle="tooltip" id="authbtn" data-backdrop="static"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Authorize Server</button>');
@@ -150,6 +151,29 @@
 	    	 $('#authsuccess').html('');
 	        var authsuccess = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>'+getUrlParameter("error_description")+'</strong></div>');
 	        $('#authsuccess').append(authsuccess);
+	        if(state != undefined){
+		    	var params = JSON.parse(sessionStorage[state]);
+		    	tokenurl = params.tokenurl;
+		        clientid = params.clientid;
+		        clientsecret = params.clientsecret;
+		        patientid = params.patientid;
+		        redirecturi = params.redirecturi;
+		        strurl = params.strurl;
+		        clientscope = params.clientscope;
+		        localStorage.setItem('strurl',strurl);
+		        $('#clientid').val(clientid);
+			    $('#clientsecret').val(clientsecret);
+			    $('#serverurl').val(strurl);
+			    $('#patientid').val(patientid);
+			    var scopearr = clientscope.split(',');
+			    for(var i=0; i< scopearr.length; i++){
+			    	$('input:checkbox.scopesclass').each(function () {
+				      	if($(this).val() == scopearr[i]){
+				      		$(this).prop('checked',true);
+					  	}
+				  	});
+			    }
+		    }
 	        return false;
 	    }
 	    if(state != undefined && code != undefined){
@@ -189,7 +213,16 @@
 	      type:"POST",
 	      data:data,
 	      success:function(data){
-	        access_token = data.access_token;
+			  console.log(data);
+			  
+			  if(typeof data == 'object'){
+				  console.log("in if");
+				  access_token = data.access_token;
+			  }else{
+				  console.log("in else");
+				  var response  = $.parseJSON(data);
+				  access_token = response.access_token;
+			  }
 	        var patientId = ''
 	        if(clientscope.indexOf("launch/patient") != -1){
 	        	patientId =  data.patient;
@@ -204,6 +237,18 @@
 	        localStorage.setItem('strurl',strurl);
 	        localStorage.setItem('patientid',patientid);
 	        localStorage.setItem('authtype','auth');
+	        $('#clientid').val(clientid);
+		    $('#clientsecret').val(clientsecret);
+		    $('#serverurl').val(strurl);
+		    $('#patientid').val(patientid);
+		    var scopearr = clientscope.split(',');
+		    for(var i=0; i< scopearr.length; i++){
+		    	$('input:checkbox.scopesclass').each(function () {
+			      	if($(this).val() == scopearr[i]){
+			      		$(this).prop('checked',true);
+				  	}
+			  	});
+		    }
 	        //getoauthjson(strurl);
 	      },
 	      error:function(e){

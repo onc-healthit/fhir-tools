@@ -10,14 +10,20 @@
 		   	table.append(thead);
 		   	results.append(table);
 		   	var noofresults = [];
+		   	console.log(data);
 		   	if(tab == '#search'){
 		   		//noofresults = data.entry;
 		   		if(data.entry){
 		   			noofresults = data.entry;
 		   		}
 		   	}else{
-		   		noofresults.push(data);
+		   		if(data.entry){
+		   			noofresults = data.entry	
+		   		}else{
+		   			noofresults.push(data);
+		   		}
 		   	}
+		   	console.log(noofresults);
 		   	for(var i=0;i<noofresults.length;i++){
 		   		var jsondata = {};
 		   		if(tab == '#search'){
@@ -26,7 +32,11 @@
 			   			jsondata = noofresults[i].resource;
 			   		}
 			   	}else{
-			   		jsondata = noofresults[i];
+			   		if(data.entry){
+			   			jsondata = noofresults[i].resource;
+			   		}else{
+			   			jsondata = noofresults[i];
+			   		}
 			   	}
 		   		var tr=$("<tr/>");
 		   		var td1 = $('<td></td>');
@@ -155,14 +165,22 @@
 		   			noofresults = data.entry;
 		   		}
 		   	}else{
-		   		noofresults.push(data);
+		   		if(data.entry){
+		   			noofresults = data.entry	
+		   		}else{
+		   			noofresults.push(data);
+		   		}
 		   	}
 		   	for(var i=0;i<noofresults.length;i++){
 		   		var jsondata = {};
 		   		if(tab == '#search'){
 			   		jsondata = noofresults[i].resource;
 			   	}else{
-			   		jsondata = noofresults[i];
+			   		if(data.entry){
+			   			jsondata = noofresults[i].resource;
+			   		}else{
+			   			jsondata = noofresults[i];
+			   		}
 			   	}
 		   		var tr=$("<tr/>");
 		   		var td1 = $("<td></td>");
@@ -224,14 +242,22 @@
 		   			noofresults = data.entry;
 		   		}
 		   	}else{
-		   		noofresults.push(data);
+		   		if(data.entry){
+		   			noofresults = data.entry	
+		   		}else{
+		   			noofresults.push(data);
+		   		}
 		   	}
 		   	for(var i=0;i<noofresults.length;i++){
 		   		var jsondata = {};
 		   		if(tab == '#search'){
 			   		jsondata = noofresults[i].resource;
 			   	}else{
-			   		jsondata = noofresults[i];
+			   		if(data.entry){
+			   			jsondata = noofresults[i].resource;
+			   		}else{
+			   			jsondata = noofresults[i];
+			   		}
 			   	}
 		   		var tr=$("<tr/>");
 		   		var td1 = $("<td></td>");
@@ -292,14 +318,22 @@
 		   			noofresults = data.entry;
 		   		}
 		   	}else{
-		   		noofresults.push(data);
+		   		if(data.entry){
+		   			noofresults = data.entry	
+		   		}else{
+		   			noofresults.push(data);
+		   		}
 		   	}
 		   	for(var i=0;i<noofresults.length;i++){
 		   		var jsondata = {};
 		   		if(tab == '#search'){
 			   		jsondata = noofresults[i].resource;
 			   	}else{
-			   		jsondata = noofresults[i];
+			   		if(data.entry){
+			   			jsondata = noofresults[i].resource;
+			   		}else{
+			   			jsondata = noofresults[i];
+			   		}
 			   	}
 		   		var tr=$("<tr/>");
 		        var td1 = $("<td></td>");
@@ -358,14 +392,22 @@
 		   			noofresults = data.entry;
 		   		}
 		   	}else{
-		   		noofresults.push(data);
+		   		if(data.entry){
+		   			noofresults = data.entry	
+		   		}else{
+		   			noofresults.push(data);
+		   		}
 		   	}
 		   	for(var i=0;i<noofresults.length;i++){
 		   		var jsondata = {};
 		   		if(tab == '#search'){
 			   		jsondata = noofresults[i].resource;
 			   	}else{
-			   		jsondata = noofresults[i];
+			   		if(data.entry){
+			   			jsondata = noofresults[i].resource;
+			   		}else{
+			   			jsondata = noofresults[i];
+			   		}
 			   	}
 		   		var tr=$("<tr/>");
 		        var td1 = $("<td></td>");
@@ -436,14 +478,22 @@
 		   			noofresults = data.entry;
 		   		}
 		   	}else{
-		   		noofresults.push(data);
+		   		if(data.entry){
+		   			noofresults = data.entry	
+		   		}else{
+		   			noofresults.push(data);
+		   		}
 		   	}
 		   	for(var i=0;i<noofresults.length;i++){
 		   		var jsondata = {};
 		   		if(tab == '#search'){
 			   		jsondata = noofresults[i].resource;
 			   	}else{
-			   		jsondata = noofresults[i];
+			   		if(data.entry){
+			   			jsondata = noofresults[i].resource;
+			   		}else{
+			   			jsondata = noofresults[i];
+			   		}
 			   	}
 		   		var tr=$("<tr/>");
 		        var td1 = $("<td></td>");
@@ -510,14 +560,22 @@
 			   			noofresults = data.entry;
 			   		}
 			   	}else{
-			   		noofresults.push(data);
+			   		if(data.entry){
+			   			noofresults = data.entry	
+			   		}else{
+			   			noofresults.push(data);
+			   		}
 			   	}
 			   	for(var i=0;i<noofresults.length;i++){
 			   		var jsondata = {};
 			   		if(tab == '#search'){
 				   		jsondata = noofresults[i].resource;
 				   	}else{
-				   		jsondata = noofresults[i];
+				   		if(data.entry){
+				   			jsondata = noofresults[i].resource;
+				   		}else{
+				   			jsondata = noofresults[i];
+				   		}
 				   	}
 			   		var tr=$("<tr/>");
 			   		var td1 = $("<td></td>");
@@ -619,14 +677,22 @@
 			   			noofresults = data.entry;
 			   		}
 			   	}else{
-			   		noofresults.push(data);
+			   		if(data.entry){
+			   			noofresults = data.entry	
+			   		}else{
+			   			noofresults.push(data);
+			   		}
 			   	}
 			   	for(var i=0;i<noofresults.length;i++){
 			   		var jsondata = {};
 			   		if(tab == '#search'){
 				   		jsondata = noofresults[i].resource;
 				   	}else{
-				   		jsondata = noofresults[i];
+				   		if(data.entry){
+				   			jsondata = noofresults[i].resource;
+				   		}else{
+				   			jsondata = noofresults[i];
+				   		}
 				   	}
 			   		var tr=$("<tr/>");
 			        var td1 = $("<td></td>");
@@ -708,14 +774,22 @@
 			   			noofresults = data.entry;
 			   		}
 			   	}else{
-			   		noofresults.push(data);
+			   		if(data.entry){
+			   			noofresults = data.entry	
+			   		}else{
+			   			noofresults.push(data);
+			   		}
 			   	}
 			   	for(var i=0;i<noofresults.length;i++){
 			   		var jsondata = {};
 			   		if(tab == '#search'){
 				   		jsondata = noofresults[i].resource;
 				   	}else{
-				   		jsondata = noofresults[i];
+				   		if(data.entry){
+				   			jsondata = noofresults[i].resource;
+				   		}else{
+				   			jsondata = noofresults[i];
+				   		}
 				   	}
 			   		var tr=$("<tr/>");
 			        var td1 = $("<td></td>");

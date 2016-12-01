@@ -460,20 +460,31 @@
 		 	</div> 
 		</div>
 		<div class="container" style="margin-top:30px;">
-			<h2 class="form-signin-heading" style="text-align:center">Login Using Username and Password</h2>
-		      <form class="form-signin" action="<%=request.getScheme() + "://" +
+			
+		<h2 class="form-signin-heading" style="text-align: center">Login
+			Using Username and Password</h2>
+		<div style="text-align: center; font-weight: bold" >
+			<%
+				if (request.getParameter("error") == null) {
+
+				} else {
+					out.println("<h5 id='loginerror'>" + request.getParameter("error") + "</h5>");
+				}
+			%>
+		</div>
+		<form class="form-signin" action="<%=request.getScheme() + "://" +
 	                request.getServerName() + 
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )+
 	                request.getContextPath() %>/authorize/userValidate" method="POST">
 		      <input name="transaction_id" type="hidden" value=<%= request.getParameter("transaction_id") %>>	
 		      <%-- <input name="transaction_id" type="hidden" value=<%= request.getScheme() %>>	 --%>	        
 		        <label class="sr-only" for="inputEmail">Username</label>
-		        <input type="text" placeholder="Username" class="form-control" id="userName" name="userName">
+		        <input type="text" placeholder="Username" class="form-control" id="userName" name="userName" style="margin-bottom:5px;">
 		        <label class="sr-only" for="inputPassword">Password</label>
 		        <input type="password" required="" placeholder="Password" class="form-control" id="password" name="password">
 		        <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
 		      </form>
-		      <h5 class="form-signin-heading" style="text-align:center"><a href="newuser.html"> Click here </a> to register a new account</h5>
+		      <!-- <h5 class="form-signin-heading" style="text-align:center"><a href="newuser.html"> Click here </a> to register a new account</h5> -->
 
 	    </div>
 		<footer style="position:fixed;bottom:0px; left: 0%; width:100%"> 

@@ -3,10 +3,12 @@
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('patientId');
 	    localStorage.removeItem('acctoken');
+	    localStorage.setItem("acctoken",false);
 	    localStorage.removeItem('strurl');
+	    var typeofauth = 'Public';
 		var state = Math.round(Math.random()*100000000).toString();
 		var strurl = baseurl = $('#publicserverurl').val().replace(/\/$/, '');
-		
+		strurl = baseurl = strurl.trim();
 		if(baseurl == '' || baseurl == undefined){
 			bootbox.alert("Please enter FHIR Server URL");
 			return false;
@@ -64,21 +66,23 @@
 	                redirecturi: redirecturi,
 	                tokenurl: tokenurl,
 	                strurl: strurl,
-	                clientscope: publicclientscope
+	                clientscope: publicclientscope,
+	                typeofauth: typeofauth
 	            });
           		fhiroauth(publicclientid,publicclientscope,redirecturi,authurl,baseurl,state);
 			},
 			error:function(e){
-				console.log(e);
-				//l.ladda( 'stop' );
+				console.log()
 				if(e.responseText == ''){
-					bootbox.alert("No Response from Server");
+					bootbox.alert("Invalid Authentication - Please provide valid details");
+					return false;
+				}else if(e.status == '404'){
+					bootbox.alert("Invalid Authentication - Please provide valid details");
+					return false;
+				}else{
+					bootbox.alert("Invalid Authentication - Please provide valid details");
 					return false;
 				}
-				var errordata = JSON.parse(e.responseText);
-				//var errormessage = JSON.stringify(errordata.text.div);
-				var errormessage = errordata.issue[0].details;
-				bootbox.alert(errormessage);
 			}
 		});
 	}

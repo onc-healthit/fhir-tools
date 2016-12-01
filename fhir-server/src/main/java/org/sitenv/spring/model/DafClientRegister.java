@@ -13,6 +13,7 @@ public class DafClientRegister  {
     private int id;
 
     @Column(name = "user_id")
+    //@OneToOne(cascade=CascadeType.ALL)
     private Integer userId;
 
     @Column(name = "client_id")

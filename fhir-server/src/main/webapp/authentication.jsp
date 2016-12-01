@@ -468,7 +468,7 @@
         </div>
     <div class="container">
         <div class="col-md-12" style="margin-top:20px;">
-            <h1>Hi user!</h1>
+            <h1>Hi <%= request.getParameter("name") %>!</h1>
             <h3><b>Admin</b> is requesting <b>full access</b> to your account.</h3>
             <h3>Do you approve?</h3>
             

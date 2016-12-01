@@ -21,6 +21,10 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     public String registerUser(DafUserRegister user) {
         return userDao.register(user);
     }
+    
+    public String updateUser(DafUserRegister user){
+    	return userDao.updateUser(user);
+    }
 
     @Override
     public DafUserRegister getUserById(Integer id) {
@@ -37,9 +41,10 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         Integer expiryTime = (int) (time / 1000L);
         sessionMap.put("expiry", expiryTime);
-
+        if(user != null){
         HttpSession session = request.getSession();
         session.setAttribute("user" + user.getUser_id(), sessionMap);
+        }
 
         return user;
     }

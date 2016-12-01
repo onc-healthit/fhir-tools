@@ -59,7 +59,6 @@ public class AuthorizeEndPoint extends HttpServlet {
     @Autowired
     private UserRegistrationService userService;
 
-    //HashMap<String , String> auths = new HashMap<String, String>();
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     @SuppressWarnings("unchecked")
@@ -123,10 +122,12 @@ public class AuthorizeEndPoint extends HttpServlet {
                     
                     if (sessionObj == null || currentTime > sessionObj.get("expiry")) {
                         
-                        String url = uri + "/login.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id();
-                        response.sendRedirect(url);
+                        String url = uri + "/login.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim();
+                        response.sendRedirect(url.trim());
                     } else {
-                        String url = uri + "/authentication.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id();
+                    	System.out.println("in auth.jsp");
+                    	DafUserRegister user = userService.getUserById(client.getUserId());
+                        String url = uri + "/authentication.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim()+"&name="+user.getUser_full_name().trim();
                         response.sendRedirect(url);
                     }
                 } else {
@@ -148,7 +149,7 @@ public class AuthorizeEndPoint extends HttpServlet {
             }
 
         } else {
-            String url = redirect_uri + "?error=invalid_scope&error_description=Unauthorized - Requested Scope not authorized for Client&state=" + state + "&scope=" + client.getScope();
+            String url = redirect_uri + "?error=invalid_scope&error_description=Unauthorized - Requested Scope not authorized for Client&state=" + state + "&scope=" + client.getScope().trim();
             response.sendRedirect(url);
         }
         //Newly added code to resolve scopes issue
@@ -166,7 +167,7 @@ public class AuthorizeEndPoint extends HttpServlet {
        
         DafAuthtemp tempAuth = dao.getAuthenticationById(transactionId);
        
-        if (button.equalsIgnoreCase("Allow")) {
+        if (button!= null && button.equalsIgnoreCase("Allow")) {
             
             if (tempAuth != null) {
                 List<String> scopes = Arrays.asList(tempAuth.getScope().split(","));
@@ -176,17 +177,17 @@ public class AuthorizeEndPoint extends HttpServlet {
 	                        request.getServerName() + 
 	                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
 	                        +request.getContextPath();
-                    String url = uri + "/view/patientlist.html?transaction_id=" + tempAuth.getTransaction_id();
-                    response.sendRedirect(url);
+                    String url = uri + "/view/patientlist.html?transaction_id=" + tempAuth.getTransaction_id().trim();
+                    response.sendRedirect(url.trim());
 
                 } else {
-                    String url = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode() + "&state=" + tempAuth.getState();
+                    String url = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode().trim() + "&state=" + tempAuth.getState().trim();
                     response.sendRedirect(url);
                 }
             }
         } else {
-            String url = tempAuth.getRedirect_uri().trim() + "?error=Access Denied";
-            response.sendRedirect(url);
+            String url = tempAuth.getRedirect_uri().trim() + "?error=Access Denied&error_description=Access Denied&state="+tempAuth.getState().trim();
+            response.sendRedirect(url.trim());
         }
     }
 
@@ -203,7 +204,7 @@ public class AuthorizeEndPoint extends HttpServlet {
         tempAuth.setLaunchPatientId(launchPatientId);
         dao.saveOrUpdate(tempAuth);
 
-        String url = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode() + "&state=" + tempAuth.getState();
+        String url = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode().trim() + "&state=" + tempAuth.getState().trim();
         logger.info("Authorize Endpoint -> formed URL: " + url);
         PrintWriter out = response.getWriter();
         JSONObject json = new JSONObject();
@@ -224,12 +225,11 @@ public class AuthorizeEndPoint extends HttpServlet {
                 +request.getContextPath();
         if (user != null) {
             
-            String url = uri + "/authentication.jsp?client_id=" + tempAuth.getClient_id() + "&redirect_uri=" + tempAuth.getRedirect_uri() + "&scope=" + tempAuth.getScope() + "&state=" + tempAuth.getState() + "&transaction_id=" + tempAuth.getTransaction_id();
+            String url = uri + "/authentication.jsp?client_id=" + tempAuth.getClient_id() + "&redirect_uri=" + tempAuth.getRedirect_uri().trim() + "&scope=" + tempAuth.getScope().trim() + "&state=" + tempAuth.getState().trim() + "&transaction_id=" + tempAuth.getTransaction_id().trim()+"&name="+user.getUser_full_name().trim();
             response.sendRedirect(url);
         } else {
-            response.sendError(401, "Unauthorized - User name or password is wrong");
+        	String url = uri+"/login.jsp?error=Invalid Username or Password.&transaction_id="+transactionId.trim();
+			response.sendRedirect(url);
         }
     }
-
-
 }

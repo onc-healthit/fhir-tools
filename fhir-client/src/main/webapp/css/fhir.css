@@ -320,3 +320,12 @@ ul {
     /*background-image: linear-gradient(to bottom,#f5f5f5 0%,#e8e8e8 100%);
     background-repeat: repeat-x;*/
 }
+
+#resurl{
+    text-decoration: none;
+    cursor: text;
+}
+.headclass:hover{
+    text-decoration: none;
+    cursor: text;
+}

@@ -10,22 +10,23 @@
 		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
 		<link href="css/fhir.css" rel="stylesheet" type="text/css" />
 		<link href="css/ladda.min.css" rel="stylesheet" type="text/css" />
-		<link href="css/custom.css" rel="stylesheet" type="text/css" />
+		<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"> -->
+		<!-- <link href="css/custom.css" rel="stylesheet" type="text/css" /> -->
 	
-    	<title>FHIR Client</title>
+    	<title>FHIR Server</title>
 	</head>
 	<body onload="checkCookie();">
 		<header> 
 			<div class="navbar navbar-inverse navbar-static-top"> <div class="navbar-inner external"> <div class="container"> <div class="nav"> <li><a href="http://www.healthit.gov/" tabindex="1">HealthIT.gov</a></li> <li> <ul class="social" style="padding:0px;"> <div id="fb-root"></div> <script>/*<![CDATA[*/(function(e,a,f){var c,b=e.getElementsByTagName(a)[0];if(e.getElementById(f)){return}c=e.createElement(a);c.id=f;c.src="//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=408132609248724&version=v2.0";b.parentNode.insertBefore(c,b)}(document,"script","facebook-jssdk"));/*]]>*/</script> <li><div class="fb-like" data-href="http://sitenv.org" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div></li> <li class="rss"> <a href="http://feeds.feedburner.com/healthitgov" title="Subscribe/RSS" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/rss.png" alt="Subscribe to ONC RSS feed"></a> </li> <li class="twitter"> <a class="fix-transparency" title="Follow ONC on Twitter" href="http://twitter.com/ONC_HealthIT/" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/twitter.png" alt="Follow ONC on Twitter"></a> </li> <li class="youtube"> <a class="fix-transparency" title="Follow Project ONC on Youtube" href="http://www.youtube.com/user/HHSONC" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/youtube.png" alt="Subscribe to ONC on YouTube"></a> </li> <li class="linkedin"> <a class="fix-transparency" title="Follow ONC on LinkedIn" href="http://www.linkedin.com/title/office+coordinator/in-us-97-Washington-D.C.-Metro-Area/" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/linkedin.png" alt="Follow ONC on Linkedin"></a> </li> <li class="googleplus"> <a class="fix-transparency" title="Find ONC on Google Plus" href="https://plus.google.com/115897569896631074599/posts" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/gplus.png" alt="Follow ONC on Google Plus"></a> </li> </ul> </li> </div> </div> </div> </div> 
 			<div class="jumbotron"> 
 				<div class="container">
-					<div class="nav-collapse">
+					<!-- <div class="nav-collapse"> -->
 	
 					<ul class="nav pull-right" style="padding-top:100px;">
 	                    
 						<li class="dropdown">
-							<a href="" data-toggle="dropdown" class="dropdown-toggle" id="userButton" style="color:#fff"></a>
-							<ul class="dropdown-menu pull-right">
+							<a href="#" data-toggle="dropdown" class="dropdown-toggle" id="userButton" style="color:#fff;padding:0px;"></a>
+							<ul class="dropdown-menu pull-right" id="userul">
 								<li><a data-target=".nav-collapse" data-toggle="collapse" href="#" id="dropname"></a></li>
 								<li class="divider"></li>
 								<li><a data-target=".nav-collapse" data-toggle="collapse" href="userlogin.html"><i class="icon-remove"></i> Log out</a></li>
@@ -35,7 +36,7 @@
 	                    
 	                </ul>
 	                    
-	            </div>
+	            <!-- </div> -->
 				</div> 
 			</div> 
 		</header>
@@ -474,37 +475,14 @@
 		 		</div> 
 		 	</div> 
 		</div>
-		<!-- <header> 
-			<div class="jumbotron"> 
-				<div class="container">
-					<div class="nav-collapse">
-	
-					<ul class="nav pull-right" style="padding-top:100px;">
-	                    
-						<li class="dropdown">
-							<a href="" data-toggle="dropdown" class="dropdown-toggle" id="userButton" style="color:#fff"></a>
-							<ul class="dropdown-menu pull-right">
-								<li><a data-target=".nav-collapse" data-toggle="collapse" href="#" id="dropname"></a></li>
-								<li class="divider"></li>
-								<li><a data-target=".nav-collapse" data-toggle="collapse" href="userlogin.html"><i class="icon-remove"></i> Log out</a></li>
-							</ul>
-						</li>
-	                    
-	                    
-	                </ul>
-	                    
-	            </div>
-				</div> 
-			</div> 
-		</header> -->
 		<div class="container" style="margin-top:30px;width:100%">
 			<div class="col-md-2" style="padding-right:0px;">
 				<div class="well sidebar-nav" style="padding:5px;">
 					<ul class="nav nav-list">
 						<li class="nav-header">PERSONAL</li>
-						<li>
+						<!-- <li>
 							<a href="#">Manage Approved Sites</a>
-						</li>
+						</li> -->
 						<li>
 							<a href="#" id="profileinfo">View Profile Information</a>
 						</li>
@@ -513,185 +491,39 @@
 						<li class="active">
 							<a href="#" id="selfclient">Self-service client registration</a>
 						</li>
+						<li class="">
+							<a href="#" class="viewclients">View Registered Clients</a>
+						</li>
 					</ul>
 				</div>
 			</div>
 			<div class="col-md-10" id="homecontent">
-				<div class="col-md-5">
+				<div class="col-md-7">
 					<div class="well">
-						<button class="btn btn-large" id="shownewclient">Register New client</button>
-					</div>
-				</div>
-				<div class="col-md-1" style="font-weight:bold;">-OR-</div>
-				<div class="col-md-6">
-					<div class="well">
-						<form class="form-horizontal">	
-							<div class="form-group">
-							    <div class="col-sm-8">
-							      	<input type="text" class="form-control" placeholder="Enter Client ID" id="clientId">
-							    </div> 		
-							    <label for="inputEmail3" class="col-sm-4 control-label"></label>					
-    						</div>
-    						<div class="form-group">
-							    <div class="col-sm-8">
-							      	<input type="text" class="form-control" placeholder="Enter Registration Access Token" id="regtoken">
-							    </div> 		
-							    <label for="inputEmail3" class="col-sm-4 control-label"></label>					
-    						</div>
-					        <button class="btn btn-large" id="editreg" onclick="getClientDetails();" type="button">Edit an existing client</button>
-					    </form>
+						<button class="btn btn-large" id="shownewclient" style="float:left;">Register New client</button>
+						<div class="col-md-2" style="font-weight:bold;text-align:center;padding:11px 19px">-OR-</div>
+						<button class="btn btn-large viewclients" id="editreg" type="button">Edit an existing client</button>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-10" id="clientregform">
-				<div class="panel panel-default">
-  					<div class="panel-heading">Client Registration</div>
-  					<div class="panel-body">
-    					<form class="form-horizontal">
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Contact Name:</label>
-							    <div class="col-sm-5">
-							      	<input type="text" class="form-control" id="contactname" data-toggle="tooltip" data-original-title=''>
-							    </div> 							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Contact Email:</label>
-							    <div class="col-sm-5 tooltipright">
-							      	<input type="text" class="form-control" id="contactemail" data-toggle="tooltip" data-original-title=''>
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Organization Name:</label>
-							    <div class="col-sm-5 tooltipright">
-							      	<input type="text" class="form-control" id="orgName" data-toggle="tooltip" data-original-title=''>
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Client Name:</label>
-							    <div class="col-sm-5">
-							      	<input type="text" class="form-control" id="clientname">
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
-							    <div class="col-sm-5">
-							      	<input type="text" class="form-control" id="redirecturi">
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
-							    <div class="col-sm-5">
-							      	<select id="clientscope" class="form-control" data-toggle="tooltip" data-original-title='' multiple="multiple">
-							      		<option value="launch">launch</option>
-										<option value="launch/patient">launch/patient</option>
-										<option value="patient/*.read">patient/*.read</option>
-										<option value="patient/Patient.read">patient/Patient.read</option>
-										<option value="patient/DocumentReference.read">patient/DocumentReference.read</option>
-										<option value="patient/MedicationOrder.read">patient/MedicationOrder.read</option>
-										<option value="patient/MedicationStatement.read">patient/MedicationStatement.read</option>
-										<option value="fhir_complete">fhir_complete</option>
-										<option value="openid profile">openid profile</option>
-										<option value="offline_access">offline_access</option>
-										<option value="online_access">online_access</option>
-							      		<option value="profile">profile</option>
-							      		<option value="email">email</option>
-							      		<option value="address">address</option>
-							      		<option value="phone">phone</option>
-							      		<option value="user/Patient.read">user/Patient.read</option>
-									  	<option value="user/*.read">user/*.read</option>
-									  	<option value="user/*.*">user/*.*</option>
-									</select>
-							    </div> 
-							    <p class="col-md-4">(Please select Multiple Scopes to Register.)</p>							
-    						</div>
-    						<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="registerclient();" id="registercli">Register</button>
-    					</form>
-  					</div>
-				</div>
-			</div>
-			<div class="col-md-10" id="editclientform">
-				<div class="panel panel-default">
-  					<div class="panel-heading">Edit Client Details</div>
-  					<div class="panel-body">
-    					<form class="form-horizontal">
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Contact Name:</label>
-							    <div class="col-sm-5">
-							      	<input type="text" class="form-control" id="editcontactname" data-toggle="tooltip" data-original-title=''>
-							    </div> 							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Contact Email:</label>
-							    <div class="col-sm-5 tooltipright">
-							      	<input type="text" class="form-control" id="editcontactemail" data-toggle="tooltip" data-original-title=''>
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Organization Name:</label>
-							    <div class="col-sm-5 tooltipright">
-							      	<input type="text" class="form-control" id="editorgName" data-toggle="tooltip" data-original-title=''>
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Client Name:</label>
-							    <div class="col-sm-5">
-							      	<input type="text" class="form-control" id="editclientname">
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
-							    <div class="col-sm-5">
-							      	<input type="text" class="form-control" id="editredirecturi">
-							    </div>    							
-    						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
-							    <div class="col-sm-5">
-							      	<select id="editclientscope" class="form-control" data-toggle="tooltip" data-original-title='' multiple="multiple">
-							      		<option value="launch">launch</option>
-										<option value="launch/patient">launch/patient</option>
-										<option value="patient/*.read">patient/*.read</option>
-										<option value="patient/Patient.read">patient/Patient.read</option>
-										<option value="patient/DocumentReference.read">patient/DocumentReference.read</option>
-										<option value="patient/MedicationOrder.read">patient/MedicationOrder.read</option>
-										<option value="patient/MedicationStatement.read">patient/MedicationStatement.read</option>
-										<option value="fhir_complete">fhir_complete</option>
-										<option value="openid profile">openid profile</option>
-										<option value="offline_access">offline_access</option>
-										<option value="online_access">online_access</option>
-							      		<option value="profile">profile</option>
-							      		<option value="email">email</option>
-							      		<option value="address">address</option>
-							      		<option value="phone">phone</option>
-							      		<option value="user/Patient.read">user/Patient.read</option>
-									  	<option value="user/*.read">user/*.read</option>
-									  	<option value="user/*.*">user/*.*</option>
-									</select>
-							    </div> 
-							    <p class="col-md-4">(Please select Multiple Scopes to Register.)</p>					
-							</div>
-							<input type="hidden" class="form-control" id="editclientid">
-							<input type="hidden" class="form-control" id="editclientIds">
-							<input type="hidden" class="form-control" id="editclientsecret">
-							<input type="hidden" class="form-control" id="editregtoken">
-    						<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="editclient();" id="editregistercli">Save</button>
-    					</form>
-  					</div>
-				</div>
+				
 			</div>
 			<div class="col-md-10" id="profilecontent">
 				<div id="content">
-					<span>
-						<div>Your user profile has the following information:</div>
-					    <dl class="dl-horizontal">
-					        <dt>full name</dt>
-					        <dd id="userfullname"></dd>
-					        <dt>preferred_username</dt>
-					        <dd id="username"></dd>
-					        <dt>email</dt>
-					        <dd id="useremail"></dd>
-						</dl>
-					</span>
+					
+				</div>
+			</div>
+			<div class="col-md-10" id="viewregclients">
+				<div class="col-md-12" id="clientstable">
+					<table id="clientsregtable" class="table">
+				        <thead>
+				            <tr>
+				                <th style="width:20%">Client name</th><th style="width:30%">Client Id</th><th style="width:40%">Client Secret</th><th style="width:10%">Actions</th>
+				            </tr>
+				        </thead>
+				        <tbody></tbody>
+			        </table>
 				</div>
 			</div>
 		</div>
@@ -711,7 +543,7 @@
 		    <!-- Modal content-->
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <button type="button" class="close clientregsuccessmodal" data-dismiss="modal">&times;</button>
 		        <h4 class="modal-title">Client Registered Successfully</h4>
 		      </div>
 		      <div class="modal-body">
@@ -733,49 +565,70 @@
 		        <p>Please Save Client ID, Client Secret and Registration Token in safe place for future use.</p>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-default clientregsuccessmodal" data-dismiss="modal">Close</button>
 		      </div>
 		    </div>
 
 		  </div>
 		</div>
 
+		<div id="editclientmodal" class="modal fade" role="dialog">
+		  
+		</div>
+
 		<script src="js/jquery-1.11.1.js"></script>
 		<script src="js/bootstrap.js"></script>
 		<script src="js/bootbox.js"></script>
+		<script src="js/formValidation.js"></script>
+		<script src="js/framework/bootstrap.js"></script>
+		<!-- <script type="text/javascript" src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script> -->
 		<script src="js/url.js"></script>
 		<script src="js/hoverMenu.js"></script>
 		<script src="js/ladda.js"></script>
 		<script src="js/ladda.jquery.js"></script>
 		<script src="js/clients.js"></script>
 		<script type="text/javascript">
-		var userId = "";
+			var userId = "";
 			$('#clientregform').hide();
 			$('#editclientform').hide();
 			$('#profilecontent').hide();
+			$('#viewregclients').hide();
 			$(document).ready(function(){
-				$( "#shownewclient" ).click(function(){
-					$('#homecontent').hide();
-					$('#clientregform').show();
-					$('#editclientform').hide();
-					$('#profilecontent').hide();
-					$('footer').css('position', 'relative');
-				})
 				$("#selfclient").click(function(){
 					$('#clientregform').hide();
 					$('#homecontent').show();
 					$('#editclientform').hide();
 					$('#profilecontent').hide();
+					$('#viewregclients').hide();
 					$('footer').css('position', 'fixed');
 				})
-				$('#profileinfo').click(function(){
+				$('.viewclients').click(function(){
 					$('#clientregform').hide();
 					$('#homecontent').hide();
 					$('#editclientform').hide();
-					$('#profilecontent').show();
-					$('footer').css('position', 'fixed');
-				})
+					$('#profilecontent').hide();
+					loadclients(userId);
+				});
 			});
+			$(document).on("click",".closebutton",function(){
+				$('input[type="text"],input[type="password"]').val('');
+	    		$('.editregscopes :checkbox:checked').each(function(i){
+			        $(this).prop('checked', false);
+			    });
+			});
+			$(document).on("click",".clientregsuccessmodal",function(){
+				$('#clientregform').hide();
+				$('#editclientform').hide();
+				$('#profilecontent').hide();
+				$('#viewregclients').hide();
+				$('#homecontent').show();
+				$('footer').css('position', 'fixed');
+			})
+			$(document).mouseup(function (){
+			       if($('#userul').css("display") == "block"){
+			        $('#userul').removeAttr('style');
+			       }
+			   });
 		</script>
 	</body>
 </html>

@@ -1,5 +1,7 @@
 package org.sitenv.spring;
 
+import java.io.IOException;
+
 import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,18 @@ public class UserRegistrationController {
 
         return userService.registerUser(user);
     }
+    
+    /**
+     * This method registers the user
+     * @param user
+     * @return This method will return the registered user.
+     */
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public String updateUser(@RequestBody DafUserRegister user) {
+
+        return userService.updateUser(user);
+    }
 
     /**
      * This method is used to get the user by id
@@ -46,14 +60,19 @@ public class UserRegistrationController {
      * @param userName
      * @param password
      * @return This method will return the user. if the user not existed returns null.
+     * @throws IOException 
      */
     @RequestMapping(value = "/details", method = RequestMethod.GET)
     @ResponseBody
-    public DafUserRegister getUserByDetails(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response, @RequestParam("userName") String userName, @RequestParam("password") String password) {
+    public DafUserRegister getUserByDetails(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response, @RequestParam("userName") String userName, @RequestParam("password") String password) throws IOException {
         
-        DafUserRegister result = userService.getUserByDetails(userName, password, request);
+        DafUserRegister user = userService.getUserByDetails(userName, password, request);
         
-        return result;
+        if(user == null){
+        	response.sendError(403, "Invalid UserName or Password.");
+        }
+        
+        return user;
     }
 
 }

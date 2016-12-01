@@ -56,12 +56,15 @@
 		$('#addbtn').attr('disabled',false);
 		var Conformance = $('#confprofname option:selected').attr('value');
 		var fhirresname = $('#fhirresources option:selected').attr('value');
-		/*if($('#resourceid').val() == '' || Conformance == undefined || fhirresname == undefined){
+		if($('#resourceid').val() == '' || Conformance == undefined || fhirresname == undefined){
 			$('#runtestbtn').attr('disabled','disabled');
 		}else{
 			$('#runtestbtn').attr('disabled',false);
-		}*/
-		$('#runtestbtn').attr('disabled',false);
+		}
+		//$('#runtestbtn').attr('disabled',false);
+		if(currenttab == "#read"){
+			$('#runtestbtn').attr('disabled',false);
+		}
 	};
 
 	removeselsearch = function(obj){
@@ -97,6 +100,7 @@
 	matchcriteria = function(obj){
 		var matchc = $('#'+obj.id).val();
 		$(obj).parent().next().children().attr('disabled',false);
+		$(obj).parent().next().next().children().attr('disabled',false);
 		$(obj).parent().next().children("select").children().remove();
 		$(obj).parent().next().children("select").append('<option>Select Modifiers</option>');
 		var matchid = $(obj).parent().next().children("select").attr("id");
@@ -108,7 +112,7 @@
 			strHtml += "<option value='"+vals[i]+"'>"+vals[i]+"</option>";
 		}
 		$('#'+matchid).append(strHtml);
-		$('#runtestbtn').attr('disabled',false);
+		//$('#runtestbtn').attr('disabled',false);
 		/*console.log($(obj).parent().next().next().attr("id"));
 		if(matchc == 'created' || matchc == 'period' || matchc == 'date'){
 			console.log("in if");
@@ -156,10 +160,12 @@
 		localStorage.removeItem('access_token');
 		localStorage.removeItem('patientId');
 	    localStorage.removeItem('acctoken');
+	    localStorage.setItem("acctoken",false);
 	    localStorage.removeItem('strurl');
+	    var typeofauth = 'Confidential';
 		var state = Math.round(Math.random()*100000000).toString();
 		var strurl = baseurl = $('#serverurl').val().replace(/\/$/, '');
-		
+		strurl = baseurl = strurl.trim();
 		if(baseurl == '' || baseurl == undefined){
 			bootbox.alert("Please enter FHIR Server URL");
 			return false;
@@ -172,7 +178,7 @@
 		
 		var clientsecret = $('#clientsecret').val();
 		if(clientsecret == '' || clientsecret == undefined){
-			bootbox.alert("Please eneter Client Secret");
+			bootbox.alert("Please enter Client Secret");
 			return false;
 		}
 
@@ -224,7 +230,8 @@
 	                redirecturi: redirecturi,
 	                tokenurl: tokenurl,
 	                strurl: strurl,
-	                clientscope: clientscope
+	                clientscope: clientscope,
+	                typeofauth: typeofauth
 	            });
           		fhiroauth(clientid,clientscope,redirecturi,authurl,baseurl,state);
 			},
@@ -306,12 +313,12 @@
 	  		$('#authbtn').toggleClass('btn-danger btn-success');
 	  		$('#authsuccess').html('');
 	  		authbtndiv = $('<button type="button" class="btn btn-success" data-target="#authorize-modal" data-toggle="modal" data-original-title="" data-toggle="tooltip" id="authbtn" data-backdrop="static"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Authorize Server</button>');
-	  		/*authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Authentication Token is Present. Run a test by entering various values in the fileds.</strong></div>');
-	        $('#authsuccess').append(authsuccess);*/
+	  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Server Authorized successfully. Run a test by entering various values in the fileds.</strong></div>');
+	        $('#authsuccess').append(authsuccess);
 	        $('#authbtndiv').append(authbtndiv);
 	    }else{
 	    	authbtndiv = $('<button type="button" class="btn btn-danger" data-target="#authorize-modal" data-toggle="modal" data-original-title="" data-toggle="tooltip" id="authbtn" data-backdrop="static"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Authorize Server</button>');
-	  		authsuccess = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Authorize your FHIR Server and then enter the various values and run a test.</strong></div>');
+	  		authsuccess = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Authorize your FHIR Server and then enter the various values and run a test.</strong></div>');
 	        $('#authsuccess').append(authsuccess);
 	        $('#authbtndiv').append(authbtndiv);
 
@@ -328,8 +335,42 @@
 	    if(error != '' && error != null && error != undefined){
 	    	localStorage.setItem('acctoken',true);
 	    	 $('#authsuccess').html('');
-	        var authsuccess = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>'+getUrlParameter("error_description")+'</strong></div>');
+	        var authsuccess = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>'+getUrlParameter("error_description")+'</strong></div>');
 	        $('#authsuccess').append(authsuccess);
+	        if(state != undefined){
+		    	var params = JSON.parse(sessionStorage[state]);
+		    	tokenurl = params.tokenurl;
+		        clientid = params.clientid;
+		        clientsecret = params.clientsecret;
+		        redirecturi = params.redirecturi;
+		        strurl = params.strurl;
+		        clientscope = params.clientscope;
+		        typeofauth = params.typeofauth;
+		        if(typeofauth == 'Confidential'){
+		        	$('#clientid').val(clientid);
+			        $('#clientsecret').val(clientsecret);
+			        $('#serverurl').val(strurl);
+			        var scopearr = clientscope.split(',');
+			        for(var i=0; i< scopearr.length; i++){
+			        	$('input:checkbox.confscopesclass').each(function () {
+					      	if($(this).val() == scopearr[i]){
+					      		$(this).prop('checked',true);
+					      	}
+					  	});
+			        }
+		        }else if(typeofauth =='Public'){
+		        	$('#publicclientid').val(clientid);
+			        $('#publicserverurl').val(strurl);
+			        var scopearr = clientscope.split(',');
+			        for(var i=0; i< scopearr.length; i++){
+			        	$('input:checkbox.publicscopesclass').each(function () {
+					      	if($(this).val() == scopearr[i]){
+					      		$(this).prop('checked',true);
+					      	}
+					  	});
+			        }
+		        }
+		    }
 	        return false;
 	    }
 	    if(state != undefined && code != undefined){
@@ -340,7 +381,8 @@
 	        redirecturi = params.redirecturi;
 	        strurl = params.strurl;
 	        clientscope = params.clientscope;
-	        getoauthtoken(code,tokenurl,clientid,clientsecret,redirecturi,state,strurl,clientscope);
+	        typeofauth = params.typeofauth;
+	        getoauthtoken(code,tokenurl,clientid,clientsecret,redirecturi,state,strurl,clientscope,typeofauth);
 	    }
   	}
 
@@ -355,7 +397,7 @@
         }
     };
   
-  	getoauthtoken = function(paramvar,tokenurl,clientid,clientsecret,redirecturi,state,strurl,clientscope){
+  	getoauthtoken = function(paramvar,tokenurl,clientid,clientsecret,redirecturi,state,strurl,clientscope,typeofauth){
 	    //var data = { "code" : paramvar , "client_id" : clientid ,"client_secret": clientsecret , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
 	    //var data = { "code" : paramvar , "client_id" : clientid , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
 	    if(clientsecret == null || clientsecret == ''){
@@ -376,12 +418,36 @@
 	        }
 	        $('#authbtn').toggleClass('btn-danger btn-success');
 	        $('#authsuccess').html('');
-	        var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized successfully. Run a test by entering various values in the fields.</strong></div>');
+	        var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Server Authorized successfully. Run a test by entering various values in the fields.</strong></div>');
 	        $('#authsuccess').append(authsuccess);
 	        localStorage.setItem('access_token',access_token);
 	        localStorage.setItem('acctoken',true);
 	        localStorage.setItem('strurl',strurl);
 	        localStorage.setItem("authtype","auth");
+	        if(typeofauth == 'Confidential'){
+	        	$('#clientid').val(clientid);
+		        $('#clientsecret').val(clientsecret);
+		        $('#serverurl').val(strurl);
+		        var scopearr = clientscope.split(',');
+		        for(var i=0; i< scopearr.length; i++){
+		        	$('input:checkbox.confscopesclass').each(function () {
+				      	if($(this).val() == scopearr[i]){
+				      		$(this).prop('checked',true);
+				      	}
+				  	});
+		        }
+	        }else if(typeofauth =='Public'){
+	        	$('#publicclientid').val(clientid);
+		        $('#publicserverurl').val(strurl);
+		        var scopearr = clientscope.split(',');
+		        for(var i=0; i< scopearr.length; i++){
+		        	$('input:checkbox.publicscopesclass').each(function () {
+				      	if($(this).val() == scopearr[i]){
+				      		$(this).prop('checked',true);
+				      	}
+				  	});
+		        }
+	        }
 	        //getoauthjson(strurl);
 	      },
 	      error:function(e){
@@ -396,7 +462,7 @@
   	}
 
   	runresourcetest =  function(){
-  		$('#authsuccess').html('');
+        $('#serverResponse').html('');
   		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();   
 		});
@@ -536,6 +602,9 @@
 		  			displayrequestheaders(searchparamarr,searchparamval);
 		  			displayresponseheaders(xhr);
 		  			//$('#responsedatamodal').modal('show');
+		  			$('#authsuccess').html('');
+	  				authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Server Authorized successfully. Run a test by entering various values in the fileds.</strong></div>');
+	        		$('#authsuccess').append(authsuccess);
 		  			$('#responsedatamodal').modal({
 					    backdrop: 'static',
 					    keyboard: false
@@ -551,22 +620,14 @@
 		          			$('#authbtn').toggleClass('btn-success btn-danger');
 		          		}
 		          		$('#authsuccess').html('');
-		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Unauthorized: Authentication token is expired.</strong></div>');
+		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Unauthorized: Authentication token is expired.</strong></div>');
 			        	$('#authsuccess').append(authfail);
 		          	}else{
-		          		$('#authsuccess').html('');
-		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>'+e.responseJSON.resourceType+" - "+e.responseJSON.issue[0].diagnostics+'</strong></div>');
-			        	$('#authsuccess').append(authfail);
+		          		$('#serverResponse').html('');
+		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>'+e.responseJSON.resourceType+" - "+e.responseJSON.issue[0].diagnostics+'</strong></div>');
+			        	$('#serverResponse').append(authfail);
 		          	}
-			        window.scrollTo(0, 0);
-		          	/*if(e.responseText == ''){
-						bootbox.alert("No Response from Server");
-						return false;
-					}
-					var errordata = JSON.parse(e.responseText);
-					//var errormessage = JSON.stringify(errordata.text.div);
-					var errormessage = errordata.issue[0].details;
-					bootbox.alert(errormessage);*/
+			        //window.scrollTo(0, 0);
 		        }
 		    })
     	}else if(localStorage.getItem("authtype") == 'noauth'){
@@ -586,12 +647,17 @@
 		          	$('pre code').each(function(i, block) {
 		    			hljs.highlightBlock(block);
 		  			});
+
+                    $('#authsuccess').html('');
+                    var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Run a test by entering various values in the fields.</strong></div>');
+                    $('#authsuccess').append(authsuccess);
 		  			displayrequestheaders(searchparamarr,searchparamval);
 		  			displayresponseheaders(xhr);
 		  			$('#responsedatamodal').modal({
 					    backdrop: 'static',
 					    keyboard: false
 					})
+
 		        },
 		        error:function(e){
 		        	l.ladda( 'stop' );
@@ -603,14 +669,14 @@
 		          			$('#authbtn').toggleClass('btn-success btn-danger');
 		          		}
 		          		$('#authsuccess').html('');
-		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Unauthorized: Authentication token is expired.</strong></div>');
+		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Unauthorized: Authentication token is expired.</strong></div>');
 			        	$('#authsuccess').append(authfail);
 		          	}else{
-		          		$('#authsuccess').html('');
-		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>'+e.responseJSON.resourceType+" - "+e.responseJSON.issue[0].diagnostics+'</strong></div>');
-			        	$('#authsuccess').append(authfail);
+		          		$('#serverResponse').html('');
+		          		var authfail = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>'+e.responseJSON.resourceType+" - "+e.responseJSON.issue[0].diagnostics+'</strong></div>');
+			        	$('#serverResponse').append(authfail);
 		          	}
-			        window.scrollTo(0, 0);
+			        //window.scrollTo(0, 0);
 		        }
 		    })
     	}
@@ -721,7 +787,7 @@
         var openclientscope = val.join(",");
         $('#noauthorize-modal').modal('hide');
         $('#authsuccess').html('');
-        var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Run a test by entering various values in the fields.</strong></div>');
+        var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Run a test by entering various values in the fields.</strong></div>');
 	    $('#authsuccess').append(authsuccess);
 	}
 

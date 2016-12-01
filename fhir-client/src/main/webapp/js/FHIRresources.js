@@ -10,7 +10,7 @@ var fhirresources = {
 		'Immunization':'DAFImmunization',
 		'MedicationStatement':'DAFMedicationStatement',
 		'Condition':'DAFProblems(Condition)',
-		'Procedure':'DAFProcedure',
+		//'Procedure':'DAFProcedure',
 		'Observation(Laboratory)' : 'DAFLabResults',
 		'Observation(SmokingStatus)':'DAFSmokingStatus',
 		'Observation(VitalSigns)':'DAFVitalSigns',		

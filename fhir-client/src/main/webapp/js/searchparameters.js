@@ -4,7 +4,7 @@ var searchparameters = {
 	"Immunization" : "patient",
 	"MedicationStatement" : "patient",
 	"Condition" : "patient,category,clinicalstatus",
-	"Procedure" : "patient",
+	//"Procedure" : "patient",
 	"Observation(Laboratory)" : "patient,code,date",
 	"Observation(SmokingStatus)" : "patient,code",
 	'Observation(VitalSigns)' : "patient,code,date",

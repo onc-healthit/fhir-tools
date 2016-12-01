@@ -3,8 +3,6 @@ package org.sitenv.spring.dao;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafMedicationStatement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -13,17 +11,18 @@ import java.util.List;
 @Repository("medicationStatementDao")
 public class MedicationStatementDaoImpl extends AbstractDao implements MedicationStatementDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(MedicationStatementDaoImpl.class);
-
     @SuppressWarnings("unchecked")
     @Override
-    public List<DafMedicationStatement> getAllMedicationStatement() {
+    public List<DafMedicationStatement> getAllMedicationStatement(Integer count) {
         Criteria criteria = getSession().createCriteria(DafMedicationStatement.class);
+        if(count!=null){
+        criteria.setMaxResults(count);
+        }
         return (List<DafMedicationStatement>) criteria.list();
     }
 
     @Override
-    public DafMedicationStatement getMedicationStatementResourceById(int id) {
+    public DafMedicationStatement getMedicationStatementResourceById(Integer id) {
         DafMedicationStatement dafMedicationStatement = (DafMedicationStatement) getSession().get(DafMedicationStatement.class, id);
         return dafMedicationStatement;
     }

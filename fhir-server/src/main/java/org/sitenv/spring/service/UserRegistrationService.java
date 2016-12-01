@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 public interface UserRegistrationService {
 
     public String registerUser(DafUserRegister user);
+    
+    public String updateUser(DafUserRegister user);
 
     public DafUserRegister getUserById(Integer id);
 

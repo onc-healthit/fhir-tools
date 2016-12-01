@@ -19,13 +19,13 @@ public class MedicationStatementServiceImpl implements MedicationStatementServic
 
     @Override
     @Transactional
-    public List<DafMedicationStatement> getAllMedicationStatement() {
-        return this.medicationStatementDao.getAllMedicationStatement();
+    public List<DafMedicationStatement> getAllMedicationStatement(Integer count) {
+        return this.medicationStatementDao.getAllMedicationStatement(count);
     }
 
     @Override
     @Transactional
-    public DafMedicationStatement getMedicationStatementResourceById(int id) {
+    public DafMedicationStatement getMedicationStatementResourceById(Integer id) {
         return this.medicationStatementDao.getMedicationStatementResourceById(id);
     }
 

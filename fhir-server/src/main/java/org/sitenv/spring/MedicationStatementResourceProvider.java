@@ -17,6 +17,7 @@ import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafMedicationStatement;
@@ -65,7 +66,7 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
     @Search
     public List<MedicationStatement> getAllMedicationStatement(@IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
 
-        List<DafMedicationStatement> dafMedStatementList = service.getAllMedicationStatement();
+        List<DafMedicationStatement> dafMedStatementList = service.getAllMedicationStatement(theCount);
 
         List<MedicationStatement> medStatementList = new ArrayList<MedicationStatement>();
 
@@ -95,6 +96,31 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         MedicationStatement medStatement = createMedicationStatementObject(dafMedStatement);
 
         return medStatement;
+    }
+    
+    
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     * This example searches by Resource id
+     *
+     * @param theId This operation takes one parameter which is the search criteria. It is annotated with the "@Required" annotation. This annotation takes one argument, a string containing the name of
+     *                           the search criteria. The data type here is String, but there are other possible parameter types depending on the specific search criteria.
+     * @return This method returns a MedicationStatement record. This list may contain record, or it may also be empty.
+     */
+    @Search
+    public MedicationStatement searchMedicationStatementResourceById(@RequiredParam(name=MedicationStatement.SP_RES_ID) String theId) {
+    	try{
+    		DafMedicationStatement dafMedStatement = service.getMedicationStatementResourceById(Integer.parseInt(theId));
+
+    		MedicationStatement medStatement = createMedicationStatementObject(dafMedStatement);
+
+    		return medStatement;
+    	} catch (NumberFormatException e) {
+        /*
+		 * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+		 */
+    		throw new ResourceNotFoundException(theId);
+    	}
     }
 
     /**

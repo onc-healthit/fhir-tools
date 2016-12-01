@@ -1,0 +1,93 @@
+<div class="panel panel-default">
+  	<div class="panel-heading">Client Registration</div>
+  		<div class="panel-body">
+    		<form class="form-horizontal" id="registerclientdetails">
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Contact Name:</label>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" id="contactname" data-toggle="tooltip" data-original-title='' data-fv-notempty name="contactname">
+					</div> 							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Contact Email:</label>
+					<div class="col-sm-5 tooltipright">
+					  	<input type="text" class="form-control" id="contactemail" data-toggle="tooltip" data-original-title='' data-fv-notempty name="contactemail">
+				    </div>    							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Organization Name:</label>
+				    <div class="col-sm-5 tooltipright">
+				      	<input type="text" class="form-control" id="orgName" data-toggle="tooltip" data-original-title='' data-fv-notempty name="orgName">
+				    </div>    							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Client Name:</label>
+				    <div class="col-sm-5">
+				      	<input type="text" class="form-control" id="clientname" data-fv-notempty name="clientname">
+				    </div>    							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
+				    <div class="col-sm-5">
+				      	<input type="text" class="form-control" id="redirecturi" data-fv-notempty name="redirecturi">
+				    </div>    							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+				    <div class="col-sm-9">
+						<div class="col-sm-5 regscopes">
+				    		<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="launch" onchange="removeerror();">launch</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="launch/patient" onchange="removeerror();">launch/patient</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/*.read" onchange="removeerror();">patient/*.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/Patient.read" onchange="removeerror();">patient/Patient.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/DocumentReference.read" onchange="removeerror();">patient/DocumentReference.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/MedicationOrder.read" onchange="removeerror();">patient/MedicationOrder.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/MedicationStatement.read" onchange="removeerror();">patient/MedicationStatement.read</label>
+							</div>
+						</div>
+						<div class="col-sm-5 regscopes">
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="fhir_complete" onchange="removeerror();">fhir_complete</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="user/Patient.read" onchange="removeerror();">user/Patient.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="user/*.read" onchange="removeerror();">user/*.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="user/*.*" onchange="removeerror();">user/*.*</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="openid" onchange="removeerror();">openid</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="offline_access" onchange="removeerror();">offline_access</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="online_access" onchange="removeerror();">online_access</label>
+							</div>
+						</div>
+					</div> 
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<p id="scopeserror" style="text-align:center;margin-top:20px;font-size:12px;color:#a94442;" class="center-block"></p>
+					</div>
+    			</div>
+    			<input type="submit" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" id="registercli" style="width:100px;" value="Register" />
+    		</form>
+  		</div>
+	</div>

@@ -485,10 +485,16 @@
 		                		The FHIR Server can be used in two modes. An open mode (No OAuth token required) and a secure mode (OAuth tokens required). 
 		                			<ol>
 		                				<li>
-		                					The server URL for open mode is : <a href="https://fhir.sitenv.org/open/fhir" target="_blank">https://fhir.sitenv.org/open/fhir</a>
+		                					The server URI for open mode is : <%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+	                 %>/open/fhir
 		                				</li>
 		                				<li>
-		                					The server URL for secure mode is : <a href="https://fhir.sitenv.org/secure/fhir" target="_blank">https://fhir.sitenv.org/secure/fhir</a>
+		                					The server URI for secure mode is : <%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+	                 %>/secure/fhir
 		                				</li>
 		                			</ol>
 		                	</div>
@@ -504,20 +510,39 @@
 						                		<li>
 						                		For example a simple READ can be executed as follows:
 											<ul style="list-style:outside none disc;margin-bottom:8px;">							                		
-												<li>GET <a href="https://fhir.sitenv.org/open/fhir/Patient/1" target="_blank">https://fhir.sitenv.org/open/fhir/Patient/1</a></li>
+												<li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+	                 %>/open/fhir/Patient/1" target="_blank"><%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1</a> - XML format.</li>
+												<li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json" target="_blank"><%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json</a> - JSON format.</li>
 											</ul>	
 										</li>
 										<li>
 										For example a simple SEARCH can be executed as follows:
-											<ul style="list-style:outside none disc;margin-bottom:8px;">							                		
-												<li>GET <a href="https://fhir.sitenv.org/open/fhir/Patient/?_id=1" target="_blank">https://fhir.sitenv.org/open/fhir/Patient/?_id=1</a></li>
+											<ul style="list-style:outside none disc;margin-bottom:8px;">	                		
+												<li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1" target="_blank"><%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1</a> - XML format.</li>
+												<li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json" target="_blank"><%=request.getScheme() + "://" +
+	                request.getServerName() + 
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json</a> -  JSON format.</li>
 											</ul>	
 										</li>
 										<li style="margin-bottom:8px;">
 											Click here for more details on <a href="http://hl7.org/fhir/search.html" target="_blank">FHIR Search</a>.
 										</li>
 										<li>
-											For a list of Patients <a style="cursor:pointer;" onclick="openpatientlistmodal();">Click here</a>
+											For a list of Patients <a style="cursor:pointer;" onclick="openpatientlistmodal();">Click here</a>.
 										</li>
 									</ol>
 						                </div>
@@ -538,11 +563,11 @@
 							                		<ul style="list-style:outside none disc;">
 							                			<li style="margin-bottom:8px;">
 							                				Create a user account in the FHIR Authorization Server: 
-							                				Follow instructions <a href="view/newuser.html">here</a> for user creation.
+							                				Follow instructions <a href="view/newuser.html" target="_blank">here</a> for user creation.
 							                			</li>
 							                			<li style="margin-bottom:8px;">
 							                				Login and Register a client so that you can get the Client Id and  Client Secret. 
-							                				Follow instructions <a href="view/clients.html">here</a> for client registration
+							                				Follow instructions <a href="view/clients.html" target="_blank">here</a> for client registration.
 							                			</li>
 							                			<li style="margin-bottom:8px;">
 							                				Once you have a Client Id and Client Secret follow the guidelines according to the Smart On FHIR to request resources.

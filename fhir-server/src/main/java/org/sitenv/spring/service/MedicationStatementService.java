@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface MedicationStatementService {
 
-    public List<DafMedicationStatement> getAllMedicationStatement();
+    public List<DafMedicationStatement> getAllMedicationStatement(Integer count);
 
-    public DafMedicationStatement getMedicationStatementResourceById(int id);
+    public DafMedicationStatement getMedicationStatementResourceById(Integer id);
 
     public List<DafMedicationStatement> getMedicationStatementByPatient(String patient);
 

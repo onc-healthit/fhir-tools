@@ -1,6 +1,12 @@
 package org.sitenv.spring;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.service.ClientRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +25,27 @@ public class ClientRegistrationController {
      * @param client
      * @return This method returns registered client 
      * @throws OAuthSystemException
+     * @throws FHIRHapiException 
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public DafClientRegister registerClient(@RequestBody DafClientRegister client) throws OAuthSystemException {
+    public DafClientRegister registerClient(@RequestBody DafClientRegister client) throws OAuthSystemException, FHIRHapiException {
 
         return registerService.registerClient(client);
+
+    }
+    
+    /**
+     * This method updates the client 
+     * @param client
+     * @return This method returns registered client 
+     * @throws FHIRHapiException 
+     */
+    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @ResponseBody
+    public DafClientRegister updateClient(@RequestBody DafClientRegister client) throws FHIRHapiException  {
+
+        return registerService.updateClient(client);
 
     }
     
@@ -34,13 +55,18 @@ public class ClientRegistrationController {
      * @param regtoken
      * @return This method returns client, if not exist returns null
      * @throws OAuthSystemException
+     * @throws IOException 
      */
 
     @RequestMapping(value = "/details", method = RequestMethod.GET)
     @ResponseBody
-    public DafClientRegister getClientByDetails(@RequestParam("clientId") String clientId, @RequestParam("regtoken") String regtoken) throws OAuthSystemException {
+    public DafClientRegister getClientByDetails(@RequestParam("clientId") String clientId, @RequestParam("regtoken") String regtoken, HttpServletResponse response) throws OAuthSystemException, IOException {
+    	DafClientRegister client = registerService.getClientByDetails(clientId, regtoken);
+    	if(client == null){
+    		response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid Client id or Registration Token.");
+    	}
         
-        return registerService.getClientByDetails(clientId, regtoken);
+    	return client;
 
     }
     
@@ -57,6 +83,17 @@ public class ClientRegistrationController {
         
         return registerService.getClientByCredentials(clientId, clientSecret);
 
+    }
+    
+    /**
+     * This method is used to get the clients with user id 
+     * @param userId
+     * @return This method returns list of clients, if not exist returns null
+     */
+    @RequestMapping(value = "/list/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<DafClientRegister> getClientsByUserId(@PathVariable Integer userId){
+    	return registerService.getClientsByUserId(userId);
     }
 
 }

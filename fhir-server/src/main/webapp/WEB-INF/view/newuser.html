@@ -463,34 +463,34 @@
   					<div class="panel-heading">New User Registration</div>
   					<div class="panel-body">
     					<form class="form-horizontal" id="userregistration">
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-4 control-label">Username:</label>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Username</label>
 							    <div class="col-sm-8">
-							      	<input type="text" class="form-control" id="username" data-toggle="tooltip" data-original-title='' placeholder="user1">
+							      	<input type="text" class="form-control" id="username" data-toggle="tooltip" data-original-title='' placeholder="user1" name=username data-fv-notempty>
 							    </div> 							
     						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-4 control-label">Email Address:</label>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Email Address</label>
 							    <div class="col-sm-8 tooltipright">
-							      	<input type="text" class="form-control" id="emailaddress" data-toggle="tooltip" data-original-title='' placeholder="user@example.com" name="email">
+							      	<input type="text" class="form-control" id="emailaddress" data-toggle="tooltip" data-original-title='' placeholder="user@example.com" name="email" data-fv-notempty>
 							    </div>    							
     						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-4 control-label">Full name:</label>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Full name</label>
 							    <div class="col-sm-8 tooltipright">
-							      	<input type="text" class="form-control" id="fullname" data-toggle="tooltip" data-original-title='' placeholder="Mike Adams" >
+							      	<input type="text" class="form-control" id="fullname" data-toggle="tooltip" data-original-title='' placeholder="Mike Adams" name="fullname" data-fv-notempty>
 							    </div>    							
     						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-4 control-label">New Password:</label>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">New Password</label>
 							    <div class="col-sm-8">
-							      	<input type="password" class="form-control" id="password" name="npassword">
+							      	<input type="password" class="form-control" id="password" name="npassword" data-fv-notempty>
 							    </div>    							
     						</div>
-    						<div class="form-group">
-								<label for="inputEmail3" class="col-sm-4 control-label">Confirm Password:</label>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Confirm Password</label>
 							    <div class="col-sm-8">
-							      	<input type="password" class="form-control" id="cpassword" name="cpassword">
+							      	<input type="password" class="form-control" id="cpassword" name="cpassword" data-fv-notempty>
 							    </div>    							
     						</div>
     						<div class="form-group">
@@ -502,7 +502,7 @@
 							      	</ul>
 							    </div>    							
     						</div>
-    						<button type="button" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" onclick="registeruser();" id="registercli">Create</button>
+    						<input type="submit" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" id="registercli" value="Create" style="width:100px"/>
     					</form>
     					<h5 class="form-signin-heading" style="text-align:center"> Already registered? <a href="userlogin.html"> Click here </a> to Login</h5>
   					</div>

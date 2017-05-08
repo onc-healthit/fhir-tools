@@ -4,6 +4,8 @@
 	var medordertrigger = 0;
 	var medOrderByPatientId = "medOrderByPatientId";
 	var medOrderCollapseByPatientId = "medOrderCollapseByPatientId";
+	var medOrderByPatientIdandinclude = "medOrderByPatientIdandinclude";
+	var medOrderCollapseByPatientIdandinclude = "medOrderCollapseByPatientIdandinclude";
 	var l = $( '#executebtn' ).ladda();
 	medicationOrderByPatientId = function(strurl){
 		var patientid = localStorage.getItem("patientid");
@@ -36,6 +38,7 @@
 	          	$('#authsuccess').html('');
 		  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized Successfully. Run a test by entering various values in the fileds.</strong></div>');
 		        $('#authsuccess').append(authsuccess);
+		        medicationOrderByPatientIdandinclude(strurl,data,medOrderByPatientIdandinclude,medOrderCollapseByPatientIdandinclude);
 	          	rendermedorderresults(data,strurl,xhr,medOrderByPatientId,medOrderCollapseByPatientId,resType);
 	          	l.ladda('stop');
 	        },
@@ -46,6 +49,46 @@
 	        	$('.medOrderrun').html('Failed');
 	        	$('.medOrderrun').parent().addClass('bg-danger');
 	        	rendermedordererror(e,medOrderByPatientId);
+	   		}
+		})
+	}
+
+	medicationOrderByPatientIdandinclude = function(strurl,data,medOrderByPatientIdandinclude,medOrderCollapseByPatientIdandinclude){
+		var patientid = localStorage.getItem("patientid");
+		l.ladda('start');
+		access_token = localStorage.getItem("access_token");
+		strurl = strurl+ "/MedicationOrder?patient="+patientid + "&_include=MedicationOrder:medication&_format=json";
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	medOrdersuccesscount++;
+	          	$('.medOrderrunByPatIdandinclude').html('Passed');
+	          	if(medordertrigger == 0){
+	          		$('.medOrderrun').html('Passed');
+	          	}
+	          	$('.medOrderpass').html(medOrdersuccesscount);
+	          	rendermedorderresults(data,strurl,xhr,medOrderByPatientIdandinclude,medOrderCollapseByPatientIdandinclude,resType);
+	        },
+	        error:function(e){
+	        	medordertrigger = 1;
+	        	l.ladda( 'stop' );
+	        	$('.medOrderrunByPatIdandinclude').html('Failed');
+	        	$('.medOrderrun').html('Failed');
+	        	$('.medOrderrun').parent().addClass('bg-danger');
+	        	rendermedordererror(e,medOrderByPatientIdandinclude);
 	   		}
 		})
 	}

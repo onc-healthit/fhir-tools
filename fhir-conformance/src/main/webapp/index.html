@@ -7,499 +7,69 @@
     	<meta name="description" content="">
     	<meta name="author" content="">
 
-		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-		<link href="css/fhir.css" rel="stylesheet" type="text/css" />
-		<link href="css/custom.css" rel="stylesheet" type="text/css" />
-		<link href="css/ladda.min.css" rel="stylesheet" type="text/css" />
     	<title>Conformance Test Tool</title>
-    	<script src="js/jquery-1.11.1.js"></script>
 	</head>
 	<body onload="checkparam();" >
-		<header>
-			<div class="navbar navbar-inverse navbar-static-top">
-				<div class="navbar-inner external">
-					<div class="container">
-						<div class="nav">
-							<li>
-								<a href="http://www.healthit.gov/" tabindex="1">HealthIT.gov</a>
-							</li>
-							<li>
-								<ul class="social" style="padding:0px;">
-									<div id="fb-root"></div>
-										<script>/*<![CDATA[*/(function(e,a,f){var c,b=e.getElementsByTagName(a)[0];if(e.getElementById(f)){return}c=e.createElement(a);c.id=f;c.src="//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=408132609248724&version=v2.0";b.parentNode.insertBefore(c,b)}(document,"script","facebook-jssdk"));/*]]>*/</script>
-										<li>
-											<div class="fb-like" data-href="http://sitenv.org" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
-										</li>
-										<li class="rss">
-											<a href="http://feeds.feedburner.com/healthitgov" title="Subscribe/RSS" tabindex="1">
-												<img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/rss.png" alt="Subscribe to ONC RSS feed">
-											</a>
-										</li>
-										<li class="twitter">
-											<a class="fix-transparency" title="Follow ONC on Twitter" href="http://twitter.com/ONC_HealthIT/" tabindex="1">
-												<img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/twitter.png" alt="Follow ONC on Twitter">
-											</a>
-										</li>
-										<li class="youtube">
-											<a class="fix-transparency" title="Follow Project ONC on Youtube" href="http://www.youtube.com/user/HHSONC" tabindex="1">
-												<img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/youtube.png" alt="Subscribe to ONC on YouTube">
-											</a>
-										</li>
-										<li class="linkedin">
-											<a class="fix-transparency" title="Follow ONC on LinkedIn" href="http://www.linkedin.com/title/office+coordinator/in-us-97-Washington-D.C.-Metro-Area/" tabindex="1">
-												<img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/linkedin.png" alt="Follow ONC on Linkedin">
-											</a>
-										</li>
-										<li class="googleplus">
-											<a class="fix-transparency" title="Find ONC on Google Plus" href="https://plus.google.com/115897569896631074599/posts" tabindex="1">
-												<img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/gplus.png" alt="Follow ONC on Google Plus">
-											</a>
-										</li>
-									</ul>
-								</li>
-							</div>
-						</div>
-					</div>
-				</div>
-			<div class="jumbotron">
-				<div class="container"></div>
-			</div>
-		</header>
-		<div class="top-navbar navbar-default">
-		 	<div class="navbar" role="navigation">
-		 		<div class="navbar-container container">
-		 			<div class="navbar-header">
-		 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" tabindex="1">
-		 					<span class="sr-only">Toggle navigation</span>
-		 					<span class="icon-bar"></span>
-		 					<span class="icon-bar"></span>
-		 					<span class="icon-bar"></span>
-		 				</button>
-		 			</div>
-		 			<nav class="sort-pages modify-pages navbar-collapse collapse" id="navigation">
-		 				<ul class="nav navbar-nav">
-		 					<li class="dropdown-parent">
-		 						<a href="https://sitenv.org/web/site/home" tabindex="1">
-		 							<span> Home</span>
-		 						</a>
-		 						<div class="firefox_fix">
-		 							<ul class="dropdown-menu" style="display: none;">
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/c-cda" tabindex="1">Consolidated CDA Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/transport" tabindex="1">Direct Transport Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/provider-directory" tabindex="1">Provider Directory Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/qrda" tabindex="1">Quality Reporting Standard Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/cqm-certification" tabindex="1">Clinical Quality Measure Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/public-health-reporting-sandbox" tabindex="1">Public Health Reporting Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/laboratory-standards-sandbox" tabindex="1">Laboratory Standards Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/electronic-prescribing-sandbox" tabindex="1">Electronic Prescribing Sandbox</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/soap-transport-sandbox" tabindex="1">SOAP Transport Sandbox</a>
-		 								</li>
-		 							</ul>
-		 						</div>
-		 					</li>
-		 					<li class="dropdown-parent">
-		 						<a href="https://sitenv.org/web/site/learn" tabindex="1">
-		 							<span> Learn</span>
-		 						</a>
-		 						<div class="firefox_fix">
-		 							<ul class="dropdown-menu">
-		 								<li>
-		 									<a href="http://www.hl7.org/permalink/?HelpDesk" target="_blank" tabindex="1">HL7 C-CDA Help Desk</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://www.hl7.org/implement/standards/product_brief.cfm?product_id=258" target="_blank" tabindex="1">C-CDA Standard</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://wiki.directproject.org/" target="_blank" tabindex="1">Direct Project Wiki</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://modularspecs.siframework.org/Implementation+Guidance+Artifacts" target="_blank" tabindex="1">SOAP Resources</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 									</li>
-		 								<li>
-		 									<a href="http://wiki.ihe.net/index.php?title=Healthcare_Provider_Directory" target="_blank" tabindex="1">IHE Healthcare Provider Directory Wiki</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://github.com/siteadmin/pdti" target="_blank" tabindex="1">Provider Directory Test Implementation (PDTI) Documentation</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_HPD.pdf" target="_blank" tabindex="1">IHE IT Infrastructure Technical Framework Supplement</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://www.hl7.org/implement/standards/product_brief.cfm?product_id=35" target="_blank" tabindex="1">QRDA Category I Standard</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://www.hl7.org/implement/standards/product_brief.cfm?product_id=286" target="_blank" tabindex="1">QRDA Category III Standard</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://projectcypress.org/" target="_blank" tabindex="1">Cypress Knowledge Base</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://www.hl7.org/implement/standards/hhsifr.cfm" target="_blank" tabindex="1">HL7 Standards Referenced in US Regulations</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 								</li>
-		 							</ul>
-		 						</div>
-		 					</li>
-		 					<li class="dropdown-parent">
-		 						<a href="https://sitenv.org/web/site/collaborate" tabindex="1">
-		 							<span> Collaborate</span>
-		 						</a>
-		 						<div class="firefox_fix">
-		 							<ul class="dropdown-menu" style="display: none;">
-		 								<li>
-		 									<a href="http://www.hl7.org/permalink/?HelpDesk" target="_blank" tabindex="1">HL7 C-CDA Help Desk</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://github.com/chb/sample_ccdas" target="_blank" tabindex="1">C-CDA Sample Repository</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://bit.ly/contribute-ccda" target="_blank" tabindex="1">Contribute a C-CDA Sample</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://jira.oncprojectracking.org/browse/QRDA" target="_blank" tabindex="1">QRDA Issue Tracker</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://github.com/chb/sample_qrdas" target="_blank" tabindex="1">QRDA Sample Repository</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://docs.google.com/forms/d/14tVqvCf0NErOcShmONgoxtKCHjKqoX2T300vaFNXKNQ/viewform" target="_blank" tabindex="1">Contribute a QRDA Sample</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://jira.oncprojectracking.org/browse/CYPRESS" target="_blank" tabindex="1">CQM Issue Tracker</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/forum/#!forum/cancer-reg-testing-tool" target="_blank" tabindex="1">Cancer Reporting Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/d/forum/hl7v2-immunization-testing" target="_blank" tabindex="1">HL7V2 Immunization Testing Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/d/forum/hl7v2-syndromic-testing" target="_blank" tabindex="1">HL7V2 Syndromic Testing Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/d/forum/hl7v2-reportable-lab-testing" target="_blank" tabindex="1">HL7V2 Reportable Lab Testing Google Group</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/d/forum/hl7v2-lab-testing" target="_blank" tabindex="1">HL7V2 Lab Testing Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/forum/?hl=en#!forum/hl7v2-lab-orders-interface-testing" target="_blank" tabindex="1">Laboratory Orders Interface (LOI) Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/d/forum/hl7v2-lab-testing" tabindex="1">HL7v2 Lab Test Compendium Testing (eDOS) Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/d/forum/erx-testing-tool" target="_blank" tabindex="1">Electronic Prescribing (eRX) Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/forum/?fromgroups#!forum/transport-testing-tool" target="_blank" tabindex="1">Transport Test Tool Google Group</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://groups.google.com/forum/?utm_source=digest&amp;utm_medium=email#!forum/edge-test-tool/topics" target="_blank" tabindex="1">Edge Test Tool Google Group</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 							</ul>
-		 						</div>
-		 					</li>
-		 					<li class="active dropdown-parent">
-		 						<a href="https://sitenv.org/web/site/test" tabindex="1">
-		 							<span> Test</span>
-		 						</a>
-		 						<div class="firefox_fix">
-		 							<ul class="dropdown-menu" style="display: none;">
-		 								<li>
-		 									<a href="https://sitenv.org/scorecard/" target="_blank" tabindex="1">C-CDA Scorecard (Beta)</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/c-cda-validator" target="_blank" tabindex="1">C-CDA Validator</a>
-		 								</li>
-		 								<li class="active">
-		 									<a href="https://sitenv.org/web/site/fhir-sandbox" tabindex="1">FHIR Sandbox</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/direct-certificate-discovery-tool" target="_blank" tabindex="1">Direct Certificate Discovery Tool</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/direct-certificate-discovery-tool-2015" target="_blank" tabindex="1">Direct Certificate Discovery Tool 2015</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/direct-transport-test-tool" target="_blank" tabindex="1">Direct Transport Test Tool</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/direct-smtp-edge-test-tool" target="_blank" tabindex="1">Direct SMTP Edge Test Tool</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/direct-xdr-edge-test-tool" target="_blank" tabindex="1">Direct XDR Edge Test Tool</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://sitenv.org/web/site/provider-directory-test-tool" target="_blank" tabindex="1">Provider Directory Test Tool</a>
-		 								</li>
-		 								<li>
-		 									<a href="https://validator.projectcypress.org/" target="_blank" tabindex="1">CYPRESS QRDA Validator</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://cda-cancer-testing.nist.gov/" target="_blank" tabindex="1">CDA Cancer Registry Reporting Validation Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://hl7v2-iz-testing.nist.gov/mu-immunization/" target="_blank" tabindex="1">Immunization Information System (IIS) Reporting Validation Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://hl7v2-ss-testing.nist.gov/mu-syndromic/" target="_blank" tabindex="1">Syndromic Surveillance Reporting Validation Tool</a>
-		 										<span class="external-page">
-		 											<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 												<span class="hiddenText">Web Site Disclaimers</span>
-		 											</a>
-		 										</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://hl7v2-elr-testing.nist.gov/mu-elr/" target="_blank" tabindex="1">Electronic Laboratory Reporting (ELR) Validation Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://hl7v2-lab-testing.nist.gov/mu-lab/" target="_blank" tabindex="1">Laboratory Results Interface (LRI) Validation Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://hit-dev.nist.gov:8086/loi-r1/#/home" target="_blank" tabindex="1">Laboratory Orders Interface (LOI) Validation Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://erx-testing.nist.gov/" target="_blank" tabindex="1">Electronic Prescribing (eRX) Test Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://hl7v2-edos-r1-testing.nist.gov/edos-r2" target="_blank" tabindex="1">Electronic Directory of Service (eDOS) Test Tool</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="http://transport-testing.nist.gov/ttt/" target="_blank" tabindex="1">NIST Transport Test Tool (TTT)</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 								<li>
-		 									<a href="https://edge.nist.gov/ett/#/home" target="_blank" tabindex="1">NIST Edge Test Tool (ETT)</a>
-		 									<span class="external-page">
-		 										<a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-		 											<span class="hiddenText">Web Site Disclaimers</span>
-		 										</a>
-		 									</span>
-		 								</li>
-		 							</ul>
-		 						</div>
-		 					</li>
-		 					<li>
-		 						<a href="https://sitenv.org/web/site/about-us" tabindex="1">
-		 							<span> About Us</span>
-		 						</a>
-		 					</li>
-		 				</ul>
-		 			</nav>
-		 		</div>
-		 	</div>
-		</div>
+
+<site-header ng-version="2.4.7" _nghost-vni-33="">
+    <header _ngcontent-vni-33="">
+        <div _ngcontent-vni-33="" class="site-header">
+            <div _ngcontent-vni-33="" class="container">
+                <a _ngcontent-vni-33="" class="site-logo" href="https://www.healthit.gov/" rel="external"
+                   title="HealthIT.gov">
+                    <img _ngcontent-vni-33="" alt="HealthIT.gov"
+                         src="images/site/healthit.gov.logo.png">
+                </a>
+            </div>
+        </div>
+        <!--template bindings={}-->
+    </header>
+</site-header>
+<app-site-navigation>
+    <nav>
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-target=".navbar-collapse"
+                            data-toggle="collapse" tabindex="1" type="button"><span
+                            class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> <span
+                                class="icon-bar"></span></button>
+                </div>
+                <nav class="collapse navbar-collapse" id="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a routerlink="/" routerlinkactive="active"
+                               tabindex="1" title="SITE Home" href="https://sitenv.org/home" class="active">Home</a></li>
+                        <li><a href="https://ttpedge.sitenv.org/ttp/#/home"
+                               tabindex="1" target="_blank" title="ETT">ETT</a></li>
+                        <li><a routerlink="test-tools" tabindex="1"
+                               title="TestTools" href="https://sitenv.org/test-tools">TestTools</a></li>
+                        <li><a href="https://www.healthit.gov/techlab/"
+                               tabindex="1" target="_blank" title="TechLab">TechLab</a></li>
+                    </ul>
+                </nav>
+                <breadcrumb prefix="SITE">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="https://sitenv.org/home" target="_blank" role="button">SITE</a>
+						</li>
+						<li class="breadcrumb-item active">
+							<span>FHIR Conformance Test Tool</span>
+                        </li>
+                    </ul>
+                </breadcrumb>
+            </div>
+        </div>
+    </nav>
+    <div class="spacer"></div>
+    <router-outlet></router-outlet>
+</app-site-navigation>
+
+
+
+
+
 		<div class="container maindiv" style="margin-top:10px;">
 			<div class="col-md-12">
 					<!-- <p>This FHIR Client tool provides developers an ability to generate FHIR client requests to various servers and examine the response returned by the server in a JSON format. Please Authorize the Server first and then enter the various values and run a test.  </p> -->
@@ -508,13 +78,13 @@
 			</div>
 			<div class="col-md-12">
 				<div class="col-md-6">
-		            <h2>Information about Conformance Test Tool</h2>
+		            <h3>Information about Conformance Test Tool</h3>
 		            <p>The FHIR Conformance Test Tool provides an easy way for servers to test their conformance to an implementation guide using provided test data and executing tests.</p>
 		            <!-- <h2>Test Data</h2>
 		            <p>Download sample test data from <a href="download/SampleData.csv">here</a></p> -->
 		        </div>
 		        <div class="col-md-6">
-		        	<h2>Instructions to use Conformance Test Tool</h2>
+		        	<h3>Instructions to use Conformance Test Tool</h3>
 		        	<ol style="margin-left:0px;">
 		        		<li>Download the Test Data in <a href="download/SampleData.xlsx" target="_new">Excel</a> or <a href="download/SampleJsonData.rar" target="_new">JSON</a> Formats.</li>
 		        		<li>Populate your system using the Test Data.</li>
@@ -586,7 +156,7 @@
 										      <td><input type="checkbox" class="checkBoxClass" name="test1" value="CarePlan"></td>
 										      <td><a onclick="opencareteammodal();" style="cursor:pointer;">Care Team</a></td>
 										      <td>Test Care Team (CarePlan) search operation based on a known Patient resource id and search operation support of the required mandatory parameters: category and status.</td>
-										      <td>2</td>
+										      <td>6</td>
 										      <td class="careteampass pass"></td>
 										      <td class="careteamrun run"></td>
 										    </tr>
@@ -594,7 +164,7 @@
 										      <td><input type="checkbox" class="checkBoxClass" name="test1" value="Condition"></td>
 										      <td><a onclick="openconditionmodal();" style="cursor:pointer;">Condition</a></td>
 										      <td>Test Problems and Health Concerns (Condition) search operation based on a known Patient resource id.</td>
-										      <td>3</td>
+										      <td>4</td>
 										      <td class="conditionpass pass"></td>
 										      <td class="conditionrun run"></td>
 										    </tr>
@@ -607,10 +177,18 @@
 										      <td class="devicerun run"></td>
 										    </tr>
 										    <tr>
+										      <td><input type="checkbox" class="checkBoxClass" name="test1" value="DocumentReference"></td>
+										      <td><a onclick="opendocrefmodal();" style="cursor:pointer;">Document Reference</a></td>
+										      <td>Test Document Reference Search Operation based on known Patient Id, type and Period and also with Extended Operations</td>
+										      <td>4</td>
+										      <td class="docrefpass pass"></td>
+										      <td class="docrefrun run"></td>
+										    </tr>
+										    <tr>
 										      <td><input type="checkbox" class="checkBoxClass" name="test1" value="Goal"></td>
 										      <td><a onclick="opengoalmodal();" style="cursor:pointer;">Goal</a></td>
 										      <td>Test Goal resource based on a known Patient resource id and search operation support of the required mandatory parameter date.</td>
-										      <td>1</td>
+										      <td>2</td>
 										      <td class="goalpass pass"></td>
 										      <td class="goalrun run"></td>
 										    </tr>
@@ -642,7 +220,7 @@
 										      <td><input type="checkbox" class="checkBoxClass" name="test1" value="MedicationStatement"></td>
 										      <td><a onclick="openmedStatementmodal();" style="cursor:pointer;">Medication Statement</a></td>
 										      <td>Test MedicationStatement resource based on a known Patient resource id</td>
-										      <td>1</td>
+										      <td>2</td>
 										      <td class="medStatementpass pass"></td>
 										      <td class="medStatementrun run"></td>
 										    </tr>
@@ -650,7 +228,7 @@
 										      <td><input type="checkbox" class="checkBoxClass" name="test1" value="MedicationOrder"></td>
 										      <td><a onclick="openmedOrdermodal();" style="cursor:pointer;">Medication Order</a></td>
 										      <td>Test MedicationOrder resource based on a known Patient resource id</td>
-										      <td>1</td>
+										      <td>2</td>
 										      <td class="medOrderpass pass"></td>
 										      <td class="medOrderrun run"></td>
 										    </tr>
@@ -680,17 +258,57 @@
 		        </div>
 			</div>
 		</div>
-		<footer>
-			<div role="contentinfo" class="container">
-					<div>
-						<p>This project was funded by a contract from the <a tabindex="100" href="http://www.healthit.gov">Office of the National Coordinator for Health Information Technology (ONC)</a>
-						</p>
-						<!-- <p><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimer</a>
-						</p> -->
-					</div>
-					<div class="row"> <div class="col-md-8"> <p>For any inquiries or questions, please send an email to <a tabindex="100" href="mailto:TestingServices@sitenv.org">TestingServices@sitenv.org</a></p> </div> <div class="col-md-4"> <p style="float:right;"><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimers</a></p> </div> </div>
-			</div>
-		</footer>
+
+
+<!-- Content ends here -->
+
+<site-footer ng-version="2.4.7" _nghost-vni-31=""  style="height: 52px;">
+    <footer _ngcontent-vni-31="">
+        <div _ngcontent-vni-31="" class="container" role="contentinfo">
+            <div _ngcontent-vni-31="" class="row">
+                <div _ngcontent-vni-31="" class="col-sm-6 text-left">
+                    <site-version _ngcontent-vni-31="" _nghost-vni-19=""><p _ngcontent-vni-19="" id="versionandrelease">
+                        <!-- <p><strong>Version:</strong> 1.0 | <strong>Released:</strong> 2/28/2017</p>
+                        </p> -->
+                    </site-version>
+                </div>
+                <div _ngcontent-vni-31="" class="col-sm-6 text-right">
+                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:TestingServices@sitenv.org" tabindex="100">TestingServices@sitenv.org</a>
+                </div>
+            </div>
+            <div _ngcontent-vni-31="" class="row">
+                <div _ngcontent-vni-31="" class="col-sm-6 text-left">
+                    <site-news-announcements _ngcontent-vni-31="" _nghost-vni-27="">
+                        <button _ngcontent-vni-27="" class="btn btn-link footer-link-btn" type="button" onclick="opennewsmodal();">News &amp;
+                            Announcements
+                        </button>
+                    </site-news-announcements>
+                    |
+                    <site-release-notes _ngcontent-vni-31="" _nghost-vni-29="">
+                        <button _ngcontent-vni-29="" class="btn btn-link footer-link-btn" type="button" onclick="openreleasemodal();">Release Notes
+                        </button>
+                    </site-release-notes>
+                </div>
+                <div _ngcontent-vni-31="" class="col-sm-6 text-right">
+                    <a _ngcontent-vni-31="" href="http://www.hhs.gov/Privacy.html" tabindex="100">Privacy
+                        Policy</a> | <a _ngcontent-vni-31="" href="http://www.hhs.gov/Disclaimer.html" tabindex="100">Disclaimers</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</site-footer>
+
+
+<script src="js/jquery-1.11.1.js"></script>
+<script src="js/url.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/remarkable.min.js"></script>
+
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+<script src="js/bootstrap.js"></script>
+<link href="css/fhir.css" rel="stylesheet">
+
 
 		<!-- Patient Results Modal -->
 		<div class="modal fade" tabindex="-1" role="dialog" id="patresmodal">
@@ -929,8 +547,8 @@
 									</td>
 								</tr>
 								<tr id="conditionByPatientandCategory">
-									<td><a data-toggle="collapse" data-target="#conditionCollapseByPatientandCategory" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id and Category</a></td>
-									<td>GET Condition resource by a known Patient Id and Category</td>
+									<td><a data-toggle="collapse" data-target="#conditionCollapseByPatientandCategory" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id and Category(problem)</a></td>
+									<td>GET Condition resource by a known Patient Id and Category(problem)</td>
 									<td class="conditionrunByPatCategory"></td>
 								</tr>
 								<tr class="conditionremovabletr">
@@ -943,7 +561,27 @@
 											</div>
 											<div class="col-md-12">
 												<label class="col-md-3">URL:</label>
-												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&category={category}&_format=json</div>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&category=problem&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="conditionByPatientandCategoryhealthconcern">
+									<td><a data-toggle="collapse" data-target="#conditionCollapseByPatientandCategoryhealthconcern" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id and Category(health-concern)</a></td>
+									<td>GET Condition resource by a known Patient Id and Category(health-concern)</td>
+									<td class="conditionrunByPatCategoryhealthconcern"></td>
+								</tr>
+								<tr class="conditionremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="conditionCollapseByPatientandCategoryhealthconcern" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Condition</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&category=health-concern&_format=json</div>
 											</div>
 										</div>
 									</td>
@@ -1018,8 +656,8 @@
 									</td>
 								</tr>
 								<tr id="careteamByPatCategoryStatus">
-									<td><a data-toggle="collapse" data-target="#careteamCollapseByPatientCategoryStatus" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id,Category and Status</a></td>
-									<td>GET CareTeam resource by a known Patient Id, Category and Status</td>
+									<td><a data-toggle="collapse" data-target="#careteamCollapseByPatientCategoryStatus" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id,Category(careteam) and Status</a></td>
+									<td>GET CareTeam resource by a known Patient Id, Category(careteam) and Status</td>
 									<td class="careteamrunByPatCategoryStatus"></td>
 								</tr>
 								<tr class="careteamremovabletr">
@@ -1032,7 +670,87 @@
 											</div>
 											<div class="col-md-12">
 												<label class="col-md-3">URL:</label>
-												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category={category}&status={status}&_format=json</div>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=careteeam&status={status}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="careteamByPatCategoryassess">
+									<td><a data-toggle="collapse" data-target="#careteamCollapseByPatientCategoryassess" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id,Category(assess-plan)</a></td>
+									<td>GET CareTeam resource by a known Patient Id, Category(assess-plan)</td>
+									<td class="careteamrunByPatCategoryassess"></td>
+								</tr>
+								<tr class="careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="careteamCollapseByPatientCategoryassess" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="careteamByPatCategoryassessDate">
+									<td><a data-toggle="collapse" data-target="#careteamCollapseByPatientCategoryassessDate" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id,Category(assess-plan) and Date</a></td>
+									<td>GET CareTeam resource by a known Patient Id, Category(assess-plan) and Date</td>
+									<td class="careteamrunByPatCategoryassessDate"></td>
+								</tr>
+								<tr class="careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="careteamCollapseByPatientCategoryassessDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="careteamByPatCategoryassessStatus">
+									<td><a data-toggle="collapse" data-target="#careteamCollapseByPatientCategoryassessStatus" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id,Category(assess-plan) and Status</a></td>
+									<td>GET CareTeam resource by a known Patient Id, Category(assess-plan) and Status</td>
+									<td class="careteamrunByPatCategoryassessStatus"></td>
+								</tr>
+								<tr class="careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="careteamCollapseByPatientCategoryassessStatus" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&status={status}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="careteamByPatCategoryassessStatusDate">
+									<td><a data-toggle="collapse" data-target="#careteamCollapseByPatientCategoryassessStatusDate" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id,Category(assess-plan), Status and Date</a></td>
+									<td>GET CareTeam resource by a known Patient Id, Category(assess-plan), Status and Date</td>
+									<td class="careteamrunByPatCategoryassessStatusDate"></td>
+								</tr>
+								<tr class="careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="careteamCollapseByPatientCategoryassessStatusDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&status={status}&date={date}&_format=json</div>
 											</div>
 										</div>
 									</td>
@@ -1086,6 +804,26 @@
 										</div>
 									</td>
 								</tr>
+								<tr id="medStatementByPatientIdandinclude">
+									<td><a data-toggle="collapse" data-target="#medStatementCollapseByPatientIdandinclude" class="accordion-toggle" style="cursor:pointer;">Medication Statement Search By Patient Id and Resource Includes</a></td>
+									<td>GET MedicationStatement resource by a known Patient Id and Resource Includes</td>
+									<td class="medStatementrunByPatIdandinclude"></td>
+								</tr>
+								<tr class="medStatementremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="medStatementCollapseByPatientIdandinclude" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">MedicationStatement</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationStatement?patient={Patient Id}&_include=MedicationStatement:medication&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 		          	</div>
@@ -1131,6 +869,26 @@
 											<div class="col-md-12">
 												<label class="col-md-3">URL:</label>
 												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationOrder?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="medOrderByPatientIdandinclude">
+									<td><a data-toggle="collapse" data-target="#medOrderCollapseByPatientIdandinclude" class="accordion-toggle" style="cursor:pointer;">Medication Order Search By Patient Id and Resource Includes</a></td>
+									<td>GET MedicationOrder resource by a known Patient Id and Resource Includes</td>
+									<td class="medOrderrunByPatIdandinclude"></td>
+								</tr>
+								<tr class="medorderremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="medOrderCollapseByPatientIdandinclude" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">MedicationOrder</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationOrder?patient={Patient Id}&_include=MedicationOrder:medication&_format=json</div>
 											</div>
 										</div>
 									</td>
@@ -1195,6 +953,115 @@
 		    </div><!-- /.modal -->
 			<!-- Device Results Modal-->
 
+			<!-- Document Reference Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="docrefresmodal">
+		      <div class="modal-dialog" style="width:900px">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="docrefByPatientId">
+									<td><a data-toggle="collapse" data-target="#docrefCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Patient Id</a></td>
+									<td>GET DocumentReference resource by a known Patient Id </td>
+									<td class="docrefrunByPatId"></td>
+								</tr>
+								<tr class="docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="docrefCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="docrefByPatientIdType">
+									<td><a data-toggle="collapse" data-target="#docrefCollapseByPatientIdType" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Patient Id and Type</a></td>
+									<td>GET DocumentReference resource by a known Patient Id and Type</td>
+									<td class="docrefrunByPatIdType"></td>
+								</tr>
+								<tr class="docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="docrefCollapseByPatientIdType" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference?patient={Patient Id}&type={system|value}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="docrefByPatientIdTypePeriod">
+									<td><a data-toggle="collapse" data-target="#docrefCollapseByPatientIdTypePeriod" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Patient Id,Type and Period</a></td>
+									<td>GET DocumentReference resource by a known Patient Id,Type and Period</td>
+									<td class="docrefrunByPatIdTypePeriod"></td>
+								</tr>
+								<tr class="docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="docrefCollapseByPatientIdTypePeriod" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference?patient={Patient Id}&type={system|value}&period={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="docrefByextandPatientId">
+									<td><a data-toggle="collapse" data-target="#docrefCollapseByextandPatientId" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Extended Operation and Patient Id</a></td>
+									<td>GET DocumentReference resource by Extended Operation and a known Patient Id</td>
+									<td class="docrefrunByPatIdext"></td>
+								</tr>
+								<tr class="docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="docrefCollapseByextandPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference/$docref?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Document Reference Results Modal-->
+
 			<!-- Goal Results Modal-->
 		    <div class="modal fade" tabindex="-1" role="dialog" id="goalresmodal">
 		      <div class="modal-dialog" style="width:900px">
@@ -1229,6 +1096,26 @@
 											<div class="col-md-12">
 												<label class="col-md-3">URL:</label>
 												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Goal?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="goalByPatientIdandDate">
+									<td><a data-toggle="collapse" data-target="#goalCollapseByPatientIdandDate" class="accordion-toggle" style="cursor:pointer;">Goal Search By Patient Id and Date</a></td>
+									<td>GET Goal resource by a known Patient Id and Date</td>
+									<td class="goalrunByPatIdandDate"></td>
+								</tr>
+								<tr class="goalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="goalCollapseByPatientIdandDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Goal</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Goal?patient={Patient Id}&date={date}&_format=json</div>
 											</div>
 										</div>
 									</td>
@@ -1825,57 +1712,6 @@
 								      	<input type="text" class="form-control" id="openpatid" data-toggle="tooltip" data-original-title=''>
 								    </div>
 	    						</div>
-	    						<div class="form-group">
-									<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
-								    <div class="col-sm-9">
-								    	<div class="col-sm-5 openscopes">
-								    		<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="launch">launch</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="launch/patient">launch/patient</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="patient/*.read">patient/*.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="patient/Patient.read">patient/Patient.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="patient/DocumentReference.read">patient/DocumentReference.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="patient/MedicationOrder.read">patient/MedicationOrder.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="patient/MedicationStatement.read">patient/MedicationStatement.read</label>
-											</div>
-								    	</div>
-								    	<div class="col-sm-5 openscopes">
-								    		<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="fhir_complete">fhir_complete</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="user/Patient.read">user/Patient.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="user/*.read">user/*.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="user/*.*">user/*.*</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="openid">openid</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="offline_access">offline_access</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="openscopesclass" type="checkbox" value="online_access">online_access</label>
-											</div>
-								    	</div>
-								    </div>
-	    						</div>
 	    						<button type="button" class="btn btn-primary center-block"  onclick="openserver();" id="openserverbtn">Submit</button>
 	    					</form>
 	    					<!-- <div class="col-md-12" align="center" style="padding-top:10px;"> Don't have Client ID? <a href="#">Click here</a> to register a client.</div> -->
@@ -1888,8 +1724,41 @@
 				  </div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
 		    <!-- Authorize Modal End-->
-		<!--<script src="js/jquery/jquery-1.11.1.js"></script>-->
-		<script src="js/bootstrap.js"></script>
+
+		    <!-- News and Announcements Modal -->
+				<div class="modal fade" tabindex="-1" role="dialog" id="news-modal">
+				  <div class="modal-dialog" style="width:600px">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				      </div>
+				      <div class="modal-body" style="overflow:auto;" id="newscontent">
+
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+		    <!-- News and Announcements Modal End-->
+
+		    <!-- News and Announcements Modal -->
+				<div class="modal fade" tabindex="-1" role="dialog" id="release-modal">
+				  <div class="modal-dialog" style="width:90%">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				      </div>
+				      <div class="modal-body" style="overflow:auto;" id="releasecontent">
+
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+		    <!-- News and Announcements Modal End-->
+
 		<script src="js/bootbox.js"></script>
 		<script src="js/hoverMenu.js"></script>
 		<script src="js/spin.js"></script>
@@ -1903,6 +1772,7 @@
 		<script src="js/medStatement.js"></script>
 		<script src="js/medicationorder.js"></script>
 		<script src="js/device.js"></script>
+		<script src="js/docref.js"></script>
 		<script src="js/goal.js"></script>
 		<script src="js/immunization.js"></script>
 		<script src="js/diagnosticreport.js"></script>
@@ -1916,29 +1786,30 @@
 	        $(".suitecheckbox").click(function () {
 	            $(".checkBoxClass").prop('checked', $(this).prop('checked'));
 	        });
+
+	        // TO display Version and Released date in footer
+	        $.ajax({
+	      		url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/Version.md",
+	        	type:"GET",
+		        success:function(data,status,xhr){
+		        	var md_content = data;
+		        	var md = new Remarkable();
+		        	var html_content = md.render(md_content);
+		        	$('#versionandrelease').html(html_content);
+		        },
+		        error:function(e){
+		        	console.log(e);
+		   		}
+			});
 	    });
 
 	    openpatmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#patresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#patresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
 				})
 	    }
 	    openallergymodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#allergyresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#allergyresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -1946,13 +1817,6 @@
 	    }
 
 	    openconditionmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#conditionresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#conditionresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -1960,13 +1824,6 @@
 	    }
 
 	    opencareteammodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#careteamresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#careteamresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -1974,13 +1831,6 @@
 	    }
 
 	    openmedStatementmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#medicationStatementresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#medicationStatementresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -1988,13 +1838,6 @@
 	    }
 
 	    openmedOrdermodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#medicationOrderresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#medicationOrderresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -2002,27 +1845,20 @@
 	    }
 
 	    opendevicemodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#deviceresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#deviceresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
 				})
 	    }
 
-	    opengoalmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#goalresmodal').modal({
+	     opendocrefmodal = function(){
+	    	$('#docrefresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
 				})
-	    	}*/
+	    }
+
+	    opengoalmodal = function(){
 	    	$('#goalresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -2030,13 +1866,6 @@
 	    }
 
 	    openimmunizationmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#immunizationresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#immunizationresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -2044,13 +1873,6 @@
 	    }
 
 	    opendiagnosticreportmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#diagnosticreportresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#diagnosticreportresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -2058,13 +1880,6 @@
 	    }
 
 	    openobslaboratorymodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#obslaboratoryresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#obslaboratoryresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -2072,13 +1887,6 @@
 	    }
 
 	    opensmokingstatusmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#smokingstatusresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#smokingstatusresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
@@ -2086,17 +1894,44 @@
 	    }
 
 	    openvitalsignsmodal = function(){
-	    	/*var execbtn = localStorage.getItem("execution");
-	    	if(execbtn == "true"){
-	    		$('#vitalsignsresmodal').modal({
-				    backdrop: 'static',
-				    keyboard: false
-				})
-	    	}*/
 	    	$('#vitalsignsresmodal').modal({
 				    backdrop: 'static',
 				    keyboard: false
 				})
+	    }
+
+	    opennewsmodal = function(){
+	    	$.ajax({
+	      		url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/NewsAndAnnouncements.md",
+	        	type:"GET",
+		        success:function(data,status,xhr){
+		        	var md_content = data;
+		        	var md = new Remarkable();
+		        	var html_content = md.render(md_content);
+		        	$('#newscontent').html(html_content);
+		        	$('#news-modal').modal('show');
+		        },
+		        error:function(e){
+		        	console.log(e);
+		   		}
+			});
+	    }
+
+	    openreleasemodal = function(){
+	    	$.ajax({
+	      		url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/ReleaseNotes.md",
+	        	type:"GET",
+		        success:function(data,status,xhr){
+		        	var md_content = data;
+		        	var md = new Remarkable();
+		        	var html_content = md.render(md_content);
+		        	$('#releasecontent').html(html_content);
+		        	$('#release-modal').modal('show');
+		        },
+		        error:function(e){
+		        	console.log(e);
+		   		}
+			});
 	    }
     </script>
 	</body>

@@ -46,6 +46,10 @@ public class DafMedicationDispense {
 
     @Column(name = "status")
     private String status;
+    
+    @Column(name = "medicationcodeableconcept")
+    @Type(type = "StringJsonObject")
+    private String medicationcodeableconcept; 
 
 
     public int getId() {
@@ -120,4 +124,12 @@ public class DafMedicationDispense {
     public void setStatus(String status) {
         this.status = status;
     }
+
+	public String getMedicationcodeableconcept() {
+		return medicationcodeableconcept;
+	}
+
+	public void setMedicationcodeableconcept(String medicationcodeableconcept) {
+		this.medicationcodeableconcept = medicationcodeableconcept;
+	}
 }

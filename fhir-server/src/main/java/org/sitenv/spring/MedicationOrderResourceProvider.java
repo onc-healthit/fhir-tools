@@ -354,11 +354,20 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
         medOrder.setStatus(MedicationOrderStatusEnum.valueOf(dafMedOrder.getStatus().trim()));
 
         //Set Medication
+//        CodeableConceptDt classCodeDt = new CodeableConceptDt();
+//        CodingDt classCodingDt = new CodingDt();
+//        classCodingDt.setSystem(dafMedOrder.getMedicationreference().getMed_system().trim());
+//        classCodingDt.setCode(dafMedOrder.getMedicationreference().getMed_code().trim());
+//        classCodingDt.setDisplay(dafMedOrder.getMedicationreference().getMed_display().trim());
+//        classCodeDt.addCoding(classCodingDt);
+//        medOrder.setMedication(classCodeDt);
+        
+        Map<String, String> medCodeableConcept = HapiUtils.convertToJsonMap(dafMedOrder.getMedicationcodeableconcept());
         CodeableConceptDt classCodeDt = new CodeableConceptDt();
         CodingDt classCodingDt = new CodingDt();
-        classCodingDt.setSystem(dafMedOrder.getMedicationreference().getMed_system().trim());
-        classCodingDt.setCode(dafMedOrder.getMedicationreference().getMed_code().trim());
-        classCodingDt.setDisplay(dafMedOrder.getMedicationreference().getMed_display().trim());
+        classCodingDt.setSystem(medCodeableConcept.get("system").trim());
+        classCodingDt.setCode(medCodeableConcept.get("code").trim());
+        classCodingDt.setDisplay(medCodeableConcept.get("display").trim());
         classCodeDt.addCoding(classCodingDt);
         medOrder.setMedication(classCodeDt);
 

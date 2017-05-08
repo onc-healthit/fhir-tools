@@ -370,3 +370,334 @@ ul {
     /*background-image: linear-gradient(to bottom,#f5f5f5 0%,#e8e8e8 100%);
     background-repeat: repeat-x;*/
 }
+
+
+
+
+/**
+new CSS Starts here for angular js
+ */
+
+.navbar-default[_ngcontent-vni-17] {
+    border-radius: 0
+}
+
+.navbar[_ngcontent-vni-17] {
+    margin: 0 auto
+}
+
+header[_ngcontent-vni-17]   .navbar-inner[_ngcontent-vni-17] {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: #fff
+}
+
+header[_ngcontent-vni-17]   .navbar[_ngcontent-vni-17] {
+    margin: 0;
+    min-height: 0
+}
+
+header[_ngcontent-vni-17]   .navbar[_ngcontent-vni-17]   .nav[_ngcontent-vni-17] {
+    float: right
+}
+
+header[_ngcontent-vni-17]   .navbar[_ngcontent-vni-17]   .nav[_ngcontent-vni-17] li[_ngcontent-vni-17] a[_ngcontent-vni-17] {
+    color: #d1d3d4
+}
+
+header[_ngcontent-vni-17]   .navbar[_ngcontent-vni-17]   .nav[_ngcontent-vni-17] li[_ngcontent-vni-17] a[_ngcontent-vni-17]:hover {
+    text-decoration: underline;
+    color: #fff;
+    background-color: #00418d
+}
+
+header[_ngcontent-vni-17]   .navbar[_ngcontent-vni-17]   .navbar-inner[_ngcontent-vni-17] {
+    background-color: #00418d;
+    background-image: none;
+    color: #fff
+}
+
+header[_ngcontent-vni-17]   .navbar-inverse[_ngcontent-vni-17]   .navbar-inner[_ngcontent-vni-17] {
+    background-color: #00418d;
+    -webkit-filter: none;
+    filter: none
+}
+footer[_ngcontent-vni-31] {
+    padding-top: 1em;
+    margin-top: 40px;
+    background-color: #eee
+}
+
+footer[_ngcontent-vni-31]    .footer-link-btn {
+    padding: 0 !important
+}
+modal[_ngcontent-vni-29]    .release-notes-modal-dialog {
+    width: 90% !important;
+    overflow-y: auto !important
+}
+.site-header[_ngcontent-vni-33] {
+    background: url(../images/site/bg-header-1920x170.png) repeat-x top #1fdbfe
+}
+
+.site-logo[_ngcontent-vni-33] {
+    padding: 15px 15px 15px 10px;
+    margin-left: 25px;
+    margin-right: 25px
+}
+
+.site-welcome-overview[_ngcontent-vni-3] {
+    margin-bottom: 30px;
+    border-radius: 10px;
+    border: 2px solid #036
+}
+
+.site-welcome-overview[_ngcontent-vni-3] h1[_ngcontent-vni-3] {
+    color: #036;
+    font-weight: 600
+}
+
+.header-description[_ngcontent-vni-3] {
+    padding: 0 5px 50px
+}
+
+.featurestable[_ngcontent-vni-1] {
+    width: 100%;
+    height: 100%
+}
+
+.featurestable[_ngcontent-vni-1] table {
+    margin: 0 auto;
+    width: 100%
+}
+
+.featurestable[_ngcontent-vni-1] thead th {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px
+}
+
+.featurestable[_ngcontent-vni-1] tbody {
+    overflow: auto;
+    width: 100%
+}
+
+.featurestable[_ngcontent-vni-1] tr:nth-child(2n) {
+    background-color: #f8f8f8
+}
+
+.featurestable[_ngcontent-vni-1] td {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px
+}
+
+
+
+.sandbox-block {
+    color: #036;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: block;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out
+}
+
+.sandbox-block:hover {
+    text-decoration: none !important;
+    background: #ddd
+}
+
+.sandbox-block a {
+    color: #036;
+    text-decoration: none !important
+}
+
+.sandbox-block span {
+    display: block;
+    font-weight: 500;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    line-height: 1.1;
+    margin: 10px 0;
+    color: inherit;
+    font-size: 14px;
+    white-space: normal
+}
+
+.sandbox-block .caption-head {
+    margin-top: 25px;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    text-align: center
+}
+
+.sandbox-block .caption-body {
+    font-size: 14px;
+    text-align: center
+}
+
+.sandbox-block .glyphicon {
+    font-size: 50px;
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: Glyphicons Halflings;
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1
+}
+
+.sandbox-block h4 {
+    white-space: normal
+}
+
+.interactive-thumbnail.active {
+    background: #ddd
+}
+
+.col .glyphnail {
+    height: 350px
+}
+
+.validation-modal-dialog {
+    width: 90% !important
+}
+
+.modal, .validation-modal-dialog {
+    overflow-y: auto !important
+}
+
+.validation-form-group {
+    padding: 25px
+}
+
+a.ext-icon {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAMAAAC67D+PAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAJUExURZmZmczMzAAAANmeCzsAAAADdFJOU///ANfKDUEAAAAySURBVHjaTIxRDgAACEHp/oeOtJYPe02gJEQiIvf5RgzK6B/jUHoE7dNwehP1JowtwAAXDABpSdB7KgAAAABJRU5ErkJggg==) 100% no-repeat;
+    padding: 0 2px 0 1px;
+    width: 10px;
+    height: 10px;
+    display: inline-block
+}
+
+.embedded {
+    position: relative;
+    right: 5px;
+    z-index: 100;
+    float: right;
+    margin-top: -35px
+}
+
+.external-page {
+    top: 1px;
+    right: 5px
+}
+
+.hiddenText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    border: 0;
+    clip: rect(0 0 0 0);
+    overflow: hidden
+}
+
+.sandbox-container {
+    padding-left: 0;
+    list-style: none
+}
+
+@media (min-width: 768px) {
+    .sandbox-container li {
+        float: left;
+        width: 50%;
+        height: 260px;
+        border: 1px solid #e6e6e6
+    }
+}
+
+@media (max-width: 767px) {
+    .sandbox-container li {
+        border: 1px solid #e6e6e6
+    }
+}
+
+.spacer {
+    margin-top: 40px
+}
+
+.vertical-align {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 80px
+}
+
+div.blockMsg {
+    width: 100%;
+    text-align: center;
+    background-color: #fefefe;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    margin: 15% auto
+}
+
+body {
+    font-family: Arial, sans-serif
+}
+
+.resultpopover {
+    max-width: 500px !important;
+    padding: 10px !important;
+    left: 800px !important
+}
+
+.result-title, .resultpopover, .resultPopoverBackground {
+    background-color: beige
+}
+
+.result-title {
+    font-weight: 700
+}
+
+.breadcrumb {
+    padding: 0;
+    list-style: none;
+    background-color: #f8f8f8;
+    margin: 0 0 5px 30px
+}
+
+.link-button-nowrap {
+    white-space: normal !important
+}
+
+
+.sandbox-block .siteglyphs {
+    font-size: 65px;
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    font-family: SITE-glyphs;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+
+

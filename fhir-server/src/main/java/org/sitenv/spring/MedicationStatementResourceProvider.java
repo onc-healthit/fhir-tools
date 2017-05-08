@@ -325,13 +325,20 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         medStatement.setWasNotTaken(dafMedStatement.isWasnottaken());
 
         //Set Medication
+        Map<String, String> medCodeableConcept = HapiUtils.convertToJsonMap(dafMedStatement.getMedicationcodeableconcept());
         CodeableConceptDt classCodeDt = new CodeableConceptDt();
         CodingDt classCodingDt = new CodingDt();
-        classCodingDt.setSystem(dafMedStatement.getMedicationreference().getMed_system().trim());
-        classCodingDt.setCode(dafMedStatement.getMedicationreference().getMed_code().trim());
-        classCodingDt.setDisplay(dafMedStatement.getMedicationreference().getMed_display().trim());
+        classCodingDt.setSystem(medCodeableConcept.get("system").trim());
+        classCodingDt.setCode(medCodeableConcept.get("code").trim());
+        classCodingDt.setDisplay(medCodeableConcept.get("display").trim());
         classCodeDt.addCoding(classCodingDt);
         medStatement.setMedication(classCodeDt);
+        
+//        ResourceReferenceDt referenceDt = new ResourceReferenceDt();
+//        referenceDt.setReference("Medication/"+dafMedStatement.getMedicationreference().getId());
+//        referenceDt.setDisplay("Sample Reference");
+//        medStatement.setMedication(referenceDt);
+        
 
         //Set ReasonNottaken
         /*List<CodeableConceptDt> reasonList =  new ArrayList<CodeableConceptDt>();
@@ -360,7 +367,7 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         timeRepeat.setFrequency(Integer.parseInt(dosageStatement.get("timingfrequency")));
         timeRepeat.setPeriodUnits(UnitsOfTimeEnum.valueOf(dosageStatement.get("timingperiodunits").trim()));
         dosageTiming.setRepeat(timeRepeat);
-        dosage.setTiming(dosageTiming);
+        //dosage.setTiming(dosageTiming);
         //Set Route
         CodeableConceptDt routeCode = new CodeableConceptDt();
         List<CodingDt> codeList = new ArrayList<CodingDt>();
@@ -371,9 +378,12 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         codeRoute.setDisplay(dosageStatement.get("routedisplay"));
         codeList.add(codeRoute);
         routeCode.setCoding(codeList);
-        dosage.setRoute(routeCode);
+        //dosage.setRoute(routeCode);
+        
+        dosage.setText(dosageStatement.get("dosagetext").trim());
         medStateDosage.add(dosage);
         medStatement.setDosage(medStateDosage);
+        
 
         PeriodDt dt = new PeriodDt();
         DateTimeDt dateTimeDt = new DateTimeDt();

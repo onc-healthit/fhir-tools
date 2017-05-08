@@ -11,461 +11,66 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-    <link href="view/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="view/css/fhir.css" rel="stylesheet" type="text/css" />
-    <link href="view/css/custom.css" rel="stylesheet" type="text/css" />
-    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> -->
-    <title>FHIR Authentication</title>
-    <script src="view/js/jquery-1.11.1.js"></script>
-    <style>
-        ul, ol {
-            margin-left: 0;
-            margin-top: 0;
-        }
-    </style>
 </head>
 <body>
-    <header> 
-            <div class="navbar navbar-inverse navbar-static-top"> <div class="navbar-inner external"> <div class="container"> <div class="nav"> <li><a href="http://www.healthit.gov/" tabindex="1">HealthIT.gov</a></li> <li> <ul class="social" style="padding:0px;"> <div id="fb-root"></div> <script>/*<![CDATA[*/(function(e,a,f){var c,b=e.getElementsByTagName(a)[0];if(e.getElementById(f)){return}c=e.createElement(a);c.id=f;c.src="//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=408132609248724&version=v2.0";b.parentNode.insertBefore(c,b)}(document,"script","facebook-jssdk"));/*]]>*/</script> <li><div class="fb-like" data-href="http://sitenv.org" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div></li> <li class="rss"> <a href="http://feeds.feedburner.com/healthitgov" title="Subscribe/RSS" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/rss.png" alt="Subscribe to ONC RSS feed"></a> </li> <li class="twitter"> <a class="fix-transparency" title="Follow ONC on Twitter" href="http://twitter.com/ONC_HealthIT/" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/twitter.png" alt="Follow ONC on Twitter"></a> </li> <li class="youtube"> <a class="fix-transparency" title="Follow Project ONC on Youtube" href="http://www.youtube.com/user/HHSONC" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/youtube.png" alt="Subscribe to ONC on YouTube"></a> </li> <li class="linkedin"> <a class="fix-transparency" title="Follow ONC on LinkedIn" href="http://www.linkedin.com/title/office+coordinator/in-us-97-Washington-D.C.-Metro-Area/" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/linkedin.png" alt="Follow ONC on Linkedin"></a> </li> <li class="googleplus"> <a class="fix-transparency" title="Find ONC on Google Plus" href="https://plus.google.com/115897569896631074599/posts" tabindex="1"><img src="https://sitenv.org/site-portal-responsivebootstrap-theme/images/gplus.png" alt="Follow ONC on Google Plus"></a> </li> </ul> </li> </div> </div> </div> </div> 
-            <div class="jumbotron"> 
-                <div class="container"></div> 
-            </div> 
-        </header>
-        <div class="top-navbar navbar-default">
-            <div class="navbar" role="navigation"> 
-                <div class="navbar-container container"> 
-                    <div class="navbar-header"> 
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" tabindex="1"> 
-                            <span class="sr-only">Toggle navigation</span> 
-                            <span class="icon-bar"></span> 
-                            <span class="icon-bar"></span> 
-                            <span class="icon-bar"></span> 
-                        </button> 
-                    </div> 
-                    <nav class="sort-pages modify-pages navbar-collapse collapse" id="navigation"> 
-                        <ul class="nav navbar-nav"> 
-                            <li class="dropdown-parent"> 
-                                <a href="https://sitenv.org/web/site/home" tabindex="1">
-                                    <span> Home</span>
-                                </a> 
-                                <div class="firefox_fix"> 
-                                    <ul class="dropdown-menu" style="display: none;"> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/c-cda" tabindex="1">Consolidated CDA Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/transport" tabindex="1">Direct Transport Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/provider-directory" tabindex="1">Provider Directory Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/qrda" tabindex="1">Quality Reporting Standard Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/cqm-certification" tabindex="1">Clinical Quality Measure Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/public-health-reporting-sandbox" tabindex="1">Public Health Reporting Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/laboratory-standards-sandbox" tabindex="1">Laboratory Standards Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/electronic-prescribing-sandbox" tabindex="1">Electronic Prescribing Sandbox</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/soap-transport-sandbox" tabindex="1">SOAP Transport Sandbox</a> 
-                                        </li> 
-                                    </ul> 
-                                </div> 
-                            </li> 
-                            <li class="dropdown-parent"> 
-                                <a href="https://sitenv.org/web/site/learn" tabindex="1">
-                                    <span> Learn</span>
-                                </a> 
-                                <div class="firefox_fix"> 
-                                    <ul class="dropdown-menu"> 
-                                        <li> 
-                                            <a href="http://www.hl7.org/permalink/?HelpDesk" target="_blank" tabindex="1">HL7 C-CDA Help Desk</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://www.hl7.org/implement/standards/product_brief.cfm?product_id=258" target="_blank" tabindex="1">C-CDA Standard</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://wiki.directproject.org/" target="_blank" tabindex="1">Direct Project Wiki</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://modularspecs.siframework.org/Implementation+Guidance+Artifacts" target="_blank" tabindex="1">SOAP Resources</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                            </li> 
-                                        <li> 
-                                            <a href="http://wiki.ihe.net/index.php?title=Healthcare_Provider_Directory" target="_blank" tabindex="1">IHE Healthcare Provider Directory Wiki</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://github.com/siteadmin/pdti" target="_blank" tabindex="1">Provider Directory Test Implementation (PDTI) Documentation</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://www.ihe.net/uploadedFiles/Documents/ITI/IHE_ITI_Suppl_HPD.pdf" target="_blank" tabindex="1">IHE IT Infrastructure Technical Framework Supplement</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://www.hl7.org/implement/standards/product_brief.cfm?product_id=35" target="_blank" tabindex="1">QRDA Category I Standard</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://www.hl7.org/implement/standards/product_brief.cfm?product_id=286" target="_blank" tabindex="1">QRDA Category III Standard</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://projectcypress.org/" target="_blank" tabindex="1">Cypress Knowledge Base</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://www.hl7.org/implement/standards/hhsifr.cfm" target="_blank" tabindex="1">HL7 Standards Referenced in US Regulations</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                        </li> 
-                                    </ul> 
-                                </div> 
-                            </li> 
-                            <li class="dropdown-parent"> 
-                                <a href="https://sitenv.org/web/site/collaborate" tabindex="1">
-                                    <span> Collaborate</span>
-                                </a> 
-                                <div class="firefox_fix"> 
-                                    <ul class="dropdown-menu" style="display: none;"> 
-                                        <li> 
-                                            <a href="http://www.hl7.org/permalink/?HelpDesk" target="_blank" tabindex="1">HL7 C-CDA Help Desk</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://github.com/chb/sample_ccdas" target="_blank" tabindex="1">C-CDA Sample Repository</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://bit.ly/contribute-ccda" target="_blank" tabindex="1">Contribute a C-CDA Sample</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://jira.oncprojectracking.org/browse/QRDA" target="_blank" tabindex="1">QRDA Issue Tracker</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://github.com/chb/sample_qrdas" target="_blank" tabindex="1">QRDA Sample Repository</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://docs.google.com/forms/d/14tVqvCf0NErOcShmONgoxtKCHjKqoX2T300vaFNXKNQ/viewform" target="_blank" tabindex="1">Contribute a QRDA Sample</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://jira.oncprojectracking.org/browse/CYPRESS" target="_blank" tabindex="1">CQM Issue Tracker</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/forum/#!forum/cancer-reg-testing-tool" target="_blank" tabindex="1">Cancer Reporting Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/d/forum/hl7v2-immunization-testing" target="_blank" tabindex="1">HL7V2 Immunization Testing Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/d/forum/hl7v2-syndromic-testing" target="_blank" tabindex="1">HL7V2 Syndromic Testing Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/d/forum/hl7v2-reportable-lab-testing" target="_blank" tabindex="1">HL7V2 Reportable Lab Testing Google Group</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/d/forum/hl7v2-lab-testing" target="_blank" tabindex="1">HL7V2 Lab Testing Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/forum/?hl=en#!forum/hl7v2-lab-orders-interface-testing" target="_blank" tabindex="1">Laboratory Orders Interface (LOI) Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/d/forum/hl7v2-lab-testing" tabindex="1">HL7v2 Lab Test Compendium Testing (eDOS) Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/d/forum/erx-testing-tool" target="_blank" tabindex="1">Electronic Prescribing (eRX) Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/forum/?fromgroups#!forum/transport-testing-tool" target="_blank" tabindex="1">Transport Test Tool Google Group</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://groups.google.com/forum/?utm_source=digest&amp;utm_medium=email#!forum/edge-test-tool/topics" target="_blank" tabindex="1">Edge Test Tool Google Group</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                    </ul> 
-                                </div> 
-                            </li> 
-                            <li class="active dropdown-parent"> 
-                                <a href="https://sitenv.org/web/site/test" tabindex="1">
-                                    <span> Test</span>
-                                </a> 
-                                <div class="firefox_fix"> 
-                                    <ul class="dropdown-menu" style="display: none;"> 
-                                        <li> 
-                                            <a href="https://sitenv.org/scorecard/" target="_blank" tabindex="1">C-CDA Scorecard (Beta)</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/c-cda-validator" target="_blank" tabindex="1">C-CDA Validator</a> 
-                                        </li> 
-                                        <li class="active"> 
-                                            <a href="https://sitenv.org/web/site/fhir-sandbox" tabindex="1">FHIR Sandbox</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/direct-certificate-discovery-tool" target="_blank" tabindex="1">Direct Certificate Discovery Tool</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/direct-certificate-discovery-tool-2015" target="_blank" tabindex="1">Direct Certificate Discovery Tool 2015</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/direct-transport-test-tool" target="_blank" tabindex="1">Direct Transport Test Tool</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/direct-smtp-edge-test-tool" target="_blank" tabindex="1">Direct SMTP Edge Test Tool</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/direct-xdr-edge-test-tool" target="_blank" tabindex="1">Direct XDR Edge Test Tool</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://sitenv.org/web/site/provider-directory-test-tool" target="_blank" tabindex="1">Provider Directory Test Tool</a> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://validator.projectcypress.org/" target="_blank" tabindex="1">CYPRESS QRDA Validator</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://cda-cancer-testing.nist.gov/" target="_blank" tabindex="1">CDA Cancer Registry Reporting Validation Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://hl7v2-iz-testing.nist.gov/mu-immunization/" target="_blank" tabindex="1">Immunization Information System (IIS) Reporting Validation Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://hl7v2-ss-testing.nist.gov/mu-syndromic/" target="_blank" tabindex="1">Syndromic Surveillance Reporting Validation Tool</a> 
-                                                <span class="external-page">
-                                                    <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                        <span class="hiddenText">Web Site Disclaimers</span>
-                                                    </a>
-                                                </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://hl7v2-elr-testing.nist.gov/mu-elr/" target="_blank" tabindex="1">Electronic Laboratory Reporting (ELR) Validation Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://hl7v2-lab-testing.nist.gov/mu-lab/" target="_blank" tabindex="1">Laboratory Results Interface (LRI) Validation Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://hit-dev.nist.gov:8086/loi-r1/#/home" target="_blank" tabindex="1">Laboratory Orders Interface (LOI) Validation Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://erx-testing.nist.gov/" target="_blank" tabindex="1">Electronic Prescribing (eRX) Test Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://hl7v2-edos-r1-testing.nist.gov/edos-r2" target="_blank" tabindex="1">Electronic Directory of Service (eDOS) Test Tool</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="http://transport-testing.nist.gov/ttt/" target="_blank" tabindex="1">NIST Transport Test Tool (TTT)</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                        <li> 
-                                            <a href="https://edge.nist.gov/ett/#/home" target="_blank" tabindex="1">NIST Edge Test Tool (ETT)</a> 
-                                            <span class="external-page">
-                                                <a href="http://www.hhs.gov/disclaimer.html" title="Web Site Disclaimers" class="ext-icon" target="_blank" tabindex="1">
-                                                    <span class="hiddenText">Web Site Disclaimers</span>
-                                                </a>
-                                            </span> 
-                                        </li> 
-                                    </ul> 
-                                </div> 
-                            </li> 
-                            <li> 
-                                <a href="https://sitenv.org/web/site/about-us" tabindex="1">
-                                    <span> About Us</span>
-                                </a> 
-                            </li> 
-                        </ul> 
-                    </nav> 
-                </div> 
-            </div> 
+    <%-- header starts here --%>
+<site-header ng-version="2.4.7" _nghost-vni-33="">
+    <header _ngcontent-vni-33="">
+        <div _ngcontent-vni-33="" class="site-header">
+            <div _ngcontent-vni-33="" class="container">
+                <a _ngcontent-vni-33="" class="site-logo" href="https://www.healthit.gov/" rel="external"
+                   title="HealthIT.gov">
+                    <img _ngcontent-vni-33="" alt="HealthIT.gov"
+                         src="${pageContext.request.contextPath}/view/images/site/healthit.gov.logo.png">
+                </a>
+            </div>
         </div>
+        <!--template bindings={}-->
+    </header>
+</site-header>
+<app-site-navigation>
+    <nav>
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-target=".navbar-collapse"
+                            data-toggle="collapse" tabindex="1" type="button"><span
+                            class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> <span
+                                class="icon-bar"></span></button>
+                </div>
+                <nav class="collapse navbar-collapse" id="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a routerlink="/" routerlinkactive="active"
+                               tabindex="1" title="SITE Home" href="https://sitenv.org/home" class="active">Home</a></li>
+                        <li><a href="https://ttpedge.sitenv.org/ttp/#/home"
+                               tabindex="1" target="_blank" title="ETT">ETT</a></li>
+                        <li><a routerlink="test-tools" tabindex="1"
+                               title="TestTools" href="https://sitenv.org/test-tools">TestTools</a></li>
+                        <li><a href="https://www.healthit.gov/techlab/"
+                               tabindex="1" target="_blank" title="TechLab">TechLab</a></li>
+                    </ul>
+                </nav>
+                <breadcrumb prefix="SITE">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a role="button" href="https://sitenv.org/home">SITE</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <span>Authentication Page</span>
+                        </li>
+                    </ul>
+                </breadcrumb>
+            </div>
+        </div>
+    </nav>
+    <div class="spacer"></div>
+    <router-outlet></router-outlet>
+</app-site-navigation>
+
+<%-- header Ends here --%>
+
     <div class="container">
         <div class="col-md-12" style="margin-top:20px;">
             <h1>Hi <%= request.getParameter("name") %>!</h1>
@@ -503,17 +108,141 @@
         </form>
     </div>
 
-<footer style="position:fixed;bottom:0px; left: 0%; width:100%"> 
-            <div role="contentinfo" class="container"> 
-                    <div> 
-                        <p>This project was funded by a contract from the <a tabindex="100" href="http://www.healthit.gov">Office of the National Coordinator for Health Information Technology (ONC)</a>
-                        </p> 
-                    </div> 
-                    <div class="row"> <div class="col-md-8"> <p>For any inquiries or questions, please send an email to <a tabindex="100" href="mailto:TestingServices@sitenv.org">TestingServices@sitenv.org</a></p> </div> <div class="col-md-4"> <p style="float:right;"><a tabindex="100" href="http://www.hhs.gov/Privacy.html">Privacy Policy</a> | <a tabindex="100" href="http://www.hhs.gov/Disclaimer.html">Disclaimers</a></p> </div> </div>
-            </div> 
-        </footer>
+<%-- Footer Starts here --%>
 
-        <script src="view/js/bootstrap.js"></script>
-        <script src="view/js/hoverMenu.js"></script>
+
+<site-footer ng-version="2.4.7" _nghost-vni-31=""  style="height: 52px;">
+<footer _ngcontent-vni-31="" style="position:fixed;bottom:0px; left: 0%; width:100%">
+        <div _ngcontent-vni-31="" class="container" role="contentinfo">
+            <div _ngcontent-vni-31="" class="row">
+                <div _ngcontent-vni-31="" class="col-sm-6 text-left">
+                    <site-version _ngcontent-vni-31="" _nghost-vni-19=""><p _ngcontent-vni-19="" id="versionandrelease">
+                        <!-- <p><strong>Version:</strong> 1.0 | <strong>Released:</strong> 2/28/2017</p>
+                        </p> -->
+                    </site-version>
+                </div>
+                <div _ngcontent-vni-31="" class="col-sm-6 text-right">
+                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:TestingServices@sitenv.org" tabindex="100">TestingServices@sitenv.org</a>
+                </div>
+            </div>
+            <div _ngcontent-vni-31="" class="row">
+                <div _ngcontent-vni-31="" class="col-sm-6 text-left">
+                    <site-news-announcements _ngcontent-vni-31="" _nghost-vni-27="">
+                        <button _ngcontent-vni-27="" class="btn btn-link footer-link-btn" type="button" onclick="opennewsmodal();">News &amp;
+                            Announcements
+                        </button>
+                    </site-news-announcements>
+                    |
+                    <site-release-notes _ngcontent-vni-31="" _nghost-vni-29="">
+                        <button _ngcontent-vni-29="" class="btn btn-link footer-link-btn" type="button" onclick="openreleasemodal();">Release Notes
+                        </button>
+                    </site-release-notes>
+                </div>
+                <div _ngcontent-vni-31="" class="col-sm-6 text-right">
+                    <a _ngcontent-vni-31="" href="http://www.hhs.gov/Privacy.html" tabindex="100">Privacy
+                        Policy</a> | <a _ngcontent-vni-31="" href="http://www.hhs.gov/Disclaimer.html" tabindex="100">Disclaimers</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</site-footer>
+
+<%-- Footer ends here --%>
+
+<script src="${pageContext.request.contextPath}/view/js/jquery-1.11.1.js"></script>
+
+<link href="${pageContext.request.contextPath}/view/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<script src="${pageContext.request.contextPath}/view/js/bootstrap.js"></script>
+<link href="${pageContext.request.contextPath}/view/css/fhir.css" rel="stylesheet">
+<script type="text/javascript" src="${pageContext.request.contextPath}/view/js/remarkable.min.js"></script>
+        <!-- <script src="view/js/hoverMenu.js"></script> -->
+
+<!-- News and Announcements Modal -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="news-modal">
+                  <div class="modal-dialog" style="width:600px">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                      </div>
+                      <div class="modal-body" style="overflow:auto;" id="newscontent">
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            <!-- News and Announcements Modal End-->
+
+            <!-- Release Notes Modal -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="release-modal">
+                  <div class="modal-dialog" style="width:90%">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                      </div>
+                      <div class="modal-body" style="overflow:auto;" id="releasecontent">
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            <!-- Release Notes Modal End-->
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+
+                    // TO display Version and Released date in footer
+                    $.ajax({
+                        url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/Version.md",
+                        type:"GET",
+                        success:function(data,status,xhr){
+                            var md_content = data;
+                            var md = new Remarkable();
+                            var html_content = md.render(md_content);
+                            $('#versionandrelease').html(html_content);
+                        },
+                        error:function(e){
+                            console.log(e);
+                        }
+                    });
+                });
+
+            opennewsmodal = function(){
+            $.ajax({
+                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/NewsAndAnnouncements.md",
+                type:"GET",
+                success:function(data,status,xhr){
+                    var md_content = data;
+                    var md = new Remarkable();
+                    var html_content = md.render(md_content);
+                    $('#newscontent').html(html_content);
+                    $('#news-modal').modal('show');
+                },
+                error:function(e){
+                    console.log(e);
+                }
+            });
+        }
+
+        openreleasemodal = function(){
+            $.ajax({
+                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/ReleaseNotes.md",
+                type:"GET",
+                success:function(data,status,xhr){
+                    var md_content = data;
+                    var md = new Remarkable();
+                    var html_content = md.render(md_content);
+                    $('#releasecontent').html(html_content);
+                    $('#release-modal').modal('show');
+                },
+                error:function(e){
+                    console.log(e);
+                }
+            });
+        }
+        </script>
 </body>
 </html>

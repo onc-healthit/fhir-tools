@@ -251,6 +251,15 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
         String theMedicationId = "Medication/" + Integer.toString(dafMedDispense.getMedicationreference().getId());
         medicationResource.setReference(theMedicationId);
         medDispense.setMedication(medicationResource);
+        
+        Map<String, String> medCodeableConcept = HapiUtils.convertToJsonMap(dafMedDispense.getMedicationcodeableconcept());
+        CodeableConceptDt classCodeDt = new CodeableConceptDt();
+        CodingDt classCodingDt = new CodingDt();
+        classCodingDt.setSystem(medCodeableConcept.get("system").trim());
+        classCodingDt.setCode(medCodeableConcept.get("code").trim());
+        classCodingDt.setDisplay(medCodeableConcept.get("display").trim());
+        classCodeDt.addCoding(classCodingDt);
+        medDispense.setMedication(classCodeDt);
 
         //set Patient Reference
         ResourceReferenceDt patientResource = new ResourceReferenceDt();

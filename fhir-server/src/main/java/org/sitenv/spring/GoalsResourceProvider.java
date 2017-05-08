@@ -7,6 +7,7 @@ import ca.uhn.fhir.model.dstu2.resource.Goal;
 import ca.uhn.fhir.model.dstu2.valueset.GoalStatusEnum;
 import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
 import ca.uhn.fhir.model.primitive.BoundCodeDt;
+import ca.uhn.fhir.model.primitive.DateDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.XhtmlDt;
 import ca.uhn.fhir.model.valueset.BundleEntryTransactionMethodEnum;
@@ -182,6 +183,11 @@ public class GoalsResourceProvider implements IResourceProvider {
         String theId = "Patient/" + Integer.toString(dafGoals.getPatient().getId());
         patientResource.setReference(theId);
         goal.setSubject(patientResource);
+        
+        //Set Date
+        DateDt dateDt = new DateDt();
+        dateDt.setValue(dafGoals.getDate());
+        goal.setStart(dateDt);
 
         NarrativeDt narrativeDt = new NarrativeDt();
         BoundCodeDt<NarrativeStatusEnum> narenum = new BoundCodeDt(

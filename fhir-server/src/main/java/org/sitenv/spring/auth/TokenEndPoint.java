@@ -54,10 +54,11 @@ public class TokenEndPoint extends HttpServlet {
         log.info("Token url:" + request.getRequestURL().append('?').append(request.getQueryString()));
 
         String credentials = request.getHeader("Authorization");
-        String client_id;
-        String client_secret;
-        String code;
-        String grant_type;
+        String client_id = null;
+        String client_secret = null;
+        String code = null;
+        String token =request.getParameter("refresh_token");
+        String grant_type = null;
         if (credentials != null) {
             credentials = credentials.substring(6);
             log.info(credentials);
@@ -99,6 +100,7 @@ public class TokenEndPoint extends HttpServlet {
             }
 
             String jsonString;
+            if(!sb.toString().isEmpty() && sb.toString()!=null){
             if (sb.toString().contains("{") && sb.toString().contains("}")) {
                 jsonString = sb.toString().replace("=", ":").replace("&", ",");
             } else {
@@ -106,12 +108,15 @@ public class TokenEndPoint extends HttpServlet {
             }
 
             log.info("body" + jsonString);
+            System.out.println("tests"+sb.toString());
 
             JSONObject payLoad = new JSONObject(jsonString);
+           
             client_id = payLoad.getString("client_id");
             client_secret = payLoad.getString("client_secret");
             code = payLoad.getString("code");
             grant_type = payLoad.getString("grant_type");
+            }
         }
 
         log.info("client id : " + client_id);
@@ -119,15 +124,16 @@ public class TokenEndPoint extends HttpServlet {
         log.info("code:" + code);
         log.info("grant_type:" + grant_type);
         if (client_id == null) {
+            response.sendError(401, "client_id is not present");
 
-            throw new Exception("client_id is not present");
-
-        }
+        }else
         if (client_secret == null) {
-
-            throw new Exception("client_secret is not present");
-        }
-
+            response.sendError(401, "client_secret is not present");
+        }else if (code == null&&token==null ) {
+            response.sendError(401, "code or refresh_token is not present");
+        }else if (grant_type == null){
+        	response.sendError(401, "grant_type is not present");
+        }else{
 
         DafClientRegister client = service.getClientByCredentials(client_id, client_secret);
 
@@ -152,11 +158,11 @@ public class TokenEndPoint extends HttpServlet {
                         JSONObject jsonOb = new JSONObject();
                         jsonOb.put("access_token", accessToken);
                         jsonOb.put("token_type", "bearer");
-                        jsonOb.put("expires_in", 3600);
+                        jsonOb.put("expires_in", "3600");
 
                         String refreshToken = null;
                         if (scopes.contains("launch/patient")) {
-                            jsonOb.put("patient", authTemp.getLaunchPatientId());
+                            jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
                         }
                         if (scopes.contains("offline_access")) {
                             refreshToken = oauthIssuerImpl.refreshToken();
@@ -183,7 +189,7 @@ public class TokenEndPoint extends HttpServlet {
                         out.println(jsonOb.toString());
                     }
                 } else if (grant_type.equals(GrantType.REFRESH_TOKEN.toString())) {
-                    if (authTemp.getRefresh_token().equals(request.getParameter("refresh_token"))) {
+                    if (authTemp.getRefresh_token().equals(token)) {
                         if (!client.getClient_id().equals(client_id)) {
                             response.sendError(401, "Invalid Client ID");
                             out.println(response);
@@ -193,11 +199,11 @@ public class TokenEndPoint extends HttpServlet {
                             JSONObject jsonOb = new JSONObject();
                             jsonOb.put("access_token", accessToken);
                             jsonOb.put("token_type", "bearer");
-                            jsonOb.put("expires_in", 3600);
+                            jsonOb.put("expires_in", "3600");
 
                             // String refreshToken = null;
                             if (scopes.contains("launch/patient")) {
-                                jsonOb.put("patient", 1);
+                                jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
                             }
             /*if(scopes.contains("offline_access")){
 	        	refreshToken = oauthIssuerImpl.refreshToken();
@@ -234,4 +240,5 @@ public class TokenEndPoint extends HttpServlet {
             out.println("{}");
         }
     }
+  }
 }

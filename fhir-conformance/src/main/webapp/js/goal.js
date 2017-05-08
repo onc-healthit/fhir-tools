@@ -4,6 +4,8 @@
 	var goaltrigger = 0;
 	var goalByPatientId = "goalByPatientId";
 	var goalCollapseByPatientId = "goalCollapseByPatientId";
+	var goalByPatientIdandDate = "goalByPatientIdandDate";
+	var goalCollapseByPatientIdandDate = "goalCollapseByPatientIdandDate";
 	var l = $( '#executebtn' ).ladda();
 	goalByPatId = function(strurl){
 		var patientid = localStorage.getItem("patientid");
@@ -36,6 +38,7 @@
 	          	$('#authsuccess').html('');
 		  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized Successfully. Run a test by entering various values in the fileds.</strong></div>');
 		        $('#authsuccess').append(authsuccess);
+		        goalbyPatIdandDate(strurl,data,goalByPatientIdandDate,goalCollapseByPatientIdandDate);
 	          	rendergoalresults(data,strurl,xhr,goalByPatientId,goalCollapseByPatientId,resType);
 	          	l.ladda('stop');
 	        },
@@ -48,6 +51,62 @@
 	        	rendergoalerror(e,goalByPatientId);
 	   		}
 		})
+	}
+
+	goalbyPatIdandDate = function(strurl,data,goalByPatientIdandDate,goalCollapseByPatientIdandDate){
+		//console.log(data);
+		var datearr=[];
+			if(data.entry){
+				for(var i=0; i< data.entry.length; i++){
+					datearr.push(data.entry[i].resource.startDate);
+				}
+			}else{
+				datearr.push(data.startDate);
+			}
+		// var datesearch = '';
+		// console.log(datearr);
+		// for(var g=0; g<datearr.length; g++){
+		// 	datesearch = datesearch+"&date="+datearr[g];
+		// }
+		// console.log(datesearch);
+		var patientid = localStorage.getItem("patientid");
+		var strurl = localStorage.getItem("strurl");
+		strurl = strurl + "/Goal?patient="+patientid+"&date="+datearr[0]+"&_format=json";
+		access_token = localStorage.getItem("access_token");
+		console.log(strurl);
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	goalsuccesscount++;
+	          	$('.goalrunByPatIdandDate').html('Passed');
+	          	if(goaltrigger == 0){
+	          		$('.goalrun').html('Passed');
+	          	}
+	          	$('.goalpass').html(goalsuccesscount);
+	          	rendergoalresults(data,strurl,xhr,goalByPatientIdandDate,goalCollapseByPatientIdandDate,resType);
+	        },
+	        error:function(e){
+	        	goaltrigger =1;
+	        	l.ladda( 'stop' );
+	        	$('.goalrunByPatIdandDate').html('Failed');
+	        	$('.goalrun').html('Failed');
+	        	$('.goalrun').parent().addClass('bg-danger');
+	        	rendergoalerror(e,goalByPatientIdandDate);
+	   		}
+		});
 	}
 
 	rendergoalresults = function(data,strurl,xhr,trid,colbyIdentifier,resType){

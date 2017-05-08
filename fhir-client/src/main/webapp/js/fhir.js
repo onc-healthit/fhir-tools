@@ -76,7 +76,7 @@
 
 	loadfhirres = function(){
 		$('#fhirresources').children().remove();
-		$('#fhirresources').append('<option>Select FHIR Profile</option>');
+		$('#fhirresources').append('<option>Select US Core Profile</option>');
 		populateSelectIdentifiedById('fhirresources');
 		$('#fhirresources').attr('disabled',false);
 	};

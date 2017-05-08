@@ -96,6 +96,28 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         DocumentReference docRef = createDocumentReferenceObject(dafDocRef);
         return docRef;
     }
+    
+    @Operation(name="$docref", idempotent=true)
+    public List<DocumentReference> getResourceByDocRefId(@OperationParam (name = DocumentReference.SP_PATIENT) ReferenceParam thePatient,
+    		@IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
+    	System.out.println("inOperation Docref");
+    	String patientId = thePatient.getIdPart();
+        List<DafDocumentReference> dafDocRefList = service.getDocumentReferenceBySubject(patientId);
+
+        List<DocumentReference> docRefList = new ArrayList<DocumentReference>();
+
+        for (DafDocumentReference dafDocRef : dafDocRefList) {
+            docRefList.add(createDocumentReferenceObject(dafDocRef));
+        }
+
+        if (theIncludes.size() > 0) {
+            IdDt practitionerId = docRefList.get(0).getAuthor().get(0).getReference();
+            PractitionerResourceProvider practitioner = new PractitionerResourceProvider();
+            Practitioner prac = practitioner.getPractitionerResourceById(practitionerId);
+            docRefList.get(0).getAuthor().get(0).setResource(prac);
+        }
+        return docRefList;
+    }
 
     /**
      * The "@Search" annotation indicates that this method supports the
@@ -168,6 +190,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
     public List<DocumentReference> searchByPatient(@RequiredParam(name = DocumentReference.SP_PATIENT) ReferenceParam thePatient,
                                                    @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         String patientId = thePatient.getIdPart();
+        System.out.println("In Compartment Patient");
         List<DafDocumentReference> dafDocRefList = service.getDocumentReferenceBySubject(patientId);
 
         List<DocumentReference> docRefList = new ArrayList<DocumentReference>();
@@ -235,6 +258,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
     public List<DocumentReference> findDocumentResourceWithType(
             @RequiredParam(name = DocumentReference.SP_TYPE) TokenParam type,
             @OptionalParam(name = DocumentReference.SP_PATIENT) ReferenceParam thePatient,
+            @OptionalParam(name = DocumentReference.SP_PERIOD) DateRangeParam thePeriod,
             @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         String identifierSystem = type.getSystem();
         String identifierCode = type.getValue();

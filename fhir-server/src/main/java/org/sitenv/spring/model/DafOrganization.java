@@ -28,24 +28,19 @@ public class DafOrganization {
     @Column(name = "telecom")
     @Type(type = "StringJsonObject")
     private String telecom;
+    
+    @Column(name = "type")
+    @Type(type = "StringJsonObject")
+    private String type;
+    
+    @Column(name = "name")
+    private String name;
+    
+    @Column(name = "address")
+    @Type(type = "StringJsonObject")
+    private String address;
 
-    @Column(name = "address_line_1")
-    private String addressLine1;
-
-    @Column(name = "address_line_2")
-    private String addressLine2;
-
-    @Column(name = "address_city")
-    private String city;
-
-    @Column(name = "address_state")
-    private String state;
-
-    @Column(name = "address_zip")
-    private String zip;
-
-    @Column(name = "address_country")
-    private String country;
+    
 
     public int getId() {
         return id;
@@ -79,53 +74,28 @@ public class DafOrganization {
         this.telecom = telecom;
     }
 
-    public String getAddressLine1() {
-        return addressLine1;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setAddressLine1(String addressLine1) {
-        this.addressLine1 = addressLine1;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public String getAddressLine2() {
-        return addressLine2;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setAddressLine2(String addressLine2) {
-        this.addressLine2 = addressLine2;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getCity() {
-        return city;
-    }
+	public String getAddress() {
+		return address;
+	}
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 }

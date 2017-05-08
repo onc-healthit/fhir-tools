@@ -60,6 +60,13 @@
 				$('.deviceremovabletr').remove();
 				deviceByPatId(strurl);
 			}
+			if(checkedValues[i] == "DocumentReference"){
+				$('.docrefpass').html('');
+				$('.docrefrun').html('Running...');
+				$('.docrefrun').parent().removeClass('bg-danger');
+				$('.deviceremovabletr').remove();
+				docrefByPatId(strurl);
+			}
 			if(checkedValues[i] == "Goal"){
 				$('.goalpass').html('');
 				$('.goalrun').html('Running...');

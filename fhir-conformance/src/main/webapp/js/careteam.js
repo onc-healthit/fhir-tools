@@ -6,6 +6,14 @@
 	var careteamCollapseByPatientId = "careteamCollapseByPatientId";
 	var careteamByPatCategoryStatus = "careteamByPatCategoryStatus";
 	var careteamCollapseByPatientCategoryStatus = "careteamCollapseByPatientCategoryStatus";
+	var careteamByPatCategoryassess = "careteamByPatCategoryassess";
+	var careteamCollapseByPatientCategoryassess = "careteamCollapseByPatientCategoryassess";
+	var careteamByPatCategoryassessDate = "careteamByPatCategoryassessDate";
+	var careteamCollapseByPatientCategoryassessDate = "careteamCollapseByPatientCategoryassessDate";
+	var careteamByPatCategoryassessStatus = "careteamByPatCategoryassessStatus";
+	var careteamCollapseByPatientCategoryassessStatus = "careteamCollapseByPatientCategoryassessStatus";
+	var careteamByPatCategoryassessStatusDate = "careteamByPatCategoryassessStatusDate";
+	var careteamCollapseByPatientCategoryassessStatusDate = "careteamCollapseByPatientCategoryassessStatusDate";
 	var l = $( '#executebtn' ).ladda();
 	careteamByPatient =  function(strurl){
 		var patientid = localStorage.getItem("patientid");
@@ -39,6 +47,10 @@
 		  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized Successfully. Run a test by entering various values in the fileds.</strong></div>');
 		        $('#authsuccess').append(authsuccess);
 	          	careteamByPatientCategoryStatus(strurl,data,careteamByPatCategoryStatus,careteamCollapseByPatientCategoryStatus);
+	          	careteamByPatientCategoryassess(strurl,data,careteamByPatCategoryassess,careteamCollapseByPatientCategoryassess);
+	          	careteamByPatientCategoryassessDate(strurl,data,careteamByPatCategoryassessDate,careteamCollapseByPatientCategoryassessDate);
+	          	careteamByPatientCategoryassessStatus(strurl,data,careteamByPatCategoryassessStatus,careteamCollapseByPatientCategoryassessStatus);
+	          	careteamByPatientCategoryassessStatusDate(strurl,data,careteamByPatCategoryassessStatusDate,careteamCollapseByPatientCategoryassessStatusDate);
 	          	rendercareteamresults(data,strurl,xhr,careteamByPatientId,careteamCollapseByPatientId,resType);
 	          	l.ladda( 'stop' );
 	        },
@@ -59,12 +71,20 @@
 	        category =  data.entry[0].resource.category[0].coding[0].code;
 	        status = data.entry[0].resource.status;
 	    }else{
-			category = data.category[0].coding[0].code;
-			status = data.status;
+	    	if(data.category){
+	    		category = data.category[0].coding[0].code;
+	    	}else{
+					return;
+				}
+	    	if(data.status){
+	    		status = data.status;
+	    	}else{
+					return;
+				}
 	    }
 		var patientid = localStorage.getItem("patientid");
 		var strurl = localStorage.getItem("strurl");
-		strurl = strurl + "/CarePlan?patient="+patientid+"&category="+category+"&status="+status+"&_format=json";
+		strurl = strurl + "/CarePlan?patient="+patientid+"&category=careteam&status="+status+"&_format=json";
 		access_token = localStorage.getItem("access_token");
 		$.ajax({
       		url:strurl,
@@ -97,6 +117,230 @@
 	        	$('.careteamrun').html('Failed');
 	        	$('.careteampass').parent().addClass('bg-danger');
 	        	rendercareteamerror(e,careteamByPatCategoryStatus);
+	   		}
+		});
+	}
+
+	careteamByPatientCategoryassess = function(strurl,data,careteamByPatCategoryassess,careteamCollapseByPatientCategoryassess){
+		var category,status;
+		if(data.entry){
+	        category =  data.entry[0].resource.category[0].coding[0].code;
+	        status = data.entry[0].resource.status;
+	    }else{
+			if(data.category){
+	    		category = data.category[0].coding[0].code;
+	    	}else{
+					return;
+				}
+	    	if(data.status){
+	    		status = data.status;
+	    	}else{
+					return;
+				}
+	    }
+		var patientid = localStorage.getItem("patientid");
+		var strurl = localStorage.getItem("strurl");
+		strurl = strurl + "/CarePlan?patient="+patientid+"&category=assess-plan&_format=json";
+		access_token = localStorage.getItem("access_token");
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	careteamSuccessCount++;
+	          	$('.careteamrunByPatCategoryassess').html('Passed');
+	          	if(careteamtrigger == 0){
+	          		$('.careteamrun').html('Passed');
+	          	}
+	          	$('.careteampass').html(careteamSuccessCount);
+	          	rendercareteamresults(data,strurl,xhr,careteamByPatCategoryassess,careteamCollapseByPatientCategoryassess,resType);
+	        },
+	        error:function(e){
+	        	careteamtrigger = 1;
+	        	l.ladda( 'stop' );
+	        	$('.careteamrunByPatCategoryassess').html('Failed');
+	        	$('.careteamrun').html('Failed');
+	        	$('.careteampass').parent().addClass('bg-danger');
+	        	rendercareteamerror(e,careteamByPatCategoryassess);
+	   		}
+		});
+	}
+
+	careteamByPatientCategoryassessDate = function(strurl,data,careteamByPatCategoryassessDate,careteamCollapseByPatientCategoryassessDate){
+		var category,status,date;
+		if(data.entry){
+	        category =  data.entry[0].resource.category[0].coding[0].code;
+	        status = data.entry[0].resource.status;
+	        date = data.entry[0].resource.period.start;
+	    }else{
+			if(data.category){
+	    		category = data.category[0].coding[0].code;
+	    	}else{
+					return;
+				}
+	    	if(data.status){
+	    		status = data.status;
+	    	}else{
+					return;
+				}
+	    	if(data.period){
+	    		date = data.period.start;
+	    	}else{ return; }
+	    }
+		var patientid = localStorage.getItem("patientid");
+		var strurl = localStorage.getItem("strurl");
+		strurl = strurl + "/CarePlan?patient="+patientid+"&category=assess-plan&date="+date+"&_format=json";
+		access_token = localStorage.getItem("access_token");
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	careteamSuccessCount++;
+	          	$('.careteamrunByPatCategoryassessDate').html('Passed');
+	          	if(careteamtrigger == 0){
+	          		$('.careteamrun').html('Passed');
+	          	}
+	          	$('.careteampass').html(careteamSuccessCount);
+	          	rendercareteamresults(data,strurl,xhr,careteamByPatCategoryassessDate,careteamCollapseByPatientCategoryassessDate,resType);
+	        },
+	        error:function(e){
+	        	careteamtrigger = 1;
+	        	l.ladda( 'stop' );
+	        	$('.careteamrunByPatCategoryassessDate').html('Failed');
+	        	$('.careteamrun').html('Failed');
+	        	$('.careteampass').parent().addClass('bg-danger');
+	        	rendercareteamerror(e,careteamByPatCategoryassessDate);
+	   		}
+		});
+	}
+
+	careteamByPatientCategoryassessStatus = function(strurl,data,careteamByPatCategoryassessStatus,careteamCollapseByPatientCategoryassessStatus){
+		var category,status;
+		if(data.entry){
+	        category =  data.entry[0].resource.category[0].coding[0].code;
+	        status = data.entry[0].resource.status;
+	    }else{
+			if(data.category){
+	    		category = data.category[0].coding[0].code;
+	    	}else{ return; }
+	    	if(data.status){
+	    		status = data.status;
+	    	}else{ return; }
+	    }
+		var patientid = localStorage.getItem("patientid");
+		var strurl = localStorage.getItem("strurl");
+		strurl = strurl + "/CarePlan?patient="+patientid+"&category=assess-plan&status="+status+"&_format=json";
+		access_token = localStorage.getItem("access_token");
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	careteamSuccessCount++;
+	          	$('.careteamrunByPatCategoryassessStatus').html('Passed');
+	          	if(careteamtrigger == 0){
+	          		$('.careteamrun').html('Passed');
+	          	}
+	          	$('.careteampass').html(careteamSuccessCount);
+	          	rendercareteamresults(data,strurl,xhr,careteamByPatCategoryassessStatus,careteamCollapseByPatientCategoryassessStatus,resType);
+	        },
+	        error:function(e){
+	        	careteamtrigger = 1;
+	        	l.ladda( 'stop' );
+	        	$('.careteamrunByPatCategoryassessStatus').html('Failed');
+	        	$('.careteamrun').html('Failed');
+	        	$('.careteampass').parent().addClass('bg-danger');
+	        	rendercareteamerror(e,careteamByPatCategoryassessStatus);
+	   		}
+		});
+	}
+
+	careteamByPatientCategoryassessStatusDate = function(strurl,data,careteamByPatCategoryassessStatusDate,careteamCollapseByPatientCategoryassessStatusDate){
+		var category,status,date;
+		if(data.entry){
+	        category =  data.entry[0].resource.category[0].coding[0].code;
+	        status = data.entry[0].resource.status;
+	        date = data.entry[0].resource.period.start;
+	    }else{
+			if(data.category){
+	    		category = data.category[0].coding[0].code;
+	    	}else{ return; }
+	    	if(data.status){
+	    		status = data.status;
+	    	}else{ return; }
+			if(data.period){
+	    		date = data.period.start;
+	    	}else{ return; }
+	    }
+		var patientid = localStorage.getItem("patientid");
+		var strurl = localStorage.getItem("strurl");
+		strurl = strurl + "/CarePlan?patient="+patientid+"&category=assess-plan&status="+status+"&date="+date+"&_format=json";
+		access_token = localStorage.getItem("access_token");
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	careteamSuccessCount++;
+	          	$('.careteamrunByPatCategoryassessStatusDate').html('Passed');
+	          	if(careteamtrigger == 0){
+	          		$('.careteamrun').html('Passed');
+	          	}
+	          	$('.careteampass').html(careteamSuccessCount);
+	          	rendercareteamresults(data,strurl,xhr,careteamByPatCategoryassessStatusDate,careteamCollapseByPatientCategoryassessStatusDate,resType);
+	        },
+	        error:function(e){
+	        	careteamtrigger = 1;
+	        	l.ladda( 'stop' );
+	        	$('.careteamrunByPatCategoryassessStatus').html('Failed');
+	        	$('.careteamrun').html('Failed');
+	        	$('.careteampass').parent().addClass('bg-danger');
+	        	rendercareteamerror(e,careteamByPatCategoryassessStatusDate);
 	   		}
 		});
 	}

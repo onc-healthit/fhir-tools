@@ -47,12 +47,18 @@ public class DAFServer extends RestfulServer {
         resourceProviders.add(new AllergyIntoleranceResourceProvider());
         resourceProviders.add(new ObservationResourceProvider());
         resourceProviders.add(new DiagnosticReportResourceProvider());
-        resourceProviders.add(new CareTeamResourceProvider());
+        resourceProviders.add(new CarePlanResourceProvider());
         resourceProviders.add(new ImmunizationResourceProvider());
         resourceProviders.add(new GoalsResourceProvider());
         resourceProviders.add(new DeviceResourceProvider());
+        resourceProviders.add(new OrganizationResourceProvider());
+        resourceProviders.add(new LocationResourceProvider());
+        resourceProviders.add(new PractitionerResourceProvider());
+        resourceProviders.add(new ProcedureResourceProvider());
 
         setResourceProviders(resourceProviders);
+        
+        setServerConformanceProvider(new ConformanceResourceProvider());
 
 		/*
          * Use a narrative generator. This is a completely optional step,

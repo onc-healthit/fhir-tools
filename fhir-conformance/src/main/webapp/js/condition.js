@@ -6,6 +6,8 @@
 	var conditionCollapseByPatientId = "conditionCollapseByPatientId";
 	var conditionByPatientandCategory = "conditionByPatientandCategory";
 	var conditionCollapseByPatientandCategory = "conditionCollapseByPatientandCategory";
+	var conditionByPatientandCategoryhealthconcern = "conditionByPatientandCategoryhealthconcern";
+	var conditionCollapseByPatientandCategoryhealthconcern = "conditionCollapseByPatientandCategoryhealthconcern";
 	var conditionByPatientandClinicalStatus = "conditionByPatientandClinicalStatus";
 	var conditionCollapseByPatientandClinicalStatus = "conditionCollapseByPatientandClinicalStatus";
 	var l = $( '#executebtn' ).ladda();
@@ -40,7 +42,8 @@
 	          	$('#authsuccess').html('');
 		  		authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Server Authorized Successfully. Run a test by entering various values in the fileds.</strong></div>');
 		        $('#authsuccess').append(authsuccess);
-	          	ConditionByPatientCategory(strurl,data,conditionByPatientandCategory,conditionCollapseByPatientandCategory);
+	          	ConditionByPatientCategoryproblem(strurl,data,conditionByPatientandCategory,conditionCollapseByPatientandCategory);
+	          	ConditionByPatientCategoryhealthconcern(strurl,data,conditionByPatientandCategoryhealthconcern,conditionCollapseByPatientandCategoryhealthconcern);
 	          	conditionByPatientClinicalStatus(strurl,data,conditionByPatientandClinicalStatus,conditionCollapseByPatientandClinicalStatus);
 	          	renderconditionresults(data,strurl,xhr,conditionByPatientId,conditionCollapseByPatientId,resType);
 	          	l.ladda( 'stop' );
@@ -56,16 +59,10 @@
 		})
 	}
 
-	ConditionByPatientCategory = function(strurl,data,conditionByPatientandCategory,conditionCollapseByPatientandCategory){
-		var category;
-		if(data.entry){
-	        category =  data.entry[0].resource.category.coding[0].code;
-	    }else{
-			category = data.category.coding[0].code;
-	    }
+	ConditionByPatientCategoryproblem = function(strurl,data,conditionByPatientandCategory,conditionCollapseByPatientandCategory){
 		var patientid = localStorage.getItem("patientid");
 		var strurl = localStorage.getItem("strurl");
-		strurl = strurl + "/Condition?patient="+patientid+"&category="+category+"&_format=json";
+		strurl = strurl + "/Condition?patient="+patientid+"&category=problem&_format=json";
 		access_token = localStorage.getItem("access_token");
 		$.ajax({
       		url:strurl,
@@ -102,12 +99,56 @@
 		});
 	}
 
+	ConditionByPatientCategoryhealthconcern = function(strurl,data,conditionByPatientandCategoryhealthconcern,conditionCollapseByPatientandCategoryhealthconcern){
+		var patientid = localStorage.getItem("patientid");
+		var strurl = localStorage.getItem("strurl");
+		strurl = strurl + "/Condition?patient="+patientid+"&category=health-concern&_format=json";
+		access_token = localStorage.getItem("access_token");
+		$.ajax({
+      		url:strurl,
+        	type:"GET",
+	        beforeSend: function (xhr) {
+	            if(localStorage.getItem("authtype") == 'auth'){
+	        		xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
+	        	}
+	            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+	        },
+	        success:function(data,status,xhr){
+	        	var resType='';
+	        	if(data.entry){
+	        		resType =  data.entry[0].resource.resourceType;
+	        	}else if(data.resourceType){
+					resType = data.resourceType;
+	        	}
+	          	conditionSuccessCount++;
+	          	$('.conditionrunByPatCategoryhealthconcern').html('Passed');
+	          	if(conditiontrigger == 0){
+	          		$('.conditionrun').html('Passed');
+	          	}
+	          	$('.conditionpass').html(conditionSuccessCount);
+	          	renderconditionresults(data,strurl,xhr,conditionByPatientandCategoryhealthconcern,conditionCollapseByPatientandCategoryhealthconcern,resType);
+	        },
+	        error:function(e){
+	        	conditiontrigger = 1;
+	        	l.ladda( 'stop' );
+	        	$('.conditionrunByPatCategoryhealthconcern').html('Failed');
+	        	$('.conditionrun').html('Failed');
+	        	$('.conditionpass').parent().addClass('bg-danger');
+	        	renderconditionerror(e,conditionByPatientandCategoryhealthconcern);
+	   		}
+		});
+	}
+
 	conditionByPatientClinicalStatus = function (strurl,data,conditionByPatientandClinicalStatus,conditionCollapseByPatientandClinicalStatus){
 		var status;
 		if(data.entry){
 	        status =  data.entry[0].resource.clinicalStatus;
 	    }else{
-			status = data.clinicalStatus;
+	    	if(data.clinicalStatus){
+	    		status = data.clinicalStatus;
+	    	}else{
+	    		return;
+	    	}
 	    }
 		var patientid = localStorage.getItem("patientid");
 		var strurl = localStorage.getItem("strurl");

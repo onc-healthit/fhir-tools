@@ -7,8 +7,7 @@ import java.util.List;
 public class ObservationSearchCriteria extends SearchCriteria {
 
     private Integer patient;
-
-    ;
+    private Integer observationId;
     private String category;
     private List<String> code;
     private DateRangeParam rangedates;
@@ -23,7 +22,15 @@ public class ObservationSearchCriteria extends SearchCriteria {
         this.patient = patient;
     }
 
-    public String getCategory() {
+    public Integer getObservationId() {
+		return observationId;
+	}
+
+	public void setObservationId(Integer observationId) {
+		this.observationId = observationId;
+	}
+
+	public String getCategory() {
         return category;
     }
 

@@ -60,7 +60,11 @@
 					codearr.push(data.entry[i].resource.code.coding[0].code);
 				}
 			}else{
-				codearr.push(data.code.coding[0].code);
+				if(data.code){
+					codearr.push(data.code.coding[0].code);
+				}else{
+					return;
+				}
 			}
 		var patientid = localStorage.getItem("patientid");
 		var strurl = localStorage.getItem("strurl");

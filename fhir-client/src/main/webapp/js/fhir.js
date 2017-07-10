@@ -586,7 +586,7 @@
 		        type:"GET",
 		        beforeSend: function (xhr) {
 		            xhr.setRequestHeader ("Authorization", "Bearer "+access_token);
-		            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+		            xhr.setRequestHeader("Content-Type","application/json+fhir");
 		        },
 		        success:function(data,status,xhr){
 		        	l.ladda( 'stop' );
@@ -635,7 +635,7 @@
 		      	url:strurl,
 		        type:"GET",
 		        beforeSend: function (xhr) {
-		            xhr.setRequestHeader("Content-Type","application/josn+fhir");
+		            xhr.setRequestHeader("Content-Type","application/json+fhir");
 		        },
 		        success:function(data,status,xhr){
 		        	l.ladda( 'stop' );

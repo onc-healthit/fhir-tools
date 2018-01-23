@@ -1,0 +1,42 @@
+.mat-card {
+  margin: 20px 30px;
+}
+
+.mat-card-title {
+  text-align: center;
+  font-size: 36px;
+}
+
+.mat-card-content {
+  margin-top: 20px;
+}
+
+.information {
+  width: 50%;
+  float: left;
+  padding: 0 15px;
+}
+
+.instructions {
+  width: 50%;
+  float: left;
+  padding: 0 15px;
+}
+
+.flex-row-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.information h1,
+.instructions h1 {
+  font-size: 24px;
+}
+
+.information p {
+  font-size: 16px;
+}
+
+.instructions li {
+  font-size: 16px;
+}

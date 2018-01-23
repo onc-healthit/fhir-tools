@@ -1,0 +1,39 @@
+.title,
+.table-container {
+  padding: 10px 30px;
+}
+
+.table-container .mat-checkbox,
+.table-container .mat-header-cell .mat-checkbox {
+  transition: none;
+}
+
+.table-container .mat-column-data {
+  min-width: 360px;
+}
+
+.table-container .mat-column-id {
+  max-width: 50px;
+}
+
+.table-container .mat-column-data .resourceContainer {
+  width: 50%;
+  float: left;
+}
+
+.resourceContainer .material-icons {
+  font-size: 12px;
+}
+
+.table-container .mat-column-patientList {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-container .mat-header-cell {
+  font-weight: bold;
+  font-size: 16px;
+  color: #000000;
+}

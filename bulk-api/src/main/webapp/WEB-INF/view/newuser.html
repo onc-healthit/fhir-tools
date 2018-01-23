@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+	
+    	<title>FHIR Server</title>
+	</head>
+	<body>
+		<!-- header starts here -->
+<site-header ng-version="2.4.7" _nghost-vni-33="">
+    <header _ngcontent-vni-33="">
+        <div _ngcontent-vni-33="" class="site-header">
+            <div _ngcontent-vni-33="" class="container">
+                <a _ngcontent-vni-33="" class="site-logo" href="https://www.healthit.gov/" rel="external"
+                   title="HealthIT.gov">
+                    <img _ngcontent-vni-33="" alt="HealthIT.gov"
+                         src="images/site/healthit.gov.logo.png">
+                </a>
+            </div>
+        </div>
+        <!--template bindings={}-->
+    </header>
+</site-header>
+<app-site-navigation>
+    <nav>
+        <div class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" data-target=".navbar-collapse"
+                            data-toggle="collapse" tabindex="1" type="button"><span
+                            class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> <span
+                                class="icon-bar"></span></button>
+                </div>
+                <nav class="collapse navbar-collapse" id="navigation">
+                    <ul class="nav navbar-nav">
+                        <li><a routerlink="/" routerlinkactive="active"
+                               tabindex="1" title="SITE Home" href="https://sitenv.org/home" class="active">Home</a></li>
+                        <li><a href="https://ttpedge.sitenv.org/ttp/#/home"
+                               tabindex="1" target="_blank" title="ETT">ETT</a></li>
+                        <li><a routerlink="test-tools" tabindex="1"
+                               title="TestTools" href="https://sitenv.org/test-tools">TestTools</a></li>
+                        <li><a href="https://www.healthit.gov/techlab/"
+                               tabindex="1" target="_blank" title="TechLab">TechLab</a></li>
+                    </ul>
+                </nav>
+                <breadcrumb prefix="SITE">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a role="button" href="https://sitenv.org/home">SITE</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <span>New User Registration</span>
+                        </li>
+                    </ul>
+                </breadcrumb>
+            </div>
+        </div>
+    </nav>
+    <div class="spacer"></div>
+    <router-outlet></router-outlet>
+</app-site-navigation>
+
+<!-- header Ends here -->
+			<div class="container">
+			<div class="col-md-3"></div>
+			<div class="col-md-6" style="margin-top:30px;">
+				<div class="panel panel-default">
+  					<div class="panel-heading">New User Registration</div>
+  					<div class="panel-body">
+    					<form class="form-horizontal" id="userregistration">
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Username</label>
+							    <div class="col-sm-8">
+							      	<input type="text" class="form-control" id="username" data-toggle="tooltip" data-original-title='' placeholder="user1" name=username data-fv-notempty>
+							    </div> 							
+    						</div>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Email Address</label>
+							    <div class="col-sm-8 tooltipright">
+							      	<input type="text" class="form-control" id="emailaddress" data-toggle="tooltip" data-original-title='' placeholder="user@example.com" name="email" data-fv-notempty>
+							    </div>    							
+    						</div>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Full name</label>
+							    <div class="col-sm-8 tooltipright">
+							      	<input type="text" class="form-control" id="fullname" data-toggle="tooltip" data-original-title='' placeholder="Mike Adams" name="fullname" data-fv-notempty>
+							    </div>    							
+    						</div>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">New Password</label>
+							    <div class="col-sm-8">
+							      	<input type="password" class="form-control" id="password" name="npassword" data-fv-notempty>
+							    </div>    							
+    						</div>
+    						<div class="form-group required">
+								<label for="inputEmail3" class="col-sm-4 control-label">Confirm Password</label>
+							    <div class="col-sm-8">
+							      	<input type="password" class="form-control" id="cpassword" name="cpassword" data-fv-notempty>
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-4 control-label"></label>
+							    <div class="col-sm-8">
+							      	<ul style="padding-left:15px;font-size:12px;">
+							      		<li>Password must be at least 8 characters long.</li>
+							      		<li>Must include one uppercase, one lowercase, one special character and one number.</li>
+							      	</ul>
+							    </div>    							
+    						</div>
+    						<input type="submit" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" id="registercli" value="Create" style="width:100px"/>
+    					</form>
+    					<h5 class="form-signin-heading" style="text-align:center"> Already registered? <a href="userlogin.html"> Click here </a> to Login</h5>
+  					</div>
+				</div>
+			</div>
+			<div class="col-md-3"></div>
+			</div>
+
+
+		<!-- Footer Starts here -->
+
+
+<site-footer ng-version="2.4.7" _nghost-vni-31=""  style="height: 52px;">
+<footer _ngcontent-vni-31="">
+        <div _ngcontent-vni-31="" class="container" role="contentinfo">
+            <div _ngcontent-vni-31="" class="row">
+                <div _ngcontent-vni-31="" class="col-sm-6 text-left">
+                    <site-version _ngcontent-vni-31="" _nghost-vni-19=""><p _ngcontent-vni-19="" id="versionandrelease">
+                        <!-- <p><strong>Version:</strong> 1.0 | <strong>Released:</strong> 2/28/2017</p>
+                        </p> -->
+                    </site-version>
+                </div>
+                <div _ngcontent-vni-31="" class="col-sm-6 text-right">
+                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:TestingServices@sitenv.org" tabindex="100">TestingServices@sitenv.org</a>
+                </div>
+            </div>
+            <div _ngcontent-vni-31="" class="row">
+                <div _ngcontent-vni-31="" class="col-sm-6 text-left">
+                    <site-news-announcements _ngcontent-vni-31="" _nghost-vni-27="">
+                        <button _ngcontent-vni-27="" class="btn btn-link footer-link-btn" type="button" onclick="opennewsmodal();">News &amp;
+                            Announcements
+                        </button>
+                    </site-news-announcements>
+                    |
+                    <site-release-notes _ngcontent-vni-31="" _nghost-vni-29="">
+                        <button _ngcontent-vni-29="" class="btn btn-link footer-link-btn" type="button" onclick="openreleasemodal();">Release Notes
+                        </button>
+                    </site-release-notes>
+                </div>
+                <div _ngcontent-vni-31="" class="col-sm-6 text-right">
+                    <a _ngcontent-vni-31="" href="http://www.hhs.gov/Privacy.html" tabindex="100">Privacy
+                        Policy</a> | <a _ngcontent-vni-31="" href="http://www.hhs.gov/Disclaimer.html" tabindex="100">Disclaimers</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</site-footer>
+
+<!-- Footer ends here -->
+
+<script src="js/jquery-1.11.1.js"></script>
+<script src="js/bootstrap.js"></script>
+
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="css/fhir.css" rel="stylesheet" type="text/css" />
+<link href="css/ladda.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/remarkable.min.js"></script>
+
+
+<!-- News and Announcements Modal -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="news-modal">
+                  <div class="modal-dialog" style="width:600px">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                      </div>
+                      <div class="modal-body" style="overflow:auto;" id="newscontent">
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            <!-- News and Announcements Modal End-->
+
+            <!-- Release Notes Modal -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="release-modal">
+                  <div class="modal-dialog" style="width:90%">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                      </div>
+                      <div class="modal-body" style="overflow:auto;" id="releasecontent">
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+            <!-- Release Notes Modal End-->
+		<script src="js/formValidation.js"></script>
+		<script src="js/framework/bootstrap.js"></script>
+		<script src="js/bootbox.js"></script>
+		<script src="js/url.js"></script>
+		<script src="js/hoverMenu.js"></script>
+		<script src="js/users.js"></script>
+		<script src="js/ladda.js"></script>
+		<script src="js/ladda.jquery.js"></script>
+		<script src="js/clients.js"></script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                    // TO display Version and Released date in footer
+                    $.ajax({
+                        url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/Version.md",
+                        type:"GET",
+                        success:function(data,status,xhr){
+                            var md_content = data;
+                            var md = new Remarkable();
+                            var html_content = md.render(md_content);
+                            $('#versionandrelease').html(html_content);
+                        },
+                        error:function(e){
+                            console.log(e);
+                        }
+                    });
+                });
+
+            opennewsmodal = function(){
+            $.ajax({
+                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/NewsAndAnnouncements.md",
+                type:"GET",
+                success:function(data,status,xhr){
+                    var md_content = data;
+                    var md = new Remarkable();
+                    var html_content = md.render(md_content);
+                    $('#newscontent').html(html_content);
+                    $('#news-modal').modal('show');
+                },
+                error:function(e){
+                    console.log(e);
+                }
+            });
+        }
+
+        openreleasemodal = function(){
+            $.ajax({
+                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/ReleaseNotes.md",
+                type:"GET",
+                success:function(data,status,xhr){
+                    var md_content = data;
+                    var md = new Remarkable();
+                    var html_content = md.render(md_content);
+                    $('#releasecontent').html(html_content);
+                    $('#release-modal').modal('show');
+                },
+                error:function(e){
+                    console.log(e);
+                }
+            });
+        }
+        </script>
+	</body>
+</html>

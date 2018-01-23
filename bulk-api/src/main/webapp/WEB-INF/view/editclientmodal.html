@@ -1,0 +1,108 @@
+<div class="modal-dialog" style="width:900px;">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Edit Client</h4>
+		      </div>
+		      <div class="modal-body">
+		        <form class="form-horizontal" id="editclientformhtml">
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Contact Name:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="editcontactname" data-toggle="tooltip" data-original-title='' name="editcontactname">
+							    </div> 							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Contact Email:</label>
+							    <div class="col-sm-5 tooltipright">
+							      	<input type="text" class="form-control" id="editcontactemail" data-toggle="tooltip" data-original-title='' name="editcontactemail">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Organization Name:</label>
+							    <div class="col-sm-5 tooltipright">
+							      	<input type="text" class="form-control" id="editorgName" data-toggle="tooltip" data-original-title='' name="editorgName">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Client Name:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="editclientname" name="editclientname">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
+							    <div class="col-sm-5">
+							      	<input type="text" class="form-control" id="editredirecturi" name="editredirecturi">
+							    </div>    							
+    						</div>
+    						<div class="form-group">
+								<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+							    <div class="col-sm-9">
+									<div class="col-sm-5 editregscopes">
+								    		<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch" onchange="removeerror();">launch</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch/patient" onchange="removeerror();">launch/patient</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/*.read" onchange="removeerror();">patient/*.read</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Patient.read" onchange="removeerror();">patient/Patient.read</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/DocumentReference.read" onchange="removeerror();">patient/DocumentReference.read</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/MedicationOrder.read" onchange="removeerror();">patient/MedicationOrder.read</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/MedicationStatement.read" onchange="removeerror();">patient/MedicationStatement.read</label>
+											</div>
+								    	</div>
+								    	<div class="col-sm-5 editregscopes">
+								    		<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="fhir_complete" onchange="removeerror();">fhir_complete</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Patient.read" onchange="removeerror();">user/Patient.read</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/*.read" onchange="removeerror();">user/*.read</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/*.*" onchange="removeerror();">user/*.*</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="openid" onchange="removeerror();">openid</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="offline_access" onchange="removeerror();">offline_access</label>
+											</div>
+											<div class="checkbox">
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="online_access" onchange="removeerror();">online_access</label>
+											</div>
+								    	</div>
+							    </div> 
+							    <div class="col-md-3">
+							    	
+							    </div>
+							    <div class="col-md-6">
+									<p id="editscopeserror" style="text-align:center;margin-top:20px;font-size:12px;color:#a94442;" class="center-block"></p>
+								</div>					
+							</div>
+							<input type="hidden" class="form-control" id="editclientid">
+							<input type="hidden" class="form-control" id="editclientIds">
+							<input type="hidden" class="form-control" id="editclientsecret">
+							<input type="hidden" class="form-control" id="editregtoken">
+    						<input type="submit" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" id="editregistercli" value="Save"/>
+    					</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default closebutton" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>

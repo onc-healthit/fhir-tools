@@ -23,7 +23,15 @@ import { ISubscription } from 'rxjs/Subscription';
   styleUrls: ['./extract.component.scss']
 })
 export class ExtractComponent implements OnInit {
-  displayedColumns = ['id', 'name', 'patientList', 'status', 'actions', 'data'];
+  displayedColumns = [
+    'id',
+    'name',
+    'patientList',
+    'status',
+    'requestId',
+    'actions',
+    'data'
+  ];
   dataSource = new MatTableDataSource();
   groupsList: any;
   group: any;
@@ -73,6 +81,7 @@ export class ExtractComponent implements OnInit {
       groupObject['name'] = this.group.name;
       groupObject['patientList'] = patList.join(',');
       groupObject['status'] = '';
+      groupObject['requestId'] = '';
       groupObject['data'] = this.extractData;
       groupObject['exported'] = false;
       this.groupTableData.push(groupObject);
@@ -90,6 +99,10 @@ export class ExtractComponent implements OnInit {
       this.extractList.push(extractObject);
       const groupIndex = this.groupTableData.findIndex(x => x === group);
       this.groupTableData[groupIndex].exported = true;
+      this.groupTableData[groupIndex].requestId = res.headers
+        .get('content-location')
+        .split('/')
+        .pop();
     });
   }
 

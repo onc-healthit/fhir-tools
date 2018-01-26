@@ -25,6 +25,12 @@
   font-size: 12px;
 }
 
+.resourceContainer a {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
 .table-container .mat-column-patientList {
   max-width: 250px;
   white-space: nowrap;

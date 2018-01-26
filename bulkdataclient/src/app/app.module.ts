@@ -15,6 +15,7 @@ import { HomeComponent } from './home/home.component';
 import { PatientsPanelComponent } from './patient-panel/patient-panel.component';
 import { GroupDialogComponent } from './patient-panel/group-dialog/group-dialog.component';
 import { ExtractComponent } from './extract/extract.component';
+import { NdJsonDialogComponent } from './extract/ndjson-dialog/ndjson-dialog.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
@@ -28,7 +29,8 @@ import { ExtractService } from './extract/extract.service';
     HomeComponent,
     PatientsPanelComponent,
     ExtractComponent,
-    GroupDialogComponent
+    GroupDialogComponent,
+    NdJsonDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -42,8 +44,8 @@ import { ExtractService } from './extract/extract.service';
     SharedModule.forRoot(),
     AppRoutingModule
   ],
-  exports: [GroupDialogComponent],
-  entryComponents: [GroupDialogComponent],
+  exports: [GroupDialogComponent, NdJsonDialogComponent],
+  entryComponents: [GroupDialogComponent, NdJsonDialogComponent],
   providers: [PatientPanelService, ExtractService],
   bootstrap: [AppComponent]
 })

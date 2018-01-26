@@ -47,7 +47,11 @@ export class PatientPanelService {
           if (res.status === 201) {
             return res;
           } else {
-            this.util.notify('Error', 'error', `{res.status}`);
+            this.util.notify(
+              'Error in creating groups',
+              'error',
+              `{res.status}`
+            );
           }
         }),
         catchError(this.handleError('createGroupError', []))
@@ -57,10 +61,14 @@ export class PatientPanelService {
   private handleError(operation, result) {
     return (error: any) => {
       if (operation === 'getListofAllPatients') {
-        this.util.notify('UnAuthorized', 'error', error.status);
+        this.util.notify(
+          'Error in fetching list of patients.',
+          'error',
+          error.status
+        );
         return result;
       } else if (operation === 'createGroupError') {
-        this.util.notify('Error', 'error', error.status);
+        this.util.notify('Error in creating groups', 'error', error.status);
         return result;
       }
     };

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://fhirtest.sitenv.org/bulk-data-api'
+  apiBaseUrl: 'http://52.70.192.201/open-fhir'
 };

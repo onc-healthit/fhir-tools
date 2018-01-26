@@ -36,16 +36,10 @@ export class ExtractService {
       Prefer: 'respond-async'
     });
     return this.http
-      .get(
-        environment.apiBaseUrl +
-          '/fhir/Group/' +
-          id +
-          '/$everything?_format=json',
-        {
-          headers: headers,
-          observe: 'response'
-        }
-      )
+      .get(environment.apiBaseUrl + '/fhir/Group/' + id + '/$everything', {
+        headers: headers,
+        observe: 'response'
+      })
       .pipe(
         tap(res => {
           return res;
@@ -57,6 +51,19 @@ export class ExtractService {
   getBulkDataByContentLocation(location: any) {
     return this.http
       .get(location, {
+        observe: 'response'
+      })
+      .pipe(
+        tap(res => {
+          return res;
+        }),
+        catchError(this.handleError('getGroupById', []))
+      );
+  }
+
+  getSelectedNdJson(resourceLink) {
+    return this.http
+      .get(resourceLink, {
         observe: 'response'
       })
       .pipe(

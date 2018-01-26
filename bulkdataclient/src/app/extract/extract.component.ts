@@ -16,6 +16,7 @@ import { ExtractService } from './extract.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { ISubscription } from 'rxjs/Subscription';
+import { NdJsonDialogComponent } from './ndjson-dialog/ndjson-dialog.component';
 
 @Component({
   selector: 'app-extract',
@@ -161,6 +162,23 @@ export class ExtractComponent implements OnInit {
           this.groupTableData[groupIndex].status = 'Completed';
           this.extractList.pop(extract);
         }
+      });
+  }
+
+  getSelectedNdJson(resourceName, resourceLink) {
+    this.extractsService
+      .getSelectedNdJson(resourceLink)
+      .subscribe((res: Response) => {
+        const config = {
+          minWidth: 800,
+          hasBackdrop: true,
+          data: {
+            ndjson: res.body,
+            link: resourceLink,
+            name: resourceName
+          }
+        };
+        const dialogRef = this.dialog.open(NdJsonDialogComponent, config);
       });
   }
 }

@@ -50,10 +50,11 @@
     <ng-container matColumnDef="data">
       <mat-header-cell *matHeaderCellDef>Data</mat-header-cell>
       <mat-cell *matCellDef="let group">
-        <!-- <a (click)="getSelectedNdJson();">Patient.ndjson</a> -->
         <div *ngFor="let item of group.data" class="resourceContainer">
-          <a href="{{item.resourceLink}}">
+          <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
             <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
+          <!-- <a href="{{item.resourceLink}}">
+            <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a> -->
         </div>
       </mat-cell>
     </ng-container>

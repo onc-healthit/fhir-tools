@@ -1,6 +1,8 @@
 package org.sitenv.spring.util;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +31,6 @@ public class HttpInterceptor implements IServerInterceptor {
 	}
 
 	public void interceptResponse(IHttpResponse resp) throws IOException {
-		
 		
 	}
 

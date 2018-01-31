@@ -3,16 +3,22 @@ package org.sitenv.spring;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.sitenv.spring.model.BulkDataOutput;
+import org.sitenv.spring.model.BulkDataOutputInfo;
 import org.sitenv.spring.model.DafBulkDataRequest;
 import org.sitenv.spring.model.DafGroup;
 import org.sitenv.spring.service.BulkDataRequestService;
@@ -24,8 +30,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import org.springframework.scheduling.annotation.Scheduled;
+
+import com.google.gson.Gson;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.AllergyIntolerance;
@@ -62,8 +69,10 @@ public class BulkDataRequestProvider {
 	
 	@RequestMapping(value="/{requestId}",method=RequestMethod.GET)
 	@ResponseBody
-	public void getContentLocationResponse(@PathVariable Integer requestId,HttpServletRequest request,
+	public String getContentLocationResponse(@PathVariable Integer requestId,HttpServletRequest request,
 		       HttpServletResponse response) {
+		
+		String body = "";
 		System.out.println(request.getHeader("test"));
 		DafBulkDataRequest bdr = bdrService.getBulkDataRequestById(requestId);
 		if(bdr!=null) {
@@ -79,27 +88,54 @@ public class BulkDataRequestProvider {
 			}
 		if(bdr.getStatus().equalsIgnoreCase("Completed")) {
 		
+			BulkDataOutput bdo = new BulkDataOutput();
+			
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(new Date());
+			cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+			cal.add(Calendar.DATE, 10);
+			String dt = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz").format( cal.getTime() );
+			bdo.setTransactionStartTime(dt);
+			
+			bdo.setRequestId(requestId.toString());
+			bdo.setSecure("false");
+			
 			String[] links = bdr.getFiles().split(",");
 			StringBuilder linksHeader = new StringBuilder();
 			String uri = request.getScheme() + "://" +
 	                request.getServerName() + 
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
 	                +request.getContextPath();
+			
 			for(int i=0;i<links.length;i++) {
+				
 				if(links[i]!=null&&!links[i].equals("null")) {
-				linksHeader.append("<"+uri+"/bulkdata/download/"+bdr.getRequestId()+"/"+links[i]+">");
+					
+					BulkDataOutputInfo bdoi = new BulkDataOutputInfo();
+					
+					String linkForBody = uri+"/bulkdata/download/"+bdr.getRequestId()+"/"+links[i];
+					String l = "<"+uri+"/bulkdata/download/"+bdr.getRequestId()+"/"+links[i]+">";
+					bdoi.setUrl(linkForBody);
+					bdo.add(bdoi);
+					
+					linksHeader.append(l);
 				
 					if(i<links.length-1) {
 						linksHeader.append(",");
 					}
 				}
 			}
+			Gson g = new Gson();
+			body = g.toJson(bdo);
+			
 			response.setHeader("Link", linksHeader.toString());
 		}
 		}else {
 			response.setStatus(404);
 			throw new ResourceNotFoundException("The requested Content-Location was not found. Please contact the Admin.");
 		}
+		
+		return body;
 	}
 	
 	@RequestMapping(value="/download/{id}/{fileName:.+}",method=RequestMethod.GET)
@@ -125,7 +161,7 @@ public class BulkDataRequestProvider {
 	      
 	}
 	
-	//@Scheduled(cron = "*/60 * * * * ?")
+	@Scheduled(cron = "*/5 * * * * ?")
 	public void processBulkDataRequestSchedular() {
 		
 		System.out.println("Schedular checking for pending requests...!");
@@ -329,19 +365,19 @@ public class BulkDataRequestProvider {
 				for(int i=0;i<patients.size();i++){
 					System.out.println(i);
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					}*/
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(patients.get(i)));
 					
 					if(i<patients.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+						// exportData.append('\n');
+						//exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -374,19 +410,19 @@ public class BulkDataRequestProvider {
 				for(int i=0;i<allergyIntoleranceList.size();i++){
 					System.out.println(i);
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+		/*			if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
 					}
-					
+			*/		
 					exportData.append(ctx.newJsonParser().encodeResourceToString(allergyIntoleranceList.get(i)));
 					
 					if(i<allergyIntoleranceList.size()-1) {
-					exportData.append(',');
+				//	exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+					//	exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -431,19 +467,19 @@ public class BulkDataRequestProvider {
 				for(int i=0;i<carePlanList.size();i++){
 					System.out.println(i);
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(carePlanList.get(i)));
 					
 					if(i<carePlanList.size()-1) {
-					exportData.append(',');
+			//		exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+				//		exportData.append('\n');
+				//		exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -483,19 +519,19 @@ public class BulkDataRequestProvider {
 				for(int i=0;i<conditionList.size();i++){
 					System.out.println(i);
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+					/* if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(conditionList.get(i)));
 					
 					if(i<conditionList.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+						// exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -535,19 +571,19 @@ public class BulkDataRequestProvider {
 				for(int i=0;i<deviceList.size();i++){
 					System.out.println(i);
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(deviceList.get(i)));
 					
 					if(i<deviceList.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+						// exportData.append('\n');
+						// exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -586,19 +622,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<diagnosticReportList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(diagnosticReportList.get(i)));
 					
 					if(i<diagnosticReportList.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+						// exportData.append('\n');
+						// exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -637,19 +673,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<documentReferenceList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(documentReferenceList.get(i)));
 					
 					if(i<documentReferenceList.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+					// 	exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -689,19 +725,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<goalList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(goalList.get(i)));
 					
 					if(i<goalList.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+						// exportData.append('\n');
+						// exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -740,19 +776,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<immunizationList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(immunizationList.get(i)));
 					
 					if(i<immunizationList.size()-1) {
-					exportData.append(',');
+				// 	exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+						// exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -791,19 +827,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<locationList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+			/*		if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(locationList.get(i)));
 					
 					if(i<locationList.size()-1) {
-					exportData.append(',');
+			//		exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+				//		exportData.append('\n');
+				 //		exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -842,19 +878,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<medicationAdministrationList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+			/*		if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(medicationAdministrationList.get(i)));
 					
 					if(i<medicationAdministrationList.size()-1) {
-					exportData.append(',');
+				//	exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+						//exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -893,19 +929,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<medicationDispenseList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(medicationDispenseList.get(i)));
 					
 					if(i<medicationDispenseList.size()-1) {
-					exportData.append(',');
+			//		exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+				//		exportData.append('\n');
+				//		exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -944,19 +980,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<medicationOrderList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+					/* if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(medicationOrderList.get(i)));
 					
 					if(i<medicationOrderList.size()-1) {
-					exportData.append(',');
+			//		exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+				//		exportData.append('\n');
+				//		exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -995,19 +1031,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<medicationList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+					/* if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(medicationList.get(i)));
 					
 					if(i<medicationList.size()-1) {
-					exportData.append(',');
+				// 	exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+					// 	exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -1046,19 +1082,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<medicationStatementList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+					/* if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(medicationStatementList.get(i)));
 					
 					if(i<medicationStatementList.size()-1) {
-					exportData.append(',');
+				//	exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+					//	exportData.append('\n');
+					//	exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -1097,19 +1133,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<observationList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+				/*	if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(observationList.get(i)));
 					
 					if(i<observationList.size()-1) {
-					exportData.append(',');
+			//		exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+				//		exportData.append('\n');
+				//		exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -1148,19 +1184,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<organizationList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+					/* if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(organizationList.get(i)));
 					
 					if(i<organizationList.size()-1) {
-					exportData.append(',');
+					// exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+						//exportData.append('\n');
+						// exportData.append("]");
 					}
 					
 					responseData.append(exportData);
@@ -1199,19 +1235,19 @@ public class BulkDataRequestProvider {
 				
 				for(int i=0;i<procedureList.size();i++){
 					StringBuilder exportData = new StringBuilder();
-					if(i==0) {
+			/*		if(i==0) {
 						exportData.append("[");
 						exportData.append('\n');
-					}
+					} */
 					
 					exportData.append(ctx.newJsonParser().encodeResourceToString(procedureList.get(i)));
 					
 					if(i<procedureList.size()-1) {
-					exportData.append(',');
+			//		exportData.append(',');
 					exportData.append('\n');
 					}else{
-						exportData.append('\n');
-						exportData.append("]");
+				//		exportData.append('\n');
+				//		exportData.append("]");
 					}
 					
 					responseData.append(exportData);

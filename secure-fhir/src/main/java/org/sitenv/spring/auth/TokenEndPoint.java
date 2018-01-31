@@ -74,9 +74,12 @@ public class TokenEndPoint extends HttpServlet {
         String scope = null;
         String client_assertion_type = null;
         String client_assertion = null;
+        
         if (credentials != null) {
-            credentials = credentials.substring(6);
-            log.info(credentials);
+            
+        	credentials = credentials.substring(6);
+            log.info("credentials = " + credentials);
+            
             String cred = CommonUtil.base64Decoder(credentials);
             String[] credList = cred.split(":", 2);
             log.info(credList[0]);
@@ -89,6 +92,9 @@ public class TokenEndPoint extends HttpServlet {
             client_assertion = request.getParameter("client_assertion");
             client_assertion_type = request.getParameter("client_assertion_type");
         } else if (request.getParameter("client_id") != null) {
+        	
+        	log.info(" Client Id found " + request.getParameter("client_id") );
+        	
             client_id = request.getParameter("client_id");
             client_secret = request.getParameter("client_secret");
             code = request.getParameter("code");
@@ -96,6 +102,7 @@ public class TokenEndPoint extends HttpServlet {
             scope = request.getParameter("scope");
             client_assertion = request.getParameter("client_assertion");
             client_assertion_type = request.getParameter("client_assertion_type");
+            
         } else {
             StringBuffer sb = new StringBuffer();
             BufferedReader bufferedReader = null;
@@ -105,6 +112,7 @@ public class TokenEndPoint extends HttpServlet {
                 char[] charBuffer = new char[128];
                 int bytesRead;
                 while ((bytesRead = bufferedReader.read(charBuffer)) != -1) {
+                	log.info(" Reading characters ");
                     sb.append(charBuffer, 0, bytesRead);
                 }
 
@@ -119,13 +127,16 @@ public class TokenEndPoint extends HttpServlet {
                     }
                 }
             }
+            
+            log.info(" Body = " + (sb == null?"Null Body":sb.toString()));
 
             String jsonString;
             if(!sb.toString().isEmpty() && sb.toString()!=null){
             	
-            	
+            	log.info("String Buffer " + sb);
             	if(sb.toString().contains("client_assertion")) {
             		
+            		log.info(" Found Client assertion ");
             		String[] params = sb.toString().split("&");
                 	
                 	for(String p : params) {
@@ -149,6 +160,8 @@ public class TokenEndPoint extends HttpServlet {
                 	}
             		
             	}else {
+            		
+            		log.info(" No client assertion found ");
             	 	
                     if (sb.toString().contains("{") && sb.toString().contains("}")) {
                         jsonString = sb.toString().replace("=", ":").replace("&", ",");

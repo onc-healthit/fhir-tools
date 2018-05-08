@@ -15,5 +15,5 @@ export class AppComponent {
     pauseOnHover: true,
     position: ['bottom', 'right']
   };
-  constructor() {}
+  constructor() { }
 }

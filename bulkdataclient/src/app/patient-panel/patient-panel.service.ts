@@ -13,11 +13,12 @@ import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PatientPanelService {
-  constructor(private http: HttpClient, private util: UtilityService) {}
+  constructor(private http: HttpClient, private util: UtilityService) { }
 
   getListofAllPatients() {
     return this.http
-      .get(environment.apiBaseUrl + '/fhir/Patient?_format=json', {
+      .get(this.util.fhirServerURL + '/fhir/Patient?_format=json', {
+        headers: new HttpHeaders().set('mode', this.util.fhirmode),
         observe: 'response'
       })
       .pipe(
@@ -39,7 +40,8 @@ export class PatientPanelService {
     };
     const headers = new Headers({ 'Content-Type': 'application/fhir+json' });
     return this.http
-      .post(environment.apiBaseUrl + '/fhir/Group/', json, {
+      .post(this.util.fhirServerURL + '/fhir/Group/', json, {
+        headers: new HttpHeaders().set('mode', this.util.fhirmode),
         observe: 'response'
       })
       .pipe(

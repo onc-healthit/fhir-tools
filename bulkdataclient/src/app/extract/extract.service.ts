@@ -15,11 +15,12 @@ import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ExtractService {
-  constructor(private http: HttpClient, private util: UtilityService) {}
+  constructor(private http: HttpClient, private util: UtilityService) { }
 
   getListofAllGroups() {
     return this.http
-      .get(environment.apiBaseUrl + '/fhir/Group?_format=json', {
+      .get(this.util.fhirServerURL + '/fhir/Group?_format=json', {
+        headers: new HttpHeaders().set('mode', this.util.fhirmode),
         observe: 'response'
       })
       .pipe(
@@ -33,10 +34,11 @@ export class ExtractService {
   getGroupById(id: any) {
     const headers = new HttpHeaders({
       Accept: 'application/fhir+ndjson',
-      Prefer: 'respond-async'
+      Prefer: 'respond-async',
+      mode: this.util.fhirmode
     });
     return this.http
-      .get(environment.apiBaseUrl + '/fhir/Group/' + id + '/$everything', {
+      .get(this.util.fhirServerURL + '/fhir/Group/' + id + '/$export', {
         headers: headers,
         observe: 'response'
       })
@@ -51,26 +53,29 @@ export class ExtractService {
   getBulkDataByContentLocation(location: any) {
     return this.http
       .get(location, {
+        headers: new HttpHeaders().set('mode', this.util.fhirmode),
         observe: 'response'
       })
       .pipe(
         tap(res => {
           return res;
         }),
-        catchError(this.handleError('getGroupById', []))
+        catchError(this.handleError('getBulkDataByContentLocation', []))
       );
   }
 
   getSelectedNdJson(resourceLink) {
     return this.http
       .get(resourceLink, {
-        observe: 'response'
+        // headers: new HttpHeaders().set('mode', this.util.fhirmode),
+        observe: 'response',
+        responseType: 'text'
       })
       .pipe(
         tap(res => {
           return res;
         }),
-        catchError(this.handleError('getGroupById', []))
+        catchError(this.handleError('getSelectedNdJson', []))
       );
   }
 
@@ -82,6 +87,20 @@ export class ExtractService {
       } else if (operation === 'getGroupById') {
         this.util.notify(
           'Error in fetching Group By Id',
+          'error',
+          error.status
+        );
+        return result;
+      } else if (operation === 'getBulkDataByContentLocation') {
+        this.util.notify(
+          'Error in fetching Bulk Data',
+          'error',
+          error.status
+        );
+        return result;
+      } else if (operation === 'getSelectedNdJson') {
+        this.util.notify(
+          'Error in fetching Selected NdJson File.',
           'error',
           error.status
         );

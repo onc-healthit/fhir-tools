@@ -1,0 +1,11 @@
+<button type="button" (click)="getNewsAndAnnouncements()" class="btn btn-link footer-link-btn">News &amp; Announcements</button>
+
+<modal #newsAndAnnouncementsModal cssClass="release-notes-modal-dialog">
+  <modal-body>
+    <div class="col-sm-12" [innerHtml]="newsAndAnnouncementsMarkdown | markdownToHtml">
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-primary" (click)="modal.close()">Close</button>
+  </modal-footer>
+</modal>

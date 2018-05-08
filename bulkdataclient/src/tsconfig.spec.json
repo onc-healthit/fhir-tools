@@ -13,8 +13,9 @@
   "files": [
     "test.ts"
   ],
-  "include": [
-    "**/*.spec.ts",
-    "**/*.d.ts"
-  ]
+  // "include": [
+  //   "**/*.spec.ts",
+  //   "**/*.d.ts",
+  //   "../node_modules/ng2-breadcrumb/*.ts"
+  // ]
 }

@@ -30,10 +30,15 @@ export class NdJsonDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<NdJsonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.ndjsondata = this.data.ndjson;
+    const jsonList = [];
+    const jsonobj = this.data.ndjson.split('\n');
+    for (let i = 0; i < jsonobj.length; i++) {
+      jsonList.push(JSON.parse(jsonobj[i]));
+    }
+    this.ndjsondata = jsonList;
     this.ndjsonname = this.data.name;
     this.ndjsonlink = this.data.link;
   }

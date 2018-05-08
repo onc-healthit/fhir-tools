@@ -1,0 +1,41 @@
+.mat-card {
+  margin: 20px 30px;
+}
+
+.example-full-width {
+  width: 80%;
+  float: left;
+}
+
+// .example-form {
+//   min-width: 150px;
+//   max-width: 600px;
+//   width: 90%;
+// }
+.infotext {
+  padding-top: 20px;
+}
+
+.urlInformation h3 {
+  text-align: left;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column; // align-items:baseline;
+  // justify-content:center;
+}
+
+.mode {
+  padding: 10px;
+  width: 100%;
+}
+
+.fhirurl {
+  padding: 10px;
+  width: 100%;
+}
+
+.savebtn {
+  width: 100px;
+}

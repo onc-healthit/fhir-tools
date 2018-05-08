@@ -1,0 +1,134 @@
+// .mat-expansion-panel {
+//   margin: 20px 30px;
+// }
+.mat-raised-button {
+  // float: right;
+  margin-top: 10px;
+}
+
+.mat-select {
+  width: 15%;
+  margin: 5px 0px -25px 760px;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: white;
+}
+
+.selection-header {
+  border: 1px solid;
+  border-radius: 15px;
+  background-color: #3f51b5;
+  color: white;
+  padding-bottom: 20px;
+  padding-left: 30px;
+}
+
+span {
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 80px;
+  padding: 6px 15px;
+  text-align: center;
+  border-radius: 3px;
+  background: #3f51b5;
+  font-family: Titillium Web, sans-serif;
+  color: #fff;
+}
+
+p {
+  margin: 5px 0px 0px 10px;
+  font-size: 16px;
+  font-family: Titillium Web, monospace;
+}
+
+.mat-card {
+  margin: 20px 30px;
+}
+
+.mat-card-title {
+  // text-align: center;
+  font-size: 26px;
+}
+
+.mat-card-content {
+  margin-top: 40px;
+}
+
+.mat-card-title p {
+  margin: 0px;
+}
+
+.mat-card-title h2 {
+  font-size: 26px;
+  margin-top: 10px;
+}
+
+.requestBody {
+  margin-bottom: 20px;
+}
+
+.resourceContainer {
+  padding: 0px;
+}
+
+.resourceContainer .material-icons {
+  font-size: 12px;
+}
+
+.resourceContainer a {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
+.resourceContainer span {
+  background: #fff;
+  padding: 0px;
+}
+
+.groupIDForm p {
+  margin: 0px;
+}
+
+.groupIDForm .mat-form-field {
+  width: 100%;
+}
+
+.requestBody pre {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.postbtn {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 100%
+}
+
+.mat-card .mat-divider {
+  position: inherit;
+  margin-top: 20px;
+}
+
+.mat-expansion-panel-header-title {
+  min-width: 450px;
+  max-width: 400px;
+}
+
+.paramsForm .mat-select {
+  margin: 0px;
+  display: inline;
+  border: 0px;
+}
+
+.params .mat-form-field {
+  width: 100%;
+}
+
+.groupParamsForm .mat-select {
+  margin: 0px;
+  display: inline;
+  border: 0px;
+}

@@ -33,10 +33,24 @@
   font-size: 24px;
 }
 
-.information p {
+.information li {
   font-size: 16px;
 }
 
 .instructions li {
   font-size: 16px;
+}
+
+.sandbox-description p,
+.sandbox-description li {
+  font-size:16px;
+}
+
+.sandbox-usage p {
+  font-size:16px;
+}
+
+.panel-heading h3,
+.panel-heading h4{
+  margin:0px;
 }

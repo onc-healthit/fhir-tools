@@ -1,26 +1,13 @@
 <div class="menu-items">
   <p class="sidebar-menu">Menu</p>
-  <!-- <mat-list>
-    <mat-list-item>
-      <mat-icon>home</mat-icon>
-      <span>Home</span>
-      <div class="mat-ripple-container"></div>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon>people</mat-icon>
-      <span> Patient Panel</span>
-      <div class="mat-ripple-container"></div>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon>import_export</mat-icon>
-      <span>Extract</span>
-      <div mat-ripple></div>
-    </mat-list-item>
-  </mat-list> -->
   <mat-nav-list>
     <a mat-list-item routerLink="/home" routerLinkActive="active">
       <mat-icon>home</mat-icon>
       <span>Home</span>
+    </a>
+    <a mat-list-item routerLink="/config" routerLinkActive="active">
+      <mat-icon>settings_applications</mat-icon>
+      <span>FHIR Server</span>
     </a>
     <a mat-list-item routerLink="/patient-panel" routerLinkActive="active">
       <mat-icon>people</mat-icon>
@@ -28,166 +15,11 @@
     </a>
     <a mat-list-item routerLink="/extract" routerLinkActive="active">
       <mat-icon>import_export</mat-icon>
-      <span>Extract</span>
+      <span>Bulk Data Extract</span>
+    </a>
+    <a mat-list-item routerLink="/run-test" routerLinkActive="active">
+      <mat-icon>play_arrow</mat-icon>
+      <span>Try Bulk Data API's</span>
     </a>
   </mat-nav-list>
-  <!-- <ul class="theme-left-sidebar-menu">
-
-    <li class="navigation">Menu</li>
-
-    <li>
-      <a data-ui-sref="/" class="side-menu-label active md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Dashboard" md-labeled-by-tooltip="md-tooltip-9" href="#/dashboard">
-        <i class="material-icons left-icon">dashboard</i>
-        <span>Dashboard</span>
-        <div class="md-ripple-container" style=""></div>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="buttons" class="side-menu-label md-ink-ripple menu-active" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Material UI" md-labeled-by-tooltip="md-tooltip-10" href="#/buttons">
-        <i class="material-icons left-icon">build</i>
-        <span>Material UI</span>
-        <div class="md-ripple-container" style=""></div>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="typography" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="CSS" md-labeled-by-tooltip="md-tooltip-11" href="#/typography">
-        <i class="material-icons left-icon">library_books</i>
-        <span>CSS</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="cards" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Advanced UI" md-labeled-by-tooltip="md-tooltip-12" href="#/cards">
-        <i class="material-icons left-icon">add_to_photos</i>
-        <span>Advanced UI</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="bottomSheet" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Extra UI" md-labeled-by-tooltip="md-tooltip-13" href="#/bottomSheet">
-        <i class="material-icons left-icon">extension</i>
-        <span>Extra UI</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="echarts" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Charts" md-labeled-by-tooltip="md-tooltip-14" href="#/echarts">
-        <i class="material-icons left-icon">insert_chart</i>
-        <span>Charts</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="form-layouts" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Form" md-labeled-by-tooltip="md-tooltip-15" href="#/form-layouts">
-        <i class="material-icons left-icon">message</i>
-        <span>Form</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="autocomplete" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Forms Elements" md-labeled-by-tooltip="md-tooltip-16" href="#/autocomplete">
-        <i class="material-icons left-icon">forum</i>
-        <span>Forms Elements</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="basic-table" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Tables" md-labeled-by-tooltip="md-tooltip-17" href="#/basic-table">
-        <i class="material-icons left-icon">border_all</i>
-        <span>Tables</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="grid" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Layout" md-labeled-by-tooltip="md-tooltip-18" href="#/grid">
-        <i class="material-icons left-icon">grid_on</i>
-        <span>Layout</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="color" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Colors" md-labeled-by-tooltip="md-tooltip-19" href="#/color">
-        <i class="material-icons left-icon">format_color_fill</i>
-        <span>Colors</span>
-      </a>
-    </li>
-
-    <li>
-      <a data-ui-sref="helpers" class="side-menu-label md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active"
-        aria-label="Helpers Class" md-labeled-by-tooltip="md-tooltip-20" href="#/helpers">
-        <i class="material-icons left-icon">live_help</i>
-        <span>Helpers Class</span>
-      </a>
-    </li>
-
-    <li>
-      <a class="side-menu-label menu-has-label md-ink-ripple" data-md-ink-ripple="#000" aria-label="Pages" md-labeled-by-tooltip="md-tooltip-21">
-        <i class="material-icons left-icon">terrain</i>
-        <i class="material-icons right-icon">keyboard_arrow_down</i>
-        <span>Pages</span>
-      </a>
-      <ul class="side-menu-label-body">
-        <li>
-          <a href="frontend/#/login" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">Login</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/signup" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">Signup</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/reset" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">Reset</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/lock" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">Lock</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/change-password" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">Change Password</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/contactus" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">Contactus</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/404" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">404</a>
-        </li>
-
-        <li>
-          <a href="frontend/#/500" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000">500</a>
-        </li>
-
-        <li>
-          <a data-ui-sref="404-admin" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active1"
-            href="#/404-admin">Dashboard 400</a>
-        </li>
-
-        <li>
-          <a data-ui-sref="500-admin" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active1"
-            href="#/500-admin">Dashboard 500</a>
-        </li>
-
-        <li>
-          <a data-ui-sref="blank" class="side-menu-label-1 md-ink-ripple" data-md-ink-ripple="#000" data-ui-sref-active="menu-active1"
-            href="#/blank">Blank Page</a>
-        </li>
-
-      </ul>
-    </li>
-  </ul> -->
 </div>

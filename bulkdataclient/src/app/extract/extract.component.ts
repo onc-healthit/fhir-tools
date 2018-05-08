@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 /**
  * Copyright 2018, Xyram Software Solutions. All rights reserved.
  */
@@ -41,6 +42,7 @@ export class ExtractComponent implements OnInit {
   extractData: any = [];
   subscribe: ISubscription;
   isLoadingResults = true;
+  responseBody: any = {};
   config = {
     hasBackdrop: true,
     data: []
@@ -51,12 +53,22 @@ export class ExtractComponent implements OnInit {
   constructor(
     private util: UtilityService,
     private extractsService: ExtractService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.loadGroups();
-    this.checkBulkData();
+    if (this.util.fhirServerURL) {
+      this.loadGroups();
+      this.checkBulkData();
+    } else {
+      this.util.notify(
+        'Please enter FHIR Server URL and try again',
+        'warn',
+        'FHIR Server URL'
+      );
+      this.router.navigate(['/config']);
+    }
   }
   loadGroups() {
     this.extractsService
@@ -140,18 +152,15 @@ export class ExtractComponent implements OnInit {
             'X-Progress'
           );
         } else if (res.status === 200) {
+          this.responseBody = res.body;
+          const result = this.responseBody.output;
           const exportLinks = res.headers.get('Link');
           const links = exportLinks.split(',');
           this.extractData = [];
-          for (let p = 0; p < links.length; p++) {
-            links[p] = links[p].replace('<', '');
-            links[p] = links[p].replace('>', '');
+          for (let p = 0; p < result.length; p++) {
             const dataObj = {
-              resourceName: links[p]
-                .split('/')
-                .pop()
-                .split('.')[0],
-              resourceLink: links[p]
+              resourceName: result[p].type,
+              resourceLink: result[p].url
             };
             this.extractData.push(dataObj);
           }

@@ -1,22 +1,156 @@
 <mat-card>
-  <mat-card-title>Welcome to Bulk API Client</mat-card-title>
+  <mat-card-title>Welcome to FHIR Bulk Data APIs sandbox.</mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <div class="flex-row-container">
-      <div class="information">
-        <h1>Information about the Bulk API client</h1>
-        <p>Bulk API client can be used to view the list of Patients and select to create a panel that can be used for extraction.
-          Once a panel is created use the Extract tab to retrieve the data for specific panels.</p>
-      </div>
-      <div class="instructions">
-        <h1>Instructions to use the Bulk API client</h1>
-        <ol style="margin:0px;padding-left:15px;">
-          <li>Select Patient panel tab to view the list of patients.</li>
-          <li>From the Patient panel select patients and create Group.</li>
-          <li>Select the Extract tab to view the list of created Groups.</li>
-          <li>Click on Extract button to get the bulk data of a particular Group.</li>
-          <li>List of resources will be available to download on completion of Bulk data request.</li>
-        </ol>
+    <div class="sandbox-description">
+      <p>This sandbox provides the following capabilities following the specification available at
+        <a href="https://github.com/smart-on-fhir/fhir-bulk-data-docs" target="_blank">https://github.com/smart-on-fhir/fhir-bulk-data-docs</a>
+      </p>
+      <ol>
+        <li>A FHIR Server that conforms to the Bulk Data API Server implementation</li>
+        <ul>
+          <!-- <li>
+            <a href="{{origin}}/open-fhir" target="_blank">{{origin}}/open-fhir</a>
+          </li> -->
+          <li>
+            <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulk-api-v2" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulk-api-v2</a>
+          </li>
+        </ul>
+        <li>A FHIR Client that conforms to the Bulk Data API Client Implementation</li>
+        <ul>
+          <!-- <li>
+            <a href="{{origin}}/backend-app-secure" target="_blank">{{origin}}/backend-app-secure</a>
+          </li> -->
+          <li>
+            <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/secure-backend-app" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/secure-backend-app</a>
+          </li>
+        </ul>
+        <li>This User Interface which can be used to try and understand Bulk Data APIs but is not part of the specification.</li>
+        <ul>
+          <li>
+            If you are new to the Bulk Data APIs, then a good place to start would be the “Try Bulk Data APIs” on the left navigation
+            menu.
+          </li>
+          <li>
+            <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulkdataclient" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulkdataclient</a>
+          </li>
+        </ul>
+      </ol>
+      <div class="panel panel-default">
+        <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+          <h3>Implementation Architecture of the Sandbox:</h3>
+        </div>
+        <div class="panel-body">
+          <p>The sandbox contains three components as shown below
+            <br>
+            <br> Sandbox User Interface ———> Bulk Data Client ———> FHIR Server (supporting Bulk Data API)
+            <br>
+            <br> The User Interface interacts with Bulk Data Client using RESTful interfaces, which in turn communicates with
+            the FHIR Server using the FHIR Bulk Data APIs to satisfy the requests.
+            <br>
+            <a href="http://docs.smarthealthit.org/authorization/backend-services/" target="_blank">The SMART Backend Services authorization guide
+            </a> is implemented between the Bulk Data Client and the FHIR Server.
+          </p>
+          <h3>Data Supported By the Sandbox</h3>
+          <p>The Bulk Data API sandbox contains two databases</p>
+          <ol>
+            <li>One with 100 patients for vendors to download and experiment.You can download and view the data in
+              <a href="{{origin}}/bulkdataclient/download/SampleData.xlsx" target="_blank">Excel</a> or
+              <a href="{{origin}}/bulkdataclient/download/SampleJSONData.rar" target="_blank">JSON</a> formats.</li>
+            <li>
+              One with 100000 patients for vendors to perform load testing and tuning. You can download and view the data in
+              <a href="{{origin}}/bulkdataclient/download/SamplePatientsData.xlsx" target="_blank">Excel</a> format.
+            </li>
+          </ol>
+          <div class="sandbox-usage">
+            <h3>Sandbox Usage</h3>
+            <p>The sandbox can be used in two different ways.</p>
+            <ol>
+              <li>Use the User Interface provided in this sandbox to experiment with the various APIs.</li>
+              <li>
+                Use the FHIR Server conformant to the Bulk Data API Server implementation using your own client.
+              </li>
+            </ol>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+                <h4>Using the Sandbox UI Screens:</h4>
+              </div>
+              <div class="panel-body">
+                <ol style="margin:0px;padding-left:15px;">
+                  <li>Select the FHIR Server tab and Select the FHIR Server type 'Open' or 'Secure' and enter the FHIR Server
+                    URL to extract the data.</li>
+                  <li>Select Patient panel tab to view the list of patients.</li>
+                  <li>From the Patient panel select patients and create Group.</li>
+                  <li>Select the Bulk Data Extract tab to view the list of created Groups.</li>
+                  <li>Click on Extract button to get the bulk data of a particular Group.</li>
+                  <li>List of resources will be available to download on completion of Bulk data request.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default" style="height: 250px;">
+              <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+                <h4>Using the Sandbox FHIR Server:</h4>
+              </div>
+              <div class="panel-body">
+                <p>The FHIR Server and its APIs can be used directly by your own client software if you have one. Instructions
+                  on using the FHIR Server either in the open mode or secure mode is provided below. Both the open and the
+                  secure server support the same APIs. </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+                <h4>Instructions to use the FHIR Server in Open Mode:</h4>
+              </div>
+              <div class="panel-body">
+                <ol style="margin:0px;padding-left:15px;">
+                  <li>List of APIs available</li>
+                  <ol type='a' style="margin:0px;padding-left:15px;">
+                    <li>Extract All Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export</li>
+                    <li>Extract Group of Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Group/'id'/$export</li>
+                    <li>To Create Group: POST https://fhirprod.sitenv.org/open-fhir/Group</li>
+                    <li>Extract By query string parameters: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export?_since=YYYY-DD-MM&&_type='String
+                      of comma separated FHIR resources'</li>
+                  </ol>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+                <h4>Instructions to use the FHIR Server in Secure Mode:</h4>
+              </div>
+              <div class="panel-body">
+                <ol style="margin:0px;padding-left:15px;">
+                  <li>In order to use the FHIR Server with the appropriate tokens the following steps need to be followed</li>
+                  <ol type='a' style="margin:0px;padding-left:15px;">
+                    <li>Create a user account in the FHIR Authorization Server: Follow instructions
+                      <a href="{{origin}}/open-fhir/view/newuser.html" target="_blank"> here </a> for user creation.</li>
+                    <li>Login and Register a Backend client by uploading your public key, so that you can get the Client Id.
+                      Follow instructions
+                      <a href="{{origin}}/open-fhir/view/clients.html" target="_blank"> here </a> for client registration.</li>
+                    <li>Once you have a Client Id follow the guidelines according to the Smart Backend Services.</li>
+                  </ol>
+                  <br>
+                  <li>List of APIs available</li>
+                  <ol type='a' style="margin:0px;padding-left:15px;">
+                    <li>Extract All Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export</li>
+                    <li>Extract Group of Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Group/'id'/$export</li>
+                    <li>To Create Group: POST https://fhirprod.sitenv.org/open-fhir/Group</li>
+                    <li>Extract By query string parameters: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export?_since=YYYY-DD-MM&&_type='String
+                      of comma separated FHIR resources'</li>
+                  </ol>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </mat-card-content>

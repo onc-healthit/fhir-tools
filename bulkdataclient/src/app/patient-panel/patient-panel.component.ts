@@ -14,6 +14,7 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { PatientPanelService } from './patient-panel.service';
 import { UtilityService } from '../shared/utility.service';
 import { GroupDialogComponent } from './group-dialog/group-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-patient-panel',
@@ -34,11 +35,22 @@ export class PatientsPanelComponent implements OnInit, AfterViewInit {
   constructor(
     private patientPanelService: PatientPanelService,
     private util: UtilityService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.loadPatients();
+    if (this.util.fhirServerURL) {
+      this.loadPatients();
+    } else {
+      this.util.notify(
+        'Please enter FHIR Server URL and try again',
+        'warn',
+        'FHIR Server URL'
+      );
+      this.router.navigate(['/config']);
+    }
+
     // this.dataSource = new MatTableDataSource(ELEMENT_DATA);
   }
 

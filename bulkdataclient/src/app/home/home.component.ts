@@ -10,7 +10,10 @@ import { Location } from '@angular/common';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  origin: string;
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.origin = location.origin;
+  }
 }

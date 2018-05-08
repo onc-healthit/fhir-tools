@@ -9,7 +9,9 @@ export type NotificationType = 'success' | 'error' | 'alert' | 'warn' | 'info';
 
 @Injectable()
 export class UtilityService {
-  constructor(private notificationService: NotificationsService) {}
+  fhirServerURL: any;
+  fhirmode: any;
+  constructor(private notificationService: NotificationsService) { }
 
   public static stripREST(data) {
     if (_.isFunction(data.plain)) {

@@ -1,0 +1,11 @@
+<button type="button" (click)="getReleaseNotes()" class="btn btn-link footer-link-btn">Release Notes</button>
+
+<modal #releaseNotesModal cssClass="release-notes-modal-dialog">
+  <modal-body>
+    <div class="col-sm-12" [innerHtml]="releaseNotesMarkdown | markdownToHtml">
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-primary" (click)="modal.close()">Close</button>
+  </modal-footer>
+</modal>

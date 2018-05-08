@@ -4,10 +4,15 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": []
+    "types": [],
+    "paths": { "@angular/*": ["../node_modules/@angular/*"] }
   },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
-  ]
+  ],
+  // "include": [
+  //   "../node_modules/ng2-breadcrumb/*.ts",
+  //   "*.ts"
+  // ]
 }

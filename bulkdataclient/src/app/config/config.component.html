@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-title>Configure FHIR Server URL.</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <h1 class="infotext">Please Enter FHIR server URL to extract data.</h1>
+    <form class="example-form row" [formGroup]="myForm" (ngSubmit)="saveURL()">
+      <div class="col-md-6">
+        <mat-form-field class="mode">
+          <mat-select placeholder="Select FHIR Server Type *" formControlName="mode">
+            <mat-option value="open">
+              Open
+            </mat-option>
+            <mat-option value="secure">
+              Secure
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="myForm.controls['mode'].errors?.required">
+            Please Select type of mode
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="fhirurl">
+          <input matInput placeholder="FHIR Server URL *" formControlName="urlFormControl">
+          <mat-error *ngIf="myForm.controls['urlFormControl'].errors?.required">
+            FHIR Server URL is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" class="savebtn">Save</button>
+      </div>
+      <div class="col-md-6">
+        <p>If you are new to the Bulk Data APIs, Click on Try Me to test with our Test Server.</p>
+        <button mat-raised-button color="primary" type="button" class="savebtn" (click)="tryme();">Try Me!</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

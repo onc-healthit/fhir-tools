@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://52.70.192.201/open-fhir'
+  // apiBaseUrl: 'https://fhirprod.sitenv.org/backend-app'
 };

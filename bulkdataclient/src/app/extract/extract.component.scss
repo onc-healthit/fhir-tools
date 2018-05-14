@@ -1,3 +1,7 @@
+.mat-card {
+  margin: 20px 30px;
+}
+
 .title,
 .table-container {
   padding: 10px 30px;
@@ -21,6 +25,11 @@
   float: left;
 }
 
+.title .header-title {
+  // float: left;
+  margin: 0;
+}
+
 .resourceContainer .material-icons {
   font-size: 12px;
 }
@@ -42,4 +51,10 @@
   font-weight: bold;
   font-size: 16px;
   color: #000000;
+}
+
+.example-radio-button {
+  padding-right: 10px;
+  margin-left: 100px;
+  margin-top: 20px;
 }

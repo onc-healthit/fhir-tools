@@ -11,6 +11,7 @@ export type NotificationType = 'success' | 'error' | 'alert' | 'warn' | 'info';
 export class UtilityService {
   fhirServerURL: any;
   fhirmode: any;
+  dsId: any;
   constructor(private notificationService: NotificationsService) { }
 
   public static stripREST(data) {

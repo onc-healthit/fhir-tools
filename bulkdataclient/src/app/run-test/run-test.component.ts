@@ -79,8 +79,8 @@ export class RunTestComponent implements OnInit {
       resources: new FormControl('', Validators.required)
     });
     this.checkBulkData();
-    this.fhirserverurl = location.origin + '/backend-app';
-    this.exportAllContentLocation = location.origin + '/backend-app/bulkdata/177';
+    this.fhirserverurl = 'https://fhirtest.sitenv.org/backend-app-secure';
+    this.exportAllContentLocation = 'https://fhirtest.sitenv.org/backend-app-secure/bulkdata/85';
     this.resourcesList = ['AllergyIntolerance', 'CarePlan', 'Claim', 'Condition', 'Device', 'Diagnostic Report', 'DocumentReference', 'Encounter', 'Goals', 'Immunization', 'Location', 'Medication', 'MedicationAdministration', 'MedicationDispense', 'MedicationOrder', 'MedicationStatement', 'Observation', 'Organization', 'Practitioner', 'Procedure'];
     this.paramsForm.setValue({ 'resources': ['AllergyIntolerance', 'CarePlan'], 'sincedate': moment('1990-01-01') });
     this.groupParamsForm.setValue({ 'resources': ['AllergyIntolerance', 'CarePlan'], 'sincedate': moment('1990-01-01'), 'groupId': '27' });

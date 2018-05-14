@@ -35,18 +35,26 @@ export class ExtractComponent implements OnInit {
     'data'
   ];
   dataSource = new MatTableDataSource();
+  radioOptions = ['Extract By Group', 'Extract All Patients'];
   groupsList: any;
   group: any;
   groupTableData: any;
   extractList: any = [];
   extractData: any = [];
   subscribe: ISubscription;
-  isLoadingResults = true;
+  isLoadingResults = false;
   responseBody: any = {};
   config = {
     hasBackdrop: true,
     data: []
   };
+  displayByGroup = false;
+  displayExtractAll = false;
+  extractAllResponseCode: any;
+  extractAllResponse: any;
+  extractAllData: any = [];
+  exportAllContentLocation: any;
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -58,8 +66,8 @@ export class ExtractComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.util.fhirServerURL) {
-      this.loadGroups();
+    if (this.util.dsId) {
+      this.exportAllContentLocation = 'https://fhirtest.sitenv.org/backend-app-secure/bulkdata/85';
       this.checkBulkData();
     } else {
       this.util.notify(
@@ -70,6 +78,39 @@ export class ExtractComponent implements OnInit {
       this.router.navigate(['/config']);
     }
   }
+
+  optionselect(event) {
+    if (event.value === 'Extract By Group') {
+      this.isLoadingResults = true;
+      this.loadGroups();
+      this.displayExtractAll = false;
+      this.displayByGroup = true;
+    } else if (event.value === 'Extract All Patients') {
+      this.displayByGroup = false;
+      this.isLoadingResults = true;
+      this.extractAllByContentLocation();
+    }
+  }
+
+  extractAllByContentLocation() {
+    this.extractsService.getBulkDataByContentLocation(this.exportAllContentLocation).subscribe((res: Response) => {
+      this.displayExtractAll = true;
+      this.isLoadingResults = false;
+      this.extractAllResponseCode = res.status;
+      this.responseBody = res.body;
+      this.extractAllResponse = this.responseBody;
+      const result = this.responseBody.output;
+      this.extractAllData = [];
+      for (let p = 0; p < result.length; p++) {
+        const dataObj = {
+          resourceName: result[p].type,
+          resourceLink: result[p].url
+        };
+        this.extractAllData.push(dataObj);
+      }
+    });
+  }
+
   loadGroups() {
     this.extractsService
       .getListofAllGroups()
@@ -81,6 +122,7 @@ export class ExtractComponent implements OnInit {
   renderGroups(data) {
     this.groupsList = data.entry;
     this.groupTableData = [];
+    this.extractData = [];
     for (let i = 0; i < this.groupsList.length; i++) {
       this.group = this.groupsList[i].resource;
       const groupObject = {};

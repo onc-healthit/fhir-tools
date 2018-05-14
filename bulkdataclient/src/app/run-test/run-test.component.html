@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-title>
     <h2>Bulk Data Extract API's.</h2>
-    <p>Base url: https://fhirtest.sitenv.org/open-fhir</p>
+    <p>Base url: https://fhirtest.sitenv.org/open-fhir/fhir</p>
   </mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
@@ -12,7 +12,7 @@
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir/Patient/$export</b>
+              <b>/fhir-base-url/Patient/$export</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
@@ -40,7 +40,7 @@
             <pre>{{extractAllResponse|json}}</pre>
           </div>
           <div class="col-md-3">
-            <p>Response Data:</p>
+            <p>ndjson Response Data:</p>
           </div>
           <div class="col-md-9">
             <div *ngFor="let item of extractAllData" class="resourceContainer col-md-3">
@@ -58,11 +58,11 @@
           <mat-panel-title>
             <span>Get</span>
             <p>
-              <b>/fhir/Group/id/$export</b>
+              <b>/fhir-base-url/Group/id/$export</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract by Group Id
+            Extract subset of patients using Group Id, which is useful to deal with Patient Panels
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
@@ -91,7 +91,7 @@
             <p>{{responseCode}}</p>
           </div>
           <div class="col-md-3">
-            <h4>Response</h4>
+            <p>Response</p>
           </div>
           <div class="col-md-9">
             <pre>
@@ -99,7 +99,7 @@
           </pre>
           </div>
           <div class="col-md-3">
-            Response Data
+            <p>ndjson Response Data</p>
           </div>
           <div class="col-md-9">
             <div *ngFor="let item of extractData" class="resourceContainer col-md-3">
@@ -118,30 +118,30 @@
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir/Patient/$export/`_since`&`_type`</b>
+              <b>/fhir-base-url/Patient/$export/`_since`&`_type`</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract Patient Data using Date and Resource Name
+            Extract Patient Data using Date (from a specific point in time) and Resource Type
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row requestBody">
-          <div class="col-md-2">
+          <div class="" style="width:12.75%; float:left;padding:0px 15px;">
             <p>Parameters:</p>
           </div>
-          <div class="col-md-10 paramsForm">
+          <div class="paramsForm" style="width:87.25%; float:left;padding:0px 15px;">
             <!-- <p>_since=1960-01-01</p>
             <p>_type=AllergyIntolerance,Condition,Observation,Medication</p> -->
             <form [formGroup]="paramsForm">
-              <div class="col-md-4 params">
+              <div class="params" style="width:50%; float:left;padding:0px 15px;">
                 <mat-form-field>
                   <input matInput [matDatepicker]="picker" placeholder="Select Date" formControlName="sincedate">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="col-md-4 params">
+              <div class="params" style="width:50%; float:left;padding:0px 15px;">
                 <mat-form-field>
                   <mat-select placeholder="Select Resources" formControlName="resources" multiple>
                     <mat-option *ngFor="let resource of resourcesList" [value]="resource">{{resource}}</mat-option>
@@ -156,24 +156,24 @@
         </div>
         <mat-divider></mat-divider>
         <div class="row requestBody" *ngIf="displayParamsResponse">
-          <div class="col-md-3">
+          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
             <p>Status Code:</p>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
             <p>{{exportUsingParamsCode}}</p>
           </div>
-          <div class="col-md-3">
-            <h4>Response</h4>
+          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
+            <p>Response</p>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
             <pre>
               {{exportUsingParamsResponse|json}}
             </pre>
           </div>
-          <div class="col-md-3">
-            Response Data
+          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
+            <p>ndjson Response Data</p>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
             <div *ngFor="let item of extractParamsData" class="resourceContainer col-md-3">
               <span>
                 <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
@@ -190,21 +190,21 @@
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir/Group/`id`/$export/`_since`&`_type`</b>
+              <b>/fhir-base-url/Group/`id`/$export/`_since`&`_type`</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract Group of Patient's Data using Date and Resource Name
+            Extract subset of Patients using Group Id, Date(from a specific point in time) and Resource Type
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
-        <div class="row requestBody">
-          <div class="col-md-2">
+        <div class="row requestBody" style="margin-top:20px;">
+          <div class="" style="width:12.75%;float:left;padding:0px 15px;">
             <p>Parameters:</p>
           </div>
-          <div class="col-md-10 groupParamsForm">
+          <div class="groupParamsForm" style="width:87.25%; float:left;padding:0px 15px;">
             <form [formGroup]="groupParamsForm">
-              <div class="col-md-4 params">
+              <div class="params" style="width:33.33%; float:left;padding:0px 15px;">
                 <mat-form-field>
                   <input matInput id="groupId" formControlName="groupId" placeholder="Enter Group ID">
                   <mat-error *ngIf="groupIDForm.controls['groupId'].errors?.required">
@@ -213,14 +213,14 @@
                 </mat-form-field>
                 <p style="margin:0px;font-size: 12px;">Please enter GroupId 2,3 or 4.</p>
               </div>
-              <div class="col-md-4 params">
+              <div class="params" style="width:33.33%; float:left;padding:0px 15px;">
                 <mat-form-field>
                   <input matInput [matDatepicker]="groupdatepicker" placeholder="Select Date" formControlName="sincedate">
                   <mat-datepicker-toggle matSuffix [for]="groupdatepicker"></mat-datepicker-toggle>
                   <mat-datepicker #groupdatepicker></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="col-md-4 params">
+              <div class="params" style="width:33.33%; float:left;padding:0px 15px;">
                 <mat-form-field>
                   <mat-select placeholder="Select Resources" formControlName="resources" multiple>
                     <mat-option *ngFor="let resource of resourcesList" [value]="resource">{{resource}}</mat-option>
@@ -235,24 +235,24 @@
         </div>
         <mat-divider></mat-divider>
         <div class="row requestBody" *ngIf="displayGroupParamsResponse">
-          <div class="col-md-3">
+          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
             <p>Status Code:</p>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
             <p>{{exportUsingGroupParamsCode}}</p>
           </div>
-          <div class="col-md-3">
-            <h4>Response</h4>
+          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
+            <p>Response</p>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
             <pre>
                 {{exportUsingGroupParamsResponse|json}}
               </pre>
           </div>
-          <div class="col-md-3">
-            Response Data
+          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
+            <p>ndjson Response Data</p>
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
             <div *ngFor="let item of extractGroupParamsData" class="resourceContainer col-md-3">
               <span>
                 <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">

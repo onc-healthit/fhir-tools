@@ -16,9 +16,10 @@ export class PatientPanelService {
   constructor(private http: HttpClient, private util: UtilityService) { }
 
   getListofAllPatients() {
+    console.log('In Call' + this.util.dsId);
     return this.http
-      .get(this.util.fhirServerURL + '/fhir/Patient?_format=json', {
-        headers: new HttpHeaders().set('mode', this.util.fhirmode),
+      .get(environment.apiBaseUrl + '/fhir/Patient?_format=json', {
+        headers: new HttpHeaders().set('dsId', this.util.dsId.toString()),
         observe: 'response'
       })
       .pipe(
@@ -40,8 +41,8 @@ export class PatientPanelService {
     };
     const headers = new Headers({ 'Content-Type': 'application/fhir+json' });
     return this.http
-      .post(this.util.fhirServerURL + '/fhir/Group/', json, {
-        headers: new HttpHeaders().set('mode', this.util.fhirmode),
+      .post(environment.apiBaseUrl + '/fhir/Group/', json, {
+        headers: new HttpHeaders().set('dsId', this.util.dsId.toString()),
         observe: 'response'
       })
       .pipe(

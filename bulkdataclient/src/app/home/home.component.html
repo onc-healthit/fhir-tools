@@ -48,7 +48,7 @@
             <br> The User Interface interacts with Bulk Data Client using RESTful interfaces, which in turn communicates with
             the FHIR Server using the FHIR Bulk Data APIs to satisfy the requests.
             <br>
-            <a href="http://docs.smarthealthit.org/authorization/backend-services/" target="_blank">The SMART Backend Services authorization guide
+            <a href="https://github.com/smart-on-fhir/fhir-bulk-data-docs/blob/master/authorization.md" target="_blank">The SMART Backend Services authorization guide
             </a> is implemented between the Bulk Data Client and the FHIR Server.
           </p>
           <h3>Data Supported By the Sandbox</h3>
@@ -72,7 +72,7 @@
               </li>
             </ol>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-12" style="padding: 0px;">
             <div class="panel panel-default">
               <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
                 <h4>Using the Sandbox UI Screens:</h4>
@@ -81,8 +81,8 @@
                 <ol style="margin:0px;padding-left:15px;">
                   <li>Select the FHIR Server tab and Select the FHIR Server type 'Open' or 'Secure' and enter the FHIR Server
                     URL to extract the data.</li>
-                  <li>Select Patient panel tab to view the list of patients.</li>
-                  <li>From the Patient panel select patients and create Group.</li>
+                  <li>Select Manage Groups tab to view the list of patients.</li>
+                  <li>From the Manage Groups select patients and create Group.</li>
                   <li>Select the Bulk Data Extract tab to view the list of created Groups.</li>
                   <li>Click on Extract button to get the bulk data of a particular Group.</li>
                   <li>List of resources will be available to download on completion of Bulk data request.</li>
@@ -90,8 +90,8 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="panel panel-default" style="height: 250px;">
+          <div class="col-md-12" style="padding: 0px;">
+            <div class="panel panel-default">
               <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
                 <h4>Using the Sandbox FHIR Server:</h4>
               </div>
@@ -99,54 +99,58 @@
                 <p>The FHIR Server and its APIs can be used directly by your own client software if you have one. Instructions
                   on using the FHIR Server either in the open mode or secure mode is provided below. Both the open and the
                   secure server support the same APIs. </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="panel panel-default">
-              <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
-                <h4>Instructions to use the FHIR Server in Open Mode:</h4>
-              </div>
-              <div class="panel-body">
-                <ol style="margin:0px;padding-left:15px;">
-                  <li>List of APIs available</li>
-                  <ol type='a' style="margin:0px;padding-left:15px;">
-                    <li>Extract All Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export</li>
-                    <li>Extract Group of Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Group/'id'/$export</li>
-                    <li>To Create Group: POST https://fhirprod.sitenv.org/open-fhir/Group</li>
-                    <li>Extract By query string parameters: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export?_since=YYYY-DD-MM&&_type='String
-                      of comma separated FHIR resources'</li>
-                  </ol>
-                </ol>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="panel panel-default">
-              <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
-                <h4>Instructions to use the FHIR Server in Secure Mode:</h4>
-              </div>
-              <div class="panel-body">
-                <ol style="margin:0px;padding-left:15px;">
-                  <li>In order to use the FHIR Server with the appropriate tokens the following steps need to be followed</li>
-                  <ol type='a' style="margin:0px;padding-left:15px;">
-                    <li>Create a user account in the FHIR Authorization Server: Follow instructions
-                      <a href="{{origin}}/open-fhir/view/newuser.html" target="_blank"> here </a> for user creation.</li>
-                    <li>Login and Register a Backend client by uploading your public key, so that you can get the Client Id.
-                      Follow instructions
-                      <a href="{{origin}}/open-fhir/view/clients.html" target="_blank"> here </a> for client registration.</li>
-                    <li>Once you have a Client Id follow the guidelines according to the Smart Backend Services.</li>
-                  </ol>
-                  <br>
-                  <li>List of APIs available</li>
-                  <ol type='a' style="margin:0px;padding-left:15px;">
-                    <li>Extract All Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export</li>
-                    <li>Extract Group of Patients: GET https://fhirprod.sitenv.org/open-fhir/fhir/Group/'id'/$export</li>
-                    <li>To Create Group: POST https://fhirprod.sitenv.org/open-fhir/Group</li>
-                    <li>Extract By query string parameters: GET https://fhirprod.sitenv.org/open-fhir/fhir/Patient/$export?_since=YYYY-DD-MM&&_type='String
-                      of comma separated FHIR resources'</li>
-                  </ol>
-                </ol>
+                <div class="col-md-12" style="padding: 0px;">
+                  <div class="panel panel-default">
+                    <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+                      <h4>Instructions to use the FHIR Server in Open Mode:</h4>
+                    </div>
+                    <div class="panel-body">
+                      <ol style="margin:0px;padding-left:15px;">
+                        <li>List of APIs available</li>
+                        <ol type='a' style="margin:0px;padding-left:15px;">
+                          <li>Extract All Patients: GET {{origin}}/open-fhir/fhir/Patient/$export</li>
+                          <li>Extract Group of Patients: GET {{origin}}/open-fhir/fhir/Group/'id'/$export</li>
+                          <li>To Create Group: POST {{origin}}/open-fhir/Group</li>
+                          <li>Extract By query string parameters: GET {{origin}}/open-fhir/fhir/Patient/$export?_since=YYYY-DD-MM&&_type='String
+                            of comma separated FHIR resources'</li>
+                          <li>Extract By GroupId and query string parameters: GET {{origin}}/open-fhir/fhir/Group/`groupId`/$export?_since=YYYY-DD-MM&&_type='String
+                            of comma separated FHIR resources'</li>
+                        </ol>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12" style="padding: 0px;">
+                  <div class="panel panel-default">
+                    <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
+                      <h4>Instructions to use the FHIR Server in Secure Mode:</h4>
+                    </div>
+                    <div class="panel-body">
+                      <ol style="margin:0px;padding-left:15px;">
+                        <li>In order to use the FHIR Server with the appropriate tokens the following steps need to be followed</li>
+                        <ol type='a' style="margin:0px;padding-left:15px;">
+                          <li>Create a user account in the FHIR Authorization Server: Follow instructions
+                            <a href="{{origin}}/open-fhir/view/newuser.html" target="_blank"> here </a> for user creation.</li>
+                          <li>Login and Register a Backend client by uploading your public key, so that you can get the Client
+                            Id. Follow instructions
+                            <a href="{{origin}}/open-fhir/view/clients.html" target="_blank"> here </a> for client registration.</li>
+                          <li>Once you have a Client Id follow the guidelines according to the Smart Backend Services.</li>
+                        </ol>
+                        <br>
+                        <li>List of APIs available</li>
+                        <ol type='a' style="margin:0px;padding-left:15px;">
+                          <li>Extract All Patients: GET {{origin}}/secure-fhir/fhir/Patient/$export</li>
+                          <li>Extract Group of Patients: GET {{origin}}/secure-fhir/fhir/Group/'id'/$export</li>
+                          <li>To Create Group: POST {{origin}}/secure-fhir/Group</li>
+                          <li>Extract By query string parameters: GET {{origin}}/secure-fhir/fhir/Patient/$export?_since=YYYY-DD-MM&&_type='String
+                            of comma separated FHIR resources'</li>
+                          <li>Extract By GroupId and query string parameters: GET {{origin}}/secure-fhir/fhir/Group/`groupId`/$export?_since=YYYY-DD-MM&&_type='String
+                            of comma separated FHIR resources'</li>
+                        </ol>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

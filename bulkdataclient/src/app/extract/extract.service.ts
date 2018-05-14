@@ -19,8 +19,8 @@ export class ExtractService {
 
   getListofAllGroups() {
     return this.http
-      .get(this.util.fhirServerURL + '/fhir/Group?_format=json', {
-        headers: new HttpHeaders().set('mode', this.util.fhirmode),
+      .get(environment.apiBaseUrl + '/fhir/Group?_format=json', {
+        headers: new HttpHeaders().set('dsId', this.util.dsId.toString()),
         observe: 'response'
       })
       .pipe(
@@ -35,10 +35,10 @@ export class ExtractService {
     const headers = new HttpHeaders({
       Accept: 'application/fhir+ndjson',
       Prefer: 'respond-async',
-      mode: this.util.fhirmode
+      'dsId': this.util.dsId.toString()
     });
     return this.http
-      .get(this.util.fhirServerURL + '/fhir/Group/' + id + '/$export', {
+      .get(environment.apiBaseUrl + '/fhir/Group/' + id + '/$export', {
         headers: headers,
         observe: 'response'
       })
@@ -53,7 +53,7 @@ export class ExtractService {
   getBulkDataByContentLocation(location: any) {
     return this.http
       .get(location, {
-        headers: new HttpHeaders().set('mode', this.util.fhirmode),
+        headers: new HttpHeaders().set('dsId', this.util.dsId.toString()),
         observe: 'response'
       })
       .pipe(

@@ -39,3 +39,14 @@
 .savebtn {
   width: 100px;
 }
+
+.dropdown-menu li a {
+  cursor: pointer;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  // height: 60px;
+}

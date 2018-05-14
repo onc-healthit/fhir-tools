@@ -18,7 +18,7 @@ export class RunTestService {
     const headers = new HttpHeaders({
       Accept: 'application/fhir+ndjson',
       Prefer: 'respond-async',
-      mode: 'open'
+      dsId: '19'
     });
     return this.http
       .get(location + '/fhir/Group/' + id + '/$export', {
@@ -37,7 +37,7 @@ export class RunTestService {
     const headers = new HttpHeaders({
       // Accept: 'application/fhir+ndjson',
       // Prefer: 'respond-async',
-      mode: 'open'
+      dsId: '19'
     });
     return this.http
       .get(location, {
@@ -55,7 +55,7 @@ export class RunTestService {
   getBulkDataByContentLocation(location: any) {
     return this.http
       .get(location, {
-        headers: new HttpHeaders().set('mode', 'open'),
+        headers: new HttpHeaders().set('dsId', '19'),
         observe: 'response'
       })
       .pipe(

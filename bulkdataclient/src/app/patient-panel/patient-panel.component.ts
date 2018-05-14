@@ -40,7 +40,8 @@ export class PatientsPanelComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    if (this.util.fhirServerURL) {
+    if (this.util.dsId) {
+      console.log('IN If');
       this.loadPatients();
     } else {
       this.util.notify(

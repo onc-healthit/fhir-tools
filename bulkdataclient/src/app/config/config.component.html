@@ -4,9 +4,9 @@
   <mat-card-content>
     <h1 class="infotext">Please Enter FHIR server URL to extract data.</h1>
     <form class="example-form row" [formGroup]="myForm" (ngSubmit)="saveURL()">
-      <div class="col-md-6">
+      <div class="" style="width:50%;float:left;padding: 0px 15px;">
         <mat-form-field class="mode">
-          <mat-select placeholder="Select FHIR Server Type *" formControlName="mode">
+          <mat-select placeholder="Select FHIR Server Type *" formControlName="mode" (change)="changeMode($event);">
             <mat-option value="open">
               Open
             </mat-option>
@@ -18,18 +18,77 @@
             Please Select type of mode
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="fhirurl">
-          <input matInput placeholder="FHIR Server URL *" formControlName="urlFormControl">
-          <mat-error *ngIf="myForm.controls['urlFormControl'].errors?.required">
+        <mat-form-field class="fhirurl" *ngIf="openMode">
+          <input matInput placeholder="FHIR Server URL *" formControlName="openurlFormControl">
+          <mat-error *ngIf="myForm.controls['openurlFormControl'].errors?.required">
             FHIR Server URL is
             <strong>required</strong>
           </mat-error>
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" class="savebtn">Save</button>
+        <mat-form-field class="fhirurl" *ngIf="secureMode">
+          <input matInput placeholder="FHIR Server URL *" formControlName="secureurlFormControl">
+          <mat-error *ngIf="myForm.controls['secureurlFormControl'].errors?.required">
+            FHIR Server URL is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="fhirurl" *ngIf="secureMode">
+          <input matInput placeholder="Issuer URI *" formControlName="issuerURI">
+          <mat-error *ngIf="myForm.controls['issuerURI'].errors?.required">
+            Server Issuer URI is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="fhirurl" *ngIf="secureMode">
+          <input matInput placeholder="Client Id *" formControlName="clientId">
+          <mat-error *ngIf="myForm.controls['clientId'].errors?.required">
+            Client Id is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="fhirurl" *ngIf="secureMode">
+          <input matInput placeholder="Server Token URL *" formControlName="tokenURL">
+          <mat-error *ngIf="myForm.controls['tokenURL'].errors?.required">
+            Authentication Token URL is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="fhirurl" *ngIf="secureMode">
+          <mat-select placeholder="Select Scopes" formControlName="scopes" multiple>
+            <mat-option *ngFor="let scope of scopesList" [value]="scope">{{scope}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="fhirurl" *ngIf="secureMode">
+          <div class="col-md-4">
+            <p>Select Private Key</p>
+          </div>
+          <div class="col-md-8">
+            <input style="display: none;" id="input-file-id" type="file" formControlName="privateKey" (change)="loadPrivateKey($event);"
+            />
+            <button color="primary" type="button" mat-raised-button for="input-file-id" onclick="document.getElementById('input-file-id').click();">
+              <mat-icon>attach_file</mat-icon> Select Private Key</button>
+            <span style="padding-left: 10px;">{{selectedFileName}}</span>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" type="submit" class="savebtn" style="margin-top:20px;">Save</button>
       </div>
-      <div class="col-md-6">
-        <p>If you are new to the Bulk Data APIs, Click on Try Me to test with our Test Server.</p>
+      <div style="width:50%;float:left;padding: 0px 15px;">
+        <p>If you are new to the Bulk Data APIs, Click on Try Me button to use our test server for testing and hit Save</p>
         <button mat-raised-button color="primary" type="button" class="savebtn" (click)="tryme();">Try Me!</button>
+
+        <!-- <div class="dropdown">
+          <button mat-raised-button color="primary" class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Try Me!
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" style="min-width: 60px;">
+            <li>
+              <a (click)="tryme('open');">Open</a>
+            </li>
+            <li>
+              <a (click)="tryme('secure');">Secure</a>
+            </li>
+          </ul>
+        </div> -->
       </div>
     </form>
   </mat-card-content>

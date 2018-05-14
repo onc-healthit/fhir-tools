@@ -23,6 +23,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { RunTestComponent } from './run-test/run-test.component';
 import { PatientPanelService } from './patient-panel/patient-panel.service';
 import { ExtractService } from './extract/extract.service';
+import { ConfigService } from './config/config.service';
 import { RunTestService } from './run-test/run-test.service';
 
 @NgModule({
@@ -52,7 +53,7 @@ import { RunTestService } from './run-test/run-test.service';
   ],
   exports: [GroupDialogComponent, NdJsonDialogComponent],
   entryComponents: [GroupDialogComponent, NdJsonDialogComponent],
-  providers: [PatientPanelService, ExtractService, RunTestService],
+  providers: [PatientPanelService, ExtractService, RunTestService, ConfigService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

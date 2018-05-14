@@ -11,5 +11,7 @@ public interface BulkDataRequestService {
 	public DafBulkDataRequest getBulkDataRequestById(Integer id);
 	
 	public List<DafBulkDataRequest> getBulkDataRequestsByProcessedFlag(Boolean flag);
+	
+	public Integer deleteRequestById(Integer id);
 
 }

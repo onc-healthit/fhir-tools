@@ -154,7 +154,6 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      */
     @Search
     public List<Patient> getAllPatient(@IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
-    	System.out.println("inside list");
     	try {
         List<DafPatientJson> dafPatientList = service.getAllPatient();
 
@@ -162,7 +161,6 @@ public class PatientJsonResourceProvider implements IResourceProvider {
         for (DafPatientJson dafPatient : dafPatientList) {
             patientList.add(createPatientObject(dafPatient));
         }
-        System.out.println(patientList.size());
         return patientList;
     	}catch(Exception e) {
     		e.printStackTrace();
@@ -466,25 +464,26 @@ public class PatientJsonResourceProvider implements IResourceProvider {
     }
 
     
-    @Operation(name="$everything", idempotent=true)
+    @Operation(name="$export", idempotent=true)
     public Binary patientTypeOperation(
-       @OperationParam(name="start") DateDt theStart,
-       @OperationParam(name="end") DateDt theEnd,
+       @OperationParam(name="_since") DateDt theStart,
+     //  @OperationParam(name="end") DateDt theEnd,
        @OperationParam(name="_type") String type,
        RequestDetails requestDetails,
        HttpServletRequest request,
        HttpServletResponse response) throws IOException {
-    	if(requestDetails.getHeader("Prefer")!= null&&requestDetails.getHeader("Prefer").equals("respond-async")) {
+    	if(requestDetails.getHeader("Prefer")!= null&&requestDetails.getHeader("Accept")!= null) {
+    	if(requestDetails.getHeader("Prefer").equals("respond-async") && requestDetails.getHeader("Accept").equals("application/fhir+json")) {
     		
     	DafBulkDataRequest bdr = new DafBulkDataRequest();
     	bdr.setResourceName("Patient");
     	bdr.setStatus("Accepted");
     	bdr.setProcessedFlag(false);
     	if(theStart!=null) {
-    		bdr.setStart(theStart.getValueAsString());
+    		bdr.setStart(theStart.getValueAsString()); 
     	}
     	bdr.setType(type);
-    	bdr.setRequestResource(requestDetails.getRequestPath());
+    	bdr.setRequestResource(request.getRequestURL().toString());
         
     	DafBulkDataRequest responseBDR = bdrService.saveBulkDataRequest(bdr);
     	
@@ -492,7 +491,6 @@ public class PatientJsonResourceProvider implements IResourceProvider {
                 request.getServerName() + 
                 ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
                 +request.getContextPath();
-    	
     	 	
     	response.setStatus(202);
     	response.setHeader("Content-Location", uri+"/bulkdata/"+responseBDR.getRequestId());
@@ -510,14 +508,17 @@ public class PatientJsonResourceProvider implements IResourceProvider {
 		
 		return retVal;
     	}else {
-    		 throw new UnprocessableEntityException("No Prefer Header supplied");
+    		 throw new UnprocessableEntityException("Invalid header values!");
+    	}
+    	}else {
+    			throw new UnprocessableEntityException("Prefer or Accepted Header is missing!");
     	}
     }
     
     public List<Patient> getPatientForBulkDataRequest(List<Integer> patients, Date start) {
     	
 		List<DafPatientJson> dafPatientList = service.getPatientJsonForBulkData(patients, start);
-
+		
 		List<Patient> patientList = new ArrayList<Patient>();
 
 		for (DafPatientJson dafPatient : dafPatientList) {

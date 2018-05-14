@@ -1,7 +1,6 @@
 package org.sitenv.spring.auth;
 
 import ch.qos.logback.classic.Logger;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 
 import org.apache.commons.codec.binary.Base64;
@@ -22,8 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.google.gson.Gson;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

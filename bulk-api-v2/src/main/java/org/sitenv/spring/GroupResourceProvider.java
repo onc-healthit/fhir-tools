@@ -132,9 +132,10 @@ public class GroupResourceProvider implements IResourceProvider{
     	return retVal;
     }
     
-	@Operation(name = "$everything", idempotent = true)
+	@Operation(name = "$export", idempotent = true)
 	public Binary patientTypeOperation(@IdParam IdDt groupId,
-			@OperationParam(name = "start") DateDt theStart, @OperationParam(name = "end") DateDt theEnd,
+			@OperationParam(name = "_since") DateDt theStart, 
+			//@OperationParam(name = "end") DateDt theEnd,
 			@OperationParam(name = "_type") String type, RequestDetails requestDetails, HttpServletRequest request,
 			HttpServletResponse response) throws FileNotFoundException {
 	
@@ -158,7 +159,7 @@ public class GroupResourceProvider implements IResourceProvider{
 			}
 
 			bdr.setType(type);
-			bdr.setRequestResource(requestDetails.getRequestPath());
+			bdr.setRequestResource(request.getRequestURL().toString());
 
 			DafBulkDataRequest responseBDR = bdrService.saveBulkDataRequest(bdr);
 

@@ -70,7 +70,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
             }
 
 
-        } else if (httpRequest.getRequestURI().contains("/open/")) {
+        } else if (httpRequest.getRequestURI().contains("/open-fhir/")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {

@@ -31,4 +31,10 @@ public class BulkDataRequestServiceImpl implements BulkDataRequestService {
 		return bdrDao.getBulkDataRequestsByProcessedFlag(flag);
 	}
 
+	@Override
+	public Integer deleteRequestById(Integer id) {
+		
+		return bdrDao.deleteRequestById(id);
+	}
+
 }

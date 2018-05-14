@@ -12,4 +12,6 @@ public interface BulkDataRequestDao {
 	
 	public List<DafBulkDataRequest> getBulkDataRequestsByProcessedFlag(Boolean flag);
 	
+	public Integer deleteRequestById(Integer id);
+	
 }

@@ -3,6 +3,7 @@ package org.sitenv.spring.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafBulkDataRequest;
 import org.springframework.stereotype.Repository;
@@ -25,6 +26,16 @@ public class BulkDataRequestDaoImpl extends AbstractDao implements BulkDataReque
 		Criteria crit = getSession().createCriteria(DafBulkDataRequest.class);
 		crit.add(Restrictions.eq("processedFlag", flag));
 		return crit.list();
+	}
+
+	@Override
+	public Integer deleteRequestById(Integer id) {
+		Query qry = getSession().createQuery("delete from DafBulkDataRequest d where d.requestId=:id");
+				         qry.setParameter("id",id);
+		Integer res = qry.executeUpdate();
+				         
+		return res;
+		
 	}
 
 }

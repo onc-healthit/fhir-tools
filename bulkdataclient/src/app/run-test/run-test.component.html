@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-title>
     <h2>Bulk Data Extract API's.</h2>
-    <p>Base url: https://fhirtest.sitenv.org/open-fhir/fhir</p>
+    <p>Base url: {{secureFHIRServer}}</p>
   </mat-card-title>
   <mat-divider></mat-divider>
   <mat-card-content>
@@ -21,6 +21,9 @@
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row requestBody">
+          <div class="col-md-12">
+            <p>Request URL: {{secureFHIRServer}}/Patient/$export</p>
+          </div>
           <div class="col-md-12">
             <button mat-raised-button color="primary" (click)="exportAll()" class="postbtn">Execute </button>
           </div>
@@ -58,7 +61,8 @@
           <mat-panel-title>
             <span>Get</span>
             <p>
-              <b>/fhir-base-url/Group/id/$export</b>
+              <b>/fhir-base-url/Group/{{'{groupId}'}}/$export
+              </b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
@@ -67,7 +71,10 @@
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row">
-          <div class="col-md-4 groupIDForm">
+          <div class="col-md-12">
+            <p>Request URL: {{secureFHIRServer}}/Group/1/$export</p>
+          </div>
+          <!-- <div class="col-md-4 groupIDForm">
             <form [formGroup]="groupIDForm">
               <mat-form-field>
                 <input matInput id="groupId" formControlName="groupId" placeholder="Enter Group ID">
@@ -77,9 +84,9 @@
               </mat-form-field>
               <p>Please enter GroupId 2,3 or 4.</p>
             </form>
-          </div>
-          <div class="col-md-2">
-            <button mat-raised-button color="primary" (click)="getdetails()">Execute </button>
+          </div> -->
+          <div class="col-md-12">
+            <button mat-raised-button color="primary" (click)="exportByGroupId()" class="postbtn">Execute </button>
           </div>
         </div>
         <mat-divider></mat-divider>
@@ -118,7 +125,7 @@
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir-base-url/Patient/$export/`_since`&`_type`</b>
+              <b>/fhir-base-url/Patient/$export?{{'{_since}'}}&{{'{_type}'}}</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
@@ -127,12 +134,13 @@
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row requestBody">
-          <div class="" style="width:12.75%; float:left;padding:0px 15px;">
+          <div class="col-md-12">
+            <p style="word-break: break-all;font-size: 15px;">Request URL: {{secureFHIRServer}}/Patient/$export?_since=1990-01-01&_type=AllergyIntolerance,Condition</p>
+          </div>
+          <!-- <div class="" style="width:12.75%; float:left;padding:0px 15px;">
             <p>Parameters:</p>
           </div>
           <div class="paramsForm" style="width:87.25%; float:left;padding:0px 15px;">
-            <!-- <p>_since=1960-01-01</p>
-            <p>_type=AllergyIntolerance,Condition,Observation,Medication</p> -->
             <form [formGroup]="paramsForm">
               <div class="params" style="width:50%; float:left;padding:0px 15px;">
                 <mat-form-field>
@@ -149,7 +157,7 @@
                 </mat-form-field>
               </div>
             </form>
-          </div>
+          </div> -->
           <div class="col-md-12">
             <button mat-raised-button color="primary" class="postbtn" (click)="exportUsingParams()">Execute </button>
           </div>
@@ -190,7 +198,7 @@
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir-base-url/Group/`id`/$export/`_since`&`_type`</b>
+              <b>/fhir-base-url/Group/{{'{groupId}'}}/$export?{{'{_since}'}}&{{'{_type}'}}</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
@@ -199,7 +207,10 @@
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row requestBody" style="margin-top:20px;">
-          <div class="" style="width:12.75%;float:left;padding:0px 15px;">
+          <div class="col-md-12">
+            <p style="word-break: break-all;font-size: 15px;">Request URL: {{secureFHIRServer}}/Group/1/$export?_since=1950-01-01&_type=AllergyIntolerance,Condition</p>
+          </div>
+          <!-- <div class="" style="width:12.75%;float:left;padding:0px 15px;">
             <p>Parameters:</p>
           </div>
           <div class="groupParamsForm" style="width:87.25%; float:left;padding:0px 15px;">
@@ -228,7 +239,7 @@
                 </mat-form-field>
               </div>
             </form>
-          </div>
+          </div> -->
           <div class="col-md-12">
             <button mat-raised-button color="primary" class="postbtn" (click)="exportGroupUsingParams()">Execute </button>
           </div>

@@ -55,7 +55,7 @@ export class RunTestService {
   getBulkDataByContentLocation(location: any) {
     return this.http
       .get(location, {
-        headers: new HttpHeaders().set('dsId', '19'),
+        headers: new HttpHeaders().set('dsId', '36'),
         observe: 'response'
       })
       .pipe(

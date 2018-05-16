@@ -4,7 +4,7 @@
   <mat-card-content>
     <h1 class="infotext">Please Enter FHIR server URL to extract data.</h1>
     <form class="example-form row" [formGroup]="myForm" (ngSubmit)="saveURL()">
-      <div class="" style="width:50%;float:left;padding: 0px 15px;">
+      <div class="col-md-6 col-sm-12">
         <mat-form-field class="mode">
           <mat-select placeholder="Select FHIR Server Type *" formControlName="mode" (change)="changeMode($event);">
             <mat-option value="open">
@@ -72,7 +72,7 @@
         </div>
         <button mat-raised-button color="primary" type="submit" class="savebtn" style="margin-top:20px;">Save</button>
       </div>
-      <div style="width:50%;float:left;padding: 0px 15px;">
+      <div class="col-md-6 col-sm-12 trymediv">
         <p>If you are new to the Bulk Data APIs, Click on Try Me button to use our test server for testing and hit Save</p>
         <button mat-raised-button color="primary" type="button" class="savebtn" (click)="tryme();">Try Me!</button>
 

@@ -47,6 +47,11 @@
 .example-section {
   display: flex;
   align-content: center;
-  align-items: center;
-  // height: 60px;
+  align-items: center; // height: 60px;
+}
+
+@media(max-width:800px) {
+  .trymediv {
+    margin-top: 20px;
+  }
 }

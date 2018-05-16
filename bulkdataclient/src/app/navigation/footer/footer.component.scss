@@ -1,13 +1,17 @@
 footer {
   padding-top: 1em; // margin-top: 40px;
-  background-color: #eee;
-  min-width: 1498px;
+  background-color: #eee; // min-width: 1498px;
 }
 
 footer /deep/.footer-link-btn {
   padding: 0px !important;
 }
 
-.hidden-print .container {
-  min-width: 1170px;
+// .hidden-print .container {
+//   min-width: 1170px;
+// }
+@media(min-width:800px) {
+  .text-right {
+    text-align: left !important;
+  }
 }

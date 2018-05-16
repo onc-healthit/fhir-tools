@@ -9,11 +9,18 @@ import { SimpleNotificationsComponent } from 'angular2-notifications';
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
+  screenWidth: number;
   notificationOptions = {
     timeOut: 5000,
     showProgressBar: true,
     pauseOnHover: true,
     position: ['bottom', 'right']
   };
-  constructor() { }
+  constructor() {
+    this.screenWidth = window.innerWidth;
+    window.onresize = () => {
+      // set screenWidth on screen size change
+      this.screenWidth = window.innerWidth;
+    };
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { SimpleNotificationsComponent } from 'angular2-notifications';
+import { SimpleNotificationsComponent } from 'angular2-notifications/dist';
 
 @Component({
   selector: 'app-root',

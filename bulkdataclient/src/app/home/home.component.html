@@ -7,7 +7,7 @@
         <a href="https://github.com/smart-on-fhir/fhir-bulk-data-docs" target="_blank">https://github.com/smart-on-fhir/fhir-bulk-data-docs</a>
       </p>
       <ol>
-        <li>A FHIR Server that conforms to the Bulk Data API Server implementation</li>
+        <li>A SITE FHIR Server that conforms to the Bulk Data API Server implementation.The code base can be found at</li>
         <ul>
           <!-- <li>
             <a href="{{origin}}/open-fhir" target="_blank">{{origin}}/open-fhir</a>
@@ -16,7 +16,7 @@
             <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulk-api-v2" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulk-api-v2</a>
           </li>
         </ul>
-        <li>A FHIR Client that conforms to the Bulk Data API Client Implementation</li>
+        <li>A FHIR Client that conforms to the Bulk Data API Client Implementation.The code base can be found at</li>
         <ul>
           <!-- <li>
             <a href="{{origin}}/backend-app-secure" target="_blank">{{origin}}/backend-app-secure</a>
@@ -29,7 +29,7 @@
         <ul>
           <li>
             If you are new to the Bulk Data APIs, then a good place to start would be the “Try Bulk Data APIs” on the left navigation
-            menu.
+            menu.The code base for the User Interface can be found at
           </li>
           <li>
             <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulkdataclient" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulkdataclient</a>
@@ -43,13 +43,13 @@
         <div class="panel-body">
           <p>The sandbox contains three components as shown below
             <br>
-            <br> Sandbox User Interface ———> Bulk Data Client ———> FHIR Server (supporting Bulk Data API)
+            <br> Sandbox User Interface ———> Bulk Data Client ———> SITE FHIR Server (supporting Bulk Data API)
             <br>
             <br> The User Interface interacts with Bulk Data Client using RESTful interfaces, which in turn communicates with
-            the FHIR Server using the FHIR Bulk Data APIs to satisfy the requests.
+            the SITE FHIR Server using the FHIR Bulk Data APIs to satisfy the requests.
             <br>
             <a href="https://github.com/smart-on-fhir/fhir-bulk-data-docs/blob/master/authorization.md" target="_blank">The SMART Backend Services authorization guide
-            </a> is implemented between the Bulk Data Client and the FHIR Server.
+            </a> is implemented between the Bulk Data Client and the SITE FHIR Server.
           </p>
           <h3>Data Supported By the Sandbox</h3>
           <p>The Bulk Data API sandbox contains two databases</p>
@@ -64,12 +64,13 @@
           </ol>
           <div class="sandbox-usage">
             <h3>Sandbox Usage</h3>
-            <p>The sandbox can be used in two different ways.</p>
+            <p>The sandbox can be used in different ways.</p>
             <ol>
               <li>Use the User Interface provided in this sandbox to experiment with the various APIs.</li>
               <li>
-                Use the FHIR Server conformant to the Bulk Data API Server implementation using your own client.
+                Use the SITE FHIR Server conformant to the Bulk Data API Server implementation using your own client.
               </li>
+              <li>Try “Bulk Data API’s” to understand how the FHIR Bulk Data APIs function.</li>
             </ol>
           </div>
           <div class="col-md-12" style="padding: 0px;">
@@ -79,8 +80,8 @@
               </div>
               <div class="panel-body">
                 <ol style="margin:0px;padding-left:15px;">
-                  <li>Select the FHIR Server tab and Select the FHIR Server type 'Open' or 'Secure' and enter the FHIR Server
-                    URL to extract the data.</li>
+                  <li>Select the SITE FHIR Server tab and Select the SITE FHIR Server type 'Open' or 'Secure' and enter the SITE
+                    FHIR Server URL to extract the data.</li>
                   <li>Select Manage Groups tab to view the list of patients.</li>
                   <li>From the Manage Groups select patients and create Group.</li>
                   <li>Select the Bulk Data Extract tab to view the list of created Groups.</li>
@@ -96,13 +97,13 @@
                 <h4>Using the Sandbox FHIR Server:</h4>
               </div>
               <div class="panel-body">
-                <p>The FHIR Server and its APIs can be used directly by your own client software if you have one. Instructions
-                  on using the FHIR Server either in the open mode or secure mode is provided below. Both the open and the
-                  secure server support the same APIs. </p>
+                <p>The SITE FHIR Server and its APIs can be used directly by your own client software if you have one. Instructions
+                  on using the SITE FHIR Server either in the open mode or secure mode is provided below. Both the open and
+                  the secure server support the same APIs. </p>
                 <div class="col-md-12" style="padding: 0px;">
                   <div class="panel panel-default">
                     <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
-                      <h4>Instructions to use the FHIR Server in Open Mode:</h4>
+                      <h4>Instructions to use the SITE FHIR Server in Open Mode:</h4>
                     </div>
                     <div class="panel-body">
                       <ol style="margin:0px;padding-left:15px;">
@@ -123,13 +124,13 @@
                 <div class="col-md-12" style="padding: 0px;">
                   <div class="panel panel-default">
                     <div class="panel-heading" style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x">
-                      <h4>Instructions to use the FHIR Server in Secure Mode:</h4>
+                      <h4>Instructions to use the SITE FHIR Server in Secure Mode:</h4>
                     </div>
                     <div class="panel-body">
                       <ol style="margin:0px;padding-left:15px;">
-                        <li>In order to use the FHIR Server with the appropriate tokens the following steps need to be followed</li>
+                        <li>In order to use the SITE FHIR Server with the appropriate tokens the following steps need to be followed</li>
                         <ol type='a' style="margin:0px;padding-left:15px;">
-                          <li>Create a user account in the FHIR Authorization Server: Follow instructions
+                          <li>Create a user account in the SITE FHIR Authorization Server: Follow instructions
                             <a href="{{origin}}/open-fhir/view/newuser.html" target="_blank"> here </a> for user creation.</li>
                           <li>Login and Register a Backend client by uploading your public key, so that you can get the Client
                             Id. Follow instructions

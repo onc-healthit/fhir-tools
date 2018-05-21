@@ -63,6 +63,15 @@ export class RunTestComponent implements OnInit {
   resourcesList: any = [];
   expandedPanel: any;
   secureFHIRServer: any;
+  stepperexecuteAll: boolean;
+  stepperexecuteGroupId: boolean;
+  stepperexecuteparams: boolean;
+  stepperexecuteGroupparams: boolean;
+
+  extractAllUrl: any;
+  exportByGroupIdUrl: any;
+  exportUsingParamsUrl: any;
+  exportGroupUsingParamsUrl: any;
 
   constructor(private runTestService: RunTestService,
     private util: UtilityService, private dialog: MatDialog,
@@ -95,9 +104,9 @@ export class RunTestComponent implements OnInit {
   getdetails() {
     if (this.groupIDForm.valid) {
       this.displayResponse = false;
-      this.isLoadingResults = true;
+      // this.isLoadingResults = true;
       this.id = this.groupIDForm.get('groupId').value;
-      this.runTestService.getGroupById(this.id, this.fhirserverurl).subscribe((res: Response) => {
+      /*this.runTestService.getGroupById(this.id, this.fhirserverurl).subscribe((res: Response) => {
         const extractObject = {};
         extractObject['id'] = this.id;
         extractObject['contentlocation'] = res.headers.get('content-location');
@@ -106,7 +115,7 @@ export class RunTestComponent implements OnInit {
           .get('content-location')
           .split('/')
           .pop();
-      });
+      });*/
     }
   }
   checkBulkData() {
@@ -204,12 +213,15 @@ export class RunTestComponent implements OnInit {
 
   exportAll() {
     this.isLoadingResults = true;
+    // this.stepperexecute = true;
     this.runTestService.getBulkDataByContentLocation(this.exportAllContentLocation).subscribe((res: Response) => {
+      this.stepperexecuteAll = true;
       this.displayExtractAll = true;
       this.isLoadingResults = false;
       this.extractAllResponseCode = res.status;
       this.responseBody = res.body;
       this.extractAllResponse = this.responseBody;
+      this.extractAllUrl = 'https://fhirtest.sitenv.org/secure-fhir/fhir/Patient/$export';
       const result = this.responseBody.output;
       this.extractAllData = [];
       for (let p = 0; p < result.length; p++) {
@@ -224,12 +236,15 @@ export class RunTestComponent implements OnInit {
 
   exportByGroupId() {
     this.isLoadingResults = true;
+
     this.runTestService.getBulkDataByContentLocation(this.extractByGroupContentLocation).subscribe((res: Response) => {
       this.displayResponse = true;
+      this.stepperexecuteGroupId = true;
       this.isLoadingResults = false;
       this.responseCode = res.status;
       this.responseBody = res.body;
       this.response = this.responseBody;
+      this.exportByGroupIdUrl = 'https://fhirtest.sitenv.org/secure-fhir/fhir/Group/1/$export';
       const result = this.responseBody.output;
       this.extractData = [];
       for (let p = 0; p < result.length; p++) {
@@ -261,13 +276,16 @@ export class RunTestComponent implements OnInit {
     // }
 
     this.isLoadingResults = true;
+
     this.runTestService.getBulkDataByContentLocation(this.exportUsingParamsContentLocation).subscribe((res: Response) => {
       this.displayParamsResponse = true;
+      this.stepperexecuteparams = true;
       this.isLoadingResults = false;
       this.exportUsingParamsCode = res.status;
       this.responseBody = res.body;
       this.exportUsingParamsResponse = this.responseBody;
       const result = this.responseBody.output;
+      this.exportUsingParamsUrl = 'https://fhirtest.sitenv.org/secure-fhir/fhir/Patient/$export?_since=1990-01-01&_type=AllergyIntolerance,Condition';
       this.extractParamsData = [];
       for (let p = 0; p < result.length; p++) {
         const dataObj = {
@@ -304,13 +322,16 @@ export class RunTestComponent implements OnInit {
     // }
 
     this.isLoadingResults = true;
+
     this.runTestService.getBulkDataByContentLocation(this.exportUsingGroupParamsContentLocation).subscribe((res: Response) => {
       this.displayGroupParamsResponse = true;
+      this.stepperexecuteGroupparams = true;
       this.isLoadingResults = false;
       this.exportUsingGroupParamsCode = res.status;
       this.responseBody = res.body;
       this.exportUsingGroupParamsResponse = this.responseBody;
       const result = this.responseBody.output;
+      this.exportGroupUsingParamsUrl = 'https://fhirtest.sitenv.org/secure/fhir/Group/1/$export?_since=1950-01-01&_type=AllergyIntolerance,Condition';
       this.extractGroupParamsData = [];
       for (let p = 0; p < result.length; p++) {
         const dataObj = {

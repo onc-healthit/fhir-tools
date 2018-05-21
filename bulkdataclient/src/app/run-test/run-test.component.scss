@@ -144,3 +144,31 @@ p {
 .mat-expansion-panel-header-description {
   font-size: 14px;
 }
+@media(max-width:800px) {
+  .mat-card {
+    width: 1063px;
+  }
+ .mat-accordion{
+   width: 1063px;;
+ }
+ .mat-card-content {
+ width: 1020px;
+}
+// .mat-expansion-panel-header-title {
+//   min-width: 450px;
+//   max-width: 400px;
+// }
+// .mat-expansion-panel-header  {
+//   height: 84px;
+// }
+// .mat-expansion-panel-header-title span {
+//   max-height: 31px;
+//   margin-top:11px;
+// }
+// .mat-expansion-panel-header .ng-tns-c19-2 .ng-trigger .ng-trigger-expansionHeight .ng-star-inserted{
+// height: 84px;
+// }
+// span{
+//    margin-top:11px;
+// }
+}

@@ -7,6 +7,7 @@
   <mat-card-content>
     <mat-accordion>
       <!-- Export All Patients-->
+
       <mat-expansion-panel class="row" (click)="expandPanel('exportAll')">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -27,31 +28,8 @@
           <div class="col-md-12">
             <button mat-raised-button color="primary" (click)="exportAll()" class="postbtn">Execute </button>
           </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="row requestBody" *ngIf="displayExtractAll">
-          <div class="col-md-3">
-            <p>Status Code:</p>
-          </div>
-          <div class="col-md-9">
-            <p>{{extractAllResponseCode}}</p>
-          </div>
-          <div class="col-md-3">
-            <p>Response Body:</p>
-          </div>
-          <div class="col-md-9">
-            <pre>{{extractAllResponse|json}}</pre>
-          </div>
-          <div class="col-md-3">
-            <p>ndjson Response Data:</p>
-          </div>
-          <div class="col-md-9">
-            <div *ngFor="let item of extractAllData" class="resourceContainer col-md-3">
-              <span>
-                <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
-                  <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
-              </span>
-            </div>
+          <div class="stepper-container" style="margin-top:90px;border:1px solid lightgrey">
+            <app-stepper stepper *ngIf="stepperexecuteAll" [myData]="extractAllData" [jsonview]="extractAllResponse" [url]="extractAllUrl"></app-stepper>
           </div>
         </div>
       </mat-expansion-panel>
@@ -59,7 +37,7 @@
       <mat-expansion-panel class="row" (click)="expandPanel('exportByGroupId')">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <span>Get</span>
+            <span>GET</span>
             <p>
               <b>/fhir-base-url/Group/{{'{groupId}'}}/$export
               </b>
@@ -88,34 +66,8 @@
           <div class="col-md-12">
             <button mat-raised-button color="primary" (click)="exportByGroupId()" class="postbtn">Execute </button>
           </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="col-md-12 requestBody" *ngIf="displayResponse">
-          <div class="col-md-3">
-            <p>Status Code</p>
-          </div>
-          <div class="col-md-9">
-            <p>{{responseCode}}</p>
-          </div>
-          <div class="col-md-3">
-            <p>Response</p>
-          </div>
-          <div class="col-md-9">
-            <pre>
-            {{response|json}}
-          </pre>
-          </div>
-          <div class="col-md-3">
-            <p>ndjson Response Data</p>
-          </div>
-          <div class="col-md-9">
-            <div *ngFor="let item of extractData" class="resourceContainer col-md-3">
-              <span>
-                <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
-                  <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
-              </span>
-
-            </div>
+          <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
+            <app-stepper stepper *ngIf="stepperexecuteGroupId" [myData]="extractData" [jsonview]="response" [url]="exportByGroupIdUrl"></app-stepper>
           </div>
         </div>
       </mat-expansion-panel>
@@ -161,36 +113,11 @@
           <div class="col-md-12">
             <button mat-raised-button color="primary" class="postbtn" (click)="exportUsingParams()">Execute </button>
           </div>
+          <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
+            <app-stepper stepper *ngIf="stepperexecuteparams" [myData]="extractParamsData" [jsonview]="exportUsingParamsResponse" [url]="exportUsingParamsUrl"></app-stepper>
+          </div>
         </div>
-        <mat-divider></mat-divider>
-        <div class="row requestBody" *ngIf="displayParamsResponse">
-          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
-            <p>Status Code:</p>
-          </div>
-          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
-            <p>{{exportUsingParamsCode}}</p>
-          </div>
-          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
-            <p>Response</p>
-          </div>
-          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
-            <pre>
-              {{exportUsingParamsResponse|json}}
-            </pre>
-          </div>
-          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
-            <p>ndjson Response Data</p>
-          </div>
-          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
-            <div *ngFor="let item of extractParamsData" class="resourceContainer col-md-3">
-              <span>
-                <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
-                  <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
-              </span>
 
-            </div>
-          </div>
-        </div>
       </mat-expansion-panel>
       <!-- Group With Parameters-->
       <mat-expansion-panel class="row" (click)="expandPanel('exportGroupWithParams')">
@@ -243,34 +170,10 @@
           <div class="col-md-12">
             <button mat-raised-button color="primary" class="postbtn" (click)="exportGroupUsingParams()">Execute </button>
           </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="row requestBody" *ngIf="displayGroupParamsResponse">
-          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
-            <p>Status Code:</p>
-          </div>
-          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
-            <p>{{exportUsingGroupParamsCode}}</p>
-          </div>
-          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
-            <p>Response</p>
-          </div>
-          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
-            <pre>
-                {{exportUsingGroupParamsResponse|json}}
-              </pre>
-          </div>
-          <div class="col-md-3" style="width:33.33%; float:left;padding:0px 15px;">
-            <p>ndjson Response Data</p>
-          </div>
-          <div class="col-md-9" style="width:66.66%; float:left;padding:0px 15px;">
-            <div *ngFor="let item of extractGroupParamsData" class="resourceContainer col-md-3">
-              <span>
-                <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
-                  <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
-              </span>
-
-            </div>
+          <div class="stepper-container" style="margin-top:110px;border:1px solid lightgrey">
+            <app-stepper stepper *ngIf="stepperexecuteGroupparams" [myData]="extractGroupParamsData" [jsonview]="exportUsingGroupParamsResponse"
+              [url]="exportGroupUsingParamsUrl">
+            </app-stepper>
           </div>
         </div>
       </mat-expansion-panel>

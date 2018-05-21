@@ -13,7 +13,7 @@
 }
 
 .table-container .mat-column-data {
-  min-width: 360px;
+ // min-width: 360px;
 }
 
 .table-container .mat-column-id {
@@ -57,4 +57,15 @@
   padding-right: 10px;
   margin-left: 100px;
   margin-top: 20px;
+}
+@media(max-width:800px) {
+  .mat-card {
+    width: 900px;
+  }
+  .mat-table {
+    width: 900px;
+  }
+  .mat-paginator {
+    width: 900px;
+  }
 }

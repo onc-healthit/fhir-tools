@@ -32,4 +32,14 @@ Build Application
 $ mvn clean install
 This will produce a file target/{application-name}.war. Copy this to your tomcat webapp directory for deployment.
 
+Tomcat Configuration for Open and Secure Servers:
+
+The following needs to be added to the tomcat server.xml file to configure open and secure servers using the same code base.
+
+ <Context path="/open/stu3" docBase="./stu3"/>
+ <Context path="/secure/stu3" docBase="./stu3"/>
+
+Verification:
+
 Verify using Postman or equivalent tool by running various FHIR APIs on the STU3 server.
+For example: http://localhost:/open/stu3/fhir/Patient/1

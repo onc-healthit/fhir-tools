@@ -36,8 +36,8 @@ Tomcat Configuration for Open and Secure Servers:
 
 The following needs to be added to the tomcat server.xml file to configure open and secure servers using the same code base.
 
-"<Context path="/open/stu3" docBase="./stu3"/>"
-"<Context path="/secure/stu3" docBase="./stu3"/>"
+"Context path="/open/stu3" docBase="./stu3"/>"
+"Context path="/secure/stu3" docBase="./stu3"/>"
 
 
 Verification:

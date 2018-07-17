@@ -68,6 +68,6 @@ This will generate a war file under target/{application-name}.war. Copy this to 
 ## Verification 
 Verify using Postman or equivalent tool by running various FHIR APIs on the DSTU2 server. 
 ```
-For example: http://localhost:<port>/open/stu3/fhir/Patient/1
+For example: http://localhost:<port>/open/fhir/Patient/1
 ```
   

@@ -24,7 +24,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 @Scope("request")
@@ -53,12 +56,14 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
     }
 
 
-    /**The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
      * @return Returns list of resource matching this identifier, or null if none exists.
-     * 
+     * <p>
      * Ex: http://<server name>/<context>/fhir/AllergyIntolerance?_pretty=true&_format=json
      */
     @Search
@@ -83,7 +88,7 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
+     * <p>
      * Ex: http://<server name>/<context>/fhir/AllergyIntolerance/1?_pretty=true&_format=json
      */
     @Read()
@@ -98,14 +103,13 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
-     * 
      *
      * @param thePatient
      * @param theIncludes
      * @param theSort
      * @param theCount
      * @return This method returns a list of AllergyIntolerance. This list may contain multiple matching resources, or it may also be empty.
-     * 
+     * <p>
      * Ex: http://<server name>/<context>/fhir/AllergyIntolerance?patient=1&_format=json
      */
     @Search()
@@ -123,12 +127,10 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
     }
 
     /**
-     *
      * @param dafAllergyIntolerance
      * @return AllergyIntolerance object
-     *
+     * <p>
      * This method converts DafAllergyIntolerance object to AllergyIntolerance object
-     *
      */
     private AllergyIntolerance createAllergyIntoleranceObject(DafAllergyIntolerance dafAllergyIntolerance) {
 
@@ -139,7 +141,7 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
 
         //Set identifier
         /*List<IdentifierDt> identifier = new ArrayList<IdentifierDt>();
-    	IdentifierDt identifierDt = new IdentifierDt();
+        IdentifierDt identifierDt = new IdentifierDt();
     	identifierDt.setSystem(dafAllergyIntolerance.getIdentifier_system().trim());
     	identifierDt.setValue(dafAllergyIntolerance.getIdentifier_value().trim());
     	identifier.add(identifierDt);

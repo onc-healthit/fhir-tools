@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "clients")
-public class DafClientRegister  {
+public class DafClientRegister {
 
     @Id
     @Column(name = "id")

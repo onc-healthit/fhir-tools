@@ -1,7 +1,6 @@
 package org.sitenv.spring.query;
 
 import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 
@@ -26,6 +25,7 @@ public class PatientSearchCriteria extends SearchCriteria {
     private Long age;
     private String race;
     private String ethnicity;
+
     public PatientSearchCriteria() {
     }
 

@@ -1,300 +1,289 @@
 package org.sitenv.spring.model;
 
-import java.util.Date;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.sitenv.spring.configuration.JSONObjectUserType;
 
+import javax.persistence.*;
+import java.util.Date;
+
 @Entity
 @Table(name = "procedure")
 @TypeDefs({@TypeDef(name = "StringJsonObject", typeClass = JSONObjectUserType.class)})
 public class DafProcedure {
-	
-	@Id
+
+    @Id
     @Column(name = "procedure_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int procedureId;
-	
-	@Column(name = "identifier")
+
+    @Column(name = "identifier")
     @Type(type = "StringJsonObject")
     private String identifier;
-	
-	@OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subject")
     private DafPatient subject;
-	
-	@Column(name="status")
-	private String status;
-	
-	@Column(name = "category")
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "category")
     @Type(type = "StringJsonObject")
     private String category;
-	
-	@Column(name = "code")
+
+    @Column(name = "code")
     @Type(type = "StringJsonObject")
     private String code;
-	
-	@Column(name="notperformed")
-	private Boolean notperformed;
-	
-	@Column(name = "reasonnotperformed")
+
+    @Column(name = "notperformed")
+    private Boolean notperformed;
+
+    @Column(name = "reasonnotperformed")
     @Type(type = "StringJsonObject")
     private String reasonnotperformed;
-	
-	@Column(name = "bodysite")
+
+    @Column(name = "bodysite")
     @Type(type = "StringJsonObject")
     private String bodysite;
-	
-	@Column(name = "reason")
+
+    @Column(name = "reason")
     @Type(type = "StringJsonObject")
     private String reason;
-	
-	@Column(name = "performer_actor")
+
+    @Column(name = "performer_actor")
     @Type(type = "StringJsonObject")
     private String performerActor;
-	
-	@Column(name = "performer_role")
+
+    @Column(name = "performer_role")
     @Type(type = "StringJsonObject")
     private String performerRole;
-	
-	@Column(name = "performed")
+
+    @Column(name = "performed")
     @Temporal(TemporalType.DATE)
     private Date performed;
-	
-	@Column(name="encounter")
-	private Integer encounter;
-	
-	@Column(name="location")
-	private Integer location;
-	
-	@Column(name = "outcome")
+
+    @Column(name = "encounter")
+    private Integer encounter;
+
+    @Column(name = "location")
+    private Integer location;
+
+    @Column(name = "outcome")
     @Type(type = "StringJsonObject")
     private String outcome;
-	
-	@Column(name="report")
-	private Integer report;
-	
-	@Column(name = "complication")
+
+    @Column(name = "report")
+    private Integer report;
+
+    @Column(name = "complication")
     @Type(type = "StringJsonObject")
     private String complication;
-	
-	@Column(name = "followup")
+
+    @Column(name = "followup")
     @Type(type = "StringJsonObject")
     private String followup;
-	
-	@Column(name="request")
-	private Integer request;
-	
-	@Column(name="notes")
-	private String notes;
-	
-	@Column(name = "focaldevice")
+
+    @Column(name = "request")
+    private Integer request;
+
+    @Column(name = "notes")
+    private String notes;
+
+    @Column(name = "focaldevice")
     @Type(type = "StringJsonObject")
     private String focalDevice;
-	
-	@Column(name="used")
-	private Integer used;
-	
-	public DafProcedure(){
-		
-	}
 
-	public int getProcedureId() {
-		return procedureId;
-	}
+    @Column(name = "used")
+    private Integer used;
 
-	public void setProcedureId(int procedureId) {
-		this.procedureId = procedureId;
-	}
+    public DafProcedure() {
 
-	public String getIdentifier() {
-		return identifier;
-	}
+    }
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
+    public int getProcedureId() {
+        return procedureId;
+    }
 
-	public DafPatient getSubject() {
-		return subject;
-	}
+    public void setProcedureId(int procedureId) {
+        this.procedureId = procedureId;
+    }
 
-	public void setSubject(DafPatient subject) {
-		this.subject = subject;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public DafPatient getSubject() {
+        return subject;
+    }
 
-	public String getCategory() {
-		return category;
-	}
+    public void setSubject(DafPatient subject) {
+        this.subject = subject;
+    }
 
-	public void setCategory(String category) {
-		this.category = category;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public String getCategory() {
+        return category;
+    }
 
-	public Boolean getNotperformed() {
-		return notperformed;
-	}
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-	public void setNotperformed(Boolean notperformed) {
-		this.notperformed = notperformed;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public String getReasonnotperformed() {
-		return reasonnotperformed;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setReasonnotperformed(String reasonnotperformed) {
-		this.reasonnotperformed = reasonnotperformed;
-	}
+    public Boolean getNotperformed() {
+        return notperformed;
+    }
 
-	public String getBodysite() {
-		return bodysite;
-	}
+    public void setNotperformed(Boolean notperformed) {
+        this.notperformed = notperformed;
+    }
 
-	public void setBodysite(String bodysite) {
-		this.bodysite = bodysite;
-	}
+    public String getReasonnotperformed() {
+        return reasonnotperformed;
+    }
 
-	public String getReason() {
-		return reason;
-	}
+    public void setReasonnotperformed(String reasonnotperformed) {
+        this.reasonnotperformed = reasonnotperformed;
+    }
 
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
+    public String getBodysite() {
+        return bodysite;
+    }
 
-	public String getPerformerActor() {
-		return performerActor;
-	}
+    public void setBodysite(String bodysite) {
+        this.bodysite = bodysite;
+    }
 
-	public void setPerformerActor(String performerActor) {
-		this.performerActor = performerActor;
-	}
+    public String getReason() {
+        return reason;
+    }
 
-	public String getPerformerRole() {
-		return performerRole;
-	}
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
-	public void setPerformerRole(String performerRole) {
-		this.performerRole = performerRole;
-	}
+    public String getPerformerActor() {
+        return performerActor;
+    }
 
-	public Date getPerformed() {
-		return performed;
-	}
+    public void setPerformerActor(String performerActor) {
+        this.performerActor = performerActor;
+    }
 
-	public void setPerformed(Date performed) {
-		this.performed = performed;
-	}
+    public String getPerformerRole() {
+        return performerRole;
+    }
 
-	public Integer getEncounter() {
-		return encounter;
-	}
+    public void setPerformerRole(String performerRole) {
+        this.performerRole = performerRole;
+    }
 
-	public void setEncounter(Integer encounter) {
-		this.encounter = encounter;
-	}
+    public Date getPerformed() {
+        return performed;
+    }
 
-	public Integer getLocation() {
-		return location;
-	}
+    public void setPerformed(Date performed) {
+        this.performed = performed;
+    }
 
-	public void setLocation(Integer location) {
-		this.location = location;
-	}
+    public Integer getEncounter() {
+        return encounter;
+    }
 
-	public String getOutcome() {
-		return outcome;
-	}
+    public void setEncounter(Integer encounter) {
+        this.encounter = encounter;
+    }
 
-	public void setOutcome(String outcome) {
-		this.outcome = outcome;
-	}
+    public Integer getLocation() {
+        return location;
+    }
 
-	public Integer getReport() {
-		return report;
-	}
+    public void setLocation(Integer location) {
+        this.location = location;
+    }
 
-	public void setReport(Integer report) {
-		this.report = report;
-	}
+    public String getOutcome() {
+        return outcome;
+    }
 
-	public String getComplication() {
-		return complication;
-	}
+    public void setOutcome(String outcome) {
+        this.outcome = outcome;
+    }
 
-	public void setComplication(String complication) {
-		this.complication = complication;
-	}
+    public Integer getReport() {
+        return report;
+    }
 
-	public String getFollowup() {
-		return followup;
-	}
+    public void setReport(Integer report) {
+        this.report = report;
+    }
 
-	public void setFollowup(String followup) {
-		this.followup = followup;
-	}
+    public String getComplication() {
+        return complication;
+    }
 
-	public Integer getRequest() {
-		return request;
-	}
+    public void setComplication(String complication) {
+        this.complication = complication;
+    }
 
-	public void setRequest(Integer request) {
-		this.request = request;
-	}
+    public String getFollowup() {
+        return followup;
+    }
 
-	public String getNotes() {
-		return notes;
-	}
+    public void setFollowup(String followup) {
+        this.followup = followup;
+    }
 
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
+    public Integer getRequest() {
+        return request;
+    }
 
-	public String getFocalDevice() {
-		return focalDevice;
-	}
+    public void setRequest(Integer request) {
+        this.request = request;
+    }
 
-	public void setFocalDevice(String focalDevice) {
-		this.focalDevice = focalDevice;
-	}
+    public String getNotes() {
+        return notes;
+    }
 
-	public Integer getUsed() {
-		return used;
-	}
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 
-	public void setUsed(Integer used) {
-		this.used = used;
-	}
-	
+    public String getFocalDevice() {
+        return focalDevice;
+    }
+
+    public void setFocalDevice(String focalDevice) {
+        this.focalDevice = focalDevice;
+    }
+
+    public Integer getUsed() {
+        return used;
+    }
+
+    public void setUsed(Integer used) {
+        this.used = used;
+    }
+
 }

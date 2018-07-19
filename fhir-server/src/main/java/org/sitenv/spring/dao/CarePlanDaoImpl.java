@@ -2,7 +2,6 @@ package org.sitenv.spring.dao;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafCarePlan;
 import org.sitenv.spring.model.DafCarePlanParticipant;

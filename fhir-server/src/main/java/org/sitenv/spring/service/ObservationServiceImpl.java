@@ -27,11 +27,11 @@ public class ObservationServiceImpl implements ObservationService {
     public DafObservation getObservationResourceById(int id) {
         return this.observationDao.getObservationResourceById(id);
     }
-    
+
     @Override
     @Transactional
-    public DafObservation getObservationResourceByIdandCategory(int id,String category) {
-        return this.observationDao.getObservationResourceByIdandCategory(id,category);
+    public DafObservation getObservationResourceByIdandCategory(int id, String category) {
+        return this.observationDao.getObservationResourceByIdandCategory(id, category);
     }
 
     @Override

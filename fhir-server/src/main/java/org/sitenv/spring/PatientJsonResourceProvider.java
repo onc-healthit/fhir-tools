@@ -14,16 +14,9 @@ import ca.uhn.fhir.model.primitive.StringDt;
 import ca.uhn.fhir.model.primitive.UriDt;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.gclient.StringClientParam;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringOrListParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafPatientJson;
@@ -36,8 +29,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +77,7 @@ public class PatientJsonResourceProvider implements IResourceProvider {
             id = theId.getIdPartAsLong().intValue();
         } catch (NumberFormatException e) {
             /*
-			 * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+             * If we can't parse the ID as a long, it's not valid so this is an unknown resource
 			 */
             throw new ResourceNotFoundException(theId);
         }
@@ -94,13 +85,13 @@ public class PatientJsonResourceProvider implements IResourceProvider {
 
         return createPatientObject(dafPatient);
     }
-    
+
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by Resource id
      *
      * @param theId This operation takes one parameter which is the search criteria. It is annotated with the "@Required" annotation. This annotation takes one argument, a string containing the name of
-     *                           the search criteria. The data type here is String, but there are other possible parameter types depending on the specific search criteria.
+     *              the search criteria. The data type here is String, but there are other possible parameter types depending on the specific search criteria.
      * @return This method returns a ]Patient. This list may patient resource, or it may also be empty.
      */
     @Search
@@ -234,7 +225,7 @@ public class PatientJsonResourceProvider implements IResourceProvider {
             searchOption.setGender(theGender);
         }
         if (theBirthDate != null) {
-        	searchOption.setBirthDate(theBirthDate);
+            searchOption.setBirthDate(theBirthDate);
            /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
@@ -319,13 +310,7 @@ public class PatientJsonResourceProvider implements IResourceProvider {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
         searchOption.setGender(theGenderType);
         if (theBirthDate != null) {
-        	searchOption.setBirthDate(theBirthDate);
-           /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
-            } catch (Exception e) {
-
-            }*/
+            searchOption.setBirthDate(theBirthDate);
         }
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 

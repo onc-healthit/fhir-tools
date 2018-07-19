@@ -16,7 +16,21 @@
 		<link href="view/css/custom.css" rel="stylesheet" type="text/css" />
 	
     	<title>FHIR Server</title>
-	</head>
+
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-40163006-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-40163006-1');
+        </script>
+
+        <!-- End Google Analytics -->
+
+    </head>
 	<body>
 	    <%-- header starts here --%>
 <site-header ng-version="2.4.7" _nghost-vni-33="">
@@ -95,14 +109,13 @@
 	                request.getContextPath() %>/authorize/userValidate" method="POST">
 		      <input name="transaction_id" type="hidden" value=<%= request.getParameter("transaction_id") %>>	
 		      <%-- <input name="transaction_id" type="hidden" value=<%= request.getScheme() %>>	 --%>	        
-		        <label class="sr-only" for="inputEmail">Username</label>
+		        <label class="sr-only" for="userName">Username</label>
 		        <input type="text" placeholder="Username" class="form-control" id="userName" name="userName" style="margin-bottom:5px;">
-		        <label class="sr-only" for="inputPassword">Password</label>
+		        <label class="sr-only" for="password">Password</label>
 		        <input type="password" required="" placeholder="Password" class="form-control" id="password" name="password">
 		        <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
 		      </form>
-		      <!-- <h5 class="form-signin-heading" style="text-align:center"><a href="newuser.html"> Click here </a> to register a new account</h5> -->
-
+            <h5 class="form-signin-heading" style="text-align:center;"><i>For demo users use Username: <b>demouser</b> Password: <b>Demouser1!</b></i></h5>
 	    </div>
 <%-- Footer Starts here --%>
 
@@ -250,5 +263,8 @@
             });
         }
         </script>
-	</body>
+
+
+
+    </body>
 </html>

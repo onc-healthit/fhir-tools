@@ -18,7 +18,9 @@ import org.sitenv.spring.service.ImmunizationService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class ImmunizationResourceProvider implements IResourceProvider {
 
@@ -32,7 +34,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         service = (ImmunizationService) context.getBean("immunizationResourceService");
     }
 
-	/**
+    /**
      * The getResourceType method comes from IResourceProvider, and must
      * be overridden to indicate what type of resource this provider
      * supplies.
@@ -42,13 +44,14 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         return Immunization.class;
     }
 
-	/**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available Immunization records.
-     * 
+     * @return Returns all the available Immunization records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/Immunization?_pretty=true&_format=json
      */
     @Search
@@ -65,7 +68,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         return immunizations;
     }
 
-	    /**
+    /**
      * This is the "read" operation. The "@Read" annotation indicates that this method supports the read and/or vread operation.
      * <p>
      * Read operations take a single parameter annotated with the {@link IdParam} paramater, and should return a single resource instance.
@@ -73,8 +76,8 @@ public class ImmunizationResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Immunization/1?_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Immunization/1?_format=json
      */
     @Read()
     public Immunization getImmunizationResourceById(@IdParam IdDt theId) {
@@ -86,7 +89,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         return immunization;
     }
 
-	 /**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -95,8 +98,8 @@ public class ImmunizationResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of CarePlans. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Immunization?patient=1&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Immunization?patient=1&_format=json
      */
     @Search()
     public List<Immunization> searchByPatient(@RequiredParam(name = Immunization.SP_PATIENT) ReferenceParam thePatient,
@@ -114,7 +117,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         return immunizationList;
     }
 
-	/**
+    /**
      * This method converts DafImmunization object to Immunization object
      */
     private Immunization createImmunizationObject(DafImmunization dafImmunization) {

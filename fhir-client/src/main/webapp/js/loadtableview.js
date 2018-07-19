@@ -341,8 +341,8 @@
 		   			td1.append(jsondata.id);
 		   		}
 		   		var td2 = $("<td></td>");
-		   		if(jsondata.status){
-		   			td2.append(jsondata.status);
+		   		if(jsondata.clinicalStatus){
+		   			td2.append(jsondata.clinicalStatus);
 		   		}
 		        var td3=$("<td></td>");
 		        if(jsondata.substance){

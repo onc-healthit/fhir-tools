@@ -1,34 +1,34 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafLocation;
 import org.sitenv.spring.query.LocationSearchCriteria;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("locationDao")
 public class LocationDaoImpl extends AbstractDao implements LocationDao {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<DafLocation> getAllLocations() {
-		 Criteria criteria = getSession().createCriteria(DafLocation.class);
-	        return (List<DafLocation>) criteria.list();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<DafLocation> getAllLocations() {
+        Criteria criteria = getSession().createCriteria(DafLocation.class);
+        return (List<DafLocation>) criteria.list();
+    }
 
-	@Override
-	public DafLocation getLocationById(int id) {
-		DafLocation dafLocation = (DafLocation) getSession().get(DafLocation.class, id);
-	        return dafLocation;
-	}
+    @Override
+    public DafLocation getLocationById(int id) {
+        DafLocation dafLocation = (DafLocation) getSession().get(DafLocation.class, id);
+        return dafLocation;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<DafLocation> getLocationBySearchCriteria(
-			LocationSearchCriteria locationSearchCriteria) {
-		Criteria criteria = getSession().createCriteria(DafLocation.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<DafLocation> getLocationBySearchCriteria(
+            LocationSearchCriteria locationSearchCriteria) {
+        Criteria criteria = getSession().createCriteria(DafLocation.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         //Identifier
         if (locationSearchCriteria.getIdentifier() != null) {
@@ -39,28 +39,28 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
                 criteria.add(Restrictions.sqlRestriction("{alias}.identifier->>'value' = '" + locationSearchCriteria.getIdentifier().getValue() + "'"));
             }
         }
-        
-        if(locationSearchCriteria.getName()!=null){
-        	criteria.add(Restrictions.eq("name", locationSearchCriteria.getName()));
+
+        if (locationSearchCriteria.getName() != null) {
+            criteria.add(Restrictions.eq("name", locationSearchCriteria.getName()));
         }
-        
-        if(locationSearchCriteria.getAddress()!=null){
-        	criteria.add(Restrictions.sqlRestriction("{alias}.address->>'line' = '" + locationSearchCriteria.getAddress() + "'"));
+
+        if (locationSearchCriteria.getAddress() != null) {
+            criteria.add(Restrictions.sqlRestriction("{alias}.address->>'line' = '" + locationSearchCriteria.getAddress() + "'"));
         }
-        
-        if(locationSearchCriteria.getPostal()!=null){
-        	criteria.add(Restrictions.sqlRestriction("{alias}.address->>'postalCode' = '" + locationSearchCriteria.getPostal() + "'"));
+
+        if (locationSearchCriteria.getPostal() != null) {
+            criteria.add(Restrictions.sqlRestriction("{alias}.address->>'postalCode' = '" + locationSearchCriteria.getPostal() + "'"));
         }
-        
-        if(locationSearchCriteria.getCity()!=null){
-        	criteria.add(Restrictions.sqlRestriction("{alias}.address->>'city' = '" + locationSearchCriteria.getCity() + "'"));
+
+        if (locationSearchCriteria.getCity() != null) {
+            criteria.add(Restrictions.sqlRestriction("{alias}.address->>'city' = '" + locationSearchCriteria.getCity() + "'"));
         }
-        
-        if(locationSearchCriteria.getState()!=null){
-        	criteria.add(Restrictions.sqlRestriction("{alias}.address->>'state' = '" + locationSearchCriteria.getState() + "'"));
+
+        if (locationSearchCriteria.getState() != null) {
+            criteria.add(Restrictions.sqlRestriction("{alias}.address->>'state' = '" + locationSearchCriteria.getState() + "'"));
         }
-        
+
         return criteria.list();
-	}
+    }
 
 }

@@ -10,6 +10,7 @@ public class DiagnosticReportSearchCriteria extends SearchCriteria {
     private String category;
     private List<String> code;
     private DateRangeParam date;
+
     public DiagnosticReportSearchCriteria() {
     }
 

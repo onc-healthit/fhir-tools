@@ -27,7 +27,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @Scope("request")
@@ -43,7 +45,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         service = (DiagnosticReportService) context.getBean("diagnosticResourceService");
     }
 
-	 /**
+    /**
      * The getResourceType method comes from IResourceProvider, and must
      * be overridden to indicate what type of resource this provider
      * supplies.
@@ -53,13 +55,14 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         return DiagnosticReport.class;
     }
 
-	/**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available DiagnosticReport records.
-     * 
+     * @return Returns all the available DiagnosticReport records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/DiagnosticReport?_pretty=true&_format=json
      */
     @Search
@@ -70,14 +73,14 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         List<DiagnosticReport> diagnosticList = new ArrayList<DiagnosticReport>();
 
         for (DafDiagnosticReport dafDiagnostics : dafDiagnosticList) {
-            
+
             diagnosticList.add(createDiagnosticReportObject(dafDiagnostics));
         }
 
         return diagnosticList;
     }
 
-	/**
+    /**
      * This is the "read" operation. The "@Read" annotation indicates that this method supports the read and/or vread operation.
      * <p>
      * Read operations take a single parameter annotated with the {@link IdParam} paramater, and should return a single resource instance.
@@ -85,8 +88,8 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/DiagnosticReport/1?_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/DiagnosticReport/1?_format=json
      */
     @Read()
     public DiagnosticReport getDiagnosticResourceById(@IdParam IdDt theId) {
@@ -98,20 +101,20 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         return diagnostic;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
      * @param thePatient
      * @param theCategory
      * @param theCode
-	 * @param thedate
+     * @param thedate
      * @param theIncludes
      * @param theSort
      * @param theCount
      * @return This method returns a list of DiagnosticReports. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/DiagnosticReport?patient=1&code=24323-8,58410-2,24356-8&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/DiagnosticReport?patient=1&code=24323-8,58410-2,24356-8&_format=json
      */
     @Search()
     public List<DiagnosticReport> searchByPatient(@RequiredParam(name = DiagnosticReport.SP_PATIENT) ReferenceParam thePatient,
@@ -119,7 +122,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
                                                   @OptionalParam(name = DiagnosticReport.SP_CODE) StringOrListParam theCode,
                                                   @OptionalParam(name = DiagnosticReport.SP_DATE) DateRangeParam thedate,
                                                   @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
-        
+
         DiagnosticReportSearchCriteria diagnosticReportSearchCriteria = new DiagnosticReportSearchCriteria();
         if (theCategory != null) {
             diagnosticReportSearchCriteria.setCategory(theCategory.getValue());
@@ -135,7 +138,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         if (thedate != null) {
             diagnosticReportSearchCriteria.setDate(thedate);
         }
-       
+
         List<DafDiagnosticReport> dafDiagnosticList = service.getDiagnosticReportBySearchCriteria(diagnosticReportSearchCriteria);
 
         List<DiagnosticReport> dignosticList = new ArrayList<DiagnosticReport>();
@@ -146,7 +149,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         return dignosticList;
     }
 
-	/**
+    /**
      * This method converts DafDiagnosticReport object to DiagnosticReport object
      */
     private DiagnosticReport createDiagnosticReportObject(DafDiagnosticReport dafDiagnostic) {

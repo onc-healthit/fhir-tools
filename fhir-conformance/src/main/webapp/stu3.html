@@ -1,0 +1,1555 @@
+<div class="panel-body">
+    <div class="pull-right" style="margin-right:50px;"><button class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" id="executebtn" onclick="runSTU3Tests();">Execute</button></div>
+                                        <table class="table table-striped stu3table">
+										  <thead>
+										    <tr>
+										      <th><input type="checkbox" class="stu3suitecheckbox" id="selectall" name="test1" onchange="stu3selectall();">&nbsp;&nbsp;All</th>
+										      <th>Test Resources</th>
+										      <th style="width:500px">Description</th>
+										      <th>No. of Tests</th>
+										      <th>Passed</th>
+										      <th>Status</th>
+										    </tr>
+										  </thead>
+										  <tbody>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Patient"></td>
+										      <td><a onclick="openstu3patmodal();" style="cursor:pointer;">Patient</a></td>
+										      <td> Test a FHIR server's Patient resource by a known patient id and search operation support of the required mandatory parameters: birthdate, gender, identifier and name; and optional search parameters: family and given.</td>
+										      <td>6</td>
+										      <td class="stu3patientpass stu3pass"></td>
+										      <td class="stu3patientrun stu3run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="AllergyIntolerance"></td>
+										      <td><a onclick="openstu3allergymodal();" style="cursor:pointer;">Allergy Intolerance</a></td>
+										      <td>Test AllergyIntolerance resource based on a known Patient resource id.</td>
+										      <td>1</td>
+										      <td class="stu3allergypass stu3pass"></td>
+										      <td class="stu3allergyrun stu3run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="CarePlan"></td>
+										      <td><a onclick="openstu3careplanmodal();" style="cursor:pointer;">Care Plan</a></td>
+										      <td>Test Care Plan search operation based on a known Patient resource id and search operation support of the required mandatory parameters: category and status.</td>
+										      <td>6</td>
+										      <td class="stu3careteampass pass"></td>
+										      <td class="stu3careteamrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="CareTeam"></td>
+										      <td><a onclick="openstu3careteammodal();" style="cursor:pointer;">Care Team</a></td>
+										      <td>Test Care Team search operation based on a known Patient resource id and search operation support of the required mandatory parameters: status.</td>
+										      <td>2</td>
+										      <td class="stu3ctpass pass"></td>
+										      <td class="stu3ctrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Condition"></td>
+										      <td><a onclick="openstu3conditionmodal();" style="cursor:pointer;">Condition</a></td>
+										      <td>Test Problems and Health Concerns (Condition) search operation based on a known Patient resource id.</td>
+										      <td>4</td>
+										      <td class="stu3conditionpass pass"></td>
+										      <td class="stu3conditionrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Device"></td>
+										      <td><a onclick="openstu3devicemodal();" style="cursor:pointer;">Device</a></td>
+										      <td>Test Device resource based on a known Patient resource id</td>
+										      <td>1</td>
+										      <td class="stu3devicepass pass"></td>
+										      <td class="stu3devicerun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="DocumentReference"></td>
+										      <td><a onclick="openstu3docrefmodal();" style="cursor:pointer;">Document Reference</a></td>
+										      <td>Test Document Reference Search Operation based on known Patient Id, type and Period and also with Extended Operations</td>
+										      <td>4</td>
+										      <td class="stu3docrefpass pass"></td>
+										      <td class="stu3docrefrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Goal"></td>
+										      <td><a onclick="openstu3goalmodal();" style="cursor:pointer;">Goal</a></td>
+										      <td>Test Goal resource based on a known Patient resource id and search operation support of the required mandatory parameter date.</td>
+										      <td>2</td>
+										      <td class="stu3goalpass pass"></td>
+										      <td class="stu3goalrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Immunization"></td>
+										      <td><a onclick="openstu3immunizationmodal();" style="cursor:pointer;">Immunization</a></td>
+										      <td>Test Immunization resource based on a known Patient resource id.</td>
+										      <td>1</td>
+										      <td class="stu3immunizationpass pass"></td>
+										      <td class="stu3immunizationrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="DiagnosticReport"></td>
+										      <td><a onclick="openstu3diagnosticreportmodal();" style="cursor:pointer;">Diagnostic Report (Laboratory)</a></td>
+										      <td>Test Diagnostic Report (Laboratory) resource based on a known Patient resource id.</td>
+										      <td>4</td>
+										      <td class="stu3diagnosticreportpass pass"></td>
+										      <td class="stu3diagnosticreportrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Observation(Laboratory)"></td>
+										      <td><a onclick="openstu3obslaboratorymodal();" style="cursor:pointer;">Laboratory (Observation)</a></td>
+										      <td>Test Observation (Laboratory) resource based on a known Patient resource id and search operation support of the required mandatory parameters code,category and date.</td>
+										      <td>4</td>
+										      <td class="stu3obslaboratorypass pass"></td>
+										      <td class="stu3obslaboratoryrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Procedure"></td>
+										      <td><a onclick="openstu3proceduremodal();" style="cursor:pointer;">Procedure</a></td>
+										      <td>Test Procedure resource based on a known Patient resource id and search operation support of the required mandatory parameters date.</td>
+										      <td>2</td>
+										      <td class="stu3procedurepass pass"></td>
+										      <td class="stu3procedurerun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="MedicationStatement"></td>
+										      <td><a onclick="openstu3medStatementmodal();" style="cursor:pointer;">Medication Statement</a></td>
+										      <td>Test MedicationStatement resource based on a known Patient resource id</td>
+										      <td>2</td>
+										      <td class="stu3medStatementpass pass"></td>
+										      <td class="stu3medStatementrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="MedicationRequest"></td>
+										      <td><a onclick="openstu3medRequestmodal();" style="cursor:pointer;">Medication Request</a></td>
+										      <td>Test MedicationRequest resource based on a known Patient resource id</td>
+										      <td>2</td>
+										      <td class="stu3medRequestpass pass"></td>
+										      <td class="stu3medRequestrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Observation(Smoking Status)"></td>
+										      <td><a onclick="openstu3smokingstatusmodal();" style="cursor:pointer;">Smoking Status (Observation)</a></td>
+										      <td>Test Observation (Smoking Status) resource based on a known Patient resource id and search operation support of the required mandatory parameter code.</td>
+										      <td>2</td>
+										      <td class="stu3smokingstatuspass pass"></td>
+										      <td class="stu3smokingstatusrun run"></td>
+										    </tr>
+										    <tr>
+										      <td><input type="checkbox" class="stu3checkBoxClass" name="test1" value="Observation(Vital Signs)"></td>
+										      <td><a onclick="openstu3vitalsignsmodal();" style="cursor:pointer;">Vital Signs (Observation)</a></td>
+										      <td>Test Observation (Vital Signs) resource based on a known Patient resource id and search operation support of the required mandatory parameter code,category and date.</td>
+										      <td>4</td>
+										      <td class="stu3vitalsignspass pass"></td>
+										      <td class="stu3vitalsignsrun run"></td>
+										    </tr>
+										  </tbody>
+										</table>
+                                    </div>
+
+
+<!-- Patient Results Modal -->
+		<div class="modal fade" tabindex="-1" role="dialog" id="stu3patresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3patById">
+									<td><a data-toggle="collapse" data-target="#stu3byId" class="accordion-toggle" style="cursor:pointer;">Patient Search By Id</a></td>
+									<td>GET Patient resource by a known Patient Id</td>
+									<td class="stu3patientrunById"></td>
+								</tr>
+								<tr class="stu3patientremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Patient</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Patient/{id}?_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3patByIdentifier">
+									<td><a data-toggle="collapse" data-target="#stu3byIdentifier" class="accordion-toggle" style="cursor:pointer;">Patient Search by Identifier</a></td>
+									<td>GET Patient resource by a known Patient Identifier</td>
+									<td class="stu3patientrunByIdentifier"></td>
+								</tr>
+								<tr class="stu3patientremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byIdentifier" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Patient</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Patient/?identifier={identifier.system|identifier.value}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3patByNameGender">
+									<td><a data-toggle="collapse" data-target="#stu3byNameGender" class="accordion-toggle" style="cursor:pointer;">Patient Search by Name and Gender</a></td>
+									<td>GET Patient resource by knowm Patient name and gender</td>
+									<td class="stu3patientrunByNameGender"></td>
+								</tr>
+								<tr class="stu3patientremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byNameGender" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Patient</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Patient/?name={name}&gender={gender}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3patByFamilyGender">
+									<td><a data-toggle="collapse" data-target="#stu3byFamilyGender" class="accordion-toggle" style="cursor:pointer;">Patient search by family and gender</a></td>
+									<td>GET Patient resource by known patient family and gender</td>
+									<td class="stu3patientrunByFamilyGender"></td>
+								</tr>
+								<tr class="stu3patientremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byFamilyGender" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Patient</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Patient/?family={family name}&gender={gender}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3patByGivenGender">
+									<td><a data-toggle="collapse" data-target="#stu3byGivenGender" class="accordion-toggle" style="cursor:pointer;">Patient search by given and gender</a></td>
+									<td>GET Patient resource by known patient given and gender</td>
+									<td class="stu3patientrunByGivenGender"></td>
+								</tr>
+								<tr class="stu3patientremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byGivenGender" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Patient</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Patient/?given={given name}&gender={gender}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3patByNameBirthdate">
+									<td><a data-toggle="collapse" data-target="#stu3byNameBirthdate" class="accordion-toggle" style="cursor:pointer;">Patient search by name and birthdate</a></td>
+									<td>GET Patient resource by known patient name and birthdate</td>
+									<td class="stu3patientrunByNameBirthDate"></td>
+								</tr>
+								<tr class="stu3patientremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byNameBirthdate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Patient</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Patient/?name={name}&birthdate={date of birth}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+		    <!-- Patient Results Modal -->
+
+		    <!-- Allergy Intolerance Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3allergyresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3allergyByPatId">
+									<td><a data-toggle="collapse" data-target="#stu3byPatId" class="accordion-toggle" style="cursor:pointer;">Allergy Intolerance Search By Patient Id</a></td>
+									<td>GET Allergy Intolerance resource by a known Patient Id</td>
+									<td class="stu3allergyrunByPatId"></td>
+								</tr>
+								<tr class="stu3allergyremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3byPatId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">AllergyIntolerance</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/AllergyIntolerance?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Allergy Intolerance Results Modal-->
+
+			<!-- Condition Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3conditionresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3conditionByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3conditionCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id</a></td>
+									<td>GET Condition resource by a known Patient Id </td>
+									<td class="stu3conditionrunByPatId"></td>
+								</tr>
+								<tr class="stu3conditionremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3conditionCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Condition</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3conditionByPatientandCategory">
+									<td><a data-toggle="collapse" data-target="#stu3conditionCollapseByPatientandCategory" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id and Category(problem)</a></td>
+									<td>GET Condition resource by a known Patient Id and Category(problem)</td>
+									<td class="stu3conditionrunByPatCategory"></td>
+								</tr>
+								<tr class="stu3conditionremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3conditionCollapseByPatientandCategory" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Condition</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&category=problem&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3conditionByPatientandCategoryhealthconcern">
+									<td><a data-toggle="collapse" data-target="#stu3conditionCollapseByPatientandCategoryhealthconcern" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id and Category(health-concern)</a></td>
+									<td>GET Condition resource by a known Patient Id and Category(health-concern)</td>
+									<td class="stu3conditionrunByPatCategoryhealthconcern"></td>
+								</tr>
+								<tr class="stu3conditionremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3conditionCollapseByPatientandCategoryhealthconcern" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Condition</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&category=health-concern&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3conditionByPatientandClinicalStatus">
+									<td><a data-toggle="collapse" data-target="#stu3conditionCollapseByPatientandClinicalStatus" class="accordion-toggle" style="cursor:pointer;">Condition Search By Patient Id and Clinical Status</a></td>
+									<td>GET Condition resource by a known Patient Id and Clinical Status</td>
+									<td class="stu3conditionrunByPatClinicalStatus"></td>
+								</tr>
+								<tr class="stu3conditionremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3conditionCollapseByPatientandClinicalStatus" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Condition</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Condition?patient={Patient Id}&clinicalstatus={status}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Condition Results Modal-->
+
+			<!-- CarePlan Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3careplanresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3careteamByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3careteamCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">CarePlan Search By Patient Id</a></td>
+									<td>GET CarePlan resource by a known Patient Id </td>
+									<td class="stu3careteamrunByPatId"></td>
+								</tr>
+								<tr class="stu3careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3careteamCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3careteamByPatCategoryStatus">
+									<td><a data-toggle="collapse" data-target="#stu3careteamCollapseByPatientCategoryStatus" class="accordion-toggle" style="cursor:pointer;">CarePlan Search By Patient Id,Category(careteam) and Status</a></td>
+									<td>GET CarePlan resource by a known Patient Id, Category(careteam) and Status</td>
+									<td class="stu3careteamrunByPatCategoryStatus"></td>
+								</tr>
+								<tr class="stu3careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3careteamCollapseByPatientCategoryStatus" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=careteeam&status={status}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3careteamByPatCategoryassess">
+									<td><a data-toggle="collapse" data-target="#stu3careteamCollapseByPatientCategoryassess" class="accordion-toggle" style="cursor:pointer;">CarePlan Search By Patient Id,Category(assess-plan)</a></td>
+									<td>GET CarePlan resource by a known Patient Id, Category(assess-plan)</td>
+									<td class="stu3careteamrunByPatCategoryassess"></td>
+								</tr>
+								<tr class="careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3careteamCollapseByPatientCategoryassess" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3careteamByPatCategoryassessDate">
+									<td><a data-toggle="collapse" data-target="#stu3careteamCollapseByPatientCategoryassessDate" class="accordion-toggle" style="cursor:pointer;">CarePlan Search By Patient Id,Category(assess-plan) and Date</a></td>
+									<td>GET CarePlan resource by a known Patient Id, Category(assess-plan) and Date</td>
+									<td class="stu3careteamrunByPatCategoryassessDate"></td>
+								</tr>
+								<tr class="stu3careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3careteamCollapseByPatientCategoryassessDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3careteamByPatCategoryassessStatus">
+									<td><a data-toggle="collapse" data-target="#stu3careteamCollapseByPatientCategoryassessStatus" class="accordion-toggle" style="cursor:pointer;">CarePlan Search By Patient Id,Category(assess-plan) and Status</a></td>
+									<td>GET CarePlan resource by a known Patient Id, Category(assess-plan) and Status</td>
+									<td class="stu3careteamrunByPatCategoryassessStatus"></td>
+								</tr>
+								<tr class="stu3careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3careteamCollapseByPatientCategoryassessStatus" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&status={status}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3careteamByPatCategoryassessStatusDate">
+									<td><a data-toggle="collapse" data-target="#stu3careteamCollapseByPatientCategoryassessStatusDate" class="accordion-toggle" style="cursor:pointer;">CarePlan Search By Patient Id,Category(assess-plan), Status and Date</a></td>
+									<td>GET CarePlan resource by a known Patient Id, Category(assess-plan), Status and Date</td>
+									<td class="stu3careteamrunByPatCategoryassessStatusDate"></td>
+								</tr>
+								<tr class="stu3careteamremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3careteamCollapseByPatientCategoryassessStatusDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CarePlan</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CarePlan?patient={Patient Id}&category=assess-plan&status={status}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- CarePlan Results Modal-->
+
+			<!-- CareTeam Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3careteamresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3ctByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3ctCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id</a></td>
+									<td>GET CareTeam resource by a known Patient Id </td>
+									<td class="stu3ctrunByPatId"></td>
+								</tr>
+								<tr class="stu3ctremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3ctCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CareTeam</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CareTeam?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3ctByPatStatus">
+									<td><a data-toggle="collapse" data-target="#stu3ctCollapseByPatientStatus" class="accordion-toggle" style="cursor:pointer;">CareTeam Search By Patient Id and Status</a></td>
+									<td>GET CareTeam resource by a known Patient Id and Status</td>
+									<td class="stu3ctrunByPatStatus"></td>
+								</tr>
+								<tr class="stu3ctremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3ctCollapseByPatientStatus" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">CareTeam</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/CareTeam?patient={Patient Id}&status={status}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- CareTeam Results Modal-->
+
+			<!-- Medication Statement Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3medicationStatementresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3medStatementByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3medStatementCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Medication Statement Search By Patient Id</a></td>
+									<td>GET MedicationStatement resource by a known Patient Id </td>
+									<td class="stu3medStatementrunByPatId"></td>
+								</tr>
+								<tr class="stu3medStatementremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3medStatementCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">MedicationStatement</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationStatement?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3medStatementByPatientIdandinclude">
+									<td><a data-toggle="collapse" data-target="#stu3medStatementCollapseByPatientIdandinclude" class="accordion-toggle" style="cursor:pointer;">Medication Statement Search By Patient Id and Resource Includes</a></td>
+									<td>GET MedicationStatement resource by a known Patient Id and Resource Includes</td>
+									<td class="stu3medStatementrunByPatIdandinclude"></td>
+								</tr>
+								<tr class="stu3medStatementremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3medStatementCollapseByPatientIdandinclude" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">MedicationStatement</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationStatement?patient={Patient Id}&_include=MedicationStatement:medication&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Medication Statement Results Modal-->
+
+			<!-- Medication Order Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3medicationRequestresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3medRequestByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3medRequestCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Medication Request Search By Patient Id</a></td>
+									<td>GET MedicationRequest resource by a known Patient Id </td>
+									<td class="stu3medRequestrunByPatId"></td>
+								</tr>
+								<tr class="stu3medRequestremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3medRequestCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">MedicationRequest</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationRequest?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3medRequestByPatientIdandinclude">
+									<td><a data-toggle="collapse" data-target="#stu3medRequestCollapseByPatientIdandinclude" class="accordion-toggle" style="cursor:pointer;">Medication Order Search By Patient Id and Resource Includes</a></td>
+									<td>GET MedicationOrder resource by a known Patient Id and Resource Includes</td>
+									<td class="stu3medOrderrunByPatIdandinclude"></td>
+								</tr>
+								<tr class="stu3medRequestremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3medRequestCollapseByPatientIdandinclude" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">MedicationRequest</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/MedicationRequest?patient={Patient Id}&_include=MedicationOrder:medication&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Medication Order Results Modal-->
+
+			<!-- Device Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3deviceresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3deviceByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3deviceCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Device Search By Patient Id</a></td>
+									<td>GET Device resource by a known Patient Id </td>
+									<td class="stu3devicerunByPatId"></td>
+								</tr>
+								<tr class="stu3deviceremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3deviceCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Device</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Device?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Device Results Modal-->
+
+			<!-- Document Reference Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3docrefresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3docrefByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3docrefCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Patient Id</a></td>
+									<td>GET DocumentReference resource by a known Patient Id </td>
+									<td class="stu3docrefrunByPatId"></td>
+								</tr>
+								<tr class="stu3docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3docrefCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3docrefByPatientIdType">
+									<td><a data-toggle="collapse" data-target="#stu3docrefCollapseByPatientIdType" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Patient Id and Type</a></td>
+									<td>GET DocumentReference resource by a known Patient Id and Type</td>
+									<td class="stu3docrefrunByPatIdType"></td>
+								</tr>
+								<tr class="stu3docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3docrefCollapseByPatientIdType" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference?patient={Patient Id}&type={system|value}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3docrefByPatientIdTypePeriod">
+									<td><a data-toggle="collapse" data-target="#stu3docrefCollapseByPatientIdTypePeriod" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Patient Id,Type and Period</a></td>
+									<td>GET DocumentReference resource by a known Patient Id,Type and Period</td>
+									<td class="stu3docrefrunByPatIdTypePeriod"></td>
+								</tr>
+								<tr class="stu3docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3docrefCollapseByPatientIdTypePeriod" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference?patient={Patient Id}&type={system|value}&period={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3docrefByextandPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3docrefCollapseByextandPatientId" class="accordion-toggle" style="cursor:pointer;">DocumentReference Search By Extended Operation and Patient Id</a></td>
+									<td>GET DocumentReference resource by Extended Operation and a known Patient Id</td>
+									<td class="stu3docrefrunByPatIdext"></td>
+								</tr>
+								<tr class="stu3docrefremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3docrefCollapseByextandPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Document Reference</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DocumentReference/$docref?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Document Reference Results Modal-->
+
+			<!-- Goal Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3goalresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3goalByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3goalCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Goal Search By Patient Id</a></td>
+									<td>GET Goal resource by a known Patient Id </td>
+									<td class="stu3goalrunByPatId"></td>
+								</tr>
+								<tr class="stu3goalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3goalCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Goal</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Goal?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3goalByPatientIdandDate">
+									<td><a data-toggle="collapse" data-target="#stu3goalCollapseByPatientIdandDate" class="accordion-toggle" style="cursor:pointer;">Goal Search By Patient Id and Date</a></td>
+									<td>GET Goal resource by a known Patient Id and Date</td>
+									<td class="stu3goalrunByPatIdandDate"></td>
+								</tr>
+								<tr class="stu3goalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3goalCollapseByPatientIdandDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Goal</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Goal?patient={Patient Id}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Goal Results Modal-->
+
+			<!-- Procedure Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3procedureresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3procedureByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3procedureCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Procedure Search By Patient Id</a></td>
+									<td>GET Procedure resource by a known Patient Id </td>
+									<td class="stu3procedurerunByPatId"></td>
+								</tr>
+								<tr class="stu3procedureremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3procedureCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Procedure</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Procedure?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3procedureByPatientIdandDate">
+									<td><a data-toggle="collapse" data-target="#stu3procedureCollapseByPatientIdandDate" class="accordion-toggle" style="cursor:pointer;">Procedure Search By Patient Id and Date</a></td>
+									<td>GET Procedure resource by a known Patient Id and Date</td>
+									<td class="stu3procedurerunByPatIdandDate"></td>
+								</tr>
+								<tr class="stu3procedureremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3procedureCollapseByPatientIdandDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Procedure</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Procedure?patient={Patient Id}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Procedure Results Modal-->
+
+			<!-- Immunization Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3immunizationresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3immunizationByPatientId">
+									<td><a data-toggle="collapse" data-target="#stu3immunizationCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Immunization Search By Patient Id</a></td>
+									<td>GET Immunization resource by a known Patient Id </td>
+									<td class="stu3immunizationrunByPatId"></td>
+								</tr>
+								<tr class="stu3immunizationremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3immunizationCollapseByPatientId" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Immunization</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Immunization?patient={Patient Id}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Immunization Results Modal-->
+
+			<!-- Diagnostic Report Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3diagnosticreportresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<!-- <tr id="diagnosticreportByPatientId">
+									<td><a data-toggle="collapse" data-target="#diagnosticreportCollapseByPatientId" class="accordion-toggle" style="cursor:pointer;">Diagnostic Report Search By Patient Id</a></td>
+									<td>GET Diagnostic Report resource by a known Patient Id </td>
+									<td class="diagnosticreportrunByPatId"></td>
+								</tr> -->
+								<tr id="stu3diagnosticreportByPatientCategory">
+									<td><a data-toggle="collapse" data-target="#stu3diagnosticreportCollapseByPatientCategory" class="accordion-toggle" style="cursor:pointer;">Diagnostic Report Search By Patient Id and Category</a></td>
+									<td>GET Diagnostic Report resource by a known Patient Id and Category</td>
+									<td class="stu3diagnosticreportrunByPatcategory"></td>
+								</tr>
+								<tr class="stu3diagnosticreportremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3diagnosticreportCollapseByPatientCategory" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">DiagnosticReport</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DiagnosticReport?patient={Patient Id}&category={category}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3diagnosticreportByPatientCode">
+									<td><a data-toggle="collapse" data-target="#stu3diagnosticreportCollapseByPatientCode" class="accordion-toggle" style="cursor:pointer;">Diagnostic Report Search By Patient Id and Code</a></td>
+									<td>GET Diagnostic Report resource by a known Patient Id and Code</td>
+									<td class="stu3diagnosticreportrunByPatCode"></td>
+								</tr>
+								<tr class="stu3diagnosticreportremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3diagnosticreportCollapseByPatientCode" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">DiagnosticReport</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DiagnosticReport?patient={Patient Id}&code={code1,code2,code3...}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3diagnosticreportByPatientCategoryDate">
+									<td><a data-toggle="collapse" data-target="#stu3diagnosticreportCollapseByPatientCategoryDate" class="accordion-toggle" style="cursor:pointer;">Diagnostic Report Search By Patient Id, Category and Date</a></td>
+									<td>GET Diagnostic Report resource by a known Patient Id, Category and Date</td>
+									<td class="stu3diagnosticreportrunByPatCategoryDate"></td>
+								</tr>
+								<tr class="stu3diagnosticreportremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3diagnosticreportCollapseByPatientCategoryDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">DiagnosticReport</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DiagnosticReport?patient={Patient Id}&category={category}&date={effective date time}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3diagnosticreportByPatientCategoryCodeDate">
+									<td><a data-toggle="collapse" data-target="#stu3diagnosticreportCollapseByPatientCategoryCodeDate" class="accordion-toggle" style="cursor:pointer;">Diagnostic Report Search By Patient Id, Category, Code and Date</a></td>
+									<td>GET Diagnostic Report resource by a known Patient Id, Category, Code and Date </td>
+									<td class="stu3diagnosticreportrunByPatCategoryCodeDate"></td>
+								</tr>
+								<tr class="stu3diagnosticreportremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3diagnosticreportCollapseByPatientCategoryCodeDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">DiagnosticReport</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/DiagnosticReport?patient={Patient Id}&category={category}&code={code1,code2,code3...}&date={effective date time}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Diagnostic Report Results Modal-->
+
+			<!-- Observation Laboratory Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3obslaboratoryresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3obslaboratoryByPatientCategory">
+									<td><a data-toggle="collapse" data-target="#stu3obslaboratoryCollapseByPatientCategory" class="accordion-toggle" style="cursor:pointer;">Observation (Laboratory) Search By Patient Id and Category</a></td>
+									<td>GET Observation (Laboratory) resource by a known Patient Id and Category</td>
+									<td class="stu3obslaboratoryrunByPatcategory"></td>
+								</tr>
+								<tr class="stu3obslaboratoryremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3obslaboratoryCollapseByPatientCategory" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3obslaboratoryByPatientCode">
+									<td><a data-toggle="collapse" data-target="#stu3obslaboratoryCollapseByPatientCode" class="accordion-toggle" style="cursor:pointer;">Observation (Laboratory) Search By Patient Id and Code</a></td>
+									<td>GET Observation (Laboratory) resource by a known Patient Id and Code</td>
+									<td class="obslaboratoryrunByPatCode"></td>
+								</tr>
+								<tr class="stu3obslaboratoryremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3obslaboratoryCollapseByPatientCode" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&code={code1,code2,code3...}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3obslaboratoryByPatientCategoryDate">
+									<td><a data-toggle="collapse" data-target="#stu3obslaboratoryCollapseByPatientCategoryDate" class="accordion-toggle" style="cursor:pointer;">Observation (Laboratory) Search By Patient Id, Category and Date</a></td>
+									<td>GET Observation (Laboratory) resource by a known Patient Id, Category and Date</td>
+									<td class="stu3obslaboratoryrunByPatCategoryDate"></td>
+								</tr>
+								<tr class="stu3obslaboratoryremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3obslaboratoryCollapseByPatientCategoryDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3obslaboratoryByPatientCategoryCodeDate">
+									<td><a data-toggle="collapse" data-target="#stu3obslaboratoryCollapseByPatientCategoryCodeDate" class="accordion-toggle" style="cursor:pointer;">Observation (Laboratory) Search By Patient Id, Category, Code and Date</a></td>
+									<td>GET Observation (Laboratory) resource by a known Patient Id, Category, Code and Date </td>
+									<td class="stu3obslaboratoryrunByPatCategoryCodeDate"></td>
+								</tr>
+								<tr class="stu3obslaboratoryremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3obslaboratoryCollapseByPatientCategoryCodeDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&code={code1,code2,code3...}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Observation laboratory Results Modal-->
+
+			<!-- Smoking Status Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3smokingstatusresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3smokingstatusByPatientCategory">
+									<td><a data-toggle="collapse" data-target="#stu3smokingstatusCollapseByPatientCategory" class="accordion-toggle" style="cursor:pointer;">Observation (Smoking Status) Search By Patient Id</a></td>
+									<td>GET Observation (Smoking Status) resource by a known Patient Id</td>
+									<td class="stu3obslaboratoryrunByPatcategory"></td>
+								</tr>
+								<tr class="stu3smokingstatusremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3smokingstatusCollapseByPatientCategory" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3smokingstatusByPatientCode">
+									<td><a data-toggle="collapse" data-target="#stu3smokingstatusCollapseByPatientCode" class="accordion-toggle" style="cursor:pointer;">Observation (Smoking Status) Search By Patient Id and Code</a></td>
+									<td>GET Observation (Smoking Status) resource by a known Patient Id and Code</td>
+									<td class="smokingstatusrunByPatCode"></td>
+								</tr>
+								<tr class="stu3smokingstatusremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3smokingstatusCollapseByPatientCode" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&code={code}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Smoking Status Results Modal-->
+
+			<!-- Observation vital signs Results Modal-->
+		    <div class="modal fade" tabindex="-1" role="dialog" id="stu3vitalsignsresmodal">
+		      <div class="modal-dialog" style="width:90%">
+		        <div class="modal-content">
+		          <div class="modal-header">
+		            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		            <h4 class="modal-title">Test Response Data</h4>
+		          </div>
+		          <div class="modal-body" style="overflow:auto;">
+		          		<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Test Name</th>
+									<th>Description</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody id="">
+								<tr id="stu3vitalsignsByPatientCategory">
+									<td><a data-toggle="collapse" data-target="#stu3vitalsignsCollapseByPatientCategory" class="accordion-toggle" style="cursor:pointer;">Observation (Vital Signs) Search By Patient Id and Category</a></td>
+									<td>GET Observation (Vital Signs) resource by a known Patient Id and Category</td>
+									<td class="stu3vitalsignsrunByPatcategory"></td>
+								</tr>
+								<tr class="stu3vitalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3vitalsignsCollapseByPatientCategory" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3vitalsignsByPatientCode">
+									<td><a data-toggle="collapse" data-target="#stu3vitalsignsCollapseByPatientCode" class="accordion-toggle" style="cursor:pointer;">Observation (Vital Signs) Search By Patient Id and Code</a></td>
+									<td>GET Observation (Vital Signs) resource by a known Patient Id and Code</td>
+									<td class="stu3vitalsignsrunByPatCode"></td>
+								</tr>
+								<tr class="stu3vitalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3vitalsignsCollapseByPatientCode" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient ID}&category={category}&code={code}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3vitalsignsByPatientCategoryDate">
+									<td><a data-toggle="collapse" data-target="#stu3vitalsignsCollapseByPatientCategoryDate" class="accordion-toggle" style="cursor:pointer;">Observation (Vital Signs) Search By Patient Id, Category and Date</a></td>
+									<td>GET Observation (Vital Signs) resource by a known Patient Id, Category and Date</td>
+									<td class="stu3vitalsignsrunByPatCategoryDate"></td>
+								</tr>
+								<tr class="stu3vitalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3vitalsignsCollapseByPatientCategoryDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&category={category}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="stu3vitalsignsByPatientCategoryCodeDate">
+									<td><a data-toggle="collapse" data-target="#stu3vitalsignsCollapseByPatientCategoryCodeDate" class="accordion-toggle" style="cursor:pointer;">Observation (Vital Signs) Search By Patient Id, Code and Date</a></td>
+									<td>GET Observation (Vital Signs) resource by a known Patient Id, Code and Date </td>
+									<td class="stu3vitalsignsrunByPatCategoryCodeDate"></td>
+								</tr>
+								<tr class="stu3vitalremovabletr">
+									<td colspan="6" class="hiddenRow">
+										<div class="accordian-body collapse" id="stu3vitalsignsCollapseByPatientCategoryCodeDate" aria-expanded="false" style="height: 0px;">
+											<h5>Test Details</h5>
+											<div class="col-md-12">
+												<label class="col-md-3">Resource:</label>
+												<div class="col-md-9" style="word-break:break-all">Observation</div>
+											</div>
+											<div class="col-md-12">
+												<label class="col-md-3">URL:</label>
+												<div class="col-md-9" style="word-break:break-all">https://{FHIR Base URL}/Observation?patient={Patient Id}&code={code1,code2,code3...}&date={date}&_format=json</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+		          	</div>
+		          	<div class="modal-footer">
+		            	<button type="button" class="btn btn-default" data-dismiss="modal" id="respclosebtn">Close</button>
+		          	</div>
+		        </div><!-- /.modal-content -->
+		      </div><!-- /.modal-dialog -->
+		    </div><!-- /.modal -->
+			<!-- Observation vital signs Results Modal-->

@@ -1,7 +1,5 @@
 package org.sitenv.spring.service;
 
-import java.util.List;
-
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.dao.ClientRegistrationDao;
 import org.sitenv.spring.exception.FHIRHapiException;
@@ -10,6 +8,8 @@ import org.sitenv.spring.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("clientRegistrationService")
 @Transactional
@@ -51,11 +51,11 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
         return clientDao.registerClient(client);
     }
 
-    public DafClientRegister updateClient(DafClientRegister client) throws FHIRHapiException  {
+    public DafClientRegister updateClient(DafClientRegister client) throws FHIRHapiException {
 
         return clientDao.updateClient(client);
     }
-    
+
     @Override
     @Transactional
     public DafClientRegister getClientByDetails(String clientId,
@@ -76,9 +76,13 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
         return clientDao.getClient(clientId);
     }
 
-	@Override
-	public List<DafClientRegister> getClientsByUserId(Integer userId) {
-		return clientDao.getClientsByUserId(userId);
-	}
+    @Override
+    public List<DafClientRegister> getClientsByUserId(Integer userId) {
+        return clientDao.getClientsByUserId(userId);
+    }
 
+    @Override
+    public DafClientRegister getDemoClientDetails() {
+        return clientDao.getDemoClientDetails();
+    }
 }

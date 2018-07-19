@@ -2,6 +2,9 @@ package org.sitenv.spring.model;
 
 import javax.persistence.*;
 
+import org.sitenv.spring.util.AESencryption;
+
+
 @Entity
 @Table(name = "users")
 public class DafUserRegister {
@@ -55,12 +58,12 @@ public class DafUserRegister {
         this.user_full_name = user_full_name;
     }
 
-    public String getUser_password() {
+  /*  public String getUser_password() {
         return user_password;
-    }
+    }*/
 
-    public void setUser_password(String user_password) {
-        this.user_password = user_password;
+    public void setUser_password(String user_password) throws Exception {
+        this.user_password = AESencryption.encrypt(user_password);
     }
 
 }

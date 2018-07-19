@@ -23,7 +23,9 @@ import org.sitenv.spring.service.GoalsService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class GoalsResourceProvider implements IResourceProvider {
 
@@ -37,7 +39,7 @@ public class GoalsResourceProvider implements IResourceProvider {
         service = (GoalsService) context.getBean("goalsResourceService");
     }
 
-	/**
+    /**
      * The getResourceType method comes from IResourceProvider, and must
      * be overridden to indicate what type of resource this provider
      * supplies.
@@ -47,13 +49,14 @@ public class GoalsResourceProvider implements IResourceProvider {
         return Goal.class;
     }
 
-	/**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available Goal records.
-     * 
+     * @return Returns all the available Goal records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/Goal?_pretty=true&_format=json
      */
     @Search
@@ -70,7 +73,7 @@ public class GoalsResourceProvider implements IResourceProvider {
         return goals;
     }
 
-	/**
+    /**
      * This is the "read" operation. The "@Read" annotation indicates that this method supports the read and/or vread operation.
      * <p>
      * Read operations take a single parameter annotated with the {@link IdParam} paramater, and should return a single resource instance.
@@ -78,8 +81,8 @@ public class GoalsResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Goal/1?_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Goal/1?_format=json
      */
     @Read()
     public Goal getGoalsResourceById(@IdParam IdDt theId) {
@@ -91,7 +94,7 @@ public class GoalsResourceProvider implements IResourceProvider {
         return goal;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -101,8 +104,8 @@ public class GoalsResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of Goals. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Goal?patient=1&_format=json&date=ge2015-01-14
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Goal?patient=1&_format=json&date=ge2015-01-14
      */
     @Search()
     public List<Goal> searchByPatient(@RequiredParam(name = Goal.SP_PATIENT) ReferenceParam thePatient,
@@ -123,8 +126,8 @@ public class GoalsResourceProvider implements IResourceProvider {
         }
         return goalList;
     }
-	
-	/**
+
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -134,7 +137,6 @@ public class GoalsResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of Goals. This list may contain multiple matching resources, or it may also be empty.
-     * 
      */
 
     @Search()
@@ -158,7 +160,8 @@ public class GoalsResourceProvider implements IResourceProvider {
         }
         return goalList;
     }
-	 /**
+
+    /**
      * This method converts DafGoals object to Goal object
      */
     private Goal createGoalsObject(DafGoals dafGoals) {
@@ -183,7 +186,7 @@ public class GoalsResourceProvider implements IResourceProvider {
         String theId = "Patient/" + Integer.toString(dafGoals.getPatient().getId());
         patientResource.setReference(theId);
         goal.setSubject(patientResource);
-        
+
         //Set Date
         DateDt dateDt = new DateDt();
         dateDt.setValue(dafGoals.getDate());

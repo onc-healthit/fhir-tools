@@ -1,35 +1,35 @@
 package org.sitenv.spring.model;
 
 public class Payload {
-	
-	String statusCode;
-	
-	String description;
-	
-	Object payload;
 
-	public String getStatusCode() {
-		return statusCode;
-	}
+    String statusCode;
 
-	public void setStatusCode(String statusCode) {
-		this.statusCode = statusCode;
-	}
+    String description;
 
-	public String getDescription() {
-		return description;
-	}
+    Object payload;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getStatusCode() {
+        return statusCode;
+    }
 
-	public Object getPayload() {
-		return payload;
-	}
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
+    }
 
-	public void setPayload(Object payload) {
-		this.payload = payload;
-	}
-	
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Object getPayload() {
+        return payload;
+    }
+
+    public void setPayload(Object payload) {
+        this.payload = payload;
+    }
+
 }

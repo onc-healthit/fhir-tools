@@ -8,6 +8,7 @@ public class GoalsSearchCriteria extends SearchCriteria {
     private Integer patient;
     private DateRangeParam date;
     private String status;
+
     public GoalsSearchCriteria() {
     }
 

@@ -5,6 +5,7 @@ public class CarePlanSearchCriteria extends SearchCriteria {
     private Integer patient;
     private String cat_code;
     private String Status;
+
     public CarePlanSearchCriteria() {
     }
 

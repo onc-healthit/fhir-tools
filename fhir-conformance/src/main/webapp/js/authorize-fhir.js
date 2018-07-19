@@ -68,6 +68,8 @@
 		              	tokenurl = arg[i].valueUri;
 		            }
 		        }
+		        localStorage.setItem("state",state);
+                sessionStorage.clear();
 		        sessionStorage[state] = JSON.stringify({
 	                clientid: clientid,
 	                clientsecret : clientsecret,
@@ -177,7 +179,21 @@
 	        return false;
 	    }
 	    if(state != undefined && code != undefined){
-	    	var params = JSON.parse(sessionStorage[state]);
+	    	var params;
+            var storedState = localStorage.getItem("state");
+            if(storedState === state){
+                params = JSON.parse(sessionStorage[state]);    
+            }else{
+                $('#authsuccess').html('');
+                $('#authbtn').toggleClass('btn-danger btn-success');
+                authbtndiv = $('<button type="button" class="btn btn-danger" data-target="#authorize-modal" data-toggle="modal" data-original-title="" data-toggle="tooltip" id="authbtn" data-backdrop="static"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Authorize Server</button>');
+                var authsuccess = $('<div class="alert alert-danger" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:6px 12px;"><strong>Unauthorized - Invalid state parameter value</strong></div>');
+                $('#authsuccess').append(authsuccess);
+                //$('#authbtndiv').append(authbtndiv);
+                bootbox.alert("Unauthorized - Invalid state parameter value");
+                return;
+            }
+
 	    	tokenurl = params.tokenurl;
 	        clientid = params.clientid;
 	        clientsecret = params.clientsecret;
@@ -203,15 +219,22 @@
     getoauthtoken = function(paramvar,tokenurl,clientid,clientsecret,patientid,redirecturi,state,strurl,clientscope){
 	    //var data = { "code" : paramvar , "client_id" : clientid ,"client_secret": clientsecret , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
 	    //var data = { "code" : paramvar , "client_id" : clientid , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
-	    if(clientsecret == null || clientsecret == ''){
-	    	var data = { "code" : paramvar , "client_id" : clientid , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
-	    }else{
-	    	var data = { "code" : paramvar , "client_id" : clientid ,"client_secret": clientsecret , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
-	    }
+	    var string;
+        if(clientsecret == null || clientsecret == ''){
+            var data = { "code" : paramvar , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
+        }else{
+            var data = { "code" : paramvar , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
+            string = clientid+":"+clientsecret;
+        }
+        
 	    $.ajax({
 	      url:tokenurl,
 	      type:"POST",
 	      data:data,
+	      beforeSend: function (xhr) {
+                    xhr.setRequestHeader ("Authorization", "Basic "+btoa(string));
+                    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        },
 	      success:function(data){
 			  console.log(data);
 			  
@@ -276,19 +299,35 @@
 		localStorage.removeItem("strurl");
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("patientid");
-		localStorage.setItem("strurl",openserverurl);
-		localStorage.setItem("patientid",openpatid);
-		localStorage.setItem("authtype","noauth");
-		var val = [];
-        $('.openscopes :checkbox:checked').each(function(i){
-          val[i] = $(this).val();
-        });
-        console.log(val);
-        var openclientscope = val.join(",");
-        $('#noauthorize-modal').modal('hide');
-        $('#authsuccess').html('');
-        var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Run a test by entering various values in the fields.</strong></div>');
-	    $('#authsuccess').append(authsuccess);
+		$.ajax({
+			url:openserverurl+"/metadata?_format=json",
+			type:"GET",
+			headers:{
+	          "Content-Type":"application/json+fhir"
+	        },
+			success:function(data){
+				localStorage.setItem("strurl",openserverurl);
+				localStorage.setItem("patientid",openpatid);
+				localStorage.setItem("authtype","noauth");
+
+				$('#noauthorize-modal').modal('hide');
+		        $('#authsuccess').html('');
+		        var authsuccess = $('<div class="alert alert-success" id="serverauthorized" style="text-align:center;margin-bottom:0px;padding:12px"><strong>Run a test by entering various values in the fields.</strong></div>');
+			    $('#authsuccess').append(authsuccess);
+			},
+			error:function(e){
+				if(e.responseText == ''){
+					bootbox.alert("Please provide valid FHIR Server URL");
+					return false;
+				}else if(e.status == '404'){
+					bootbox.alert("Please provide valid FHIR Server URL");
+					return false;
+				}else{
+					bootbox.alert("Please provide valid FHIR Server URL");
+					return false;
+				}
+			}
+		});
 	}
 
 }).call(this);

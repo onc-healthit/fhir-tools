@@ -4,10 +4,14 @@ import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.IdentifierDt;
+import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
+import ca.uhn.fhir.model.dstu2.composite.QuantityDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.composite.SimpleQuantityDt;
 import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration;
 import ca.uhn.fhir.model.dstu2.resource.MedicationAdministration.Dosage;
 import ca.uhn.fhir.model.dstu2.valueset.MedicationAdministrationStatusEnum;
+import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
@@ -23,7 +27,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 @Scope("request")
@@ -39,7 +46,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         service = (MedicationAdministrationService) context.getBean("medicationAdministrationResourceService");
     }
 
-	 /**
+    /**
      * The getResourceType method comes from IResourceProvider, and must
      * be overridden to indicate what type of resource this provider
      * supplies.
@@ -49,13 +56,14 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return MedicationAdministration.class;
     }
 
-	/**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available MedicationAdministration records.
-     * 
+     * @return Returns all the available MedicationAdministration records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/MedicationAdministration?_pretty=true&_format=json
      */
     @Search
@@ -72,7 +80,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministrationList;
     }
 
-	/**
+    /**
      * This is the "read" operation. The "@Read" annotation indicates that this method supports the read and/or vread operation.
      * <p>
      * Read operations take a single parameter annotated with the {@link IdParam} paramater, and should return a single resource instance.
@@ -80,8 +88,8 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/MedicationAdministration/1?_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/MedicationAdministration/1?_format=json
      */
     @Read()
     public MedicationAdministration getMedicationAdministrationResourceById(@IdParam IdDt theId) {
@@ -93,7 +101,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministration;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -102,14 +110,14 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      * @param theSort
      * @param theCount
      * @return This method returns a list of MedicationAdministrations. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/MedicationAdministration?patient=1&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/MedicationAdministration?patient=1&_format=json
      */
     @Search()
     public List<MedicationAdministration> searchByPatient(@RequiredParam(name = MedicationAdministration.SP_PATIENT) ReferenceParam thePatient,
                                                           @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         String patientId = thePatient.getIdPart();
-        
+
         List<DafMedicationAdministration> dafMedAdministrationList = service.getMedicationAdministrationByPatient(patientId);
 
         List<MedicationAdministration> medAdministrationList = new ArrayList<MedicationAdministration>();
@@ -120,7 +128,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministrationList;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -129,14 +137,14 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      * @param theSort
      * @param theCount
      * @return This method returns a list of MedicationAdministrations. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/MedicationAdministration?code=2823-3&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/MedicationAdministration?code=2823-3&_format=json
      */
     @Search()
     public List<MedicationAdministration> searchByCode(@RequiredParam(name = MedicationAdministration.SP_CODE) ReferenceParam theCode,
                                                        @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         String code = theCode.getIdPart();
-        
+
         List<DafMedicationAdministration> dafMedAdministrationList = service.getMedicationAdministrationByCode(code);
 
         List<MedicationAdministration> medAdministrationList = new ArrayList<MedicationAdministration>();
@@ -148,12 +156,11 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
     }
 
     /**
-     *
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by Identifier Value
      *
-     * @param theId This operation takes one parameter which is the search criteria. It is annotated with the "@Required" annotation. This annotation takes one argument, a string containing the name of
-     *                           the search criteria. The datatype here is String, but there are other possible parameter types depending on the specific search criteria.
+     * @param theId       This operation takes one parameter which is the search criteria. It is annotated with the "@Required" annotation. This annotation takes one argument, a string containing the name of
+     *                    the search criteria. The datatype here is String, but there are other possible parameter types depending on the specific search criteria.
      * @param theIncludes
      * @param theSort
      * @param theCount
@@ -176,7 +183,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministrationList;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -185,13 +192,12 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      * @param theSort
      * @param theCount
      * @return This method returns a list of MedicationAdministrations. This list may contain multiple matching resources, or it may also be empty.
-     * 
      */
     @Search()
     public List<MedicationAdministration> searchByMedication(@RequiredParam(name = MedicationAdministration.SP_MEDICATION) ReferenceParam theMedication,
                                                              @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         String medicationId = theMedication.getIdPart();
-        
+
         List<DafMedicationAdministration> dafMedAdministrationList = service.getMedicationAdministrationByMedication(medicationId);
 
         List<MedicationAdministration> medAdministrationList = new ArrayList<MedicationAdministration>();
@@ -202,7 +208,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministrationList;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -211,7 +217,6 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      * @param theSort
      * @param theCount
      * @return This method returns a list of MedicationAdministrations. This list may contain multiple matching resources, or it may also be empty.
-     * 
      */
     @Search()
     public List<MedicationAdministration> searchByStatus(@RequiredParam(name = MedicationAdministration.SP_STATUS) String status,
@@ -228,7 +233,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministrationList;
     }
 
-	/**
+    /**
      * This method converts DafMedicationAdministration object to MedicationAdministration object
      */
     private MedicationAdministration createMedicationAdministrationObject(DafMedicationAdministration dafMedAdministration) {
@@ -250,7 +255,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         medAdministration.setStatus(MedicationAdministrationStatusEnum.valueOf(dafMedAdministration.getStatus().trim()));
 
     	/*//Set Medication Reference
-    	ResourceReferenceDt medicationResource =new ResourceReferenceDt();
+        ResourceReferenceDt medicationResource =new ResourceReferenceDt();
     	String theMedicationId = "Medication/"+Integer.toString(dafMedAdministration.getMedicationreference().getId());
     	medicationResource.setReference(theMedicationId);
     	medAdministration.setMedication(medicationResource);*/
@@ -280,7 +285,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         String thePrescriptionId = "MedicationOrder/" + Integer.toString(dafMedAdministration.getPrescription().getId());
         prescriptionResource.setReference(thePrescriptionId);
         medAdministration.setPrescription(prescriptionResource);
-    	
+
 
         Map<String, String> medDosage = HapiUtils.convertToJsonMap(dafMedAdministration.getDosage());
         Dosage dosa = new Dosage();
@@ -291,6 +296,26 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         siteCodeDt.addCoding(siteCodingDt);
         dosa.setSite(siteCodeDt);
         medAdministration.setDosage(dosa);
+        //set Quantity
+        SimpleQuantityDt simpleQuantityDt = new SimpleQuantityDt();
+        simpleQuantityDt.setCode(medDosage.get("code"));
+        simpleQuantityDt.setValue(Long.parseLong(medDosage.get("value")));
+        simpleQuantityDt.setUnit(medDosage.get("unit"));
+        simpleQuantityDt.setSystem(medDosage.get("system"));
+        dosa.setQuantity(simpleQuantityDt);
+     //   medDosage.add(medicationDosage);
+     //   medOrder.setDosageInstruction(medDosage);
+        medAdministration.setDosage(dosa);
+        
+        
+        //EffectiveTime
+   	Map<String, String> enPeriod = HapiUtils.convertToJsonMap(dafMedAdministration.getEffectiveTimePeriod());
+  //PeriodDt period = new ArrayList<PeriodDt>();
+	 PeriodDt period = new PeriodDt();
+	 period.setStart(new DateTimeDt(enPeriod.get("start")));
+	 period.setEnd(new DateTimeDt(enPeriod.get("end")));
+  // period.add(period);
+	 medAdministration.setEffectiveTime(period);
 
         return medAdministration;
 

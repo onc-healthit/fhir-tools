@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -22,6 +23,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet
@@ -29,7 +31,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
     @Autowired
     private AuthTempDao dao;
-	
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
@@ -54,8 +56,31 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                     String expiryTime = authentication.getExpiry();
                     Integer currentTime = Common.convertTimestampToUnixTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis())));
                     if (Common.convertTimestampToUnixTime(expiryTime) + 3600 > currentTime) {
-                        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
-                        chain.doFilter(request, response);
+                        List<String> scopes = Arrays.asList(authentication.getScope().split(","));
+                        List<String> patientScopes = Arrays.asList("launch/patient,patient/Patient.read,user/Patient.read".split(","));
+                        List<String> userScopes = Arrays.asList("user/*.read,user/*.*,patient/*.read,fhir_complete".split(","));
+
+                        if (CollectionUtils.containsAny(scopes, userScopes)) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if (CollectionUtils.containsAny(scopes, patientScopes) && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                            if (scopes.contains("launch/patient") && !httpRequest.getPathInfo().split("/", 3)[2].equals(String.valueOf(authentication.getLaunchPatientId()))) {
+                                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Access is denied for this Patient");
+                            }
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if (scopes.contains("patient/DocumentReference.read") && httpRequest.getRequestURI().contains("/fhir/DocumentReference")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if (scopes.contains("patient/MedicationOrder.read") && httpRequest.getRequestURI().contains("/fhir/MedicationOrder")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if (scopes.contains("patient/MedicationStatement.read") && httpRequest.getRequestURI().contains("/fhir/MedicationStatement")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else {
+                            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access denied: scope is not valid to access the resource.");
+                        }
                     } else {
 
                         httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token is expired.");
@@ -68,9 +93,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token was invalid.");
             }
-
-
-        } else if (httpRequest.getRequestURI().contains("/open/")) {
+        } else if (httpRequest.getRequestURI().contains("/open")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {

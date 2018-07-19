@@ -10,8 +10,8 @@ public interface ObservationDao {
     public List<DafObservation> getAllObservations();
 
     public DafObservation getObservationResourceById(int id);
-    
-    public DafObservation getObservationResourceByIdandCategory(int id,String Category);
+
+    public DafObservation getObservationResourceByIdandCategory(int id, String Category);
 
     public List<DafObservation> getObservationByPatient(String patient);
 

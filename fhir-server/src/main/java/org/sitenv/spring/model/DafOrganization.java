@@ -28,19 +28,18 @@ public class DafOrganization {
     @Column(name = "telecom")
     @Type(type = "StringJsonObject")
     private String telecom;
-    
+
     @Column(name = "type")
     @Type(type = "StringJsonObject")
     private String type;
-    
+
     @Column(name = "name")
     private String name;
-    
+
     @Column(name = "address")
     @Type(type = "StringJsonObject")
     private String address;
 
-    
 
     public int getId() {
         return id;
@@ -74,28 +73,28 @@ public class DafOrganization {
         this.telecom = telecom;
     }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
 }

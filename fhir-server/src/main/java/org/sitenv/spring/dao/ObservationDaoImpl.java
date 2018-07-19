@@ -4,7 +4,6 @@ import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.sitenv.spring.model.DafDocumentReference;
 import org.sitenv.spring.model.DafObservation;
 import org.sitenv.spring.query.ObservationSearchCriteria;
 import org.slf4j.Logger;
@@ -31,10 +30,10 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
         DafObservation dafObservation = (DafObservation) getSession().get(DafObservation.class, id);
         return dafObservation;
     }
-    
+
     @Override
-    public DafObservation getObservationResourceByIdandCategory(int id,String category) {
-    	Criteria criteria = getSession().createCriteria(DafObservation.class)
+    public DafObservation getObservationResourceByIdandCategory(int id, String category) {
+        Criteria criteria = getSession().createCriteria(DafObservation.class)
                 .add(Restrictions.eq("id", id))
                 .add(Restrictions.like("cat_code", category));
         DafObservation dafObservation = (DafObservation) criteria.uniqueResult();

@@ -27,7 +27,10 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 @Scope("request")
@@ -38,12 +41,12 @@ public class ConditionResourceProvider implements IResourceProvider {
     AbstractApplicationContext context;
     ConditionService service;
 
-    
+
     public ConditionResourceProvider() {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         service = (ConditionService) context.getBean("conditionResourceService");
     }
-    
+
     /**
      * The getResourceType method comes from IResourceProvider, and must
      * be overridden to indicate what type of resource this provider
@@ -53,7 +56,7 @@ public class ConditionResourceProvider implements IResourceProvider {
     public Class<Condition> getResourceType() {
         return Condition.class;
     }
-    
+
     /**
      * This method returns all the available Conditions records.
      * <p/>
@@ -67,14 +70,14 @@ public class ConditionResourceProvider implements IResourceProvider {
         List<Condition> conditionList = new ArrayList<Condition>();
 
         for (DafCondition dafConditions : dafConditionsList) {
-            
+
             conditionList.add(createConditionObject(dafConditions));
         }
 
         return conditionList;
     }
-	
-	/**
+
+    /**
      * This is the "read" operation. The "@Read" annotation indicates that this method supports the read and/or vread operation.
      * <p>
      * Read operations take a single parameter annotated with the {@link IdParam} paramater, and should return a single resource instance.
@@ -82,9 +85,9 @@ public class ConditionResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-	 *Ex: http://<server name>/<context>/fhir/Condition/1?_format=json
+     * Ex: http://<server name>/<context>/fhir/Condition/1?_format=json
      */
-	@Read()
+    @Read()
     public Condition getConditionResourceById(@IdParam IdDt theId) {
 
         DafCondition dafCondition = service.getConditionResourceById(theId.getIdPartAsLong().intValue());
@@ -94,7 +97,7 @@ public class ConditionResourceProvider implements IResourceProvider {
         return condition;
     }
 
-	 /**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -105,8 +108,8 @@ public class ConditionResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of Conditions. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Condition?patient=1&clinicalstatus=active,relapse,remission&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Condition?patient=1&clinicalstatus=active,relapse,remission&_format=json
      */
     @Search()
     public List<Condition> searchByPatient(@RequiredParam(name = Condition.SP_PATIENT) ReferenceParam thePatient,
@@ -128,7 +131,7 @@ public class ConditionResourceProvider implements IResourceProvider {
             String cat = theCategory.getValue();
             searchOptions.setCategory(cat);
         }
-        
+
         List<DafCondition> dafConditionList = service.getConditionBySearchOptions(searchOptions);
         List<Condition> conditionList = new ArrayList<Condition>();
 
@@ -137,8 +140,8 @@ public class ConditionResourceProvider implements IResourceProvider {
         }
         return conditionList;
     }
-	
-	/**
+
+    /**
      * This method converts DafCondition object to Condition object
      */
     private Condition createConditionObject(DafCondition dafCondition) {

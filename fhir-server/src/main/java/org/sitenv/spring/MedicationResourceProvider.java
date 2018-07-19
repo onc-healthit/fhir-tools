@@ -8,7 +8,6 @@ import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafMedication;
 import org.sitenv.spring.service.MedicationService;
@@ -17,7 +16,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Scope("request")
 public class MedicationResourceProvider implements IResourceProvider {
@@ -55,7 +57,7 @@ public class MedicationResourceProvider implements IResourceProvider {
         List<Medication> medList = new ArrayList<Medication>();
 
         for (DafMedication dafMed : dafMedList) {
-            
+
             medList.add(createMedicationResourceObject(dafMed));
         }
 
@@ -70,7 +72,7 @@ public class MedicationResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-	 *Ex: http://<server name>/<context>/fhir/Medication/1?_format=json
+     * Ex: http://<server name>/<context>/fhir/Medication/1?_format=json
      */
     @Read()
     public Medication getMedicationResourceById(@IdParam IdDt theId) {
@@ -81,7 +83,7 @@ public class MedicationResourceProvider implements IResourceProvider {
 
         return med;
     }
-    
+
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by the Code
@@ -91,19 +93,19 @@ public class MedicationResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of Medications. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Medication?code=2823-3&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Medication?code=2823-3&_format=json
      */
     @Search()
     public List<Medication> searchByCode(@RequiredParam(name = Medication.SP_CODE) String code,
                                          @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         //String codeValue = code.getIdPart();
         List<DafMedication> dafMedList = service.getMedicationByCode(code);
-       
+
         List<Medication> medList = new ArrayList<Medication>();
 
         for (DafMedication dafMed : dafMedList) {
-           
+
             medList.add(createMedicationResourceObject(dafMed));
         }
 

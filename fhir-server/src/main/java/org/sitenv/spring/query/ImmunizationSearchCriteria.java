@@ -4,6 +4,7 @@ public class ImmunizationSearchCriteria extends SearchCriteria {
 
     private Integer patient;
     private String status;
+
     public ImmunizationSearchCriteria() {
     }
 

@@ -15,8 +15,8 @@ public class MedicationStatementDaoImpl extends AbstractDao implements Medicatio
     @Override
     public List<DafMedicationStatement> getAllMedicationStatement(Integer count) {
         Criteria criteria = getSession().createCriteria(DafMedicationStatement.class);
-        if(count!=null){
-        criteria.setMaxResults(count);
+        if (count != null) {
+            criteria.setMaxResults(count);
         }
         return (List<DafMedicationStatement>) criteria.list();
     }

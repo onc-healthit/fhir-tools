@@ -1,47 +1,45 @@
 package org.sitenv.spring.dao;
 
-import java.util.Date;
-import java.util.List;
-
+import ca.uhn.fhir.rest.param.ParamPrefixEnum;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
-import org.sitenv.spring.model.DafLocation;
 import org.sitenv.spring.model.DafProcedure;
 import org.sitenv.spring.query.ProcedureSearchCriteria;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.rest.param.ParamPrefixEnum;
+import java.util.Date;
+import java.util.List;
 
 @Repository("procedureDao")
 public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<DafProcedure> getAllProcedures() {
-		 Criteria criteria = getSession().createCriteria(DafProcedure.class);
-	        return (List<DafProcedure>) criteria.list();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<DafProcedure> getAllProcedures() {
+        Criteria criteria = getSession().createCriteria(DafProcedure.class);
+        return (List<DafProcedure>) criteria.list();
+    }
 
-	@Override
-	public DafProcedure getProcedureById(int id) {
-		DafProcedure dafProcedure = (DafProcedure) getSession().get(DafProcedure.class, id);
+    @Override
+    public DafProcedure getProcedureById(int id) {
+        DafProcedure dafProcedure = (DafProcedure) getSession().get(DafProcedure.class, id);
         return dafProcedure;
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<DafProcedure> getProcedureBySearchCriteria(
-			ProcedureSearchCriteria procedureSearchCriteria) {
-		Criteria criteria = getSession().createCriteria(DafProcedure.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		if(procedureSearchCriteria.getSubject()!=null){
-			criteria.add(Restrictions.eq("subject.id", procedureSearchCriteria.getSubject()));
-		}
-		
-		if(procedureSearchCriteria.getStatus()!=null){
-			criteria.add(Restrictions.eq("status", procedureSearchCriteria.getStatus()));
-		}
-		
-		if (procedureSearchCriteria.getRangedates() != null) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<DafProcedure> getProcedureBySearchCriteria(
+            ProcedureSearchCriteria procedureSearchCriteria) {
+        Criteria criteria = getSession().createCriteria(DafProcedure.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        if (procedureSearchCriteria.getSubject() != null) {
+            criteria.add(Restrictions.eq("subject.id", procedureSearchCriteria.getSubject()));
+        }
+
+        if (procedureSearchCriteria.getStatus() != null) {
+            criteria.add(Restrictions.eq("status", procedureSearchCriteria.getStatus()));
+        }
+
+        if (procedureSearchCriteria.getRangedates() != null) {
             Date from = null;
             Date to = null;
             ParamPrefixEnum fromParamPrefixEnum = null;
@@ -81,9 +79,9 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
                 criteria.add(Restrictions.between("performed", from, to));
             }
         }
-		
-		
-		return criteria.list();
-	}
+
+
+        return criteria.list();
+    }
 
 }

@@ -6,70 +6,15 @@
 	var emailregex = /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
 	var regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/;
     var usernameregex = /^[A-Za-z0-9_]+$/i;
-	/*registeruser = function(){
-		var username = $('#username').val();
-		var email = $('#emailaddress').val();
-		var fname = $('#fullname').val();
-		var password = $('#password').val();
-		var cpassword = $('#cpassword').val();
-		if(username == '' || username == undefined){
-            bootbox.alert("Please enter Username");
-            return false;
-        }
-        if(!usernameregex.test(username)){
-            bootbox.alert("Please Enter Valid Username");
-            return false;
-        }
-        if(!emailregex.test(email)){
-            bootbox.alert("Please Enter Valid Email");
-            return false;
-        }
-        if(fname == '' || fname == undefined){
-            bootbox.alert("Please enter Full name");
-            return false;
-        }
-        if(password == '' || password == undefined){
-            bootbox.alert("Please enter Password");
-            return false;
-        }
-        if(password != cpassword){
-            bootbox.alert("Passwords do not match");
-            return false;
-        }
-        var data = {"user_name":username,"user_email":email,"user_full_name":fname,"user_password":password};
-        $.ajax({
-          url:main_url+"/user/",
-          type:"POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          data:JSON.stringify(data),
-          success:function(data){
-            if(data == "Username already exists. Please use a different Username."){
-                bootbox.alert(data);
-                return false;
-            }else{
-                $('input[type="text"],input[type="password"]').val('');
-                
-                bootbox.alert(data,function(){
-                    window.location.replace('userlogin.html');
-                });
-            }
-          },
-          error:function(e){
-            console.log(e);
-            bootbox.alert("User Registration failed. Please contact Admin.");
-          }
-        })
-	}*/
-
     userlogin = function(){
-        var uname = $('#regname').val();
+        var uname = $('#username').val();
         var pass = $('#userpass').val();
+        var postobj = {"userName":uname,"password":btoa(pass)};
         if(uname != '' && pass != ''){
             $.ajax({
-                url:main_url+"/user/details?userName="+encodeURIComponent(uname)+"&password="+encodeURIComponent(pass),
-                type:"GET",
+                url:main_url+"/user/details",
+                type:"POST",
+				data:JSON.stringify(postobj),
                 headers:{
                     "Content-Type":"application/json",
                     "Accept":"application/json"

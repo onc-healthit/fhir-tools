@@ -11,6 +11,7 @@ public class ObservationSearchCriteria extends SearchCriteria {
     private String category;
     private List<String> code;
     private DateRangeParam rangedates;
+
     public ObservationSearchCriteria() {
     }
 
@@ -23,14 +24,14 @@ public class ObservationSearchCriteria extends SearchCriteria {
     }
 
     public Integer getObservationId() {
-		return observationId;
-	}
+        return observationId;
+    }
 
-	public void setObservationId(Integer observationId) {
-		this.observationId = observationId;
-	}
+    public void setObservationId(Integer observationId) {
+        this.observationId = observationId;
+    }
 
-	public String getCategory() {
+    public String getCategory() {
         return category;
     }
 

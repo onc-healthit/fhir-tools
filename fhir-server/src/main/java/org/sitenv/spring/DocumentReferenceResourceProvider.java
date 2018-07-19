@@ -30,7 +30,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Prabhushankar.Byrapp on 8/7/2015.
@@ -96,12 +99,12 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         DocumentReference docRef = createDocumentReferenceObject(dafDocRef);
         return docRef;
     }
-    
-    @Operation(name="$docref", idempotent=true)
-    public List<DocumentReference> getResourceByDocRefId(@OperationParam (name = DocumentReference.SP_PATIENT) ReferenceParam thePatient,
-    		@IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
-    	System.out.println("inOperation Docref");
-    	String patientId = thePatient.getIdPart();
+
+    @Operation(name = "$docref", idempotent = true)
+    public List<DocumentReference> getResourceByDocRefId(@OperationParam(name = DocumentReference.SP_PATIENT) ReferenceParam thePatient,
+                                                         @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
+        System.out.println("inOperation Docref");
+        String patientId = thePatient.getIdPart();
         List<DafDocumentReference> dafDocRefList = service.getDocumentReferenceBySubject(patientId);
 
         List<DocumentReference> docRefList = new ArrayList<DocumentReference>();
@@ -174,17 +177,17 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return docRefList;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
      * @param thePatient
-	 * @param theIncludes
+     * @param theIncludes
      * @param theSort
      * @param theCount
      * @return This method returns a list of DocumentReferences. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/DocumentReference?patient=1&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/DocumentReference?patient=1&_format=json
      */
     @Search()
     public List<DocumentReference> searchByPatient(@RequiredParam(name = DocumentReference.SP_PATIENT) ReferenceParam thePatient,
@@ -243,16 +246,15 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return docRefList;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the
      * search operation. This searches by status.
      *
      * @param thePatient
-	 * @param type
+     * @param type
      * @return This method returns a list of DocumentReference. This list may contain multiple
      * matching resources, or it may also be empty.
      * <p/>
-     * 
      */
     @Search()
     public List<DocumentReference> findDocumentResourceWithType(
@@ -279,7 +281,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         return docRefList;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the
      * search operation. This searches by status.
      *
@@ -327,7 +329,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         Date createdDate = theDate.getValueAsDateTimeDt().getValue(); // e.g. 2011-01-02
         TemporalPrecisionEnum precision = theDate.getPrecision(); // e.g. DAY
 
-        
+
         List<DafDocumentReference> dafDocRefList;
         if (thePatient != null) {
             dafDocRefList = service.getDocumentReferenceByCreatedDateOptional(thePatient.getIdPart(), comparatorStr, createdDate);
@@ -438,7 +440,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         ResourceReferenceDt rrDt = new ResourceReferenceDt();
         ResourceReferenceDt authorReferenceDt1 = new ResourceReferenceDt(new IdDt(dafDocRef.getDafAuthor().getName()));
         List<ResourceReferenceDt> authors = new ArrayList<ResourceReferenceDt>();
-        
+
         authors.add(authorReferenceDt1);
         docRef.setAuthor(authors);
 
@@ -455,8 +457,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         docRef.setIndexed(new InstantDt(dafDocRef.getIndexed()));
 
         //status
-        //docRef.setStatus(DocumentReferenceStatusEnum.valueOf(dafDocRef.getStatus()));
-        docRef.setStatus(DocumentReferenceStatusEnum.SUPERSEDED);
+        docRef.setStatus(DocumentReferenceStatusEnum.valueOf(dafDocRef.getStatus()));
 
         //Doc status - need to convert to new table
         docRef.setDocStatus(new CodeableConceptDt("http://hl7.org/fhir/composition-status", dafDocRef.getDocumentStatus()));

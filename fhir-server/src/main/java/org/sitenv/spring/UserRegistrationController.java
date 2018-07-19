@@ -1,9 +1,10 @@
 package org.sitenv.spring;
 
-import java.io.IOException;
+import java.util.Map;
 
 import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.service.UserRegistrationService;
+import org.sitenv.spring.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,6 +22,7 @@ public class UserRegistrationController {
 
     /**
      * This method registers the user
+     *
      * @param user
      * @return This method will return the registered user.
      */
@@ -30,9 +32,10 @@ public class UserRegistrationController {
 
         return userService.registerUser(user);
     }
-    
+
     /**
      * This method registers the user
+     *
      * @param user
      * @return This method will return the registered user.
      */
@@ -45,6 +48,7 @@ public class UserRegistrationController {
 
     /**
      * This method is used to get the user by id
+     *
      * @param id
      * @return This method will return the user. if the user not existed returns null.
      */
@@ -56,23 +60,31 @@ public class UserRegistrationController {
     }
 
     /**
-     *  This method used to get the user by user name and password
+     * This method used to get the user by user name and password
+     *
      * @param userName
      * @param password
      * @return This method will return the user. if the user not existed returns null.
-     * @throws IOException 
+     * @throws Exception 
      */
-    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    @RequestMapping(value = "/details", method = RequestMethod.POST)
     @ResponseBody
-    public DafUserRegister getUserByDetails(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response, @RequestParam("userName") String userName, @RequestParam("password") String password) throws IOException {
-        
-        DafUserRegister user = userService.getUserByDetails(userName, password, request);
-        
-        if(user == null){
-        	response.sendError(403, "Invalid UserName or Password.");
+    public DafUserRegister getUserByDetails(ModelMap modelMap, HttpServletRequest request, HttpServletResponse response,@RequestBody Map<String,String> credentials) throws Exception {
+
+        DafUserRegister user = null;
+        try{
+        	user = userService.getUserByDetails(credentials.get("userName"), CommonUtil.base64Decoder(credentials.get("password")), request);
+
+        if (user == null) {
+        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Please provide valid credentials.");
         }
-        
+        }catch(Exception e){
+        	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to connect to the Database. Please contact Admin.");
+        }
+
         return user;
+        
     }
+    
 
 }

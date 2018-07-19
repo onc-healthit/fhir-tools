@@ -21,7 +21,9 @@ import org.sitenv.spring.service.DeviceService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class DeviceResourceProvider implements IResourceProvider {
 
@@ -35,7 +37,7 @@ public class DeviceResourceProvider implements IResourceProvider {
         service = (DeviceService) context.getBean("deviceResourceService");
     }
 
-	/**
+    /**
      * The getResourceType method comes from IResourceProvider, and must
      * be overridden to indicate what type of resource this provider
      * supplies.
@@ -45,13 +47,14 @@ public class DeviceResourceProvider implements IResourceProvider {
         return Device.class;
     }
 
-	/**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+    /**
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available Device records.
-     * 
+     * @return Returns all the available Device records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/Device?_pretty=true&_format=json
      */
     @Search
@@ -68,7 +71,7 @@ public class DeviceResourceProvider implements IResourceProvider {
         return devices;
     }
 
-	/**
+    /**
      * This is the "read" operation. The "@Read" annotation indicates that this method supports the read and/or vread operation.
      * <p>
      * Read operations take a single parameter annotated with the {@link IdParam} paramater, and should return a single resource instance.
@@ -76,8 +79,8 @@ public class DeviceResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Device/1?_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Device/1?_format=json
      */
     @Read()
     public Device getDeviceResourceById(@IdParam IdDt theId) {
@@ -89,7 +92,7 @@ public class DeviceResourceProvider implements IResourceProvider {
         return device;
     }
 
-	/**
+    /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      * This example searches by patient
      *
@@ -98,8 +101,8 @@ public class DeviceResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of Devices. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/Device?patient=1&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/Device?patient=1&_format=json
      */
     @Search()
     public List<Device> searchByPatient(@RequiredParam(name = Device.SP_PATIENT) ReferenceParam thePatient,
@@ -117,7 +120,7 @@ public class DeviceResourceProvider implements IResourceProvider {
         return deviceList;
     }
 
-	/**
+    /**
      * This method converts DafDevice object to Device object
      */
     private Device createDeviceObject(DafDevice dafDevice) {

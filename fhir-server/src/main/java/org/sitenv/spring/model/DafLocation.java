@@ -1,174 +1,169 @@
 package org.sitenv.spring.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.sitenv.spring.configuration.JSONObjectUserType;
 
+import javax.persistence.*;
+
 @Entity
-@Table(name="location")
+@Table(name = "location")
 @TypeDefs({@TypeDef(name = "StringJsonObject", typeClass = JSONObjectUserType.class)})
 public class DafLocation {
-	
-	@Id
+
+    @Id
     @Column(name = "location_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer locationId;
-	
-	@Column(name = "identifier")
+    private Integer locationId;
+
+    @Column(name = "identifier")
     @Type(type = "StringJsonObject")
     private String identifier;
-	
-	@Column(name="status")
-	private String status;
-	
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="description")
-	private String description;
-	
-	@Column(name="mode")
-	private String mode;
-	
-	@Column(name="type")
-	@Type(type = "StringJsonObject")
-	private String type;
-	
-	@Column(name="telecom")
-	@Type(type = "StringJsonObject")
-	private String telecom;
-	
-	@Column(name="address")
-	@Type(type = "StringJsonObject")
-	private String address;
-	
-	@Column(name="physicaltype")
-	@Type(type = "StringJsonObject")
-	private String physicaltype;
-	
-	@Column(name="position")
-	@Type(type = "StringJsonObject")
-	private String position;
-	
-	@Column(name="managingOrganization")
-	private String managingOrganization;
-	
-	@Column(name="partof")
-	private String partof;
-	
-	public DafLocation(){
-		
-	}
 
-	public Integer getLocationId() {
-		return locationId;
-	}
+    @Column(name = "status")
+    private String status;
 
-	public void setLocationId(Integer locationId) {
-		this.locationId = locationId;
-	}
+    @Column(name = "name")
+    private String name;
 
-	public String getIdentifier() {
-		return identifier;
-	}
+    @Column(name = "description")
+    private String description;
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
+    @Column(name = "mode")
+    private String mode;
 
-	public String getStatus() {
-		return status;
-	}
+    @Column(name = "type")
+    @Type(type = "StringJsonObject")
+    private String type;
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    @Column(name = "telecom")
+    @Type(type = "StringJsonObject")
+    private String telecom;
 
-	public String getName() {
-		return name;
-	}
+    @Column(name = "address")
+    @Type(type = "StringJsonObject")
+    private String address;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Column(name = "physicaltype")
+    @Type(type = "StringJsonObject")
+    private String physicaltype;
 
-	public String getDescription() {
-		return description;
-	}
+    @Column(name = "position")
+    @Type(type = "StringJsonObject")
+    private String position;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    @Column(name = "managingOrganization")
+    private String managingOrganization;
 
-	public String getMode() {
-		return mode;
-	}
+    @Column(name = "partof")
+    private String partof;
 
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
+    public DafLocation() {
 
-	public String getType() {
-		return type;
-	}
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public Integer getLocationId() {
+        return locationId;
+    }
 
-	public String getTelecom() {
-		return telecom;
-	}
+    public void setLocationId(Integer locationId) {
+        this.locationId = locationId;
+    }
 
-	public void setTelecom(String telecom) {
-		this.telecom = telecom;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public String getPhysicaltype() {
-		return physicaltype;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setPhysicaltype(String physicaltype) {
-		this.physicaltype = physicaltype;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getPosition() {
-		return position;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPosition(String position) {
-		this.position = position;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getManagingOrganization() {
-		return managingOrganization;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setManagingOrganization(String managingOrganization) {
-		this.managingOrganization = managingOrganization;
-	}
+    public String getMode() {
+        return mode;
+    }
 
-	public String getPartof() {
-		return partof;
-	}
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
 
-	public void setPartof(String partof) {
-		this.partof = partof;
-	}
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTelecom() {
+        return telecom;
+    }
+
+    public void setTelecom(String telecom) {
+        this.telecom = telecom;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhysicaltype() {
+        return physicaltype;
+    }
+
+    public void setPhysicaltype(String physicaltype) {
+        this.physicaltype = physicaltype;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getManagingOrganization() {
+        return managingOrganization;
+    }
+
+    public void setManagingOrganization(String managingOrganization) {
+        this.managingOrganization = managingOrganization;
+    }
+
+    public String getPartof() {
+        return partof;
+    }
+
+    public void setPartof(String partof) {
+        this.partof = partof;
+    }
 }

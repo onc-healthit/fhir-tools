@@ -11,6 +11,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-40163006-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-40163006-1');
+    </script>
+
+    <!-- End Google Analytics -->
+
+
 </head>
 <body>
     <%-- header starts here --%>
@@ -87,14 +102,11 @@
                 
             </div>    
         </div>
-        
-        <!-- <form action="https://fhirtest.sitenv.org/hapi/authorize" method="post">-->
-        <!-- <form action="https://fhirprod.sitenv.org/hapi/authorize" method="post"> -->
+
         <form action="<%=request.getScheme() + "://" +
 	                request.getServerName() + 
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )+
 	                request.getContextPath() %>/authorize" method="post">
-        <!-- <form action="https://fhirtest.direct.sitenv.org/hapi/authorize" method="post"> -->
             <input name="transaction_id" type="hidden" value=<%= request.getParameter("transaction_id") %>>
             <input name="scope" type="hidden" value="*">
             <div class="col-md-12">
@@ -155,7 +167,10 @@
 <script src="${pageContext.request.contextPath}/view/js/bootstrap.js"></script>
 <link href="${pageContext.request.contextPath}/view/css/fhir.css" rel="stylesheet">
 <script type="text/javascript" src="${pageContext.request.contextPath}/view/js/remarkable.min.js"></script>
-        <!-- <script src="view/js/hoverMenu.js"></script> -->
+
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+
+    <!-- <script src="view/js/hoverMenu.js"></script> -->
 
 <!-- News and Announcements Modal -->
                 <div class="modal fade" tabindex="-1" role="dialog" id="news-modal">
@@ -243,6 +258,9 @@
                 }
             });
         }
+
+
         </script>
+
 </body>
 </html>

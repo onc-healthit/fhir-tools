@@ -14,7 +14,6 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafPractitioner;
 import org.sitenv.spring.service.PractitionerService;
@@ -24,7 +23,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component
 @Scope("request")
@@ -58,7 +60,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     *  Ex: http://<server name>/<context>/fhir/Practitioner/1?_format=json
+     * Ex: http://<server name>/<context>/fhir/Practitioner/1?_format=json
      */
     @Read()
     public Practitioner getPractitionerResourceById(@IdParam IdDt theId) {
@@ -71,13 +73,14 @@ public class PractitionerResourceProvider implements IResourceProvider {
     }
 
     /**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theId
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available Practitioner records.
-     * 
+     * @return Returns all the available Practitioner records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/Practitioner?_id=1&_format=json
      */
     @Search()
@@ -111,14 +114,14 @@ public class PractitionerResourceProvider implements IResourceProvider {
         identifierDt.setUse(IdentifierUseEnum.OFFICIAL);
         identifierDt.setValue(identifier.get("value"));
         identifierDtList.add(identifierDt);
-        
+
         docPrac.setIdentifier(identifierDtList);
 
         //Name
         HumanNameDt name = new HumanNameDt();
         name.addFamily(dafPractitioner.getFamilyName());
         name.addGiven(dafPractitioner.getGivenName());
-        
+
         docPrac.setName(name);
 
         //Telecom
@@ -135,6 +138,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
         Map<String, String> text = HapiUtils.convertToJsonMap(dafPractitioner.getText());
         NarrativeDt nText = new NarrativeDt();
         nText.setStatus(NarrativeStatusEnum.valueOf(text.get("status")));
+        nText.setDiv(text.get("div"));
         docPrac.setText(nText);
 
         List<PractitionerRole> practitionerList = new ArrayList<PractitionerRole>();

@@ -49,8 +49,10 @@ public class AuthTempDaoImpl extends AbstractDao implements AuthTempDao {
     @Override
     public DafAuthtemp getAuthByClientId(String clientId, String clientSecret) {
         Criteria crit = getSession().createCriteria(DafAuthtemp.class)
-                .add(Restrictions.eq("client_id", clientId))
-                .add(Restrictions.eq("client_secret", clientSecret));
+                .add(Restrictions.eq("client_id", clientId));
+
+//        if(clientSecret != null)  crit.add(Restrictions.eq("client_secret", clientSecret));
+
         DafAuthtemp auth = (DafAuthtemp) crit.uniqueResult();
         return auth;
     }

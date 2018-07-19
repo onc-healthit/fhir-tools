@@ -1,16 +1,28 @@
 var searchparameters = {
-	"Patient" : "identifier,name,gender,family,given,birthdate",
 	"AllergyIntolerance" : "patient",
-	"Immunization" : "patient",
-	"MedicationStatement" : "patient",
+	"CarePlan": "patient,category,date,status",
+	"CareTeam": "patient,status",
 	"Condition" : "patient,category,clinicalstatus",
-	//"Procedure" : "patient",
+	"Device": "patient",
+	"DiagnosticReport" : "category,patient,date,code",
+	"Goal" : "patient,date",
+	"Immunization" : "patient",
+	"Location" : "address,address-postalcode,address-city,address-state,identifier,name",
+	"Medication":"code",
+	"MedicationOrder":"patient,code,identifier,medication,status,datewritten",
+	"MedicationRequest" : "subject",
+	"MedicationStatement" : "patient,status,code,identifier,medication,effectivedatetime",
+	"Organization" : "address-postalcode,address-city,address-state,address-country,identifier,name,address",
+	"Patient" : "identifier,name,gender,family,given,birthdate,telecom",
+	"Practitioner": "_id",
+	"Procedure" : "patient,date",
 	"Observation(Laboratory)" : "patient,code,date",
 	"Observation(SmokingStatus)" : "patient,code",
-	'Observation(VitalSigns)' : "patient,code,date",
+	"Observation(VitalSigns)" : "patient,code,date",
 }
 
 var matchcriterian = {
+	"_id":"exact",
 	"identifier" : "in",
 	"patient" : "in",
 	"category" : "exact",
@@ -22,8 +34,10 @@ var matchcriterian = {
 	"family" : "exact",
 	"given" : "exact",
 	"gender" : "text,missing",
-	"birthdate" :"eq,gt,lt,ge,le"
+	"birthdate" :"eq,gt,lt,ge,le",
+	"address" : "exact,contains"
 }
+
 /*var matchcriterian = {
 	"subject":"text,below,above,not,in,not-in",
 	"subject.identifier" : "text,below,above,not,in,not-in",

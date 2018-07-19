@@ -7,6 +7,7 @@ public class ConditionSearchCriteria extends SearchCriteria {
     private Integer patientId;
     private String category;
     private List<String> status;
+
     public ConditionSearchCriteria() {
     }
 

@@ -25,7 +25,7 @@ public class DownloadDocument extends HttpServlet {
         String contextPath = System.getProperty("catalina.base");
         String[] pathInfo = request.getPathInfo().split("/");
         String fileName = pathInfo[1];
-        
+
 
         File downloadFile = new File(contextPath + "/Data/" + fileName);
         FileInputStream inputStream = null;

@@ -9,6 +9,20 @@
 		<link href="css/fhir.css" rel="stylesheet">
 		<script type="text/javascript" src="js/remarkable.min.js"></script>
     	<title>FHIR Query Tool</title>
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-40163006-1"></script>
+		<script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-40163006-1');
+		</script>
+
+		<!-- End Google Analytics -->
+
+
 	</head>
 	<body onload="checkparam();" >
 
@@ -128,15 +142,16 @@
 						      	<div class="form-group">
 									<label for="confprofname" class="col-sm-3 control-label">Select Implementation Guide:</label>
 									<div class="col-sm-3">
-										<select id="confprofname" class="form-control" onchange="loadfhirres();" data-toggle="tooltip" data-original-title=''>
+										<select id="confprofname" class="form-control" onchange="loadfhirres(this);" data-toggle="tooltip" data-original-title=''>
 										    <option>Select Implementation Guide</option>
-											<option value="US Core">US Core</option>
+											<option value="DSTU2">DSTU2</option>
+											<option value="STU3">STU3</option>
 										</select>
 									</div>
 									<label for="fhirresources" class="col-sm-2 control-label">Select FHIR Profile:</label>
 									<div class="col-sm-4">
 										<select class="form-control" id="fhirresources" onchange="loadsearchparam();" disabled="disabled" data-toggle="tooltip" data-original-title=''>
-										   	<option>Select US Core Profile</option>
+										   	<option>Select Profile</option>
 										</select>
 									</div>
 			    				</div>
@@ -309,12 +324,12 @@
 				      </div>
 				      <div class="modal-body" style="overflow:auto;">
 				      	<div class="row" align="center" style="font-size:14px;font-weight:bold;color:#233a52;">
-				      		<div class="col-md-12">Authorize the FHIR server by selecting Public Server or Confidential Server. Please enter the client ID and client Secret for the FHIR server being tested, these are supplied by the server administrator/single-sign-on application.</div>
+				      		<div class="col-md-12">Authorize the FHIR server by selecting Public Client or Confidential Client. Please enter the client ID and client Secret for the FHIR server being tested, these are supplied by the server administrator/single-sign-on application.</div>
 				      	</div>
 				      	<div class='row'><div class='span12'><hr style="margin:5px;"></div></div>
 				      	<div class="col-md-12">
-				      		<label class="checkbox-inline"><input id="rdb1" type="radio" name="toggler" value="1" style="margin-right:10px;margin-top:0px" />Public Server</label>
-							<label class="checkbox-inline"><input id="rdb2" type="radio" name="toggler" value="2" style="margin-right:10px;margin-top:0px" />Confidential Server</label>
+				      		<label class="checkbox-inline"><input id="rdb1" type="radio" name="toggler" value="1" style="margin-right:10px;margin-top:0px" />Public Client</label>
+							<label class="checkbox-inline active"><input id="rdb2" type="radio" name="toggler" value="2" checked="" style="margin-right:10px;margin-top:0px" />Confidential Client</label>
 				      	</div>
 
 
@@ -387,13 +402,24 @@
 	    					</form>
 	    					<!-- <div class="col-md-12" align="center" style="padding-top:10px;"> Don't have Client ID? <a href="#">Click here</a> to register a client.</div> -->
 						</div>
-						<div id="blk-2" class="toHide rows" style="display:none;padding-top:35px;">
+						<div id="blk-2" class="toHide rows" style="display:block;padding-top:35px;">
 						    <form class="form-horizontal">
 	    						<div class="form-group">
 									<label for="clientid" class="col-sm-3 control-label">Client ID:</label>
-								    <div class="col-sm-8">
+								    <div class="col-sm-7">
 								      	<input type="text" class="form-control" id="clientid">
 								    </div>
+									<div class="col-sm-1">
+										<div class="dropdown">
+											<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="padding: 4px 10px;">Try Me
+												<span class="caret"></span></button>
+											<ul class="dropdown-menu" style="min-width: 60px;">
+												<li><a href="#" onclick="getdemouser('dstu2');">DSTU2</a></li>
+												<li><a href="#" onclick="getdemouser('stu3');">STU3</a></li>
+											</ul>
+										</div>
+									</div>
+
 	    						</div>
 	    						<div class="form-group">
 									<label for="clientsecret" class="col-sm-3 control-label">Client Secret:</label>
@@ -549,7 +575,8 @@
 		<script src="js/ladda.jquery.js"></script>
 		<script src="js/fhir.js"></script>
 		<script src="js/publicfhir.js"></script>
-		<script src="js/loadtableview.js"></script>
+		<script src="js/dstu2tableview.js"></script>
+		<script src="js/stu3tableview.js"></script>
 		<script src="js/kelpjsonview.js"></script>
 		<script type="text/javascript">
 		$('#search').load("search.html",function(){
@@ -592,6 +619,11 @@
 		  }
 		});
 
+		// To delete Access_Token on closing of browser
+		window.onbeforeunload = function(e) {
+		      localStorage.removeItem("access_token");
+		    };
+
 		$(document).ready(function(){
 		    $('[data-toggle="tooltip"]').tooltip();
 
@@ -612,7 +644,7 @@
 		});
 		$("[name=toggler]").click(function(){
             $('.toHide').hide();
-            $("#blk-"+$(this).val()).show('slow');
+            $("#blk-"+$(this).val()).show();
     	});
     	$('#searchparamcollapse').on('hidden.bs.collapse', function () {
 		  	console.log("yes");
@@ -620,12 +652,8 @@
 		$('#authorize-modal').on('hidden.bs.modal', function () {
 			 /*$('input[type="text"]').val('');
 			 $("[type=checkbox]").attr('checked', false);*/
-			 $('.toHide').hide();
+			 //$('.toHide').hide();
 		});
-		/*$('#noauthorize-modal').on('hidden.bs.modal', function () {
-			 $('input[type="text"],input[type="password"]').val('');
-			 $("[type=checkbox]").attr('checked', false);
-		});*/
 		$('#responsedatamodal').on('hidden.bs.modal', function () {
 			if (!$('#responsedatacollapse').hasClass('in')) {
 		        $('#responsedatacollapse').collapse('toggle');
@@ -707,5 +735,6 @@
 			});
 	    }
 		</script>
+
 	</body>
 </html>

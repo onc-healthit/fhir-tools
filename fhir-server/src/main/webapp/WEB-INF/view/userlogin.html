@@ -13,6 +13,19 @@
 		<link href="css/custom.css" rel="stylesheet" type="text/css" />
 	
     	<title>FHIR Server</title>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-40163006-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-40163006-1');
+        </script>
+
+        <!-- End Google Analytics -->
+
 	</head>
 	<body>
 		<!-- header starts here -->
@@ -78,25 +91,15 @@
 			<h2 class="form-signin-heading" style="text-align:center;">Login Using Username and Password</h2>
 			<h5 id="loginerror" style="font-weight:bold"></h5>
 		      <form class="form-signin" id="loginform">		        
-		        <label class="sr-only" for="inputEmail">Username</label>
-		        <input type="text" placeholder="Username" class="form-control" id="regname" style="margin-bottom:5px;">
-		        <label class="sr-only" for="inputPassword">Password</label>
+		        <label class="sr-only" for="username">Username</label>
+		        <input type="text" placeholder="Username" class="form-control" id="username" style="margin-bottom:5px;">
+		        <label class="sr-only" for="userpass">Password</label>
 		        <input type="password" required="" placeholder="Password" class="form-control" id="userpass">
-		        <!-- <div class="form-group">
-					<label for="inputEmail3" class="col-sm-4 control-label">Username:</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="regname" data-toggle="tooltip" data-original-title='' placeholder="Username" name=username>
-					</div> 							
-    			</div>
-    			<div class="form-group">
-					<label for="inputEmail3" class="col-sm-4 control-label">Password:</label>
-					<div class="col-sm-4 tooltipright">
-						<input type="password" class="form-control" id="userpass" data-toggle="tooltip" data-original-title='' placeholder="Password" name="password">
-					</div>    							
-    			</div> -->
+
 		        <button type="button" class="btn btn-primary btn-block" onclick="userlogin();">Login</button>
 		      </form>
 		      <h5 class="form-signin-heading" style="text-align:center"><a href="newuser.html"> Click here </a> to register a new account</h5>
+              <h5 class="form-signin-heading" style="text-align:center;"><i>For demo users use Username: <b>demouser</b> Password: <b>Demouser1!</b></i></h5>
 
 	    </div>
 
@@ -248,5 +251,6 @@
             });
         }
 		</script>
-	</body>
+
+    </body>
 </html>

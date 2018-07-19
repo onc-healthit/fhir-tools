@@ -20,7 +20,9 @@ import org.sitenv.spring.service.CareTeamService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class CareTeamResourceProvider implements IResourceProvider {
 
@@ -46,12 +48,13 @@ public class CareTeamResourceProvider implements IResourceProvider {
     }
 
     /**
-     *The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
+     *
      * @param theIncludes
      * @param theSort
      * @param theCount
-     * @return  Returns all the available CarePlan records.
-     * 
+     * @return Returns all the available CarePlan records.
+     * <p>
      * Ex: http://<server name>/<context>/fhir/CarePlan?_pretty=true&_format=json
      */
     @Search
@@ -77,8 +80,8 @@ public class CareTeamResourceProvider implements IResourceProvider {
      *
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/CarePlan/1?_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/CarePlan/1?_format=json
      */
     @Read(version = true)
     public CarePlan getCarePlanResourceById(@IdParam IdDt theId) {
@@ -101,8 +104,8 @@ public class CareTeamResourceProvider implements IResourceProvider {
      * @param theSort
      * @param theCount
      * @return This method returns a list of CarePlans. This list may contain multiple matching resources, or it may also be empty.
-     * 
-     *  Ex: http://<server name>/<context>/fhir/CarePlan?patient=1&category=careteam&status=active&_format=json
+     * <p>
+     * Ex: http://<server name>/<context>/fhir/CarePlan?patient=1&category=careteam&status=active&_format=json
      */
     @Search()
     public List<CarePlan> searchByPatient(@RequiredParam(name = CarePlan.SP_PATIENT) ReferenceParam thePatient,
@@ -127,7 +130,7 @@ public class CareTeamResourceProvider implements IResourceProvider {
         }
         return carePlanList;
     }
-    
+
     /**
      * This method converts DafCareTeam object to CarePlan object
      */

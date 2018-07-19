@@ -56,6 +56,10 @@ public class DafMedicationAdministration {
     @Column(name = "dosage")
     @Type(type = "StringJsonObject")
     private String dosage;
+    
+    @Column(name = "effectiveTimePeriod")
+    @Type(type = "StringJsonObject")
+    private String effectiveTimePeriod;
 
     public int getId() {
         return id;
@@ -117,11 +121,11 @@ public class DafMedicationAdministration {
         return wasnotgiven;
     }
 
-    public void setWasnotgiven(boolean wasnotgiven) {
+    public void setWasnotgiven(Boolean wasnotgiven) {
         this.wasnotgiven = wasnotgiven;
     }
 
-    public void setWasnotgiven(Boolean wasnotgiven) {
+    public void setWasnotgiven(boolean wasnotgiven) {
         this.wasnotgiven = wasnotgiven;
     }
 
@@ -156,4 +160,12 @@ public class DafMedicationAdministration {
     public void setDosage(String dosage) {
         this.dosage = dosage;
     }
+
+	public String getEffectiveTimePeriod() {
+		return effectiveTimePeriod;
+	}
+
+	public void setEffectiveTimePeriod(String effectiveTimePeriod) {
+		this.effectiveTimePeriod = effectiveTimePeriod;
+	}
 }

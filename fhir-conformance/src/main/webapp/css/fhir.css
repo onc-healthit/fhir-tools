@@ -309,8 +309,26 @@ a.morelink {
 }
 .comment {
     /*width: 100%;*/
-    background-color: #fff;
+    /*background-color: #fff;*/
     /*margin: 10px;*/
+
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;
+}
+
+.validation {
+    /*width: 100%;*/
+    /*background-color: #fff;*/
+    /*margin: 10px;*/
+
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;
 }
 
 .hiddenText {
@@ -699,5 +717,24 @@ body {
     -moz-osx-font-smoothing: grayscale
 }
 
+.nav-pills li:not(active){
+    background-color:#ddd;
+    border-radius:2px;
+}   
 
+.validation{
+    /*overflow: auto;*/
+    min-height: 100px;
+    /*max-width: 800px;*/
+    height: auto;
+    /*white-space: pre !important;
+    word-wrap: normal !important;*/
+}
+
+.validation-pre{
+    /*overflow: auto;
+    width:auto;
+    height:auto;*/
+    min-height: 100px;
+}
 

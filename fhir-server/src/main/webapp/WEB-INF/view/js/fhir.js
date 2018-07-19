@@ -397,7 +397,7 @@
 	        redirecturi = params.redirecturi;
 	        getoauthtoken(code,tokenurl,clientid,clientsecret,redirecturi,strurl)
 	    }
-  	}
+  	};
 
   	getUrlParameter = function(sParam){
         var sPageURL = window.location.search.substring(1);
@@ -412,17 +412,7 @@
   
   	getoauthtoken = function(paramvar,tokenurl,clientid,clientsecret,redirecturi,strurl){
 	  	$("#spinner").show();
-	    //var tokenurl = sessionStorage.getItem("tokenurl");
-	    //var clientsecret = sessionStorage.getItem("clientsecret");
-	    //var clientid = sessionStorage.getItem("clientid");
-	    //var redirecturi = sessionStorage.getItem("redirecturi");
 	    var data = { "code" : paramvar , "client_id" : clientid ,"client_secret": clientsecret , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
-	    /*console.log(clientsecret);
-	    if(clientsecret == null){
-	    	var data = { "code" : paramvar , "client_id" : clientid , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
-	    }else{
-	    	var data = { "code" : paramvar , "client_id" : clientid ,"client_secret": clientsecret , "grant_type" : "authorization_code" , "redirect_uri" : redirecturi }
-	    }*/
 	    $.ajax({
 	      url:tokenurl,
 	      type:"POST",
@@ -436,7 +426,7 @@
 	        console.log(e);
 	      }
 	    })
-  	}
+  	};
 
     getoauthjson = function(strurl){
       //var baseurl = sessionStorage.getItem("baseurl");

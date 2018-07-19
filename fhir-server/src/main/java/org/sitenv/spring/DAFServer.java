@@ -1,8 +1,6 @@
 package org.sitenv.spring;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.narrative.DefaultThymeleafNarrativeGenerator;
-import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 
@@ -57,7 +55,7 @@ public class DAFServer extends RestfulServer {
         resourceProviders.add(new ProcedureResourceProvider());
 
         setResourceProviders(resourceProviders);
-        
+
         setServerConformanceProvider(new ConformanceResourceProvider());
 
 		/*
@@ -65,11 +63,13 @@ public class DAFServer extends RestfulServer {
 		 * but can be useful as it causes HAPI to generate narratives for
 		 * resources which don't otherwise have one.
 		 */
+/*
         INarrativeGenerator narrativeGen = new DefaultThymeleafNarrativeGenerator();
         getFhirContext().setNarrativeGenerator(narrativeGen);
+*/
 
 		/*
-		 * Tells HAPI to use content types which are not technically FHIR compliant when a browser is detected as the
+         * Tells HAPI to use content types which are not technically FHIR compliant when a browser is detected as the
 		 * requesting client. This prevents browsers from trying to download resource responses instead of displaying them
 		 * inline which can be handy for troubleshooting.
 		 */

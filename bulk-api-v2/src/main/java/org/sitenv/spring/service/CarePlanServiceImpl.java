@@ -43,13 +43,6 @@ public class CarePlanServiceImpl implements CarePlanService {
         return this.carePlanDao.getCarePlanBySearchCriteria(carePlanSearchCriteria);
     }
 
-    @Override
-    @Transactional
-    public List<DafCarePlanParticipant> getCarePlanparticipantByCareTeam(int id) {
-        return this.carePlanDao.getCarePlanparticipantByCareTeam(id);
-    }
-
-    
     public List<DafCarePlan> getCarePlanForBulkData(List<Integer> patients, Date start){
     	return this.carePlanDao.getCarePlanForBulkData(patients, start);
     }

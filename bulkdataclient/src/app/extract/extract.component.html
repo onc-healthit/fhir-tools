@@ -57,7 +57,7 @@
     </ng-container>
 
     <ng-container matColumnDef="data">
-      <mat-header-cell *matHeaderCellDef>Data</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>Extracted Resource Data in Ndjson Format</mat-header-cell>
       <mat-cell *matCellDef="let group">
         <div *ngFor="let item of group.data" class="resourceContainer">
           <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
@@ -73,8 +73,8 @@
     </mat-row>
   </mat-table>
 
-  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" class="mat-elevation-z4">
-  </mat-paginator>
+  <!-- <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" class="mat-elevation-z4">
+  </mat-paginator> -->
 </div>
 
 <mat-card *ngIf="displayExtractAll">
@@ -93,7 +93,7 @@
         <pre style="max-height: 300px;">{{extractAllResponse|json}}</pre>
       </div> -->
       <div class="col-md-3">
-        <p>ndjson Response Data:</p>
+        <p>Extracted Resource Data In Ndjson Format:</p>
       </div>
       <div class="col-md-9">
         <div *ngFor="let item of extractAllData" class="resourceContainer col-md-3">

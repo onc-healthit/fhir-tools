@@ -2,7 +2,7 @@
  * Copyright 2018, Xyram Software Solutions. All rights reserved.
  */
 import { Injectable } from '@angular/core';
-import { NotificationsService } from 'angular2-notifications/dist';
+import { NotificationsService } from 'angular2-notifications';
 import * as _ from 'lodash';
 
 export type NotificationType = 'success' | 'error' | 'alert' | 'warn' | 'info';

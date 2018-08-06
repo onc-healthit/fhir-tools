@@ -153,7 +153,6 @@ public class CarePlanResourceProvider implements IResourceProvider {
     private CarePlan createCarePlanObject(DafCarePlan dafCarePlan) {
 
         CarePlan carePlan = new CarePlan();
-
         //Set Version
         carePlan.setId(new IdDt(RESOURCE_TYPE, dafCarePlan.getId() + "", VERSION_ID));
 
@@ -182,9 +181,8 @@ public class CarePlanResourceProvider implements IResourceProvider {
         catenum.add(catCodinglist);
         carePlan.setCategory(catenum);
 
-
         //set Participant
-        List<DafCarePlanParticipant> dafCarePlanList = service.getCarePlanparticipantByCareTeam(dafCarePlan.getId());
+        List<DafCarePlanParticipant> dafCarePlanList = dafCarePlan.getParticipants();
         List<Participant> participantlist = new ArrayList<CarePlan.Participant>();
         for (int i = 0; i < dafCarePlanList.size(); i++) {
             Participant participant = new Participant();

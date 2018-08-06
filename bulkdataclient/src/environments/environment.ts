@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://fhirtest.sitenv.org/backend-app-secure'
+  apiBaseUrl: 'https://fhirprod.sitenv.org/backend-app'
 };

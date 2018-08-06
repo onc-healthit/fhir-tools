@@ -130,14 +130,47 @@
 			</div>
 			<div class="col-md-10" id="viewregclients">
 				<div class="col-md-12" id="clientstable">
-					<table id="clientsregtable" class="table">
+                    <div class="client-tabs">
+
+                      <!-- Nav tabs -->
+                      <ul class="nav nav-tabs nav-justified" role="tablist">
+                        <li role="presentation" class="active"><a href="#oAuthClients" aria-controls="oAuthClients" role="tab" data-toggle="tab" class="userclientsa">User OAuth Clients</a></li>
+                        <li role="presentation"><a href="#backendClients" aria-controls="profile" role="tab" data-toggle="tab" class="backendclients">Backend Clients</a></li>
+                      </ul>
+
+                      <!-- Tab panes -->
+                      <div class="tab-content" style="padding-top: 20px;">
+                        <div role="tabpanel" class="tab-pane active" id="oAuthClients">
+                            <table id="clientsregtable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%">Client name</th><th style="width:30%">Client Id</th><th style="width:40%">Client Secret</th><th style="width:10%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="backendClients">
+                            <table id="backendclienttable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%">Client name</th><th style="width:30%">Client Id</th><th style="width:40%">Token End Point</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                      </div>
+
+                    </div>
+					<!-- <table id="clientsregtable" class="table">
 				        <thead>
 				            <tr>
 				                <th style="width:20%">Client name</th><th style="width:30%">Client Id</th><th style="width:40%">Client Secret</th><th style="width:10%">Actions</th>
 				            </tr>
 				        </thead>
 				        <tbody></tbody>
-			        </table>
+			        </table> -->
 				</div>
 			</div>
             <div class="col-md-10" id="backendclientregform">
@@ -222,6 +255,7 @@
 		        <p>Please Save Client ID, Client Secret and Registration Token in safe place for future use.</p>
 		      </div>
 		      <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="downloadClientDetails"><span class="glyphicon glyphicon-save"></span> Save Details to a file</button>
 		        <button type="button" class="btn btn-default clientregsuccessmodal" data-dismiss="modal">Close</button>
 		      </div>
 		    </div>
@@ -253,6 +287,7 @@
                 <p>Please Save Client ID, Token URL in safe place for future use.</p>
               </div>
               <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="downloadDetails"><span class="glyphicon glyphicon-save"></span> Save Details to a file</button>
                 <button type="button" class="btn btn-default clientregsuccessmodal" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -312,6 +347,8 @@
 		<script src="js/clients.js"></script>
 		<script type="text/javascript">
 			var userId = "";
+            var backendData;
+            var regclientData;
 			$('#clientregform').hide();
 			$('#editclientform').hide();
 			$('#profilecontent').hide();
@@ -335,6 +372,40 @@
 					$('footer').css('position', 'relative');
 					loadclients(userId);
 				});
+
+                $('#downloadDetails').on("click", function() {
+                  function download() {
+                    console.log(backendData);
+                    var data = backendData;
+                    var details = "Registered Client Details\n\n"+"Client Name: "+data.name+"\nOrganization Name: "+ data.org_name+"\nClient Id: "+data.client_id+"\nToken URL: "+geturl()+"/fhir/token";
+                    var fileName = "Registered Client Details.txt";
+
+                    var pp = document.createElement('a');
+                    pp.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(details));
+                    pp.setAttribute('download', fileName);
+                    pp.click();
+                  }
+                  setTimeout(function() {
+                    download()
+                  }, 500);
+                });
+
+                $('#downloadClientDetails').on("click", function() {
+                  function download() {
+                    console.log(regclientData);
+                    var data = regclientData;
+                    var details = "Registered Client Details\n\n"+"Client Id: "+data.client_id+"\nClient Secret: "+ data.client_secret+"\nRegistration Token: "+data.register_token+"\nClient Name: "+data.name+"\nOrganization Name: "+data.org_name+"\nContact Name: "+data.contact_name+"\nContact Email: "+data.contact_mail+"\nScopes: "+data.scope+"\nRedirect URI: "+data.redirect_uri;
+                    var fileName = "Registered Client Details.txt";
+
+                    var pp = document.createElement('a');
+                    pp.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(details));
+                    pp.setAttribute('download', fileName);
+                    pp.click();
+                  }
+                  setTimeout(function() {
+                    download()
+                  }, 500);
+                });
                 $(document).on('click', '.browse', function(){
                   var file = $(this).parent().parent().parent().find('.file');
                   file.trigger('click');

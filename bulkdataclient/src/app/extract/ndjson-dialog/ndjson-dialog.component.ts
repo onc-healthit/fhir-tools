@@ -34,11 +34,17 @@ export class NdJsonDialogComponent implements OnInit {
 
   ngOnInit() {
     const jsonList = [];
-    const jsonobj = this.data.ndjson.split('\n');
-    for (let i = 0; i < jsonobj.length; i++) {
-      jsonList.push(JSON.parse(jsonobj[i]));
+    console.log(this.data.ndjson);
+    if (this.data.ndjson !== '') {
+      const jsonobj = this.data.ndjson.split('\n');
+      for (let i = 0; i < jsonobj.length; i++) {
+        jsonList.push(JSON.parse(jsonobj[i]));
+      }
+      this.ndjsondata = jsonList;
+    } else {
+      this.ndjsondata = this.data.ndjson;
     }
-    this.ndjsondata = jsonList;
+
     this.ndjsonname = this.data.name;
     this.ndjsonlink = this.data.link;
   }

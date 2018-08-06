@@ -12,10 +12,10 @@ public class DafCarePlanParticipant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //@OneToMany(cascade = CascadeType.ALL)
-    //@JoinColumn(name="careteam")
-    @Column(name = "careteam")
-    private int careteam;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="careteam")
+   // @Column(name = "careteam")
+    private DafCarePlan careplan;
 
     @Column(name = "role_system")
     private String role_system;
@@ -40,15 +40,15 @@ public class DafCarePlanParticipant {
         this.id = id;
     }
 
-    public int getCareteam() {
-        return careteam;
-    }
+    public DafCarePlan getCareplan() {
+		return careplan;
+	}
 
-    public void setCareteam(int careteam) {
-        this.careteam = careteam;
-    }
+	public void setCareplan(DafCarePlan careplan) {
+		this.careplan = careplan;
+	}
 
-    public String getRole_system() {
+	public String getRole_system() {
         return role_system;
     }
 

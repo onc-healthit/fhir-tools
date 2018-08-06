@@ -43,7 +43,7 @@ public class BulkDataOutputInfo {
 		else if(url.contains("Immunization"))
 			type = "Immunization";
 		else if(url.contains("Location"))
-			type = "location";
+			type = "Location";
 		else if(url.contains("MedicationAdministration"))
 			type = "MedicationAdministration";
 		else if(url.contains("MedicationDispense"))

@@ -220,7 +220,6 @@ public class TokenEndPoint extends HttpServlet {
 
                 System.out.println("~~~~~~~~~ JWT Body ~~~~~~~");
                 String body = new String(base64Url.decode(base64EncodedBody));
-                System.out.println("JWT Body : "+body); 
                 
                 JSONObject jwtBody = new JSONObject(body);
                 if(jwtBody!=null && jwtBody.has("sub")) {
@@ -273,6 +272,8 @@ public class TokenEndPoint extends HttpServlet {
 
                          out.println(jsonOb.toString());
         	    		 
+        	    	 }else {
+        	    		 response.sendError(401,"Invalid client_assertion");
         	    	 }
             		
             		

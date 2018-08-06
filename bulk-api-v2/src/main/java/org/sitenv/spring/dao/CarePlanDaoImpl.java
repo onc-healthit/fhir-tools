@@ -68,14 +68,6 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
     }
 
     @Override
-    public List<DafCarePlanParticipant> getCarePlanparticipantByCareTeam(int id) {
-        Criteria criteria = getSession().createCriteria(DafCarePlanParticipant.class, "dp")
-                .add(Restrictions.eq("careteam", id));
-        List<DafCarePlanParticipant> dafCareTeam = criteria.list();
-        return dafCareTeam;
-    }
-    
-    @Override
     public List<DafCarePlan> getCarePlanForBulkData(List<Integer> patients, Date start){
 	
 	Criteria criteria = getSession().createCriteria(DafCarePlan.class, "careplan")

@@ -1,5 +1,6 @@
 (function(){
-	 var main_url = geturl();
+	 //var main_url = geturl();
+	 var main_url = "https://fhirtest.sitenv.org/secure-fhir";
 	checkCookie = function() {
 	    var user=getCookie("userdetails");
 	    var split = user.split(',');
@@ -268,8 +269,11 @@
             },
             success: function(data) {
                 var tbody = $('#clientsregtable tbody');
+                var backendtbody = $('#backendclienttable tbody');
                 $('#clientsregtable tbody').html('');
+                $('#backendclienttable tbody').html('');
 			    props = ["name", "client_id", "client_secret","id"];
+			    backendprops = ["name","client_id","token_url"];
 			    if(data.length>0){
 			    	for(var i=0; i< data.length; i++){
 			    		if(!data[i].isBackendClient){
@@ -287,6 +291,18 @@
 						  		}
 							}
 							tbody.append(tr);
+			    		} else if(data[i].isBackendClient){
+			    			var tr = $('<tr>');
+							for(var m=0; m<backendprops.length; m++){
+								if(backendprops[m] == 'name'){
+						  			$('<td style="width:20%">').html(data[i].name).appendTo(tr); 
+						  		}else if(backendprops[m] == 'client_id'){
+						  			$('<td style="width:30%">').html(data[i].client_id).appendTo(tr); 
+						  		} else if(backendprops[m] == 'token_url'){
+						  			$('<td style="width:40%">').html(geturl()+"/fhir/token").appendTo(tr); 
+						  		}
+							}
+							backendtbody.append(tr);
 			    		}
 					}
 			    }else{
@@ -330,6 +346,10 @@
 			$('#viewregclients').hide();
 			$('footer').css('position', 'relative');
 			$('#backendclientregform').load('backendclient.html',function(){
+				$('#clientappname').tooltip({'trigger':'hover', 'title': 'Name of the Client Application'});
+				$('#organization').tooltip({'trigger':'hover', 'title': 'Name of the Organization'});
+				$('#issuerurl').tooltip({'trigger':'hover', 'title': 'Register a fixed "issuer URL" with the EHR'});
+				$('.uploadfile').tooltip({'trigger':'hover','title':'Register a public RSA key with the EHR'});
 				$('#registerbackendclientdetails').formValidation({
 		            framework: 'bootstrap',
 		            /*err: {
@@ -420,6 +440,8 @@
 						    $(this).prop('checked', false);
 						});
 						console.log(data);
+						backendData = data;
+						console.log(backendData);
 						$('#registerbackendcli').attr('disabled',false);
 						$('#registerbackendcli').removeClass('disabled');
 				      	$('#regbackendclientid').html(data.client_id);
@@ -556,6 +578,7 @@
 				      	$('.regscopes :checkbox:checked').each(function(i){
 						    $(this).prop('checked', false);
 						});
+						regclientData = data;
 				      	$('#regclientid').html(data.client_id);
 				      	$('#regclientsecret').html(data.client_secret);
 				      	$('#regregtoken').html(data.register_token);

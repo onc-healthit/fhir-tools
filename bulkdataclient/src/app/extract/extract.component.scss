@@ -13,7 +13,7 @@
 }
 
 .table-container .mat-column-data {
- // min-width: 360px;
+  // min-width: 360px;
 }
 
 .table-container .mat-column-id {
@@ -23,6 +23,10 @@
 .table-container .mat-column-data .resourceContainer {
   width: 50%;
   float: left;
+}
+
+.table-container .mat-column-data {
+  min-width: 400px;
 }
 
 .title .header-title {
@@ -58,6 +62,7 @@
   margin-left: 100px;
   margin-top: 20px;
 }
+
 @media(max-width:800px) {
   .mat-card {
     width: 900px;

@@ -1,8 +1,12 @@
 <mat-card>
-  <mat-card-title>Configure FHIR Server URL.</mat-card-title>
+  <mat-card-title>Execute Bulk Data API's</mat-card-title>
+  <p>The Execute Bulk Data API's component allows one to input a FHIR Server of choice and execute the Bulk Data API's live
+    and examine how the server interacts. If you dont have a FHIR Server, you can use the SITE FHIR Server to execute the
+    APIs.
+  </p>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <h1 class="infotext">Please Enter FHIR server URL to extract data.</h1>
+    <h3 class="infotext">Please Enter your FHIR Server to execute Bulk Data API's</h3>
     <form class="example-form row" [formGroup]="myForm" (ngSubmit)="saveURL()">
       <div class="col-md-6 col-sm-12">
         <mat-form-field class="mode">
@@ -19,14 +23,14 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="fhirurl" *ngIf="openMode">
-          <input matInput placeholder="FHIR Server URL *" formControlName="openurlFormControl">
+          <input matInput placeholder="FHIR Server URL *" [(ngModel)]="BaseURL" formControlName="openurlFormControl">
           <mat-error *ngIf="myForm.controls['openurlFormControl'].errors?.required">
             FHIR Server URL is
             <strong>required</strong>
           </mat-error>
         </mat-form-field>
         <mat-form-field class="fhirurl" *ngIf="secureMode">
-          <input matInput placeholder="FHIR Server URL *" formControlName="secureurlFormControl">
+          <input matInput placeholder="FHIR Server URL *" [(ngModel)]="BaseURL" formControlName="secureurlFormControl">
           <mat-error *ngIf="myForm.controls['secureurlFormControl'].errors?.required">
             FHIR Server URL is
             <strong>required</strong>
@@ -73,9 +77,28 @@
         <button mat-raised-button color="primary" type="submit" class="savebtn" style="margin-top:20px;">Save</button>
       </div>
       <div class="col-md-6 col-sm-12 trymediv">
-        <p>If you are new to the Bulk Data APIs, Click on Try Me button to use our test server for testing and hit Save</p>
-        <button mat-raised-button color="primary" type="button" class="savebtn" (click)="tryme();">Try Me!</button>
-
+        <p>The tools used here (including clients and servers) provide no protection of any data used during the tests, including
+          but not limited to client secrets and access tokens. Please do not point this reference implementation to any data
+          that contains PII (Personally Identifiable Information) and PHI (Protected Health information).</p>
+        <p>If you are new to the Bulk Data APIs, Select the SITE Server Open or Secure button to use our test server for testing
+          and hit Save</p>
+        <div class="col-md-6">
+          <button mat-raised-button color="primary" type="button" class="openbtn" [disabled]="isClickedOpen" (click)="tryme('open');">Use SITE Open FHIR Server</button>
+        </div>
+        <div class="col-md-6">
+          <button mat-raised-button color="primary" type="button" class="securebtn" [disabled]="isClickedsecure" (click)="tryme('secure');">Use SITE Secure FHIR Server</button>
+        </div>
+        <div class="col-md-12">
+          <p *ngIf="secureServerSelected" class="secureServerInfo">In order to use the SITE FHIR Server with the appropriate tokens the following steps need to be followed
+          </p>
+          <ol type='a' style="margin:0px;" *ngIf="secureServerSelected">
+            <li>Create a user account in the SITE FHIR Authorization Server: Follow instructions
+              <a href="{{origin}}/secure-fhir/view/newuser.html" target="_blank"> here </a> for user creation.</li>
+            <li>Login and Register a Backend client by uploading your public key, so that you can get the Client Id. Follow instructions
+              <a href="{{origin}}/secure-fhir/view/clients.html" target="_blank"> here </a> for client registration.</li>
+            <li>Once you have a Client Id follow the guidelines according to the Smart Backend Services.</li>
+          </ol>
+        </div>
         <!-- <div class="dropdown">
           <button mat-raised-button color="primary" class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">Try Me!
             <span class="caret"></span>
@@ -91,5 +114,186 @@
         </div> -->
       </div>
     </form>
+    <div class="row" *ngIf="openServerSaved">
+      <div class="col-md-12">
+        <h2 style="color:#3f51b5; margin-top:50px;">Population API's expected to be supported by the server.</h2>
+        <!-- <ol type='a' style="margin:0px;padding-left:15px;">
+          <li>Extract All Patients: GET {{origin}}/open-fhir/fhir/Patient/$export</li>
+          <li>Extract Group of Patients: GET {{origin}}/open-fhir/fhir/Group/'id'/$export</li>
+          <li>Extract By query string parameters: GET {{origin}}/open-fhir/fhir/Patient/$export?_since=MM-DD-YYYY&&_type='String
+            of comma separated FHIR resources'</li>
+          <li>Extract By GroupId and query string parameters: GET {{origin}}/open-fhir/fhir/Group/`groupId`/$export?_since=MM-DD-YYYY&&_type='String
+            of comma separated FHIR resources'</li>
+        </ol> -->
+      </div>
+    </div>
+    <div class="row" *ngIf="secureServerSaved">
+      <div class="col-md-12">
+        <h2 style="color:#3f51b5; margin-top:50px;">Population API's expected to be supported by the server.</h2>
+        <!-- <ol type='a' style="margin:0px;padding-left:15px;">
+          <li>Extract All Patients: GET {{origin}}/secure-fhir/fhir/Patient/$export</li>
+          <li>Extract Group of Patients: GET {{origin}}/secure-fhir/fhir/Group/'id'/$export</li>
+          <li>Extract By query string parameters: GET {{origin}}/secure-fhir/fhir/Patient/$export?_since=MM-DD-YYYY&&_type='String
+            of comma separated FHIR resources'</li>
+          <li>Extract By GroupId and query string parameters: GET {{origin}}/secure-fhir/fhir/Group/`groupId`/$export?_since=MM-DD-YYYY&&_type='String
+            of comma separated FHIR resources'</li>
+        </ol> -->
+      </div>
+    </div>
+    <div class="row" *ngIf="serverDetailsSaved">
+      <div class="openserver">
+        <!-- <h3>List of API's Available</h3> -->
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>GET</span>
+                <p>/fhir-base-url/Patient/$export</p>
+              </mat-panel-title>
+              <mat-panel-description>Extract All Patients</mat-panel-description>
+            </mat-expansion-panel-header>
+            <hr style="margin: 1px">
+            <br>
+            <h5>Request URL:{{BaseURL}}/Patient/$export</h5>
+            <button mat-raised-button color="primary" (click)="exportAll()">Execute </button>
+            <div class="row" *ngIf="enableExportAllStepper">
+              <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
+                <app-config-stepper stepper [data]="stepperData"></app-config-stepper>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>GET</span>
+                <p>/fhir-base-url/Group/{{'{groupid}'}}/$export</p>
+              </mat-panel-title>
+              <mat-panel-description>Extract subset of patients using Group Id, which is useful to deal with Patient Panels</mat-panel-description>
+            </mat-expansion-panel-header>
+            <hr style="margin:1px">
+            <br>
+            <div class="row">
+              <h4 class="col-md-2">Parameters:</h4>
+              <mat-form-field class="col-md-4">
+                <input matInput id="groupId" [(ngModel)]="groupid" placeholder="Enter Group Id">
+              </mat-form-field>
+              <div class="col-md-6 placeholderInformation">
+                <p>Enter Group Id in the Input field. For Ex., 1 or 2 or 3 or 4 or 5.</p>
+              </div>
+            </div>
+            <h5 *ngIf="!groupid">Request URL:{{BaseURL}}/Group/{{'{groupid}'}}/$export</h5>
+            <h5 *ngIf="groupid">Request URL:{{BaseURL}}/Group/{{groupid}}/$export</h5>
+            <button mat-raised-button color="primary" (click)="extractByGroupId()">Execute</button>
+            <div class="row" *ngIf="enableGroupByIdStepper">
+              <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
+                <app-config-stepper stepper [data]="stepperData"></app-config-stepper>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>GET</span>
+                <p>/fhir-base-url/Patient/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}}</p>
+              </mat-panel-title>
+              <mat-panel-description>Extract Patient Data using Date (from a specific point in time) and Resource Type</mat-panel-description>
+            </mat-expansion-panel-header>
+            <hr style="margin:1px">
+            <br>
+            <div class="row">
+              <h4 class="col-md-2">Parameters:</h4>
+              <mat-form-field class="col-md-4">
+                <input matInput [matDatepicker]="picker1" [(ngModel)]="date1" placeholder="Choose a date" [min]="minDate" [max]="maxDate">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <div class="col-md-6 placeholderInformation">
+                <p>Select a Date between 01-01-1950(MM-DD-YYYY) and Current Date.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">&nbsp;</div>
+              <mat-form-field class="col-md-4">
+                <mat-select placeholder="Select Resources" [(ngModel)]="resources1" multiple>
+                  <mat-option *ngFor="let resource of resourcesList" [value]="resource">{{resource}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div class="col-md-6 placeholderInformation">
+                <p>Select a List of Resources which need to be extracted.</p>
+              </div>
+            </div>
+            <h5 *ngIf="!date1 && !resources1">Request URL: {{BaseURL}}/Patient/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}}</h5>
+            <h5 *ngIf="date1 && !resources1">Request URL: {{BaseURL}}/Patient/$export?_since={{date1 |date: 'yyyy-MM-dd'}}&{{'{_type=resourcename}'}}</h5>
+            <h5 *ngIf="date1 && resources1">Request URL: {{BaseURL}}/Patient/$export?_since={{date1 | date: 'yyyy-MM-dd'}}&_type={{resources1}}</h5>
+            <button mat-raised-button color="primary" (click)="exportByDateandResource()">Execute</button>
+            <div class="row" *ngIf="enableDateandResourceStepper">
+              <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
+                <app-config-stepper stepper [data]="stepperData"></app-config-stepper>
+              </div>
+            </div>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span>GET</span>
+                <p>/fhir-base-url/Group/{{'{groupId}'}}/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}}</p>
+              </mat-panel-title>
+              <mat-panel-description>Extract subset of Patients using Group Id, Date(from a specific point in time) and Resource Type</mat-panel-description>
+            </mat-expansion-panel-header>
+            <hr style="margin:1px">
+            <br>
+            <div class="row">
+              <h4 class="col-md-2">Parameters:</h4>
+              <mat-form-field class="col-md-4">
+                <input matInput id="groupId" [(ngModel)]="groupid2" placeholder="Enter Group ID">
+              </mat-form-field>
+              <div class="col-md-6 placeholderInformation">
+                <p>Enter Group Id in the Input field. For Ex., 1 or 2 or 3 or 4 or 5.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                &nbsp;
+              </div>
+              <mat-form-field class="col-md-4">
+                <input matInput [matDatepicker]="picker2" [(ngModel)]="date2" placeholder="Choose a date">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+              <div class="col-md-6 placeholderInformation">
+                <p>Select a Date between 01-01-1950(MM-DD-YYYY) and Current Date.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                &nbsp;
+              </div>
+              <mat-form-field class="col-md-4">
+                <mat-select placeholder="Select Resources" [(ngModel)]="resources2" multiple>
+                  <mat-option *ngFor="let resource of resourcesList" [value]="resource">{{resource}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div class="col-md-6 placeholderInformation">
+                <p>Select a List of Resources which need to be extracted.</p>
+              </div>
+            </div>
+            <h5 *ngIf="!groupid2 && !date2 && !resources2">Request URL: {{BaseURL}}/Group/{{'{groupId}'}}/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}} </h5>
+            <h5 *ngIf="groupid2 && !date2 && !resources2">Request URL: {{BaseURL}}/Group/{{groupid2}}/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}} </h5>
+            <h5 *ngIf="groupid2 && date2 && !resources2">Request URL: {{BaseURL}}/Group/{{groupid2}}/$export?_since={{date2|date: 'yyyy-MM-dd'}}&{{'{_type=resourcename}'}}
+            </h5>
+            <h5 *ngIf="groupid2 && date2 && resources2">Request URL: {{BaseURL}}/Group/{{groupid2}}/$export?_since={{date2| date:'yyyy-MM-dd'}}&_type={{resources2}}
+            </h5>
+            <button mat-raised-button color="primary" (click)="exportByGroupDateandResource()">Execute</button>
+            <div class="row" *ngIf="enableGroupDateandResourceStepper">
+              <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
+                <app-config-stepper stepper [data]="stepperData"></app-config-stepper>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>
+
+<app-loading [isLoading]="isLoadingResults"></app-loading>

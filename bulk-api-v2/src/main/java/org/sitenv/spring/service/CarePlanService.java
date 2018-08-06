@@ -16,8 +16,6 @@ public interface CarePlanService {
     public List<DafCarePlan> getCarePlanByPatient(String Patient);
 
     public List<DafCarePlan> getCarePlanBySearchCriteria(CarePlanSearchCriteria carePlanSearchCriteria);
-
-    public List<DafCarePlanParticipant> getCarePlanparticipantByCareTeam(int id);
     
     public List<DafCarePlan> getCarePlanForBulkData(List<Integer> patients, Date start);
 

@@ -702,3 +702,44 @@ body {
 .backendclientdetails p{
     text-align: center;
 }
+
+/*.client-tabs .nav-tabs {
+    border-bottom: 1px solid #ddd;
+}*/
+
+.client-tabs .nav-tabs li.active a {
+     background-color: #337ab7 !important; 
+     color:#fff;
+}
+
+.client-tabs .nav-tabs li.active a.userclientsa {
+     border-top-left-radius: 10px;
+}
+
+.client-tabs .nav-tabs li.active a.backendclients {
+     border-top-right-radius: 10px;
+}
+
+.client-tabs .nav-tabs li a.userclientsa {
+     border-top-left-radius: 10px;
+}
+
+.client-tabs .nav-tabs li a.backendclients {
+     border-top-right-radius: 10px;
+}
+
+.client-tabs .nav-tabs li.active a:hover {
+     background-color: #337ab7 !important; 
+     color:#fff;
+     text-decoration: none;
+}
+
+.client-tabs .nav-tabs li a {
+     background-color: #eeeeee !important; 
+}
+
+.client-tabs .tab-content{
+    border:1px solid #ddd;
+    border-top:none;
+    padding:15px;
+}

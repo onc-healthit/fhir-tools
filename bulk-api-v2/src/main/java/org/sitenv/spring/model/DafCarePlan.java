@@ -2,6 +2,7 @@ package org.sitenv.spring.model;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -30,6 +31,9 @@ public class DafCarePlan {
     @Column(name="last_updated")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
+    
+    @OneToMany(mappedBy = "careplan", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<DafCarePlanParticipant> participants;
 
     public int getId() {
         return id;
@@ -78,4 +82,13 @@ public class DafCarePlan {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
+
+	public List<DafCarePlanParticipant> getParticipants() {
+		return participants;
+	}
+
+	public void setParticipants(List<DafCarePlanParticipant> participants) {
+		this.participants = participants;
+	}
+
 }

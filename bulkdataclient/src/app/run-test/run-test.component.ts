@@ -16,7 +16,6 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { NdJsonDialogComponent } from '../extract/ndjson-dialog/ndjson-dialog.component';
 import * as moment from 'moment';
 
-
 @Component({
   selector: 'app-run-test',
   templateUrl: './run-test.component.html',
@@ -73,9 +72,12 @@ export class RunTestComponent implements OnInit {
   exportUsingParamsUrl: any;
   exportGroupUsingParamsUrl: any;
 
-  constructor(private runTestService: RunTestService,
-    private util: UtilityService, private dialog: MatDialog,
-    private router: Router) { }
+  constructor(
+    private runTestService: RunTestService,
+    private util: UtilityService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.groupIDForm = new FormGroup({
@@ -91,15 +93,47 @@ export class RunTestComponent implements OnInit {
       resources: new FormControl('', Validators.required)
     });
     this.checkBulkData();
-    this.secureFHIRServer = 'https://fhirtest.sitenv.org/secure-fhir/fhir';
-    this.fhirserverurl = 'https://fhirtest.sitenv.org/backend-app-secure';
-    this.exportAllContentLocation = 'https://fhirtest.sitenv.org/backend-app-secure/bulkdata/121';
-    this.extractByGroupContentLocation = 'https://fhirtest.sitenv.org/backend-app-secure/bulkdata/122';
-    this.exportUsingParamsContentLocation = 'https://fhirtest.sitenv.org/backend-app-secure/bulkdata/123';
-    this.exportUsingGroupParamsContentLocation = 'https://fhirtest.sitenv.org/backend-app-secure/bulkdata/124';
-    this.resourcesList = ['AllergyIntolerance', 'CarePlan', 'Claim', 'Condition', 'Device', 'Diagnostic Report', 'DocumentReference', 'Encounter', 'Goals', 'Immunization', 'Location', 'Medication', 'MedicationAdministration', 'MedicationDispense', 'MedicationOrder', 'MedicationStatement', 'Observation', 'Organization', 'Practitioner', 'Procedure'];
-    this.paramsForm.setValue({ 'resources': ['AllergyIntolerance', 'CarePlan'], 'sincedate': moment('1990-01-01') });
-    this.groupParamsForm.setValue({ 'resources': ['AllergyIntolerance', 'CarePlan'], 'sincedate': moment('1990-01-01'), 'groupId': '27' });
+    this.secureFHIRServer = 'https://fhirprod.sitenv.org/secure-fhir/fhir';
+    this.fhirserverurl = 'https://fhirprod.sitenv.org/backend-app';
+    this.exportAllContentLocation =
+      'https://fhirprod.sitenv.org/backend-app/bulkdata/444';
+    this.extractByGroupContentLocation =
+      'https://fhirprod.sitenv.org/backend-app/bulkdata/445';
+    this.exportUsingParamsContentLocation =
+      'https://fhirprod.sitenv.org/backend-app/bulkdata/446';
+    this.exportUsingGroupParamsContentLocation =
+      'https://fhirprod.sitenv.org/backend-app/bulkdata/447';
+    this.resourcesList = [
+      'AllergyIntolerance',
+      'CarePlan',
+      'Claim',
+      'Condition',
+      'Device',
+      'Diagnostic Report',
+      'DocumentReference',
+      'Encounter',
+      'Goals',
+      'Immunization',
+      'Location',
+      'Medication',
+      'MedicationAdministration',
+      'MedicationDispense',
+      'MedicationOrder',
+      'MedicationStatement',
+      'Observation',
+      'Organization',
+      'Practitioner',
+      'Procedure'
+    ];
+    this.paramsForm.setValue({
+      resources: ['AllergyIntolerance', 'CarePlan'],
+      sincedate: moment('1990-01-01')
+    });
+    this.groupParamsForm.setValue({
+      resources: ['AllergyIntolerance', 'CarePlan'],
+      sincedate: moment('1990-01-01'),
+      groupId: '27'
+    });
   }
   getdetails() {
     if (this.groupIDForm.valid) {
@@ -153,7 +187,7 @@ export class RunTestComponent implements OnInit {
             this.extractData = [];
             for (let p = 0; p < result.length; p++) {
               const dataObj = {
-                resourceName: result[p].type,
+                resourceName: this.util.capitalizeFirstChar(result[p].type),
                 resourceLink: result[p].url
               };
               this.extractData.push(dataObj);
@@ -168,7 +202,7 @@ export class RunTestComponent implements OnInit {
             this.extractParamsData = [];
             for (let p = 0; p < result.length; p++) {
               const dataObj = {
-                resourceName: result[p].type,
+                resourceName: this.util.capitalizeFirstChar(result[p].type),
                 resourceLink: result[p].url
               };
               this.extractParamsData.push(dataObj);
@@ -183,7 +217,7 @@ export class RunTestComponent implements OnInit {
             this.extractGroupParamsData = [];
             for (let p = 0; p < result.length; p++) {
               const dataObj = {
-                resourceName: result[p].type,
+                resourceName: this.util.capitalizeFirstChar(result[p].type),
                 resourceLink: result[p].url
               };
               this.extractGroupParamsData.push(dataObj);
@@ -214,47 +248,53 @@ export class RunTestComponent implements OnInit {
   exportAll() {
     this.isLoadingResults = true;
     // this.stepperexecute = true;
-    this.runTestService.getBulkDataByContentLocation(this.exportAllContentLocation).subscribe((res: Response) => {
-      this.stepperexecuteAll = true;
-      this.displayExtractAll = true;
-      this.isLoadingResults = false;
-      this.extractAllResponseCode = res.status;
-      this.responseBody = res.body;
-      this.extractAllResponse = this.responseBody;
-      this.extractAllUrl = 'https://fhirtest.sitenv.org/secure-fhir/fhir/Patient/$export';
-      const result = this.responseBody.output;
-      this.extractAllData = [];
-      for (let p = 0; p < result.length; p++) {
-        const dataObj = {
-          resourceName: result[p].type,
-          resourceLink: result[p].url
-        };
-        this.extractAllData.push(dataObj);
-      }
-    });
+    this.runTestService
+      .getBulkDataByContentLocation(this.exportAllContentLocation)
+      .subscribe((res: Response) => {
+        this.stepperexecuteAll = true;
+        this.displayExtractAll = true;
+        this.isLoadingResults = false;
+        this.extractAllResponseCode = res.status;
+        this.responseBody = res.body;
+        this.extractAllResponse = this.responseBody;
+        this.extractAllUrl =
+          'https://fhirprod.sitenv.org/secure-fhir/fhir/Patient/$export';
+        const result = this.responseBody.output;
+        this.extractAllData = [];
+        for (let p = 0; p < result.length; p++) {
+          const dataObj = {
+            resourceName: this.util.capitalizeFirstChar(result[p].type),
+            resourceLink: result[p].url
+          };
+          this.extractAllData.push(dataObj);
+        }
+      });
   }
 
   exportByGroupId() {
     this.isLoadingResults = true;
 
-    this.runTestService.getBulkDataByContentLocation(this.extractByGroupContentLocation).subscribe((res: Response) => {
-      this.displayResponse = true;
-      this.stepperexecuteGroupId = true;
-      this.isLoadingResults = false;
-      this.responseCode = res.status;
-      this.responseBody = res.body;
-      this.response = this.responseBody;
-      this.exportByGroupIdUrl = 'https://fhirtest.sitenv.org/secure-fhir/fhir/Group/1/$export';
-      const result = this.responseBody.output;
-      this.extractData = [];
-      for (let p = 0; p < result.length; p++) {
-        const dataObj = {
-          resourceName: result[p].type,
-          resourceLink: result[p].url
-        };
-        this.extractData.push(dataObj);
-      }
-    });
+    this.runTestService
+      .getBulkDataByContentLocation(this.extractByGroupContentLocation)
+      .subscribe((res: Response) => {
+        this.displayResponse = true;
+        this.stepperexecuteGroupId = true;
+        this.isLoadingResults = false;
+        this.responseCode = res.status;
+        this.responseBody = res.body;
+        this.response = this.responseBody;
+        this.exportByGroupIdUrl =
+          'https://fhirprod.sitenv.org/secure-fhir/fhir/Group/5/$export';
+        const result = this.responseBody.output;
+        this.extractData = [];
+        for (let p = 0; p < result.length; p++) {
+          const dataObj = {
+            resourceName: this.util.capitalizeFirstChar(result[p].type),
+            resourceLink: result[p].url
+          };
+          this.extractData.push(dataObj);
+        }
+      });
   }
 
   exportUsingParams() {
@@ -277,24 +317,27 @@ export class RunTestComponent implements OnInit {
 
     this.isLoadingResults = true;
 
-    this.runTestService.getBulkDataByContentLocation(this.exportUsingParamsContentLocation).subscribe((res: Response) => {
-      this.displayParamsResponse = true;
-      this.stepperexecuteparams = true;
-      this.isLoadingResults = false;
-      this.exportUsingParamsCode = res.status;
-      this.responseBody = res.body;
-      this.exportUsingParamsResponse = this.responseBody;
-      const result = this.responseBody.output;
-      this.exportUsingParamsUrl = 'https://fhirtest.sitenv.org/secure-fhir/fhir/Patient/$export?_since=1990-01-01&_type=AllergyIntolerance,Condition';
-      this.extractParamsData = [];
-      for (let p = 0; p < result.length; p++) {
-        const dataObj = {
-          resourceName: result[p].type,
-          resourceLink: result[p].url
-        };
-        this.extractParamsData.push(dataObj);
-      }
-    });
+    this.runTestService
+      .getBulkDataByContentLocation(this.exportUsingParamsContentLocation)
+      .subscribe((res: Response) => {
+        this.displayParamsResponse = true;
+        this.stepperexecuteparams = true;
+        this.isLoadingResults = false;
+        this.exportUsingParamsCode = res.status;
+        this.responseBody = res.body;
+        this.exportUsingParamsResponse = this.responseBody;
+        const result = this.responseBody.output;
+        this.exportUsingParamsUrl =
+          'https://fhirprod.sitenv.org/secure-fhir/fhir/Patient/$export?_since=1990-01-01&_type=AllergyIntolerance,Condition';
+        this.extractParamsData = [];
+        for (let p = 0; p < result.length; p++) {
+          const dataObj = {
+            resourceName: this.util.capitalizeFirstChar(result[p].type),
+            resourceLink: result[p].url
+          };
+          this.extractParamsData.push(dataObj);
+        }
+      });
   }
 
   expandPanel(type) {
@@ -323,24 +366,26 @@ export class RunTestComponent implements OnInit {
 
     this.isLoadingResults = true;
 
-    this.runTestService.getBulkDataByContentLocation(this.exportUsingGroupParamsContentLocation).subscribe((res: Response) => {
-      this.displayGroupParamsResponse = true;
-      this.stepperexecuteGroupparams = true;
-      this.isLoadingResults = false;
-      this.exportUsingGroupParamsCode = res.status;
-      this.responseBody = res.body;
-      this.exportUsingGroupParamsResponse = this.responseBody;
-      const result = this.responseBody.output;
-      this.exportGroupUsingParamsUrl = 'https://fhirtest.sitenv.org/secure/fhir/Group/1/$export?_since=1950-01-01&_type=AllergyIntolerance,Condition';
-      this.extractGroupParamsData = [];
-      for (let p = 0; p < result.length; p++) {
-        const dataObj = {
-          resourceName: result[p].type,
-          resourceLink: result[p].url
-        };
-        this.extractGroupParamsData.push(dataObj);
-      }
-    });
+    this.runTestService
+      .getBulkDataByContentLocation(this.exportUsingGroupParamsContentLocation)
+      .subscribe((res: Response) => {
+        this.displayGroupParamsResponse = true;
+        this.stepperexecuteGroupparams = true;
+        this.isLoadingResults = false;
+        this.exportUsingGroupParamsCode = res.status;
+        this.responseBody = res.body;
+        this.exportUsingGroupParamsResponse = this.responseBody;
+        const result = this.responseBody.output;
+        this.exportGroupUsingParamsUrl =
+          'https://fhirprod.sitenv.org/secure/fhir/Group/5/$export?_since=1990-01-01&_type=AllergyIntolerance,Condition';
+        this.extractGroupParamsData = [];
+        for (let p = 0; p < result.length; p++) {
+          const dataObj = {
+            resourceName: this.util.capitalizeFirstChar(result[p].type),
+            resourceLink: result[p].url
+          };
+          this.extractGroupParamsData.push(dataObj);
+        }
+      });
   }
-
 }

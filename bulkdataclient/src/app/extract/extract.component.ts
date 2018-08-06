@@ -103,7 +103,7 @@ export class ExtractComponent implements OnInit {
       this.extractAllData = [];
       for (let p = 0; p < result.length; p++) {
         const dataObj = {
-          resourceName: result[p].type,
+          resourceName: this.util.capitalizeFirstChar(result[p].type),
           resourceLink: result[p].url
         };
         this.extractAllData.push(dataObj);
@@ -134,7 +134,17 @@ export class ExtractComponent implements OnInit {
         patList.push(patId);
       }
       groupObject['name'] = this.group.name;
-      groupObject['patientList'] = patList.join(',');
+      if (patList.length === 2) {
+        groupObject['patientList'] = 'Two Patients';
+      } else if (patList.length === 5) {
+        groupObject['patientList'] = 'Five Patients';
+      } else if (patList.length === 10) {
+        groupObject['patientList'] = 'Ten Patients';
+      } else if (patList.length === 50) {
+        groupObject['patientList'] = 'Fifty Patients';
+      } else if (patList.length === 100) {
+        groupObject['patientList'] = 'One Hundred Patients';
+      }
       groupObject['status'] = '';
       groupObject['requestId'] = '';
       groupObject['data'] = this.extractData;
@@ -201,7 +211,7 @@ export class ExtractComponent implements OnInit {
           this.extractData = [];
           for (let p = 0; p < result.length; p++) {
             const dataObj = {
-              resourceName: result[p].type,
+              resourceName: this.util.capitalizeFirstChar(result[p].type),
               resourceLink: result[p].url
             };
             this.extractData.push(dataObj);

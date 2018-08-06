@@ -1,14 +1,18 @@
 <mat-card>
   <mat-card-title>
-    <h2>Bulk Data Extract API's.</h2>
-    <p>Base url: {{secureFHIRServer}}</p>
+    Bulk Data API's Simulation.
   </mat-card-title>
+  <p class="baseURL">The Bulk Data API's Simulation simulates how each of the Bulk Data API works in terms of request and response and the data
+    that is exchanged using SITE FHIR Server and Client. Execute any of the APIs below and examine the results to learn more
+    about the API.</p>
+
   <mat-divider></mat-divider>
   <mat-card-content>
+    <p class="baseURL">FHIR Base url: {{secureFHIRServer}}</p>
     <mat-accordion>
       <!-- Export All Patients-->
 
-      <mat-expansion-panel class="row" (click)="expandPanel('exportAll')">
+      <mat-expansion-panel class="row" (click)="expandPanel('exportAll')" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span>GET</span>
@@ -17,7 +21,12 @@
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract all Patients
+            <div class="panelDescription">
+              <p>Extract all Patients</p>
+              <button mat-mini-fab color="primary" (click)="exportAll()" matTooltip="Execute" class="executeButton">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
@@ -25,16 +34,16 @@
           <div class="col-md-12">
             <p>Request URL: {{secureFHIRServer}}/Patient/$export</p>
           </div>
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <button mat-raised-button color="primary" (click)="exportAll()" class="postbtn">Execute </button>
-          </div>
+          </div> -->
           <div class="stepper-container" style="margin-top:90px;border:1px solid lightgrey">
             <app-stepper stepper *ngIf="stepperexecuteAll" [myData]="extractAllData" [jsonview]="extractAllResponse" [url]="extractAllUrl"></app-stepper>
           </div>
         </div>
       </mat-expansion-panel>
       <!-- Export By Group Id-->
-      <mat-expansion-panel class="row" (click)="expandPanel('exportByGroupId')">
+      <mat-expansion-panel class="row" (click)="expandPanel('exportByGroupId')" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span>GET</span>
@@ -44,7 +53,12 @@
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract subset of patients using Group Id, which is useful to deal with Patient Panels
+            <div class="panelDescription">
+              <p>Extract subset of patients using Group Id, which is useful to deal with Patient Panels</p>
+              <button mat-mini-fab color="primary" (click)="exportByGroupId()" matTooltip="Execute" class="executeButton">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
@@ -63,31 +77,37 @@
               <p>Please enter GroupId 2,3 or 4.</p>
             </form>
           </div> -->
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <button mat-raised-button color="primary" (click)="exportByGroupId()" class="postbtn">Execute </button>
-          </div>
+          </div> -->
           <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
             <app-stepper stepper *ngIf="stepperexecuteGroupId" [myData]="extractData" [jsonview]="response" [url]="exportByGroupIdUrl"></app-stepper>
           </div>
         </div>
       </mat-expansion-panel>
       <!-- With Parameters-->
-      <mat-expansion-panel class="row" (click)="expandPanel('exportWithParams')">
+      <mat-expansion-panel class="row" (click)="expandPanel('exportWithParams')" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir-base-url/Patient/$export?{{'{_since}'}}&{{'{_type}'}}</b>
+              <b>/fhir-base-url/Patient/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}}</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract Patient Data using Date (from a specific point in time) and Resource Type
+
+            <div class="panelDescription">
+              <p>Extract Patient Data using Date (from a specific point in time) and Resource Type</p>
+              <button mat-mini-fab color="primary" (click)="exportUsingParams()" matTooltip="Execute" class="executeButton">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row requestBody">
           <div class="col-md-12">
-            <p style="word-break: break-all;font-size: 15px;">Request URL: {{secureFHIRServer}}/Patient/$export?_since=1990-01-01&_type=AllergyIntolerance,Condition</p>
+            <p style="word-break: break-all;font-size: 15px;">Request URL: {{secureFHIRServer}}/Patient/$export?_since=01-01-1990&_type=AllergyIntolerance,Condition</p>
           </div>
           <!-- <div class="" style="width:12.75%; float:left;padding:0px 15px;">
             <p>Parameters:</p>
@@ -110,9 +130,9 @@
               </div>
             </form>
           </div> -->
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <button mat-raised-button color="primary" class="postbtn" (click)="exportUsingParams()">Execute </button>
-          </div>
+          </div> -->
           <div class="stepper-container col-md-12" style="margin-top:30px;border:1px solid lightgrey">
             <app-stepper stepper *ngIf="stepperexecuteparams" [myData]="extractParamsData" [jsonview]="exportUsingParamsResponse" [url]="exportUsingParamsUrl"></app-stepper>
           </div>
@@ -120,22 +140,28 @@
 
       </mat-expansion-panel>
       <!-- Group With Parameters-->
-      <mat-expansion-panel class="row" (click)="expandPanel('exportGroupWithParams')">
+      <mat-expansion-panel class="row" (click)="expandPanel('exportGroupWithParams')" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <span>GET</span>
             <p>
-              <b>/fhir-base-url/Group/{{'{groupId}'}}/$export?{{'{_since}'}}&{{'{_type}'}}</b>
+              <b>/fhir-base-url/Group/{{'{groupId}'}}/$export?{{'{_since=DateTime}'}}&{{'{_type=resourcename}'}}</b>
             </p>
           </mat-panel-title>
           <mat-panel-description>
-            Extract subset of Patients using Group Id, Date(from a specific point in time) and Resource Type
+
+            <div class="panelDescription">
+              <p>Extract subset of Patients using Group Id, Date(from a specific point in time) and Resource Type</p>
+              <button mat-mini-fab color="primary" (click)="exportGroupUsingParams()" matTooltip="Execute" class="executeButton">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </div>
           </mat-panel-description>
         </mat-expansion-panel-header>
         <hr style="margin: 1px">
         <div class="row requestBody" style="margin-top:20px;">
           <div class="col-md-12">
-            <p style="word-break: break-all;font-size: 15px;">Request URL: {{secureFHIRServer}}/Group/1/$export?_since=1950-01-01&_type=AllergyIntolerance,Condition</p>
+            <p style="word-break: break-all;font-size: 15px;">Request URL: {{secureFHIRServer}}/Group/1/$export?_since=01-01-1950&_type=AllergyIntolerance,Condition</p>
           </div>
           <!-- <div class="" style="width:12.75%;float:left;padding:0px 15px;">
             <p>Parameters:</p>
@@ -167,9 +193,9 @@
               </div>
             </form>
           </div> -->
-          <div class="col-md-12">
+          <!-- <div class="col-md-12">
             <button mat-raised-button color="primary" class="postbtn" (click)="exportGroupUsingParams()">Execute </button>
-          </div>
+          </div> -->
           <div class="stepper-container" style="margin-top:110px;border:1px solid lightgrey">
             <app-stepper stepper *ngIf="stepperexecuteGroupparams" [myData]="extractGroupParamsData" [jsonview]="exportUsingGroupParamsResponse"
               [url]="exportGroupUsingParamsUrl">

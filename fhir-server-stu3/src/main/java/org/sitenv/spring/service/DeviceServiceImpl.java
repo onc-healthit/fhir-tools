@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("deviceResourceService")
@@ -39,5 +40,11 @@ public class DeviceServiceImpl implements DeviceService {
     public List<DafDevice> getDeviceBySearchCriteria(DeviceSearchCriteria deviceSearchCriteria) {
         return this.deviceDao.getDeviceBySearchCriteria(deviceSearchCriteria);
     }
+
+	@Override
+	@Transactional
+	public List<DafDevice> getDeviceForBulkData(List<Integer> patients, Date start) {
+		return this.deviceDao.getDeviceForBulkData(patients, start);
+	}
 
 }

@@ -536,4 +536,17 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
     }
 
 
+	public List<DocumentReference> getDocumentReferenceForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafDocumentReference> dafDocumentReferenceList = service.getDocumentReferenceForBulkData(patients, start);
+
+        List<DocumentReference> docRefList = new ArrayList<DocumentReference>();
+
+        for (DafDocumentReference dafDocumentReference : dafDocumentReferenceList) {
+                docRefList.add(createDocumentReferenceObject(dafDocumentReference));
+        }
+
+        return docRefList;
+	}
+
+
 }

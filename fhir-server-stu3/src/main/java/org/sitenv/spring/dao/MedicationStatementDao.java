@@ -25,4 +25,6 @@ public interface MedicationStatementDao {
 
     public List<DafMedicationStatement> getMedicationStatementByIdentifierValue(String identifierValue);
 
+	public List<DafMedicationStatement> getMedicationStatementForBulkData(List<Integer> patients, Date start);
+
 }

@@ -102,4 +102,18 @@ public class GoalsDaoImpl extends AbstractDao implements GoalsDao {
         return (List<DafGoals>) criteria.list();
     }
 
+	@Override
+	public List<DafGoals> getGoalsForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafGoals.class, "goals")
+                .createAlias("goals.patient", "dp");
+        if(patients!=null) {
+            criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+                        
+        return criteria.list();
+	}
+
 }

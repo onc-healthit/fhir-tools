@@ -19,6 +19,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -161,5 +162,17 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 
         return medicationRequest;
     }
+
+	public List<MedicationRequest> getMedicationRequestForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafMedicationRequest> dafMedicationOrderList = service.getMedicationRequestForBulkData(patients, start);
+
+        List<MedicationRequest> medOrderList = new ArrayList<MedicationRequest>();
+
+        for (DafMedicationRequest dafMedicationOrder : dafMedicationOrderList) {
+                medOrderList.add(createMedicationRequestObject(dafMedicationOrder));
+        }
+
+        return medOrderList;
+	}
 
 }

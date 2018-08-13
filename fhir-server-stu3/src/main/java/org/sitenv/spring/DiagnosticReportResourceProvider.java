@@ -22,6 +22,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -246,5 +247,17 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 
         return diagnostic;
     }
+
+	public List<DiagnosticReport> getDiagnosticReportForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafDiagnosticReport> dafDiagnosticReportList = service.getDiagnosticReportForBulkData(patients, start);
+
+        List<DiagnosticReport> diagnosticList = new ArrayList<DiagnosticReport>();
+
+        for (DafDiagnosticReport dafDiagnosticReport : dafDiagnosticReportList) {
+                diagnosticList.add(createDiagnosticReportObject(dafDiagnosticReport));
+        }
+
+        return diagnosticList;
+	}
 
 }

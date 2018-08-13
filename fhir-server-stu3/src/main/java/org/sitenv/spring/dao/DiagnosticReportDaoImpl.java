@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository("diagnosticReportDao")
@@ -64,5 +65,19 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
         }
         return (List<DafDiagnosticReport>) criteria.list();
     }
+
+	@Override
+	public List<DafDiagnosticReport> getDiagnosticReportForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafDiagnosticReport.class, "diagnostic")
+                .createAlias("diagnostic.patient", "dp");
+        if(patients!=null) {
+         	criteria.add(Restrictions.in("dp.id", patients));
+         }
+         if(start != null) {
+         	criteria.add(Restrictions.ge("updated", start));
+         }
+                        
+        return criteria.list();
+	}
 
 }

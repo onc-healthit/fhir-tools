@@ -25,6 +25,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -397,4 +398,16 @@ public class LocationResourceProvider implements IResourceProvider {
 
         return location;
     }
+
+	public List<Location> getLocationForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafLocation> dafLocationList = service.getLocationForBulkData(patients, start);
+
+        List<Location> locationList = new ArrayList<Location>();
+
+        for (DafLocation dafLocation : dafLocationList) {
+                locationList.add(createLocationObject(dafLocation));
+        }
+
+        return locationList;
+	}
 }

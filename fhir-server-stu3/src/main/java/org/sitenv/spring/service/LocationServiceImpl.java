@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("locationResourceService")
@@ -34,5 +35,10 @@ public class LocationServiceImpl implements LocationService {
 
         return dao.getLocationBySearchCriteria(locationSearchCriteria);
     }
+
+	@Override
+	public List<DafLocation> getLocationForBulkData(List<Integer> patients, Date start) {
+		return this.dao.getLocationForBulkData(patients, start);
+	}
 
 }

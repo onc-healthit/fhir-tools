@@ -22,6 +22,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -377,5 +378,17 @@ public class ObservationResourceProvider implements IResourceProvider {
 
         return observation;
     }
+
+	public List<Observation> getObservationForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafObservation> dafObservationList = service.getObservationForBulkData(patients, start);
+
+        List<Observation> observationList = new ArrayList<Observation>();
+
+        for (DafObservation dafObservation : dafObservationList) {
+                observationList.add(createObservationObject(dafObservation));
+        }
+
+        return observationList;
+	}
 
 }

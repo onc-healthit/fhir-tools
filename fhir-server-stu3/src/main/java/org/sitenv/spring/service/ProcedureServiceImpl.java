@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("procedureResourceService")
@@ -34,5 +35,10 @@ public class ProcedureServiceImpl implements ProcedureService {
 
         return dao.getProcedureBySearchCriteria(procedureSearchCriteria);
     }
+
+	@Override
+	public List<DafProcedure> getProcedureForBulkData(List<Integer> patients, Date start) {
+		return this.dao.getProcedureForBulkData(patients, start);
+	}
 
 }

@@ -20,6 +20,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -330,4 +331,16 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
         return medDispense;
 
     }
+
+	public List<MedicationDispense> getMedicationDispenseForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafMedicationDispense> dafMedicationDispenseList = service.getMedicationDispenseForBulkData(patients, start);
+
+        List<MedicationDispense> medDispenseList = new ArrayList<MedicationDispense>();
+
+        for (DafMedicationDispense dafMedicationDispense : dafMedicationDispenseList) {
+                medDispenseList.add(createMedicationDispenseObject(dafMedicationDispense));
+        }
+
+        return medDispenseList;
+	}
 }

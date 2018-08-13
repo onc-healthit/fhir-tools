@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("goalsResourceService")
@@ -39,5 +40,11 @@ public class GoalsServiceImpl implements GoalsService {
     public List<DafGoals> getGoalsBySearchCriteria(GoalsSearchCriteria goalsSearchCriteria) {
         return this.goalsDao.getGoalsBySearchCriteria(goalsSearchCriteria);
     }
+
+	@Override
+	@Transactional
+	public List<DafGoals> getGoalsForBulkData(List<Integer> patients, Date start) {
+		return this.goalsDao.getGoalsForBulkData(patients, start);
+	}
 
 }

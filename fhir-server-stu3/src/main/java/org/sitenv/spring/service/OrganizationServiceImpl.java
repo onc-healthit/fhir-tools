@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("organizationService")
@@ -33,5 +34,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     public List<DafOrganization> getOrganizationBySearchCriteria(OrganizationSearchCriteria criteria) {
         return this.organizationDao.getOrganizationBySearchCriteria(criteria);
     }
+
+	@Override
+	public List<DafOrganization> getOrganizationForBulkData(List<Integer> patients, Date start) {
+		return this.organizationDao.getOrganizationForBulkData(patients, start);
+	}
 
 }

@@ -15,4 +15,6 @@ public interface ConditionService {
 
     public List<DafCondition> getConditionBySearchOptions(ConditionSearchCriteria conditionSearchCriteria);
 
+	public List<DafCondition> getConditionForBulkData(List<Integer> patients, java.util.Date start);
+
 }

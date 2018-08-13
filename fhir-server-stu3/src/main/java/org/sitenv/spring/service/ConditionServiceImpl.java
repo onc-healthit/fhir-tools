@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("conditionResourceService")
@@ -39,4 +40,9 @@ public class ConditionServiceImpl implements ConditionService {
     public List<DafCondition> getConditionBySearchOptions(ConditionSearchCriteria conditionSearchCriteria) {
         return this.conditionDao.getConditionBySearchOptions(conditionSearchCriteria);
     }
+
+	@Override
+	public List<DafCondition> getConditionForBulkData(List<Integer> patients, Date start) {
+		return this.conditionDao.getConditionForBulkData(patients, start);
+	}
 }

@@ -180,4 +180,18 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
         return dafDocumentReferences;
     }
 
+	@Override
+	public List<DafDocumentReference> getDocumentReferenceForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafDocumentReference.class, "docRef")
+                .createAlias("docRef.dafPatient", "dp");
+        if(patients!=null) {
+        	criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+                        
+        return criteria.list();
+	}
+
 }

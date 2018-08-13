@@ -2,6 +2,7 @@ package org.sitenv.spring.service;
 
 import org.sitenv.spring.model.DafMedicationDispense;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MedicationDispenseService {
@@ -19,5 +20,7 @@ public interface MedicationDispenseService {
     public List<DafMedicationDispense> getMedicationDispenseByMedication(String medication);
 
     public List<DafMedicationDispense> getMedicationDispenseByStatus(String status);
+
+	public List<DafMedicationDispense> getMedicationDispenseForBulkData(List<Integer> patients, Date start);
 
 }

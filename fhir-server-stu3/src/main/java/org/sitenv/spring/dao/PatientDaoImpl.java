@@ -185,4 +185,20 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
         return (List<PatientList>) criteria.list();
     }
 
+    @Override
+    @Transactional
+    public List<DafPatientJson> getPatientJsonForBulkData(List<Integer> patients, Date start){
+
+        Criteria criteria = getSession().createCriteria(DafPatientJson.class);
+
+                        if(patients!=null) {
+                criteria.add(Restrictions.in("id", patients));
+                        }
+                        if(start != null) {
+                                criteria.add(Restrictions.ge("updated", start));
+                        }
+        return criteria.list();
+
+        }
+
 }

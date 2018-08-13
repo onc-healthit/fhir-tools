@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository("medicationDao")
@@ -35,4 +36,18 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 
         return dafMedication;
     }
+
+	@Override
+	public List<DafMedication> getMedicationForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafMedication.class, "medication");
+        // .createAlias("medication.patient", "dp");
+                 /*if(patients!=null) {
+         criteria.add(Restrictions.in("dp.id", patients));
+                 }*/ 
+        if(start != null) {
+           criteria.add(Restrictions.ge("updated", start));
+        }
+                 
+        return criteria.list();
+	}
 }

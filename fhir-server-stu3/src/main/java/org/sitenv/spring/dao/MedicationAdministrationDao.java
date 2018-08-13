@@ -2,6 +2,7 @@ package org.sitenv.spring.dao;
 
 import org.sitenv.spring.model.DafMedicationAdministration;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MedicationAdministrationDao {
@@ -19,5 +20,7 @@ public interface MedicationAdministrationDao {
     public List<DafMedicationAdministration> getMedicationAdministrationByMedication(String medication);
 
     public List<DafMedicationAdministration> getMedicationAdministrationByStatus(String status);
+
+	public List<DafMedicationAdministration> getMedicationAdministrationForBulkData(List<Integer> patients, Date start);
 
 }

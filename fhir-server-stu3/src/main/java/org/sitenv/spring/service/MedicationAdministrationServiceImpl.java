@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("medicationAdministrationResourceService")
@@ -56,5 +57,11 @@ public class MedicationAdministrationServiceImpl implements MedicationAdministra
     public List<DafMedicationAdministration> getMedicationAdministrationByStatus(String status) {
         return this.medicationAdministrationDao.getMedicationAdministrationByStatus(status);
     }
+
+	@Override
+	public List<DafMedicationAdministration> getMedicationAdministrationForBulkData(List<Integer> patients,
+			Date start) {
+		return this.medicationAdministrationDao.getMedicationAdministrationForBulkData(patients, start);
+	}
 
 }

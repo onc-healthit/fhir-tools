@@ -228,4 +228,16 @@ public class ConditionResourceProvider implements IResourceProvider {
 
         return condition;
     }
+
+	public List<Condition> getConditionForBulkDataRequest(List<Integer> patients, java.util.Date start) {
+		List<DafCondition> dafConditionList = service.getConditionForBulkData(patients, start);
+
+        List<Condition> conditionList = new ArrayList<Condition>();
+
+        for (DafCondition dafCondition : dafConditionList) {
+                conditionList.add(createConditionObject(dafCondition));
+        }
+
+        return conditionList;
+	}
 }

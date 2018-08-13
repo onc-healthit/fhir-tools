@@ -3,6 +3,7 @@ package org.sitenv.spring.dao;
 import org.sitenv.spring.model.DafCondition;
 import org.sitenv.spring.query.ConditionSearchCriteria;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ConditionDao {
@@ -14,5 +15,7 @@ public interface ConditionDao {
     public List<DafCondition> getConditionByPatient(String patient);
 
     public List<DafCondition> getConditionBySearchOptions(ConditionSearchCriteria conditionSearchCriteria);
+
+	public List<DafCondition> getConditionForBulkData(List<Integer> patients, Date start);
 
 }

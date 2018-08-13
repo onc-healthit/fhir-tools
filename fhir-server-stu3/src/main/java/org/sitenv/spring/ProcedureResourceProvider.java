@@ -20,6 +20,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -244,5 +245,17 @@ public class ProcedureResourceProvider implements IResourceProvider {
 
         return procedure;
     }
+
+	public List<Procedure> getProcedureForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafProcedure> dafProcedureList = service.getProcedureForBulkData(patients, start);
+
+        List<Procedure> procedureList = new ArrayList<Procedure>();
+
+        for (DafProcedure dafProcedure : dafProcedureList) {
+                procedureList.add(createProcedureObject(dafProcedure));
+        }
+
+        return procedureList;
+	}
 
 }

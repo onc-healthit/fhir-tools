@@ -3,6 +3,7 @@ package org.sitenv.spring.service;
 import org.sitenv.spring.model.DafPatientJson;
 import org.sitenv.spring.query.PatientSearchCriteria;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,5 +16,7 @@ public interface PatientService {
     public DafPatientJson getPatientById(int id);
 
     public List<DafPatientJson> getPatientBySearchOption(PatientSearchCriteria criteria);
+
+	public List<DafPatientJson> getPatientJsonForBulkData(List<Integer> patients, Date start);
 
 }

@@ -19,6 +19,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -231,5 +232,17 @@ public class GoalsResourceProvider implements IResourceProvider {
         goal.setExpressedBy(expressedBy);
         return goal;
     }
+
+	public List<Goal> getGoalsForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafGoals> dafGoalsList = service.getGoalsForBulkData(patients, start);
+
+        List<Goal> goalsList = new ArrayList<Goal>();
+
+        for (DafGoals dafGoals: dafGoalsList) {
+                goalsList.add(createGoalsObject(dafGoals));
+        }
+
+        return goalsList;
+	}
 
 }

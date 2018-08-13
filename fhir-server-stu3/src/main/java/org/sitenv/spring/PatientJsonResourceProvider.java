@@ -1,18 +1,25 @@
 package org.sitenv.spring;
 
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.primitive.DateDt;
+import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.method.RequestDetails;
 import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.*;
 import org.sitenv.spring.configuration.AppConfig;
+import org.sitenv.spring.model.DafBulkDataRequest;
 import org.sitenv.spring.model.DafPatientJson;
 import org.sitenv.spring.query.ObservationSearchCriteria;
 import org.sitenv.spring.query.PatientSearchCriteria;
+import org.sitenv.spring.service.BulkDataRequestService;
 import org.sitenv.spring.service.PatientService;
 import org.sitenv.spring.util.HapiConstants;
 import org.sitenv.spring.util.HapiUtils;
@@ -20,10 +27,19 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by Prabhushankar.Byrapp on 8/22/2015.
@@ -36,10 +52,12 @@ public class PatientJsonResourceProvider implements IResourceProvider {
     public static final String VERSION_ID = "3.0";
     AbstractApplicationContext context;
     PatientService service;
+    BulkDataRequestService bdrService;
 
     public PatientJsonResourceProvider() {
         context = new AnnotationConfigApplicationContext(AppConfig.class);
         service = (PatientService) context.getBean("patientService");
+        bdrService = (BulkDataRequestService) context.getBean("bulkDataRequestService");
     }
 
     /**
@@ -549,5 +567,65 @@ public class PatientJsonResourceProvider implements IResourceProvider {
         return patient;
     }
 
+	public List<Patient> getPatientForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafPatientJson> dafPatientList = service.getPatientJsonForBulkData(patients, start);
 
+        List<Patient> patientList = new ArrayList<Patient>();
+
+        for (DafPatientJson dafPatient : dafPatientList) {
+                patientList.add(createPatientObject(dafPatient));
+        }
+
+        return patientList;
+	}
+
+	@Operation(name="$export", idempotent=true)
+    public Binary patientTypeOperation(
+     //  @OperationParam(name="_since") DateDt theStart,
+     //  @OperationParam(name="end") DateDt theEnd,
+       @OperationParam(name="_type") String type,
+       RequestDetails requestDetails,
+       HttpServletRequest request,
+       HttpServletResponse response) throws IOException {
+        if(requestDetails.getHeader("Prefer")!= null&&requestDetails.getHeader("Accept")!= null) {
+        if(requestDetails.getHeader("Prefer").equals("respond-async") && requestDetails.getHeader("Accept").equals("application/fhir+json")) {
+
+        DafBulkDataRequest bdr = new DafBulkDataRequest();
+        bdr.setResourceName("Patient");
+        bdr.setStatus("Accepted");
+        bdr.setProcessedFlag(false);
+        /*if(theStart!=null) {
+                bdr.setStart(theStart.getValueAsString());
+        }*/
+        bdr.setType(type);
+        bdr.setRequestResource(request.getRequestURL().toString());
+
+        DafBulkDataRequest responseBDR = bdrService.saveBulkDataRequest(bdr);
+
+        String uri = request.getScheme() + "://" +
+                request.getServerName() +
+                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                +request.getContextPath();
+
+        response.setStatus(202);
+        response.setHeader("Content-Location", uri+"/bulkdata/"+responseBDR.getRequestId());
+        GregorianCalendar cal = new GregorianCalendar();
+                cal.setTime(new Date());
+                cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+                cal.add(Calendar.DATE, 10);
+        //HTTP header date format: Thu, 01 Dec 1994 16:00:00 GMT
+        String o = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz").format( cal.getTime() );
+        response.setHeader("Expires", o);
+
+        Binary retVal = new Binary();
+
+        retVal.setContentType("application/fhir+json");
+        return retVal;
+        }else {
+            throw new UnprocessableEntityException("Invalid header values!");
+        }
+        }else {
+            throw new UnprocessableEntityException("Prefer or Accepted Header is missing!");
+        }
+     }
 }

@@ -3,6 +3,7 @@ package org.sitenv.spring.dao;
 import org.sitenv.spring.model.DafObservation;
 import org.sitenv.spring.query.ObservationSearchCriteria;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ObservationDao {
@@ -18,5 +19,7 @@ public interface ObservationDao {
     public List<DafObservation> getObservationBySearchCriteria(ObservationSearchCriteria observationSearchCriteria);
 
     public List<DafObservation> getObservationByBPCode(String BPCode);
+
+	public List<DafObservation> getObservationForBulkData(List<Integer> patients, Date start);
 
 }

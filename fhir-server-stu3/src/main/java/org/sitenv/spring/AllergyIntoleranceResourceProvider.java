@@ -20,6 +20,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -213,5 +214,25 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
 
         return allergyIntolerance;
     }
+
+
+    /**
+     * This method is implemented to get AllergyIntolerances for Bulk data request
+     * @param patients
+     * @param start
+     * @return This method returns a list of AllergyIntolerance. This list may contain multiple matching resources, or it may also be empty.
+     */
+        public List<AllergyIntolerance> getAllergyIntoleranceForBulkDataRequest(List<Integer> patients, Date start) {
+
+                List<DafAllergyIntolerance> dafAllergyIntoleranceList = service.getAllergyIntoleranceForBulkData(patients, start);
+
+                List<AllergyIntolerance> allergyIntoleranceList = new ArrayList<AllergyIntolerance>();
+
+                for (DafAllergyIntolerance dafAllergyIntolerance : dafAllergyIntoleranceList) {
+                        allergyIntoleranceList.add(createAllergyIntoleranceObject(dafAllergyIntolerance));
+                }
+
+                return allergyIntoleranceList;
+        }
 
 }

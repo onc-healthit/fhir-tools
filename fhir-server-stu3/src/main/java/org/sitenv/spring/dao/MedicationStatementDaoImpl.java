@@ -104,4 +104,18 @@ public class MedicationStatementDaoImpl extends AbstractDao implements Medicatio
         return dafMedicationStatement;
     }
 
+	@Override
+	public List<DafMedicationStatement> getMedicationStatementForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafMedicationStatement.class, "medStatement")
+                .createAlias("medStatement.patient", "dp");
+        if(patients!=null) {
+            criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+        
+        return criteria.list();
+	}
+
 }

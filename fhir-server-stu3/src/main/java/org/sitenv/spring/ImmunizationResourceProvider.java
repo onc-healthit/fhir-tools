@@ -17,6 +17,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -206,5 +207,17 @@ public class ImmunizationResourceProvider implements IResourceProvider {
 
         return immunization;
     }
+
+	public List<Immunization> getImmunizationForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafImmunization> dafImmunizationList = service.getImmunizationForBulkData(patients, start);
+
+        List<Immunization> immunizationList = new ArrayList<Immunization>();
+
+        for (DafImmunization dafImmunization : dafImmunizationList) {
+                immunizationList.add(createImmunizationObject(dafImmunization));
+        }
+
+        return immunizationList;
+	}
 
 }

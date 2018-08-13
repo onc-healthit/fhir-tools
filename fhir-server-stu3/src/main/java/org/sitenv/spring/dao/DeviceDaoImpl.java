@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -54,5 +55,19 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 
         return (List<DafDevice>) criteria.list();
     }
+
+	@Override
+	public List<DafDevice> getDeviceForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafDevice.class, "device")
+                .createAlias("device.patient", "dp");
+        if(patients!=null) {
+        	criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+        
+        return criteria.list();
+	}
 
 }

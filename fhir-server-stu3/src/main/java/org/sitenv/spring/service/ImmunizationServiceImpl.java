@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("immunizationResourceService")
@@ -39,5 +40,11 @@ public class ImmunizationServiceImpl implements ImmunizationService {
     public List<DafImmunization> getImmunizationBySearchCriteria(ImmunizationSearchCriteria immunizationSearchCriteria) {
         return this.immunizationDao.getImmunizationBySearchCriteria(immunizationSearchCriteria);
     }
+
+	@Override
+	@Transactional
+	public List<DafImmunization> getImmunizationForBulkData(List<Integer> patients, Date start) {
+		return this.immunizationDao.getImmunizationForBulkData(patients, start);
+	}
 
 }

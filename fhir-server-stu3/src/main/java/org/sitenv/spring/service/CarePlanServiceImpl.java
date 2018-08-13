@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,5 +48,11 @@ public class CarePlanServiceImpl implements CarePlanService {
     public List<DafCarePlanParticipant> getCarePlanparticipantByCarePlan(int id) {
         return this.carePlanDao.getCarePlanparticipantByCarePlan(id);
     }
+
+	@Override
+	@Transactional
+	public List<DafCarePlan> getCarePlanForBulkData(List<Integer> patients, Date start) {
+		return this.carePlanDao.getCarePlanForBulkData(patients, start);
+	}
 
 }

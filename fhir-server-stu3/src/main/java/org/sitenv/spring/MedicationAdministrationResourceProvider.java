@@ -21,6 +21,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -372,5 +373,18 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         return medAdministration;
 
     }
+
+	public List<MedicationAdministration> getMedicationAdministrationForBulkDataRequest(List<Integer> patients,
+			Date start) {
+		List<DafMedicationAdministration> dafMedicationAdministrationList = service.getMedicationAdministrationForBulkData(patients, start);
+
+        List<MedicationAdministration> medAdministrationList = new ArrayList<MedicationAdministration>();
+
+        for (DafMedicationAdministration dafMedicationAdministration : dafMedicationAdministrationList) {
+                medAdministrationList.add(createMedicationAdministrationObject(dafMedicationAdministration));
+        }
+
+        return medAdministrationList;
+	}
 
 }

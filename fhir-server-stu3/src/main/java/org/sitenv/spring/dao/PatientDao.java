@@ -4,6 +4,7 @@ import org.sitenv.spring.model.DafPatientJson;
 import org.sitenv.spring.model.PatientList;
 import org.sitenv.spring.query.PatientSearchCriteria;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ public interface PatientDao {
     public List<DafPatientJson> getPatientBySearchOption(PatientSearchCriteria criteria);
 
     public List<PatientList> getPatientsOnAuthorize();
+
+	public List<DafPatientJson> getPatientJsonForBulkData(List<Integer> patients, Date start);
 }

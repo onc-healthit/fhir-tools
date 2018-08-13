@@ -413,4 +413,16 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         return medStatement;
 
     }
+
+	public List<MedicationStatement> getMedicationStatementForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafMedicationStatement> dafMedicationStatementList = service.getMedicationStatementForBulkData(patients, start);
+
+        List<MedicationStatement> medStatementList = new ArrayList<MedicationStatement>();
+
+        for (DafMedicationStatement dafMedicationStatement : dafMedicationStatementList) {
+                medStatementList.add(createMedicationStatementObject(dafMedicationStatement));
+        }
+
+        return medStatementList;
+	}
 }

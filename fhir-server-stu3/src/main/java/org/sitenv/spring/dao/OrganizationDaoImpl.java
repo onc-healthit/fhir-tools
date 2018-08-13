@@ -7,6 +7,7 @@ import org.sitenv.spring.model.DafOrganization;
 import org.sitenv.spring.query.OrganizationSearchCriteria;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository("organizationDao")
@@ -85,5 +86,19 @@ public class OrganizationDaoImpl extends AbstractDao implements OrganizationDao 
         return criteria.list();
 
     }
+
+	@Override
+	public List<DafOrganization> getOrganizationForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafOrganization.class, "organization");
+        // .createAlias("organization.patient", "dp");
+                 /*if(patients!=null) {
+         criteria.add(Restrictions.in("dp.id", patients));
+                 }*/
+        if(start != null) {
+           criteria.add(Restrictions.ge("updated", start));
+        }
+                 
+        return criteria.list();
+	}
 
 }

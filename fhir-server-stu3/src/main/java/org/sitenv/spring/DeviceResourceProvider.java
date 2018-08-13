@@ -20,6 +20,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -217,5 +218,17 @@ public class DeviceResourceProvider implements IResourceProvider {
 
         return device;
     }
+
+	public List<Device> getDeviceForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafDevice> dafDeviceList = service.getDeviceForBulkData(patients, start);
+
+        List<Device> deviceList = new ArrayList<Device>();
+
+        for (DafDevice dafDevice : dafDeviceList) {
+                deviceList.add(createDeviceObject(dafDevice));
+        }
+
+        return deviceList;
+	}
 
 }

@@ -121,4 +121,18 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
         List<DafObservation> dafObservation = (List<DafObservation>) criteria.list();
         return dafObservation;
     }
+
+	@Override
+	public List<DafObservation> getObservationForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafObservation.class, "observation")
+                .createAlias("observation.patient", "dp");
+        if(patients!=null) {
+            criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+        
+        return criteria.list();
+	}
 }

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository("conditionDao")
@@ -63,5 +64,19 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
         }
         return (List<DafCondition>) criteria.list();
     }
+
+	@Override
+	public List<DafCondition> getConditionForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafCondition.class, "condition")
+                .createAlias("condition.patient", "dp");
+        if(patients!=null) {
+        	criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+        	criteria.add(Restrictions.ge("updated", start));
+        }
+        
+        return criteria.list();
+	}
 
 }

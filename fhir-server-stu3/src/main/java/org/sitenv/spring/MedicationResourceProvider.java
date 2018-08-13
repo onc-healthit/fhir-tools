@@ -17,6 +17,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -268,4 +269,16 @@ public class MedicationResourceProvider implements IResourceProvider {
 
         return medRes;
     }
+
+	public List<Medication> getMedicationForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafMedication> dafMedicationList = service.getMedicationForBulkData(patients, start);
+
+        List<Medication> medList = new ArrayList<Medication>();
+
+        for (DafMedication dafMedication : dafMedicationList) {
+                medList.add(createMedicationResourceObject(dafMedication));
+        }
+
+        return medList;
+	}
 }

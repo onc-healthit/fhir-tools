@@ -69,4 +69,9 @@ public class MedicationStatementServiceImpl implements MedicationStatementServic
         return this.medicationStatementDao.getMedicationStatementByIdentifierValue(identifierValue);
     }
 
+	@Override
+	public List<DafMedicationStatement> getMedicationStatementForBulkData(List<Integer> patients, Date start) {
+		return this.medicationStatementDao.getMedicationStatementForBulkData(patients, start);
+	}
+
 }

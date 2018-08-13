@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository("allergyIntoleranceDao")
@@ -35,5 +36,18 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
         List<DafAllergyIntolerance> dafAllergyIntolerance = criteria.list();
         return dafAllergyIntolerance;
     }
+
+	@Override
+	public List<DafAllergyIntolerance> getAllergyIntoleranceForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafAllergyIntolerance.class, "allergyIntolerance")
+                .createAlias("allergyIntolerance.patient", "dp");
+        if(patients!=null) {
+            criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+        	criteria.add(Restrictions.ge("updated", start));
+        }
+        return criteria.list();
+	}
 
 }

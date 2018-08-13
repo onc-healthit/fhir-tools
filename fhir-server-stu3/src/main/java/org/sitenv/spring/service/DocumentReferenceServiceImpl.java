@@ -89,4 +89,10 @@ public class DocumentReferenceServiceImpl implements DocumentReferenceService {
         return this.documentReferenceDao.getDocumentReferenceByStatus(status);
     }
 
+
+	@Override
+	public List<DafDocumentReference> getDocumentReferenceForBulkData(List<Integer> patients, Date start) {
+		return this.documentReferenceDao.getDocumentReferenceForBulkData(patients, start);
+	}
+
 }

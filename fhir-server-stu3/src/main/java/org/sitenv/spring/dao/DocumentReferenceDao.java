@@ -32,5 +32,7 @@ public interface DocumentReferenceDao {
 
     public List<DafDocumentReference> getDocumentReferenceByStatus(String status);
 
+	public List<DafDocumentReference> getDocumentReferenceForBulkData(List<Integer> patients, Date start);
+
 
 }

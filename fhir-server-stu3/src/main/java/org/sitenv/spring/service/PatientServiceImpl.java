@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +37,12 @@ public class PatientServiceImpl implements PatientService {
     @Transactional
     public List<DafPatientJson> getPatientBySearchOption(PatientSearchCriteria searchCriteria) {
         return this.patientDao.getPatientBySearchOption(searchCriteria);
+    }
+
+    @Override
+    @Transactional
+    public List<DafPatientJson> getPatientJsonForBulkData(List<Integer> patients, Date start){
+        return this.patientDao.getPatientJsonForBulkData(patients, start);
     }
 
 

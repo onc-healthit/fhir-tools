@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("observationResourceService")
@@ -51,4 +52,9 @@ public class ObservationServiceImpl implements ObservationService {
     public List<DafObservation> getObservationByBPCode(String BPCode) {
         return this.observationDao.getObservationByBPCode(BPCode);
     }
+
+	@Override
+	public List<DafObservation> getObservationForBulkData(List<Integer> patients, Date start) {
+		return this.observationDao.getObservationForBulkData(patients, start);
+	}
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("medicationRequestResourceService")
@@ -33,5 +34,10 @@ public class MedicationRequestServiceImpl implements MedicationRequestService {
     public List<DafMedicationRequest> getMedicationRequestBySearchCriteria(MedicationRequestSearchCriteria medicationRequestSearchCriteria) {
         return this.medicationRequestDao.getMedicationRequestBySearchCriteria(medicationRequestSearchCriteria);
     }
+
+	@Override
+	public List<DafMedicationRequest> getMedicationRequestForBulkData(List<Integer> patients, Date start) {
+		return this.medicationRequestDao.getMedicationRequestForBulkData(patients, start);
+	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("allergyIntoleranceResourceService")
@@ -32,4 +33,9 @@ public class AllergyIntoleranceServiceImpl implements AllergyIntoleranceService 
     public List<DafAllergyIntolerance> getAllergyIntoleranceByPatient(String patient) {
         return this.allergyIntoleranceDao.getAllergyIntoleranceByPatient(patient);
     }
+
+	@Override
+	public List<DafAllergyIntolerance> getAllergyIntoleranceForBulkData(List<Integer> patients, Date start) {
+		return this.allergyIntoleranceDao.getAllergyIntoleranceForBulkData(patients, start);
+	}
 }

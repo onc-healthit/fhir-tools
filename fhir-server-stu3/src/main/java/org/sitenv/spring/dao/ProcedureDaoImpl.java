@@ -84,4 +84,18 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
         return criteria.list();
     }
 
+	@Override
+	public List<DafProcedure> getProcedureForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafProcedure.class, "procedure")
+                .createAlias("procedure.subject", "dp");
+        if(patients!=null) {
+            criteria.add(Restrictions.in("dp.id", patients));
+        }
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+        
+        return criteria.list();
+	}
+
 }

@@ -20,6 +20,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -220,5 +221,17 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return organization;
 
     }
+
+	public List<Organization> getOrganizationForBulkDataRequest(List<Integer> patients, Date start) {
+		List<DafOrganization> dafOrganizationList = service.getOrganizationForBulkData(patients, start);
+
+        List<Organization> organizationList = new ArrayList<Organization>();
+
+        for (DafOrganization dafOrganization : dafOrganizationList) {
+                organizationList.add(createOrganizationObject(dafOrganization));
+        }
+
+        return organizationList;
+	}
 
 }

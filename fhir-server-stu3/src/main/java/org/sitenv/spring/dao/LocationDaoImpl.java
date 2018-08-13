@@ -6,6 +6,7 @@ import org.sitenv.spring.model.DafLocation;
 import org.sitenv.spring.query.LocationSearchCriteria;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository("locationDao")
@@ -62,5 +63,19 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
 
         return criteria.list();
     }
+
+	@Override
+	public List<DafLocation> getLocationForBulkData(List<Integer> patients, Date start) {
+		Criteria criteria = getSession().createCriteria(DafLocation.class, "location");
+        // .createAlias("location.patient", "dp");
+                 /*if(patients!=null) {
+         criteria.add(Restrictions.in("dp.id", patients));
+                 }*/
+        if(start != null) {
+            criteria.add(Restrictions.ge("updated", start));
+        }
+                 
+        return criteria.list();
+	}
 
 }

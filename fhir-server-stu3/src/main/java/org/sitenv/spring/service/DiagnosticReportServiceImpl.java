@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("diagnosticResourceService")
@@ -39,4 +40,10 @@ public class DiagnosticReportServiceImpl implements DiagnosticReportService {
     public List<DafDiagnosticReport> getDiagnosticReportBySearchCriteria(DiagnosticReportSearchCriteria diagnosticReportSearchCriteria) {
         return this.diagnosticDao.getDiagnosticReportBySearchCriteria(diagnosticReportSearchCriteria);
     }
+
+	@Override
+	@Transactional
+	public List<DafDiagnosticReport> getDiagnosticReportForBulkData(List<Integer> patients, Date start) {
+		return this.diagnosticDao.getDiagnosticReportForBulkData(patients, start);
+	}
 }

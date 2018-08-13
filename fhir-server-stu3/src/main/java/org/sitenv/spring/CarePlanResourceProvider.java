@@ -18,6 +18,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.AbstractApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -170,5 +171,17 @@ public class CarePlanResourceProvider implements IResourceProvider {
 
         return carePlan;
     }
+
+	public List<CarePlan> getCarePlanForBulkData(List<Integer> patients, Date start) {
+		List<DafCarePlan> dafCarePlanList = service.getCarePlanForBulkData(patients, start);
+
+        List<CarePlan> careplanList = new ArrayList<CarePlan>();
+
+        for (DafCarePlan dafCarePlan : dafCarePlanList) {
+                careplanList.add(createCarePlanObject(dafCarePlan));
+        }
+
+        return careplanList;
+	}
 
 }

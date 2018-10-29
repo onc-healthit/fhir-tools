@@ -166,6 +166,7 @@ public class TokenEndPoint extends HttpServlet {
                             jsonOb.put("access_token", accessToken);
                             jsonOb.put("token_type", "bearer");
                             jsonOb.put("expires_in", "3600");
+                            jsonOb.put("scope", authTemp.getScope());
 
                             String refreshToken = null;
                             if (scopes.contains("launch/patient")) {
@@ -197,11 +198,11 @@ public class TokenEndPoint extends HttpServlet {
                         }
                     } else if (grant_type.equals(GrantType.REFRESH_TOKEN.toString())) {
                         if (authTemp.getRefresh_token() != null && authTemp.getRefresh_token().equals(token)) {
-                        	HttpSession session = request.getSession();
-                        	HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session.getAttribute("user" + client.getUserId());
+                            HttpSession session = request.getSession();
+                            HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session.getAttribute("user" + client.getUserId());
                             Integer currentTime = (int) (System.currentTimeMillis() / 1000L);
                             if (scopes.contains("online_access")&&sessionObj != null&&currentTime > sessionObj.get("expiry")){
-                            	response.sendError(401, "Invalid refresh_token");
+                                response.sendError(401, "Invalid refresh_token");
                                 out.println(response);
                             }else if (!client.getClient_id().equals(client_id)) {
                                 response.sendError(401, "Invalid Client ID");
@@ -213,6 +214,7 @@ public class TokenEndPoint extends HttpServlet {
                                 jsonOb.put("access_token", accessToken);
                                 jsonOb.put("token_type", "bearer");
                                 jsonOb.put("expires_in", "3600");
+                                jsonOb.put("scope", authTemp.getScope());
 
                                 // String refreshToken = null;
                                 if (scopes.contains("launch/patient")) {
@@ -239,8 +241,8 @@ public class TokenEndPoint extends HttpServlet {
                 }
             } else {
                 //the auth codes don't match.
-                response.setStatus(403);    //forbidden.
-                out.println("{}");
+                //response.setStatus(403);    //forbidden.
+                response.sendError(401, "Invalid authentication");
             }
         }
     }

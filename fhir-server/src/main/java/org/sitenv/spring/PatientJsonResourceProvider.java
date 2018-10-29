@@ -226,12 +226,6 @@ public class PatientJsonResourceProvider implements IResourceProvider {
         }
         if (theBirthDate != null) {
             searchOption.setBirthDate(theBirthDate);
-           /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
         }
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 
@@ -252,15 +246,20 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      */
     @Search()
     public List<Patient> findPatientsByBirthDate(@RequiredParam(name = Patient.SP_BIRTHDATE) DateParam theBirthDate,
+                                                 @OptionalParam(name = Patient.SP_GIVEN) StringDt theGivenName,
+                                                 @OptionalParam(name = Patient.SP_FAMILY) StringDt theFamily,
                                                  @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
         PatientSearchCriteria searchOption = new PatientSearchCriteria();
         searchOption.setBirthDate(theBirthDate);
-        /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            searchOption.setBirthDate(sdf.parse(theBirthDate.toString()));
-        } catch (Exception e) {
 
-        }*/
+        if (theFamily != null) {
+            searchOption.setFamilyName(theFamily.getValue());
+        }
+
+        if (theGivenName != null) {
+            searchOption.setGivenName(theGivenName.getValue());
+        }
+
         List<DafPatientJson> dafPatientList = service.getPatientBySearchOption(searchOption);
 
         List<Patient> patientList = new ArrayList<Patient>();

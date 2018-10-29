@@ -1019,7 +1019,8 @@ CREATE TABLE medication_statement (
     dosage json,
     identifier_system character(100),
     identifier_value character(100),
-    status character(50)
+    status character(50),
+    dateasserted date
 );
 
 
@@ -2384,6 +2385,7 @@ COPY medication_statement (id, patient, wasnottaken, reasonnottaken, effectivepe
 24	13	f	\N	2016-07-01	{"code":"997501","display":"Fexofenadine hydrochloride 60 MG Oral Tablet", "system": "http://www.nlm.nih.gov/research/umls/rxnorm"}	1	{"timingstart":"2016-07-01","timingfrequency":"3","timingperiod":"1","timingperiodunits":"D","routecode":"C38288","routedisplay":"ORAL","quantityvalue":"1","quantityunit":"mg","quantitycode":"mg","dosagetext":" 1 tablet daily as needed for pollen allergy"}	https://sitenv.org                                                                                  	7707                                                                                                	ACTIVE                                            
 \.
 
+update medication_statement set dateasserted = effectiveperiod + interval '1 month' ;
 
 --
 -- Data for Name: observation; Type: TABLE DATA; Schema: public; Owner: postgres

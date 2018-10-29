@@ -388,6 +388,10 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         dt.setStart(dateTimeDt);
         medStatement.setEffective(dt);
 
+        DateTimeDt dateAssertedTimeDt = new DateTimeDt();
+        dateAssertedTimeDt.setValue(dafMedStatement.getDateAsserted());
+        medStatement.setDateAsserted(dateAssertedTimeDt);
+
         return medStatement;
 
     }

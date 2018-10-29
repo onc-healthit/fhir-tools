@@ -38,6 +38,10 @@ public class DafMedicationStatement {
     @Temporal(TemporalType.DATE)
     private Date effectivePeriod;
 
+    @Column(name = "dateAsserted")
+    @Temporal(TemporalType.DATE)
+    private Date dateAsserted;
+
     @Column(name = "medicationcodeableconcept")
     @Type(type = "StringJsonObject")
     private String medicationcodeableconcept;
@@ -107,6 +111,14 @@ public class DafMedicationStatement {
 
     public void setEffectivePeriod(Date effectivePeriod) {
         this.effectivePeriod = effectivePeriod;
+    }
+
+    public Date getDateAsserted() {
+        return dateAsserted;
+    }
+
+    public void setDateAsserted(Date dateAsserted) {
+        this.dateAsserted = dateAsserted;
     }
 
     public String getMedicationcodeableconcept() {

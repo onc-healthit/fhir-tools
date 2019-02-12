@@ -62,7 +62,7 @@ public class PractitionerResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/Practitioner/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public Practitioner getPractitionerResourceById(@IdParam IdDt theId) {
 
         DafPractitioner dafPractitioner = service.getPractitionerById(theId.getIdPartAsLong().intValue());

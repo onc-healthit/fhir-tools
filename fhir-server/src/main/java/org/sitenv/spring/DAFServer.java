@@ -53,6 +53,7 @@ public class DAFServer extends RestfulServer {
         resourceProviders.add(new LocationResourceProvider());
         resourceProviders.add(new PractitionerResourceProvider());
         resourceProviders.add(new ProcedureResourceProvider());
+        resourceProviders.add(new ProvenanceResourceProvider());
 
         setResourceProviders(resourceProviders);
 

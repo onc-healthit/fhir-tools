@@ -91,7 +91,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/DiagnosticReport/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public DiagnosticReport getDiagnosticResourceById(@IdParam IdDt theId) {
 
         DafDiagnosticReport dafDiagnostic = service.getDiagnosticResourceById(theId.getIdPartAsLong().intValue());
@@ -123,7 +123,10 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
                                                   @OptionalParam(name = DiagnosticReport.SP_DATE) DateRangeParam thedate,
                                                   @IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
 
+    	 String patientId = thePatient.getIdPart();
         DiagnosticReportSearchCriteria diagnosticReportSearchCriteria = new DiagnosticReportSearchCriteria();
+        diagnosticReportSearchCriteria.setPatient(Integer.parseInt(patientId));
+        
         if (theCategory != null) {
             diagnosticReportSearchCriteria.setCategory(theCategory.getValue());
         }

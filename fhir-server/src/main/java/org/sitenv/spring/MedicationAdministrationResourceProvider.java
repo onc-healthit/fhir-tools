@@ -91,7 +91,7 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      * <p>
      * Ex: http://<server name>/<context>/fhir/MedicationAdministration/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public MedicationAdministration getMedicationAdministrationResourceById(@IdParam IdDt theId) {
 
         DafMedicationAdministration dafMedAdministration = service.getMedicationAdministrationResourceById(theId.getIdPartAsLong().intValue());

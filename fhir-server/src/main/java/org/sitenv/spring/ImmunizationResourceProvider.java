@@ -79,7 +79,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Immunization/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public Immunization getImmunizationResourceById(@IdParam IdDt theId) {
 
         DafImmunization dafImmunization = service.getImmunizationById(theId.getIdPartAsLong().intValue());

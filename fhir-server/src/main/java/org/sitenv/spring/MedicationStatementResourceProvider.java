@@ -85,7 +85,7 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/MedicationStatement/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public MedicationStatement getMedicationStatementResourceById(@IdParam IdDt theId) {
 
         DafMedicationStatement dafMedStatement = service.getMedicationStatementResourceById(theId.getIdPartAsLong().intValue());

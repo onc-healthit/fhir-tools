@@ -68,6 +68,7 @@ public class ConformanceResourceProvider extends ServerConformanceProvider {
         rest.setSecurity(restSecurity);
 
         rest.setResource(conformance.getRest().get(0).getResource());
+
         restList.add(rest);
         conformance.setRest(restList);
 

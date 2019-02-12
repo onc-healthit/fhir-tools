@@ -58,7 +58,7 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return organizationList;
     }
 
-    @Read()
+    @Read(version = false)
     public Organization getOrganizationResourceById(@IdParam IdDt theId) {
 
         try {

@@ -91,7 +91,7 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/AllergyIntolerance/1?_pretty=true&_format=json
      */
-    @Read()
+    @Read(version = false)
     public AllergyIntolerance getAllergyIntoleranceResourceById(@IdParam IdDt theId) {
 
         DafAllergyIntolerance dafAllergyIntolerance = service.getAllergyIntoleranceResourceById(theId.getIdPartAsLong().intValue());

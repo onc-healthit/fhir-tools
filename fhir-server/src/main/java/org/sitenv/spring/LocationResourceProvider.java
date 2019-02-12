@@ -91,7 +91,7 @@ public class LocationResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Location/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public Location getLocationResourceById(@IdParam IdDt theId) {
 
         DafLocation dafLocation = service.getLocationById(theId

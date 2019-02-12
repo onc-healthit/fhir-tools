@@ -93,7 +93,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
      * <p/>
      * Ex: http://<server name>/<context>/fhir/DocumentReference/1?_pretty=true&_format=json
      */
-    @Read()
+    @Read(version = false)
     public DocumentReference getResourceById(@IdParam IdDt theId) {
         DafDocumentReference dafDocRef = service.getDocumentReferenceById(theId.getIdPartAsLong().intValue());
         DocumentReference docRef = createDocumentReferenceObject(dafDocRef);

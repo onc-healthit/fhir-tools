@@ -94,7 +94,7 @@ public class ProcedureResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Procedure/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public Procedure getProcedureResourceById(@IdParam IdDt theId) {
 
         DafProcedure dafProcedure = service.getProcedureById(theId

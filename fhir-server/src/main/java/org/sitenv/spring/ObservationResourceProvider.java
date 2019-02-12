@@ -90,7 +90,7 @@ public class ObservationResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none
      * exists.
      */
-    @Read()
+    @Read(version = false)
     public Observation getObservationResourceById(@IdParam IdDt theId) {
 
         try {

@@ -82,7 +82,7 @@ public class DeviceResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Device/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public Device getDeviceResourceById(@IdParam IdDt theId) {
 
         DafDevice dafDevice = service.getDeviceById(theId.getIdPartAsLong().intValue());

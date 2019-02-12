@@ -83,7 +83,7 @@ public class CareTeamResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/CarePlan/1?_format=json
      */
-    @Read(version = true)
+    @Read(version = false)
     public CarePlan getCarePlanResourceById(@IdParam IdDt theId) {
 
         DafCareTeam dafCareTeam = service.getCareTeamById(theId.getIdPartAsLong().intValue());

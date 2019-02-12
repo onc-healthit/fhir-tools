@@ -1,15 +1,16 @@
 package org.sitenv.spring;
 
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.composite.*;
 import ca.uhn.fhir.model.dstu2.resource.CarePlan;
 import ca.uhn.fhir.model.dstu2.resource.CarePlan.Participant;
 import ca.uhn.fhir.model.dstu2.valueset.CarePlanStatusEnum;
+import ca.uhn.fhir.model.dstu2.valueset.NarrativeStatusEnum;
+import ca.uhn.fhir.model.primitive.BoundCodeDt;
 import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.model.primitive.XhtmlDt;
+import ca.uhn.fhir.model.valueset.BundleEntryTransactionMethodEnum;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateParam;
@@ -86,7 +87,7 @@ public class CarePlanResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/CarePlan/1?_format=json
      */
-    @Read(version = true)
+    @Read(version = false)
     public CarePlan getCarePlanResourceById(@IdParam IdDt theId) {
 
         DafCarePlan dafCareTeam = service.getCarePlanById(theId.getIdPartAsLong().intValue());
@@ -191,8 +192,22 @@ public class CarePlanResourceProvider implements IResourceProvider {
             participant.setMember(memres);
             participantlist.add(participant);
         }
-
         carePlan.setParticipant(participantlist);
+
+        //Set Description
+        carePlan.setDescription(dafCarePlan.getDescription());
+
+        //Set CarePlan.text
+        NarrativeDt narrativeDt = new NarrativeDt();
+        BoundCodeDt<NarrativeStatusEnum> narenum = new BoundCodeDt(
+                BundleEntryTransactionMethodEnum.VALUESET_BINDER);
+        narenum.setValue(dafCarePlan.getTextstatus());
+        narrativeDt.setStatus(narenum);
+        XhtmlDt xhtmlDt = new XhtmlDt();
+        xhtmlDt.setValueAsString(dafCarePlan.getDescription());
+        narrativeDt.setDiv(xhtmlDt);
+        carePlan.setText(narrativeDt);
+
         return carePlan;
     }
 

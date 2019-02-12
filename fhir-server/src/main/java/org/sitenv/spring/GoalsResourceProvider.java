@@ -84,7 +84,7 @@ public class GoalsResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Goal/1?_format=json
      */
-    @Read()
+    @Read(version = false)
     public Goal getGoalsResourceById(@IdParam IdDt theId) {
 
         DafGoals dafGoals = service.getGoalsById(theId.getIdPartAsLong().intValue());

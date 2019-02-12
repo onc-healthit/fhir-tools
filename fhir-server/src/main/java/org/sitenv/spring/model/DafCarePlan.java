@@ -25,6 +25,12 @@ public class DafCarePlan {
     @Column(name = "cat_system")
     private String cat_system;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "textstatus")
+    private String textstatus;
+
 
     public int getId() {
         return id;
@@ -64,5 +70,21 @@ public class DafCarePlan {
 
     public void setCat_system(String cat_system) {
         this.cat_system = cat_system;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getTextstatus() {
+        return textstatus;
+    }
+
+    public void setTextstatus(String textstatus) {
+        this.textstatus = textstatus;
     }
 }

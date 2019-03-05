@@ -334,7 +334,7 @@ ul {
      background-repeat: repeat-x;*/
 }
 
-#loginerror {
+#loginerror, #oldpassworderror, #resetoldpassworderror{
     color: #a94442;
     text-align: center;
 }

@@ -16,6 +16,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafGoals;
 import org.sitenv.spring.query.GoalsSearchCriteria;
@@ -84,15 +85,34 @@ public class GoalsResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Goal/1?_format=json
      */
-    @Read(version = false)
-    public Goal getGoalsResourceById(@IdParam IdDt theId) {
-
-        DafGoals dafGoals = service.getGoalsById(theId.getIdPartAsLong().intValue());
-
-        Goal goal = createGoalsObject(dafGoals);
-
-        return goal;
+    @Read(version = true)
+    public Goal readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafGoals dafGoals = service.getGoalsById(theId.getIdPartAsLong().intValue());
+            return createGoalsObject(dafGoals);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public Goal getGoalHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafGoals dafGoals = service.getGoalsById(theId.getIdPartAsLong().intValue());
+            return createGoalsObject(dafGoals);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

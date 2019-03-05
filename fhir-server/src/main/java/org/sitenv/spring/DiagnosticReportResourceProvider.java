@@ -18,6 +18,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringOrListParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafDiagnosticReport;
 import org.sitenv.spring.query.DiagnosticReportSearchCriteria;
@@ -91,14 +92,32 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/DiagnosticReport/1?_format=json
      */
-    @Read(version = false)
-    public DiagnosticReport getDiagnosticResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public DiagnosticReport readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafDiagnosticReport dafDiagnostic = service.getDiagnosticResourceById(theId.getIdPartAsLong().intValue());
+            return createDiagnosticReportObject(dafDiagnostic);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        DafDiagnosticReport dafDiagnostic = service.getDiagnosticResourceById(theId.getIdPartAsLong().intValue());
-
-        DiagnosticReport diagnostic = createDiagnosticReportObject(dafDiagnostic);
-
-        return diagnostic;
+    @History()
+    public DiagnosticReport getDiagnosticReportHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafDiagnosticReport dafDiagnostic = service.getDiagnosticResourceById(theId.getIdPartAsLong().intValue());
+            return createDiagnosticReportObject(dafDiagnostic);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**
@@ -223,11 +242,13 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         diagnostic.setIdentifier(identifier);
 
         //Set Request
+/*
         List<ResourceReferenceDt> referenceDts = new ArrayList<ResourceReferenceDt>();
         ResourceReferenceDt referenceDt = new ResourceReferenceDt();
         referenceDt.setReference("DiagnosticOrder/1");
         referenceDts.add(referenceDt);
         diagnostic.setRequest(referenceDts);
+*/
 
         return diagnostic;
     }

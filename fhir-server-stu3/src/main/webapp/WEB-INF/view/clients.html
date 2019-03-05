@@ -108,6 +108,9 @@
                 <li>
                     <a href="#" id="profileinfo">View Profile Information</a>
                 </li>
+                <li>
+                    <a href="#" id="resetpass">Change Password</a>
+                </li>
                 <li class="nav-divider"></li>
                 <li class="nav-header">DEVELOPER</li>
                 <li class="active">
@@ -136,6 +139,15 @@
 
         </div>
     </div>
+    
+    <div class="col-md-10" id="resetcontent">
+         <div id="resetpasscontent">
+
+        </div> 
+    </div>
+    
+    
+    
     <div class="col-md-10" id="viewregclients">
         <div class="col-md-12" id="clientstable">
             <table id="clientsregtable" class="table">
@@ -166,8 +178,8 @@
                     </site-version>
                 </div>
                 <div _ngcontent-vni-31="" class="col-sm-6 text-right">
-                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:TestingServices@sitenv.org"
-                                                     tabindex="100">TestingServices@sitenv.org</a>
+                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:SITTeam@hhs.gov"
+                                                     tabindex="100">SITTeam@hhs.gov</a>
                 </div>
             </div>
             <div _ngcontent-vni-31="" class="row">
@@ -304,6 +316,7 @@
             $('#editclientform').hide();
             $('#profilecontent').hide();
             $('#viewregclients').hide();
+            $('#resetcontent').hide();
             $('footer').css('position', 'fixed');
         })
         $('.viewclients').click(function () {
@@ -342,6 +355,7 @@
         $('#profilecontent').hide();
         $('#viewregclients').hide();
         $('#homecontent').show();
+        $('#resetcontent').hide();
         $('footer').css('position', 'fixed');
     })
     $(document).mouseup(function () {

@@ -38,5 +38,4 @@ public class PatientServiceImpl implements PatientService {
         return this.patientDao.getPatientBySearchOption(searchCriteria);
     }
 
-
 }

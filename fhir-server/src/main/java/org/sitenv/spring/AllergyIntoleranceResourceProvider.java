@@ -15,6 +15,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafAllergyIntolerance;
 import org.sitenv.spring.service.AllergyIntoleranceService;
@@ -56,6 +57,8 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
     }
 
 
+
+
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.
      *
@@ -91,15 +94,37 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/AllergyIntolerance/1?_pretty=true&_format=json
      */
-    @Read(version = false)
-    public AllergyIntolerance getAllergyIntoleranceResourceById(@IdParam IdDt theId) {
-
-        DafAllergyIntolerance dafAllergyIntolerance = service.getAllergyIntoleranceResourceById(theId.getIdPartAsLong().intValue());
+    @Read(version = true)
+    public AllergyIntolerance readOrVread(@IdParam IdDt theId) {
+        int id;
+        if (theId.hasVersionIdPart()) {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+        }else {
+            id = theId.getIdPartAsLong().intValue();
+        }
+        DafAllergyIntolerance dafAllergyIntolerance = service.getAllergyIntoleranceResourceById(id);
 
         AllergyIntolerance allergyIntolerance = createAllergyIntoleranceObject(dafAllergyIntolerance);
 
         return allergyIntolerance;
     }
+
+    @History()
+    public AllergyIntolerance getAllergyIntoleranceHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafAllergyIntolerance dafAllergyIntolerance = service.getAllergyIntoleranceResourceById(id);
+            AllergyIntolerance allergyIntolerance = createAllergyIntoleranceObject(dafAllergyIntolerance);
+            return allergyIntolerance;
+        } catch (Exception e) {
+            /*
+             * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+             */
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

@@ -16,6 +16,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafCarePlan;
 import org.sitenv.spring.model.DafCarePlanParticipant;
@@ -87,15 +88,42 @@ public class CarePlanResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/CarePlan/1?_format=json
      */
-    @Read(version = false)
-    public CarePlan getCarePlanResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public CarePlan readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
 
-        DafCarePlan dafCareTeam = service.getCarePlanById(theId.getIdPartAsLong().intValue());
+            DafCarePlan dafCareTeam = service.getCarePlanById(id);
+            return createCarePlanObject(dafCareTeam);
 
-        CarePlan carePlan = createCarePlanObject(dafCareTeam);
-
-        return carePlan;
+        } catch (NumberFormatException e) {
+            /*
+             * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+             */
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public CarePlan getCarePlanHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafCarePlan dafCareTeam = service.getCarePlanById(id);
+            return createCarePlanObject(dafCareTeam);
+        } catch (NumberFormatException e) {
+            /*
+             * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+             */
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

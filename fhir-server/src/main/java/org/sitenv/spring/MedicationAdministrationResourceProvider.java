@@ -18,6 +18,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafMedicationAdministration;
 import org.sitenv.spring.service.MedicationAdministrationService;
@@ -91,15 +92,34 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
      * <p>
      * Ex: http://<server name>/<context>/fhir/MedicationAdministration/1?_format=json
      */
-    @Read(version = false)
-    public MedicationAdministration getMedicationAdministrationResourceById(@IdParam IdDt theId) {
-
-        DafMedicationAdministration dafMedAdministration = service.getMedicationAdministrationResourceById(theId.getIdPartAsLong().intValue());
-
-        MedicationAdministration medAdministration = createMedicationAdministrationObject(dafMedAdministration);
-
-        return medAdministration;
+    @Read(version = true)
+    public MedicationAdministration readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafMedicationAdministration dafMedAdministration = service.getMedicationAdministrationResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationAdministrationObject(dafMedAdministration);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public MedicationAdministration getMedicationAdministrationHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafMedicationAdministration dafMedAdministration = service.getMedicationAdministrationResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationAdministrationObject(dafMedAdministration);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

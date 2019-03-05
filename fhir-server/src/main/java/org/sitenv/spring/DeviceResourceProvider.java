@@ -14,6 +14,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafDevice;
 import org.sitenv.spring.query.DeviceSearchCriteria;
@@ -82,15 +83,36 @@ public class DeviceResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Device/1?_format=json
      */
-    @Read(version = false)
-    public Device getDeviceResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public Device readOrVread(@IdParam IdDt theId) {
 
-        DafDevice dafDevice = service.getDeviceById(theId.getIdPartAsLong().intValue());
-
-        Device device = createDeviceObject(dafDevice);
-
-        return device;
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafDevice dafDevice = service.getDeviceById(theId.getIdPartAsLong().intValue());
+            return createDeviceObject(dafDevice);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public Device getPatientHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+
+            DafDevice dafDevice = service.getDeviceById(theId.getIdPartAsLong().intValue());
+            return createDeviceObject(dafDevice);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

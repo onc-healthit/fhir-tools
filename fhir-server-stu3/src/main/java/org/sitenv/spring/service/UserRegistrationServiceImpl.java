@@ -26,7 +26,12 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     public String updateUser(DafUserRegister user) {
         return userDao.updateUser(user);
     }
-
+    
+    @Override
+    public String updateUserPassword(String userName, String password, String oldPassword) {
+    	return userDao.updateUserPassword(userName, password, oldPassword);
+    }
+    
     @Override
     public DafUserRegister getUserById(Integer id) {
         return userDao.getUserById(id);
@@ -36,7 +41,6 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     public DafUserRegister getUserByDetails(String userName, String password, HttpServletRequest request) throws Exception {
 
         DafUserRegister user = userDao.getUserByDetails(userName, password);
-
         HashMap<String, Integer> sessionMap = new HashMap<String, Integer>();
         long time = System.currentTimeMillis() + (2*60 * 60 * 1000); // 4 * 60 * 60 * 1000 3600 seconds times 1000 milliseconds(1 hour)
 
@@ -49,5 +53,22 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         return user;
     }
+
+    @Override
+	public DafUserRegister getUserByEmail(String email) {
+		return userDao.getUserByEmail(email);
+	}
+
+    @Override
+	public DafUserRegister updateTempPassword(String tempPassword, String email) {
+		return userDao.updateTempPassword(tempPassword, email);
+	}
+	
+	@Override
+	public String changeUserPassword(String userName, String password, String oldPassword) {
+		System.out.println();
+		return userDao.changeUserPassword(userName, password, oldPassword);
+	}
+
 
 }

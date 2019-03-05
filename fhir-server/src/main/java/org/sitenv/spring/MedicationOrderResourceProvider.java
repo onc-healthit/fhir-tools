@@ -90,14 +90,33 @@ public class MedicationOrderResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/MedicationOrder/1?_format=json
      */
-    @Read(version = false)
-    public MedicationOrder getMedicationOrderResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public MedicationOrder readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafMedicationOrder dafMedOrder = service.getMedicationOrderResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationOrderObject(dafMedOrder);
 
-        DafMedicationOrder dafMedOrder = service.getMedicationOrderResourceById(theId.getIdPartAsLong().intValue());
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        MedicationOrder medOrder = createMedicationOrderObject(dafMedOrder);
-
-        return medOrder;
+    @History()
+    public MedicationOrder getMedicationOrderHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafMedicationOrder dafMedOrder = service.getMedicationOrderResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationOrderObject(dafMedOrder);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
 

@@ -12,4 +12,12 @@ public interface UserRegistrationDao {
 
     public DafUserRegister getUserByDetails(String userName, String password) throws Exception;
 
+    public DafUserRegister getUserByEmail(String email);
+
+	public DafUserRegister updateTempPassword(String tempPassword, String email);
+	
+	public String changeUserPassword(String userName, String password, String oldPassword);
+	
+	 public String updateUserPassword(String userName, String password, String oldPassword);
+    
 }

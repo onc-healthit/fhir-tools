@@ -16,6 +16,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringOrListParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafCondition;
 import org.sitenv.spring.query.ConditionSearchCriteria;
@@ -87,15 +88,37 @@ public class ConditionResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/Condition/1?_format=json
      */
-    @Read(version = false)
-    public Condition getConditionResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public Condition readOrVread(@IdParam IdDt theId) {
 
-        DafCondition dafCondition = service.getConditionResourceById(theId.getIdPartAsLong().intValue());
-
-        Condition condition = createConditionObject(dafCondition);
-
-        return condition;
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafCondition dafCondition = service.getConditionResourceById(theId.getIdPartAsLong().intValue());
+            return createConditionObject(dafCondition);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public Condition getConditionHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafCondition dafCondition = service.getConditionResourceById(theId.getIdPartAsLong().intValue());
+            return createConditionObject(dafCondition);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
+
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

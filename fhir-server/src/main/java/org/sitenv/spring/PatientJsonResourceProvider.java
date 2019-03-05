@@ -72,11 +72,15 @@ public class PatientJsonResourceProvider implements IResourceProvider {
      * @param theId The read operation takes one parameter, which must be of type IdDt and must be annotated with the "@Read.IdParam" annotation.
      * @return Returns a resource matching this identifier, or null if none exists.
      */
-    @Read(version = false)
-    public Patient readPatient(@IdParam IdDt theId) {
+    @Read(version=true)
+    public Patient readOrVread(@IdParam IdDt theId) {
         int id;
         try {
-            id = theId.getIdPartAsLong().intValue();
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
         } catch (NumberFormatException e) {
             /*
              * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -86,6 +90,21 @@ public class PatientJsonResourceProvider implements IResourceProvider {
         DafPatientJson dafPatient = service.getPatientById(id);
 
         return createPatientObject(dafPatient);
+    }
+
+    @History()
+    public Patient getPatientHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafPatientJson dafPatient = service.getPatientById(id);
+            return createPatientObject(dafPatient);
+        } catch (Exception e) {
+            /*
+             * If we can't parse the ID as a long, it's not valid so this is an unknown resource
+             */
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**

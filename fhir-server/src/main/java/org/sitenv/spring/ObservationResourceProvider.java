@@ -90,11 +90,17 @@ public class ObservationResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none
      * exists.
      */
-    @Read(version = false)
-    public Observation getObservationResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public Observation readOrVread(@IdParam IdDt theId) {
 
         try {
-            Integer observationId = theId.getIdPartAsLong().intValue();
+            Integer observationId;
+            if (theId.hasVersionIdPart()) {
+                observationId = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                observationId = theId.getIdPartAsLong().intValue();
+            }
+
             DafObservation dafObservation = service.getObservationResourceById(observationId);
             if (dafObservation.getPatient() != null) {
                 Observation observation = createObservationObject(dafObservation);
@@ -103,10 +109,23 @@ public class ObservationResourceProvider implements IResourceProvider {
                 throw new ResourceNotFoundException(theId);
             }
         } catch (Exception e) {
-            /*
-			 * If we can't parse the ID as a long, it's not valid so this is an
-			 * unknown resource
-			 */
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
+    @History()
+    public Observation getObservationHistory(@IdParam IdDt theId) {
+
+        try {
+            int observationId = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafObservation dafObservation = service.getObservationResourceById(observationId);
+            if (dafObservation.getPatient() != null) {
+                Observation observation = createObservationObject(dafObservation);
+                return observation;
+            } else {
+                throw new ResourceNotFoundException(theId);
+            }
+        } catch (Exception e) {
             throw new ResourceNotFoundException(theId);
         }
     }

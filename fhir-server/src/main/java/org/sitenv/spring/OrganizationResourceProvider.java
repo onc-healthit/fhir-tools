@@ -58,21 +58,34 @@ public class OrganizationResourceProvider implements IResourceProvider {
         return organizationList;
     }
 
-    @Read(version = false)
-    public Organization getOrganizationResourceById(@IdParam IdDt theId) {
-
+    @Read(version = true)
+    public Organization readOrVread(@IdParam IdDt theId) {
         try {
             Integer organizationId = theId.getIdPartAsLong().intValue();
+            if (theId.hasVersionIdPart()) {
+                organizationId = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                organizationId = theId.getIdPartAsLong().intValue();
+            }
             DafOrganization dafOrganization = service.getOrganizationResourceById(organizationId);
             return createOrganizationObject(dafOrganization);
         } catch (Exception e) {
-            /*
-			 * If we can't parse the ID as a long, it's not valid so this is an
-			 * unknown resource
-			 */
             throw new ResourceNotFoundException(theId);
         }
     }
+
+    @History()
+    public Organization getOrganizationHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafOrganization dafOrganization = service.getOrganizationResourceById(id);
+            return createOrganizationObject(dafOrganization);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     @Search()
     public List<Organization> getOrganizationByIdentifierValue(@RequiredParam(name = Organization.SP_IDENTIFIER) TokenParam theIdentifierValue,

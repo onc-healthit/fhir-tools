@@ -15,6 +15,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafProcedure;
 import org.sitenv.spring.query.ProcedureSearchCriteria;
@@ -94,15 +95,32 @@ public class ProcedureResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Procedure/1?_format=json
      */
-    @Read(version = false)
+    @Read(version = true)
     public Procedure getProcedureResourceById(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafProcedure dafProcedure = service.getProcedureById(theId.getIdPartAsLong().intValue());
+            return createProcedureObject(dafProcedure);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        DafProcedure dafProcedure = service.getProcedureById(theId
-                .getIdPartAsLong().intValue());
-
-        Procedure procedure = createProcedureObject(dafProcedure);
-
-        return procedure;
+    @History()
+    public Procedure getProcedureHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafProcedure dafProcedure = service.getProcedureById(theId.getIdPartAsLong().intValue());
+            return createProcedureObject(dafProcedure);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**

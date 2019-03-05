@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import ca.uhn.fhir.rest.annotation.*;
 import org.sitenv.spring.util.HapiUtils;
 import org.springframework.context.support.AbstractApplicationContext;
 
@@ -22,12 +23,6 @@ import ca.uhn.fhir.model.primitive.DateTimeDt;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.model.primitive.UriDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.IncludeParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -64,12 +59,8 @@ public class ProvenanceResourceProvider implements IResourceProvider{
      */
     @Search
     public List<Provenance> getAllProvenance(@IncludeParam(allow = "*") Set<Include> theIncludes, @Sort SortSpec theSort, @Count Integer theCount) {
-
-
         List<Provenance> provenances = new ArrayList<Provenance>();
-
-        provenances.add(createProvenanceObject());
-
+        provenances.add(createProvenanceObject(1));
         return provenances;
     }
     
@@ -84,31 +75,38 @@ public class ProvenanceResourceProvider implements IResourceProvider{
      * 
      *  Ex: http://<server name>/<context>/fhir/Provenance/1?_format=json
      */
-    @Read(version = false)
-    public Provenance getProvenanceResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public Provenance readOrVread(@IdParam IdDt theId) {
     	int id;
         try {
-            id = theId.getIdPartAsLong().intValue();
-            if(id==1) {
-            	Provenance provenance = createProvenanceObject();
-                return provenance;
-            	}
-            	else {
-            		throw new ResourceNotFoundException(theId);
-            	}
+			if (theId.hasVersionIdPart()) {
+				id = Integer.parseInt(theId.getValue().split("/")[1]);
+			}else {
+				id = theId.getIdPartAsLong().intValue();
+			}
+            Provenance provenance = createProvenanceObject(id);
+            return provenance;
         } catch (NumberFormatException e) {
-            /*
-			 * If we can't parse the ID as a long, it's not valid so this is an unknown resource
-			 */
             throw new ResourceNotFoundException(theId);
         }
-    	
     }
-    
+
+	@History()
+	public Provenance getProvenanceHistory(@IdParam IdDt theId) {
+		int id;
+		try {
+			id = Integer.parseInt(theId.getValue().split("/")[1]);
+			Provenance provenance = createProvenanceObject(id);
+			return provenance;
+		} catch (Exception e) {
+			throw new ResourceNotFoundException(theId);
+		}
+	}
+
     /**
      * This method converts returns sample Provenance object
      */
-    private Provenance createProvenanceObject() {
+    private Provenance createProvenanceObject(int id) {
 
     	Provenance provenance = new Provenance();
 
@@ -117,7 +115,7 @@ public class ProvenanceResourceProvider implements IResourceProvider{
 
     	//Set Target
     	List<ResourceReferenceDt> targetList=new ArrayList<>();
-    	targetList.add(new ResourceReferenceDt("Procedure/1"));
+    	targetList.add(new ResourceReferenceDt("Procedure/"+id));
     	provenance.setTarget(targetList);
     	
     	//Set Period

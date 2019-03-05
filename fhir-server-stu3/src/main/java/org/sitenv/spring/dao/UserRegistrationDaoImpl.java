@@ -5,9 +5,10 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.util.AESencryption;
+import org.sitenv.spring.util.CommonUtil;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.Iterator;
 import java.util.List;
 
 @Transactional
@@ -22,11 +23,18 @@ public class UserRegistrationDaoImpl extends AbstractDao implements UserRegistra
 
         Criteria criteria = getSession().createCriteria(DafUserRegister.class)
                 .add(Restrictions.eq("user_name", user.getUser_name()).ignoreCase());
+        Criteria criteriaEmail = getSession().createCriteria(DafUserRegister.class)
+                .add(Restrictions.eq("user_email", user.getUser_email()).ignoreCase());
         @SuppressWarnings("unchecked")
         List<DafUserRegister> existedUser = criteria.list();
+        @SuppressWarnings("unchecked")
+        List<DafUserRegister> existedEmail = criteriaEmail.list();
         if (existedUser != null && existedUser.size() > 0) {
             return "Username already exists. Please use a different Username.";
+        } else if(existedEmail != null && existedEmail.size() > 0){
+        	return "Useremail already exists. Please use a different Email Address.";
         } else {
+        	user.setIsPass(true);
             int i = (Integer) session.save(user);
             if (i > 0) {
                 return "User Registerd Successfully. Please Login to register Clients.";
@@ -50,6 +58,30 @@ public class UserRegistrationDaoImpl extends AbstractDao implements UserRegistra
         }
 
     }
+ 
+    public String updateUserPassword(String username, String password, String oldpassword){
+    	Criteria criteria = getSession().createCriteria(DafUserRegister.class)
+                .add(Restrictions.eq("user_name", username));
+
+        DafUserRegister dafUserRegister = (DafUserRegister) criteria.uniqueResult();
+        
+    	session = getSession();
+    	try {
+    		if(!oldpassword.equals(dafUserRegister.getTempPassword())) {
+            	return "Please enter valid Old Password.";
+            }
+    		dafUserRegister.setUser_password(password);
+    		dafUserRegister.setIsPass(true);
+    		dafUserRegister.setTempPassword(null);
+    		session.update(dafUserRegister);
+    		return "Password updated successfully. Please Login with updated Password.";
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    		return "Failed to update User password. Please contact Admin";
+    	}
+    	
+    }
 
     @Override
     public DafUserRegister getUserById(Integer id) {
@@ -65,8 +97,63 @@ public class UserRegistrationDaoImpl extends AbstractDao implements UserRegistra
                 .add(Restrictions.eq("user_password", AESencryption.encrypt(password)));
 
         DafUserRegister user = (DafUserRegister) criteria.uniqueResult();
-
         return user;
     }
+
+    @Override
+	public DafUserRegister getUserByEmail(String email) {
+
+		Criteria criteria = getSession().createCriteria(DafUserRegister.class);
+		criteria.add(Restrictions.eq("user_email", email));
+		DafUserRegister dafUserRegister = (DafUserRegister) criteria.uniqueResult();
+		
+		return dafUserRegister;
+		
+	}
+
+    @Override
+	public DafUserRegister updateTempPassword(String tempPassword, String email) {
+
+		Criteria criteria = getSession().createCriteria(DafUserRegister.class);
+		criteria.add(Restrictions.eq("user_email", email));
+		DafUserRegister dafUserRegister = (DafUserRegister) criteria.uniqueResult();
+		try {
+			dafUserRegister.setTempPassword(tempPassword);
+			dafUserRegister.setIsPass(false);
+			dafUserRegister.setUser_password(tempPassword);
+			getSession().update(dafUserRegister);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return dafUserRegister;
+
+	}
+	
+	@Override
+	public String changeUserPassword(String userName, String password, String oldPassword) {
+		Criteria criteria=getSession().createCriteria(DafUserRegister.class);
+		criteria.add(Restrictions.eq("user_name",userName));
+		//criteria.add(Restrictions.eq("user_password",oldpassword));
+		
+		DafUserRegister  dafUserRegister=(DafUserRegister) criteria.uniqueResult();
+		try {	
+		session=getSession();		
+		if(dafUserRegister!=null && AESencryption.decrypt(dafUserRegister.getUser_password()).equals(oldPassword)){
+		
+			dafUserRegister.setUser_password(password);
+			session.update(dafUserRegister);
+			
+			return "Password changed successfully.";
+		} else {
+			return "Please enter valid Old password."; 
+		}
+			
+		}catch (Exception e) {
+			e.printStackTrace();	
+			return "Error while updating password.";
+		}
+	}
 
 }

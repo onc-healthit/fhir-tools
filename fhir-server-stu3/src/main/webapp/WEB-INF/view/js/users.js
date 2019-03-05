@@ -2,7 +2,7 @@
     //var main_url = "http://localhost:8000/hapi";
     //var main_url = "https://fhirtest.direct.sitenv.org/hapi";
     //var main_url = "https://fhirtest.sitenv.org/hapi-resprint";
-    var main_url = geturl();
+    var main_url = geturl()+"/stu3/";
     var emailregex = /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
     var regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/;
     var usernameregex = /^[A-Za-z0-9_]+$/i;
@@ -13,7 +13,7 @@
         var postobj = {"userName":uname,"password":btoa(pass)};
         if (uname != '' && pass != '') {
             $.ajax({
-                url: main_url + "/stu3/user/details",
+                url: main_url + "/user/details",
                 type:"POST",
 				data:JSON.stringify(postobj),
                 headers:{
@@ -26,7 +26,12 @@
                         var cname = "userdetails";
                         var cvalue = data.user_full_name + "," + data.user_id;
                         setCookie("userdetails", cvalue, 1);
-                        window.location.replace("clients.html");
+                        setCookie("username", data.user_name);
+                        if(data.isPass) {
+                        	window.location.replace("clients.html");
+                        } else {                        	
+                        	window.location.replace("changepassword.html");
+                        }
                     }
                 },
                 error: function (e) {
@@ -135,17 +140,17 @@
             var cpassword = $('#cpassword').val();
             var data = {"user_name": username, "user_email": email, "user_full_name": fname, "user_password": password};
             $.ajax({
-                url: main_url + "/stu3/user/",
+                url: main_url + "/user/",
                 type: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 data: JSON.stringify(data),
                 success: function (data) {
-                    if (data == "Username already exists. Please use a different Username.") {
+                    if (data == "Username already exists. Please use a different Username." || data == "Useremail already exists. Please use a different Email-id.") {
                         bootbox.alert(data);
                         return false;
-                    } else {
+                    } else{
                         $('input[type="text"],input[type="password"]').val('');
 
                         bootbox.alert(data, function () {

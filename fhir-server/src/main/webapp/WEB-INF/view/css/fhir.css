@@ -336,6 +336,12 @@ table {
     word-wrap: break-all;
 }
 
+#loginerror, #oldpassworderror, #resetoldpassworderror{
+    color: #a94442;
+    text-align: center;
+    font-weight: bold;
+}
+
 table th, table td { overflow: hidden;word-wrap: break-word; }
 
 .editanchor{

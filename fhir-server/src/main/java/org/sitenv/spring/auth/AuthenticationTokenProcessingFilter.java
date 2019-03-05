@@ -93,6 +93,9 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token was invalid.");
             }
+        }else if (httpRequest.getRequestURI().contains("/fhirserver")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
         } else if (httpRequest.getRequestURI().contains("/open")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);

@@ -25,7 +25,13 @@
                         var cname = "userdetails";
                         var cvalue = data.user_full_name+","+data.user_id;
                         setCookie("userdetails", cvalue, 1);
-                        window.location.replace("clients.html");
+                        setCookie("username", data.user_name);
+                        if(data.isPass) {
+                        	window.location.replace("clients.html");
+                        } else {                        	
+                        	window.location.replace("changepassword.html");
+                        }
+
                     }
                 },
                 error: function(e){

@@ -1,5 +1,5 @@
 (function () {
-    var main_url = geturl();
+    var main_url = geturl()+"/stu3/";
 
     checkCookie = function () {
         var user = getCookie("userdetails");
@@ -44,7 +44,7 @@
         $('#editclientmodal').load('editclientmodal.html', function () {
             if (clientId != '' && regtoken != '') {
                 $.ajax({
-                    url: main_url + "/stu3/client/details?clientId=" + encodeURIComponent(clientId) + "&regtoken=" + encodeURIComponent(regtoken),
+                    url: main_url + "/client/details?clientId=" + encodeURIComponent(clientId) + "&regtoken=" + encodeURIComponent(regtoken),
                     type: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -184,7 +184,7 @@
                     "scope": clientscope
                 }
                 $.ajax({
-                    url: main_url + "/stu3/client/",
+                    url: main_url + "/client/",
                     type: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -219,7 +219,7 @@
 
     getuserdetails = function (userId) {
         $.ajax({
-            url: main_url + "/stu3/user/" + userId,
+            url: main_url + "/user/" + userId,
             type: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -256,7 +256,7 @@
             "user_password": password
         };
         $.ajax({
-            url: main_url + "/stu3/user/",
+            url: main_url + "/user/",
             type: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -279,7 +279,7 @@
 
     loadclients = function (userId) {
         $.ajax({
-            url: main_url + "/stu3/client/list/" + userId,
+            url: main_url + "/client/list/" + userId,
             type: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -320,7 +320,9 @@
             }
         })
         $('#homecontent').hide();
+        $('#resetcontent').hide();
         $('#viewregclients').show();
+        $('footer').css('position', 'fixed');
     }
 
     $(document).ready(function () {
@@ -451,7 +453,7 @@
                         "scope": clientscope
                     }
                     $.ajax({
-                        url: main_url + "/stu3/client/",
+                        url: main_url + "/client/",
                         type: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -488,6 +490,7 @@
             $('#homecontent').hide();
             $('#editclientform').hide();
             $('#profilecontent').show();
+            $('#resetcontent').hide();
             $('#viewregclients').hide();
             $('footer').css('position', 'fixed');
             $('#content').load('profileinfo.html', function () {
@@ -540,7 +543,7 @@
                         "user_password": password
                     };
                     $.ajax({
-                        url: main_url + "/stu3/user/",
+                        url: main_url + "/user/",
                         type: "PUT",
                         headers: {
                             "Content-Type": "application/json"
@@ -563,6 +566,115 @@
                 });
             });
         });
+        
+        
+        
+        //Change password
+        $(document).on('click', '#resetpass', function () {
+            $('#clientregform').hide();
+            $('#homecontent').hide();
+            $('#editclientform').hide();
+            $('#resetcontent').show();
+            $('#profilecontent').hide();
+            $('#viewregclients').hide();
+            $('footer').css('position', 'fixed');
+            $('#resetpasscontent').load('resetpass.html', function () {
+                //getuserdetails(userId);
+               // $('#profilecontent').hide();
+                $('#resetpassword').formValidation('destroy').formValidation({
+                    framework: 'bootstrap',
+                    icon: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+
+                    	resetoldpassword: {
+    	                    validators: {
+    	                    	/*regexp: {
+    	                            regexp: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/,
+    	                            message: 'Please re-enter password following password rules.'
+    	                        },*/
+    	                        notEmpty: {
+    	                            message: 'Old password is required'
+    	                        }
+    	                    }
+    	                },
+
+    	                resetnpassword: {
+    	                    validators: {
+    	                        regexp: {
+    	                            regexp: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/,
+    	                            message: 'Please re-enter password following password rules.'
+    	                        },
+    	                        notEmpty: {
+    	                            message: 'Password is required'
+    	                        }
+    	                    }
+    	                },
+
+    	                resetcpassword: {
+    	                    validators: {
+    	                        regexp: {
+    	                            regexp: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/,
+    	                            message: 'Please re-enter password following password rules.'
+    	                        },
+    	                        notEmpty: {
+    	                            message: 'Password is required'
+    	                        },
+    	                        identical: {
+    	                            field: 'resetnpassword',
+    	                            message: 'Password entered and confirmed do not match.'
+    	                        }
+    	                    }
+    	                }
+    	            },
+                }).on('success.form.fv', function (e) {
+    	            // Prevent form submission
+    	            e.preventDefault();
+
+    	            var oldpassword = $('#resetoldpassword').val();
+    	            var newpassword = $('#resetnpassword').val();
+    	            var username = getCookie("username");
+    	            var data = {"oldPassword": btoa(oldpassword), "password": btoa(newpassword), "userName":username};
+    	            $.ajax({
+    	                url: main_url + "/user/change-password",
+    	                type: "PUT",
+    	                headers: {
+    	                    "Content-Type": "application/json"
+    	                },
+    	                data: JSON.stringify(data),
+    	                success: function (data) {
+    	                	console.log(data);
+    	                	$('#resetoldpassworderror').html('');
+    	                    if (data == "Password changed successfully.") {
+    	                    	//deleteCookie("username");
+    	                    	bootbox.alert(data,function(){
+    	                    		$('#resetcontent').hide();
+        	                        $('#homecontent').show();
+    	                    	});
+    	                    } else{
+    	                       // $('input[type="text"],input[type="password"]').val('');
+    	                    	$('#resetoldpassworderror').html(data);
+    	                        return false;
+    	                    }
+    	                },
+    	                error: function (e) {
+    	                    console.log(e);
+    	                    bootbox.alert("User password update failed. Please contact Admin.");
+    	                }
+    	            });
+    	        });
+    	 });
+    	});
+        
+        
+        
+        
+        
+        
+        
         removeerror = function () {
             var val = [];
             $('.regscopes :checkbox:checked').each(function (i) {

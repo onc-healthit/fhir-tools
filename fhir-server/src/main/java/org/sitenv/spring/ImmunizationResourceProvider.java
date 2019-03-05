@@ -11,6 +11,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafImmunization;
 import org.sitenv.spring.query.ImmunizationSearchCriteria;
@@ -79,15 +80,34 @@ public class ImmunizationResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Immunization/1?_format=json
      */
-    @Read(version = false)
-    public Immunization getImmunizationResourceById(@IdParam IdDt theId) {
-
-        DafImmunization dafImmunization = service.getImmunizationById(theId.getIdPartAsLong().intValue());
-
-        Immunization immunization = createImmunizationObject(dafImmunization);
-
-        return immunization;
+    @Read(version = true)
+    public Immunization readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafImmunization dafImmunization = service.getImmunizationById(theId.getIdPartAsLong().intValue());
+            return createImmunizationObject(dafImmunization);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public Immunization getImmunizationHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafImmunization dafImmunization = service.getImmunizationById(theId.getIdPartAsLong().intValue());
+            return createImmunizationObject(dafImmunization);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

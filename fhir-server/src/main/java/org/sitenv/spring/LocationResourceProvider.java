@@ -11,6 +11,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafLocation;
 import org.sitenv.spring.query.LocationSearchCriteria;
@@ -91,15 +92,32 @@ public class LocationResourceProvider implements IResourceProvider {
      * <p>
      * Ex: http://<server name>/<context>/fhir/Location/1?_format=json
      */
-    @Read(version = false)
-    public Location getLocationResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public Location readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafLocation dafLocation = service.getLocationById(theId.getIdPartAsLong().intValue());
+            return createLocationObject(dafLocation);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        DafLocation dafLocation = service.getLocationById(theId
-                .getIdPartAsLong().intValue());
-
-        Location location = createLocationObject(dafLocation);
-
-        return location;
+    @History()
+    public Location getLocationHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafLocation dafLocation = service.getLocationById(theId.getIdPartAsLong().intValue());
+            return createLocationObject(dafLocation);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**

@@ -8,6 +8,7 @@ import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafMedication;
 import org.sitenv.spring.service.MedicationService;
@@ -74,15 +75,34 @@ public class MedicationResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/Medication/1?_format=json
      */
-    @Read(version = false)
+    @Read(version = true)
     public Medication getMedicationResourceById(@IdParam IdDt theId) {
-
-        DafMedication dafMed = service.getMedicationResourceById(theId.getIdPartAsLong().intValue());
-
-        Medication med = createMedicationResourceObject(dafMed);
-
-        return med;
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafMedication dafMed = service.getMedicationResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationResourceObject(dafMed);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
+
+    @History()
+    public Medication getMedicationHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafMedication dafMed = service.getMedicationResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationResourceObject(dafMed);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
 
     /**
      * The "@Search" annotation indicates that this method supports the search operation. You may have many different method annotated with this annotation, to support many different search criteria.

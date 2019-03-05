@@ -22,6 +22,7 @@ import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafDocumentReference;
 import org.sitenv.spring.service.DocumentReferenceService;
@@ -93,11 +94,32 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
      * <p/>
      * Ex: http://<server name>/<context>/fhir/DocumentReference/1?_pretty=true&_format=json
      */
-    @Read(version = false)
-    public DocumentReference getResourceById(@IdParam IdDt theId) {
-        DafDocumentReference dafDocRef = service.getDocumentReferenceById(theId.getIdPartAsLong().intValue());
-        DocumentReference docRef = createDocumentReferenceObject(dafDocRef);
-        return docRef;
+    @Read(version = true)
+    public DocumentReference readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafDocumentReference dafDocRef = service.getDocumentReferenceById(theId.getIdPartAsLong().intValue());
+            return createDocumentReferenceObject(dafDocRef);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
+
+    @History()
+    public DocumentReference getDocumentReferenceHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafDocumentReference dafDocRef = service.getDocumentReferenceById(theId.getIdPartAsLong().intValue());
+            return createDocumentReferenceObject(dafDocRef);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     @Operation(name = "$docref", idempotent = true)
@@ -116,7 +138,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         if (theIncludes.size() > 0) {
             IdDt practitionerId = docRefList.get(0).getAuthor().get(0).getReference();
             PractitionerResourceProvider practitioner = new PractitionerResourceProvider();
-            Practitioner prac = practitioner.getPractitionerResourceById(practitionerId);
+            Practitioner prac = practitioner.readOrVread(practitionerId);
             docRefList.get(0).getAuthor().get(0).setResource(prac);
         }
         return docRefList;
@@ -205,7 +227,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         if (theIncludes.size() > 0) {
             IdDt practitionerId = docRefList.get(0).getAuthor().get(0).getReference();
             PractitionerResourceProvider practitioner = new PractitionerResourceProvider();
-            Practitioner prac = practitioner.getPractitionerResourceById(practitionerId);
+            Practitioner prac = practitioner.readOrVread(practitionerId);
             docRefList.get(0).getAuthor().get(0).setResource(prac);
         }
         return docRefList;

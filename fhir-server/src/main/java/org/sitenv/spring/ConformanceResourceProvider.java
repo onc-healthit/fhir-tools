@@ -40,7 +40,7 @@ public class ConformanceResourceProvider extends ServerConformanceProvider {
         //Set Software
         Software software = new Software();
         software.setName("ONC Argonaut FHIR Server");
-        software.setVersion("1,6");
+        software.setVersion("1.6");
         conformance.setSoftware(software);
 
         //Set Rest

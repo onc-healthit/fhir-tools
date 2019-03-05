@@ -15,6 +15,7 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafMedicationDispense;
 import org.sitenv.spring.service.MedicationDispenseService;
@@ -84,14 +85,32 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/MedicationDispense/1?_format=json
      */
-    @Read(version = false)
-    public MedicationDispense getMedicationDispenseResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public MedicationDispense readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafMedicationDispense dafMedDispense = service.getMedicationDispenseResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationDispenseObject(dafMedDispense);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        DafMedicationDispense dafMedDispense = service.getMedicationDispenseResourceById(theId.getIdPartAsLong().intValue());
-
-        MedicationDispense medDispense = createMedicationDispenseObject(dafMedDispense);
-
-        return medDispense;
+    @History()
+    public MedicationDispense getMedicationDispenseHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafMedicationDispense dafMedDispense = service.getMedicationDispenseResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationDispenseObject(dafMedDispense);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**
@@ -121,7 +140,7 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
         if (theIncludes.size() > 0) {
             IdDt theId = medDispenseList.get(0).getPatient().getReference();
             PatientJsonResourceProvider patRes = new PatientJsonResourceProvider();
-            Patient patient = patRes.readPatient(theId);
+            Patient patient = patRes.readOrVread(theId);
             medDispenseList.get(0).getPatient().setResource(patient);
         }
         return medDispenseList;

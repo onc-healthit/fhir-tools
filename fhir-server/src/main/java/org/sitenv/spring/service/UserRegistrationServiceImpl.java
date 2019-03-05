@@ -49,5 +49,30 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         return user;
     }
+    
+    @Override
+	public DafUserRegister getUserByEmail(String email) {
+		return userDao.getUserByEmail(email);
+	}
+
+    @Override
+	public DafUserRegister updateTempPassword(String tempPassword, String email) {
+		return userDao.updateTempPassword(tempPassword, email);
+	}
+	
+	@Override
+	public String changeUserPassword(String userName, String password, String oldPassword) {
+		System.out.println();
+		return userDao.changeUserPassword(userName, password, oldPassword);
+	}
+
+	@Override
+	public String updateUserPassword(String userName, String password, String oldPassword) {
+		return userDao.updateUserPassword(userName, password, oldPassword);
+		
+	}
+
+	
+    
 
 }

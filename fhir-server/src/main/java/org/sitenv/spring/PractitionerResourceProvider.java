@@ -14,6 +14,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafPractitioner;
 import org.sitenv.spring.service.PractitionerService;
@@ -62,14 +63,31 @@ public class PractitionerResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/Practitioner/1?_format=json
      */
-    @Read(version = false)
-    public Practitioner getPractitionerResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public Practitioner readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafPractitioner dafPractitioner = service.getPractitionerById(theId.getIdPartAsLong().intValue());
+            return createPractitionerObject(dafPractitioner);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        DafPractitioner dafPractitioner = service.getPractitionerById(theId.getIdPartAsLong().intValue());
-
-        Practitioner docPrac = createPractitionerObject(dafPractitioner);
-
-        return docPrac;
+    @History()
+    public Practitioner getPractitionerHistory(@IdParam IdDt theId) {
+        try {
+            int id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafPractitioner dafPractitioner = service.getPractitionerById(id);
+            return createPractitionerObject(dafPractitioner);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
     /**

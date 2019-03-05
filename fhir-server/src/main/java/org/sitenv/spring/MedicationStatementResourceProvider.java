@@ -85,14 +85,32 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
      * @return Returns a resource matching this identifier, or null if none exists.
      * Ex: http://<server name>/<context>/fhir/MedicationStatement/1?_format=json
      */
-    @Read(version = false)
-    public MedicationStatement getMedicationStatementResourceById(@IdParam IdDt theId) {
+    @Read(version = true)
+    public MedicationStatement readOrVread(@IdParam IdDt theId) {
+        int id;
+        try {
+            if (theId.hasVersionIdPart()) {
+                id = Integer.parseInt(theId.getValue().split("/")[1]);
+            }else {
+                id = theId.getIdPartAsLong().intValue();
+            }
+            DafMedicationStatement dafMedStatement = service.getMedicationStatementResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationStatementObject(dafMedStatement);
+        } catch (NumberFormatException e) {
+            throw new ResourceNotFoundException(theId);
+        }
+    }
 
-        DafMedicationStatement dafMedStatement = service.getMedicationStatementResourceById(theId.getIdPartAsLong().intValue());
-
-        MedicationStatement medStatement = createMedicationStatementObject(dafMedStatement);
-
-        return medStatement;
+    @History()
+    public MedicationStatement getMedicationStatementHistory(@IdParam IdDt theId) {
+        int id;
+        try {
+            id = Integer.parseInt(theId.getValue().split("/")[1]);
+            DafMedicationStatement dafMedStatement = service.getMedicationStatementResourceById(theId.getIdPartAsLong().intValue());
+            return createMedicationStatementObject(dafMedStatement);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(theId);
+        }
     }
 
 

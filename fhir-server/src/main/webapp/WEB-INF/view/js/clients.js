@@ -302,7 +302,9 @@
             } 
 		})
 	    $('#homecontent').hide();
+		$('#resetcontent').hide();
 	    $('#viewregclients').show();
+	    $('footer').css('position', 'fixed');
 	}
 
 	$(document).ready(function(){
@@ -462,6 +464,7 @@
 			$('#homecontent').hide();
 			$('#editclientform').hide();
 			$('#profilecontent').show();
+			$('#resetcontent').hide();
 			$('#viewregclients').hide();
 			$('footer').css('position', 'fixed');
 			$('#content').load('profileinfo.html',function(){
@@ -531,6 +534,114 @@
 		        });
 			});
 		});
+		
+		
+		//Change password
+        $(document).on('click', '#resetpass', function () {
+            $('#clientregform').hide();
+            $('#homecontent').hide();
+            $('#editclientform').hide();
+            $('#resetcontent').show();
+            $('#profilecontent').hide();
+            $('#viewregclients').hide();
+            $('footer').css('position', 'fixed');
+            $('#resetpasscontent').load('resetpass.html', function () {
+                //getuserdetails(userId);
+               // $('#profilecontent').hide();
+                $('#resetpassword').formValidation('destroy').formValidation({
+                    framework: 'bootstrap',
+                    icon: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+
+                    	resetoldpassword: {
+    	                    validators: {
+    	                    	/*regexp: {
+    	                            regexp: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/,
+    	                            message: 'Please re-enter password following password rules.'
+    	                        },*/
+    	                        notEmpty: {
+    	                            message: 'Old password is required'
+    	                        }
+    	                    }
+    	                },
+
+    	                resetnpassword: {
+    	                    validators: {
+    	                        regexp: {
+    	                            regexp: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/,
+    	                            message: 'Please re-enter password following password rules.'
+    	                        },
+    	                        notEmpty: {
+    	                            message: 'Password is required'
+    	                        }
+    	                    }
+    	                },
+
+    	                resetcpassword: {
+    	                    validators: {
+    	                        regexp: {
+    	                            regexp: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/,
+    	                            message: 'Please re-enter password following password rules.'
+    	                        },
+    	                        notEmpty: {
+    	                            message: 'Password is required'
+    	                        },
+    	                        identical: {
+    	                            field: 'resetnpassword',
+    	                            message: 'Password entered and confirmed do not match.'
+    	                        }
+    	                    }
+    	                }
+    	            },
+                }).on('success.form.fv', function (e) {
+    	            // Prevent form submission
+    	            e.preventDefault();
+
+    	            var oldpassword = $('#resetoldpassword').val();
+    	            var newpassword = $('#resetnpassword').val();
+    	            var username = getCookie("username");
+    	            var data = {"oldPassword": btoa(oldpassword), "password": btoa(newpassword), "userName":username};
+    	            $.ajax({
+    	                url: main_url + "/user/change-password",
+    	                type: "PUT",
+    	                headers: {
+    	                    "Content-Type": "application/json"
+    	                },
+    	                data: JSON.stringify(data),
+    	                success: function (data) {
+    	                	console.log(data);
+    	                	$('#resetoldpassworderror').html('');
+    	                    if (data == "Password changed successfully.") {
+    	                    	//deleteCookie("username");
+    	                    	bootbox.alert(data,function(){
+    	                    		$('#resetcontent').hide();
+        	                        $('#homecontent').show();
+    	                    	});
+    	                    } else{
+    	                       // $('input[type="text"],input[type="password"]').val('');
+    	                    	$('#resetoldpassworderror').html(data);
+    	                        return false;
+    	                    }
+    	                },
+    	                error: function (e) {
+    	                    console.log(e);
+    	                    bootbox.alert("User password update failed. Please contact Admin.");
+    	                }
+    	            });
+    	        });
+    	 });
+    	});
+        
+        
+        
+        
+        
+		
+		
 		removeerror = function(){
 			var val = [];
 	        $('.regscopes :checkbox:checked').each(function(i){

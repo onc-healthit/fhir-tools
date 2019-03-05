@@ -1,6 +1,9 @@
 package org.sitenv.spring;
 
 import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
 import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.service.UserRegistrationService;
@@ -10,6 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -62,8 +72,6 @@ public class UserRegistrationController {
     /**
      * This method used to get the user by user name and password
      *
-     * @param userName
-     * @param password
      * @return This method will return the user. if the user not existed returns null.
      * @throws Exception 
      */
@@ -85,6 +93,100 @@ public class UserRegistrationController {
         return user;
         
     }
+    /**
+	 * This method updates the password for user
+	 * 
+	 * @return This method will returns the password updated user.
+	 */
+	@RequestMapping(value = "/update-password", method = RequestMethod.PUT)
+	@ResponseBody
+	public String updatePasswordByUsername(@RequestBody Map<String, String> credentials) {
+		return userService.updateUserPassword(credentials.get("userName"),
+				CommonUtil.base64Decoder(credentials.get("password")),credentials.get("oldPassword"));
+	}
+    
+	@RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+	@ResponseBody
+	public DafUserRegister getUserByEmail(@RequestParam String email, HttpServletRequest request )throws Exception {
+		System.out.println(email);
+		DafUserRegister checkedEmail = userService.getUserByEmail(email);
+		if (checkedEmail!=null) {
+			String tempPassword = UUID.randomUUID().toString().substring(0, Math.min(UUID.randomUUID().toString().length(), 10));
+			String userName=checkedEmail.getUser_name();
+			 // Recipient's email ID needs to be mentioned.
+		      String to = checkedEmail.getUser_email();
+		      
+		      ResourceBundle rb = ResourceBundle.getBundle("application");
+		      String from=rb.getString("from");
+		      final String username =rb.getString("username");
+		      final String password =rb.getString("password");
+		     
+		      String host = rb.getString("host");
+		      String port = rb.getString("port");
+		      String socketFactory_class = rb.getString("socketFactory_class");
+		     // boolean auth = rb.containsKey("true");
+		      String smtp_port = rb.getString("smtp_port");
+
+		      Properties props = new Properties();
+		      props.put("mail.smtp.host",host);
+		      props.put("mail.smtp.socketFactory.port", port);
+		      props.put("mail.smtp.socketFactory.class",socketFactory_class);
+		      props.put("mail.smtp.auth", "true");
+		      props.put("mail.smtp.port", smtp_port);
+
+		      // Get the Session object.
+		      Session session = Session.getInstance(props,
+		    		  new javax.mail.Authenticator() {
+		            	protected PasswordAuthentication getPasswordAuthentication() {
+		            		return new PasswordAuthentication(username, password);
+		            }
+		      });
+
+		      try {
+		            // Create a default MimeMessage object.
+		            Message message = new MimeMessage(session);
+
+		            // Set From: header field of the header.
+		            message.setFrom(new InternetAddress(from));
+
+		            // Set To: header field of the header.
+		            message.setRecipients(Message.RecipientType.TO,
+		              InternetAddress.parse(to));
+
+		            // Set Subject: header field
+		            message.setSubject("Reset your FHIR SITE password");
+
+		            // Send the actual HTML message, as big as you like
+		            message.setContent( 
+				              "<p><label>We received a request to reset FHIR SITE password for your account, </label>"+userName+".</p><p><label>Your account password is </label>"+tempPassword 
+				              +"</p><p><label> Thank You!</label></p>",
+				             "text/html");
+
+		            // Send message
+		            Transport.send(message);
+
+		            System.out.println("Sent message successfully....");
+
+		      } catch (MessagingException e) {
+		    	  e.printStackTrace();
+		    	  throw new RuntimeException(e);
+		      }
+			
+	        return userService.updateTempPassword(tempPassword, email);
+			
+		}
+		return null;
+	}
+	
+	@RequestMapping(value = "/change-password", method = RequestMethod.PUT)
+	@ResponseBody
+	public String changePasswordByUsername(@RequestBody Map<String, String> credentials) {
+		return userService.changeUserPassword(credentials.get("userName"),
+				CommonUtil.base64Decoder(credentials.get("password")),CommonUtil.base64Decoder(credentials.get("oldPassword")));
+		
+	}
+	
+	
     
 
 }

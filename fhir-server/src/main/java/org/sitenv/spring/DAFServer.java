@@ -6,6 +6,7 @@ import ca.uhn.fhir.rest.server.RestfulServer;
 
 import javax.servlet.annotation.WebServlet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 

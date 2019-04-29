@@ -1,0 +1,42 @@
+package org.sitenv.spring.service;
+
+import java.util.List;
+
+import org.sitenv.spring.dao.PatientDao;
+import org.sitenv.spring.model.DafPatient;
+import org.sitenv.spring.util.SearchParameterMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service("patientService")
+@Transactional
+public class PatientServiceImpl implements PatientService {
+	
+	@Autowired
+    private PatientDao patientDao;
+	
+	@Override
+    @Transactional
+    public DafPatient getPatientById(int id) {
+        return this.patientDao.getPatientById(id);
+    }
+	
+	@Override
+	@Transactional
+	public DafPatient getPatientByVersionId(int theId, String versionId) {
+		return this.patientDao.getPatientByVersionId(theId, versionId);
+	}
+	
+	@Override
+    @Transactional
+    public List<DafPatient> search(SearchParameterMap paramMap){
+        return this.patientDao.search(paramMap);
+    }
+
+   @Override
+   @Transactional
+   public List<DafPatient> getPatientHistoryById(int theId) {
+	   return this.patientDao.getPatientHistoryById(theId);
+   }
+}

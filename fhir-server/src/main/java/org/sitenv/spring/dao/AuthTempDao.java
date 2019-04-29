@@ -17,5 +17,7 @@ public interface AuthTempDao {
     public DafAuthtemp getAuthenticationById(String transactionId);
 
     public DafAuthtemp getAuthById(String clientId);
+    
+    public DafAuthtemp validateIdToken(String idToken);
 
 }

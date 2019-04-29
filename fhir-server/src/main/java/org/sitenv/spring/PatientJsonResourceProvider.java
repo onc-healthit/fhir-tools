@@ -510,7 +510,7 @@ public class PatientJsonResourceProvider implements IResourceProvider {
         //Communication
         List<Patient.Communication> languageList = new ArrayList<Patient.Communication>();
         Patient.Communication language = new Patient.Communication();
-        language.setLanguage(HapiUtils.setCodeableConceptDtValues(dafPatient.getLanguage(), "", HapiConstants.COMMUNICATION_LANGUAGE_SYSTEM));
+        language.setLanguage(HapiUtils.setCodeableConceptDtValues(dafPatient.getLanguage(), "en-US", HapiConstants.COMMUNICATION_LANGUAGE_SYSTEM));
         languageList.add(language);
         patient.setCommunication(languageList);
 

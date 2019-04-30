@@ -26,13 +26,13 @@ $ git clone https://github.com/siteadmin/fhir-tools.git
 Create the database by running the below command in command prompt
 
 ```
-$ createdb -h localhost -p 5432 -U postgres R4
+$ createdb -h localhost -p 5432 -U postgres r4
 ```
 
-R4 database file `fhir-R4-db.backup` is located under root directory. Load schema and sample data using psql command
+R4 database file `fhir-r4-db.backup` is located under root directory. Load schema and sample data using psql command
 
 ```
-$ psql -U postgres -d R4 -f fhir-R4-db.backup 
+$ psql -U postgres -d r4 -f fhir-r4-db.backup 
 ```
 
 ### Tomcat Configuration 
@@ -42,7 +42,7 @@ $ psql -U postgres -d R4 -f fhir-R4-db.backup
 Open application.properties file under fhir-server/src/main/resources and change below properties and save the file. 
 
 ```  
-jdbc.url=jdbc:postgresql://localhost:5432/R4
+jdbc.url=jdbc:postgresql://localhost:5432/r4
 jdbc.username=postgres
 jdbc.password=postgres
 ```
@@ -52,8 +52,8 @@ jdbc.password=postgres
 Open server.xml and add below two lines under `<host>` tag and save the file.
 
 ```
-<Context path="/open/R4" docBase="./R4"/>
-<Context path="/secure/R4" docBase="./R4"/>
+<Context path="/open/r4" docBase="./r4"/>
+<Context path="/secure/r4" docBase="./r4"/>
 ```
 
 ### Built Application 
@@ -68,6 +68,6 @@ This will generate a war file under target/{application-name}.war. Copy this to 
 ## Verification 
 Verify using Postman or equivalent tool by running various FHIR APIs on the R4 server. 
 ```
-For example: http://localhost:<port>/open/R4/fhir/Patient/1
+For example: http://localhost:<port>/open/r4/fhir/Patient/1
 ```
   

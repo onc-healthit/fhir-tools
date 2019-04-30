@@ -2,28 +2,34 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.9
--- Dumped by pg_dump version 9.6.9
-
--- Started on 2018-06-27 20:41:21
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- TOC entry 185 (class 1259 OID 17031)
--- Name: allergy_intolerance; Type: TABLE; Schema: public; Owner: postgres
+-- Name: allergy_intolerance; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.allergy_intolerance (
@@ -46,8 +52,7 @@ CREATE TABLE public.allergy_intolerance (
 ALTER TABLE public.allergy_intolerance OWNER TO postgres;
 
 --
--- TOC entry 186 (class 1259 OID 17037)
--- Name: auth_temp; Type: TABLE; Schema: public; Owner: postgres
+-- Name: auth_temp; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.auth_temp (
@@ -64,14 +69,14 @@ CREATE TABLE public.auth_temp (
     state character(255),
     transaction_id character(255),
     refresh_token character varying(255),
-    launch_patient_id integer
+    launch_patient_id integer,
+    id_token text
 );
 
 
 ALTER TABLE public.auth_temp OWNER TO postgres;
 
 --
--- TOC entry 187 (class 1259 OID 17044)
 -- Name: auth_temp_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -86,8 +91,6 @@ CREATE SEQUENCE public.auth_temp_id_seq
 ALTER TABLE public.auth_temp_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2656 (class 0 OID 0)
--- Dependencies: 187
 -- Name: auth_temp_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -95,8 +98,7 @@ ALTER SEQUENCE public.auth_temp_id_seq OWNED BY public.auth_temp.id;
 
 
 --
--- TOC entry 188 (class 1259 OID 17046)
--- Name: authenticator; Type: TABLE; Schema: public; Owner: postgres
+-- Name: authenticator; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.authenticator (
@@ -108,7 +110,6 @@ CREATE TABLE public.authenticator (
 ALTER TABLE public.authenticator OWNER TO postgres;
 
 --
--- TOC entry 189 (class 1259 OID 17049)
 -- Name: authenticator_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -123,8 +124,6 @@ CREATE SEQUENCE public.authenticator_id_seq
 ALTER TABLE public.authenticator_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2657 (class 0 OID 0)
--- Dependencies: 189
 -- Name: authenticator_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -132,8 +131,7 @@ ALTER SEQUENCE public.authenticator_id_seq OWNED BY public.authenticator.id;
 
 
 --
--- TOC entry 190 (class 1259 OID 17051)
--- Name: author; Type: TABLE; Schema: public; Owner: postgres
+-- Name: author; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.author (
@@ -145,7 +143,6 @@ CREATE TABLE public.author (
 ALTER TABLE public.author OWNER TO postgres;
 
 --
--- TOC entry 191 (class 1259 OID 17054)
 -- Name: author_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -160,8 +157,6 @@ CREATE SEQUENCE public.author_id_seq
 ALTER TABLE public.author_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2658 (class 0 OID 0)
--- Dependencies: 191
 -- Name: author_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -169,8 +164,7 @@ ALTER SEQUENCE public.author_id_seq OWNED BY public.author.id;
 
 
 --
--- TOC entry 192 (class 1259 OID 17056)
--- Name: careplan; Type: TABLE; Schema: public; Owner: postgres
+-- Name: careplan; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.careplan (
@@ -196,8 +190,7 @@ CREATE TABLE public.careplan (
 ALTER TABLE public.careplan OWNER TO postgres;
 
 --
--- TOC entry 193 (class 1259 OID 17062)
--- Name: careteam; Type: TABLE; Schema: public; Owner: postgres
+-- Name: careteam; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.careteam (
@@ -224,7 +217,6 @@ CREATE TABLE public.careteam (
 ALTER TABLE public.careteam OWNER TO postgres;
 
 --
--- TOC entry 194 (class 1259 OID 17068)
 -- Name: careteam_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -239,8 +231,6 @@ CREATE SEQUENCE public.careteam_id_seq
 ALTER TABLE public.careteam_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2659 (class 0 OID 0)
--- Dependencies: 194
 -- Name: careteam_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -248,7 +238,6 @@ ALTER SEQUENCE public.careteam_id_seq OWNED BY public.careplan.id;
 
 
 --
--- TOC entry 195 (class 1259 OID 17070)
 -- Name: careteam_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -263,8 +252,6 @@ CREATE SEQUENCE public.careteam_id_seq1
 ALTER TABLE public.careteam_id_seq1 OWNER TO postgres;
 
 --
--- TOC entry 2660 (class 0 OID 0)
--- Dependencies: 195
 -- Name: careteam_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -272,8 +259,7 @@ ALTER SEQUENCE public.careteam_id_seq1 OWNED BY public.careteam.id;
 
 
 --
--- TOC entry 196 (class 1259 OID 17072)
--- Name: careteam_participant; Type: TABLE; Schema: public; Owner: postgres
+-- Name: careteam_participant; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.careteam_participant (
@@ -290,7 +276,6 @@ CREATE TABLE public.careteam_participant (
 ALTER TABLE public.careteam_participant OWNER TO postgres;
 
 --
--- TOC entry 197 (class 1259 OID 17078)
 -- Name: careteam_participant_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -305,8 +290,6 @@ CREATE SEQUENCE public.careteam_participant_id_seq
 ALTER TABLE public.careteam_participant_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2661 (class 0 OID 0)
--- Dependencies: 197
 -- Name: careteam_participant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -314,8 +297,7 @@ ALTER SEQUENCE public.careteam_participant_id_seq OWNED BY public.careteam_parti
 
 
 --
--- TOC entry 198 (class 1259 OID 17080)
--- Name: clients; Type: TABLE; Schema: public; Owner: postgres
+-- Name: clients; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.clients (
@@ -331,14 +313,15 @@ CREATE TABLE public.clients (
     scope text,
     redirect_uri character varying(255),
     last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
-    status boolean
+    status boolean,
+    launch_id character varying,
+    launch_uri character varying
 );
 
 
 ALTER TABLE public.clients OWNER TO postgres;
 
 --
--- TOC entry 199 (class 1259 OID 17087)
 -- Name: clients_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -353,8 +336,6 @@ CREATE SEQUENCE public.clients_id_seq
 ALTER TABLE public.clients_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2662 (class 0 OID 0)
--- Dependencies: 199
 -- Name: clients_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -362,8 +343,7 @@ ALTER SEQUENCE public.clients_id_seq OWNED BY public.clients.id;
 
 
 --
--- TOC entry 200 (class 1259 OID 17089)
--- Name: condition; Type: TABLE; Schema: public; Owner: postgres
+-- Name: condition; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.condition (
@@ -392,8 +372,7 @@ CREATE TABLE public.condition (
 ALTER TABLE public.condition OWNER TO postgres;
 
 --
--- TOC entry 201 (class 1259 OID 17095)
--- Name: confidentiality; Type: TABLE; Schema: public; Owner: postgres
+-- Name: confidentiality; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.confidentiality (
@@ -407,7 +386,6 @@ CREATE TABLE public.confidentiality (
 ALTER TABLE public.confidentiality OWNER TO postgres;
 
 --
--- TOC entry 202 (class 1259 OID 17098)
 -- Name: confidentiality_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -422,8 +400,6 @@ CREATE SEQUENCE public.confidentiality_id_seq
 ALTER TABLE public.confidentiality_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2663 (class 0 OID 0)
--- Dependencies: 202
 -- Name: confidentiality_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -431,8 +407,7 @@ ALTER SEQUENCE public.confidentiality_id_seq OWNED BY public.confidentiality.id;
 
 
 --
--- TOC entry 203 (class 1259 OID 17100)
--- Name: content; Type: TABLE; Schema: public; Owner: postgres
+-- Name: content; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.content (
@@ -448,7 +423,6 @@ CREATE TABLE public.content (
 ALTER TABLE public.content OWNER TO postgres;
 
 --
--- TOC entry 204 (class 1259 OID 17103)
 -- Name: content_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -463,8 +437,6 @@ CREATE SEQUENCE public.content_id_seq
 ALTER TABLE public.content_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2664 (class 0 OID 0)
--- Dependencies: 204
 -- Name: content_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -472,8 +444,7 @@ ALTER SEQUENCE public.content_id_seq OWNED BY public.content.id;
 
 
 --
--- TOC entry 205 (class 1259 OID 17105)
--- Name: context_event; Type: TABLE; Schema: public; Owner: postgres
+-- Name: context_event; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.context_event (
@@ -487,7 +458,6 @@ CREATE TABLE public.context_event (
 ALTER TABLE public.context_event OWNER TO postgres;
 
 --
--- TOC entry 206 (class 1259 OID 17108)
 -- Name: context_event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -502,8 +472,6 @@ CREATE SEQUENCE public.context_event_id_seq
 ALTER TABLE public.context_event_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2665 (class 0 OID 0)
--- Dependencies: 206
 -- Name: context_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -511,8 +479,7 @@ ALTER SEQUENCE public.context_event_id_seq OWNED BY public.context_event.id;
 
 
 --
--- TOC entry 207 (class 1259 OID 17110)
--- Name: context_facility_type; Type: TABLE; Schema: public; Owner: postgres
+-- Name: context_facility_type; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.context_facility_type (
@@ -526,7 +493,6 @@ CREATE TABLE public.context_facility_type (
 ALTER TABLE public.context_facility_type OWNER TO postgres;
 
 --
--- TOC entry 208 (class 1259 OID 17113)
 -- Name: context_facility_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -541,8 +507,6 @@ CREATE SEQUENCE public.context_facility_type_id_seq
 ALTER TABLE public.context_facility_type_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2666 (class 0 OID 0)
--- Dependencies: 208
 -- Name: context_facility_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -550,8 +514,7 @@ ALTER SEQUENCE public.context_facility_type_id_seq OWNED BY public.context_facil
 
 
 --
--- TOC entry 209 (class 1259 OID 17115)
--- Name: context_period; Type: TABLE; Schema: public; Owner: postgres
+-- Name: context_period; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.context_period (
@@ -564,8 +527,7 @@ CREATE TABLE public.context_period (
 ALTER TABLE public.context_period OWNER TO postgres;
 
 --
--- TOC entry 210 (class 1259 OID 17118)
--- Name: custodian; Type: TABLE; Schema: public; Owner: postgres
+-- Name: custodian; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.custodian (
@@ -577,7 +539,6 @@ CREATE TABLE public.custodian (
 ALTER TABLE public.custodian OWNER TO postgres;
 
 --
--- TOC entry 211 (class 1259 OID 17121)
 -- Name: custodian_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -592,8 +553,6 @@ CREATE SEQUENCE public.custodian_id_seq
 ALTER TABLE public.custodian_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2667 (class 0 OID 0)
--- Dependencies: 211
 -- Name: custodian_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -601,8 +560,7 @@ ALTER SEQUENCE public.custodian_id_seq OWNED BY public.custodian.id;
 
 
 --
--- TOC entry 212 (class 1259 OID 17123)
--- Name: device; Type: TABLE; Schema: public; Owner: postgres
+-- Name: device; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.device (
@@ -629,7 +587,6 @@ CREATE TABLE public.device (
 ALTER TABLE public.device OWNER TO postgres;
 
 --
--- TOC entry 213 (class 1259 OID 17129)
 -- Name: device_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -644,8 +601,6 @@ CREATE SEQUENCE public.device_id_seq
 ALTER TABLE public.device_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2668 (class 0 OID 0)
--- Dependencies: 213
 -- Name: device_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -653,8 +608,7 @@ ALTER SEQUENCE public.device_id_seq OWNED BY public.device.id;
 
 
 --
--- TOC entry 214 (class 1259 OID 17131)
--- Name: diagnosticreport; Type: TABLE; Schema: public; Owner: postgres
+-- Name: diagnosticreport; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.diagnosticreport (
@@ -684,7 +638,6 @@ CREATE TABLE public.diagnosticreport (
 ALTER TABLE public.diagnosticreport OWNER TO postgres;
 
 --
--- TOC entry 215 (class 1259 OID 17138)
 -- Name: diagnosticreport_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -699,8 +652,6 @@ CREATE SEQUENCE public.diagnosticreport_id_seq
 ALTER TABLE public.diagnosticreport_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2669 (class 0 OID 0)
--- Dependencies: 215
 -- Name: diagnosticreport_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -708,8 +659,7 @@ ALTER SEQUENCE public.diagnosticreport_id_seq OWNED BY public.diagnosticreport.i
 
 
 --
--- TOC entry 216 (class 1259 OID 17140)
--- Name: doc_class_codes; Type: TABLE; Schema: public; Owner: postgres
+-- Name: doc_class_codes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.doc_class_codes (
@@ -723,7 +673,6 @@ CREATE TABLE public.doc_class_codes (
 ALTER TABLE public.doc_class_codes OWNER TO postgres;
 
 --
--- TOC entry 217 (class 1259 OID 17143)
 -- Name: doc_class_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -738,8 +687,6 @@ CREATE SEQUENCE public.doc_class_codes_id_seq
 ALTER TABLE public.doc_class_codes_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2670 (class 0 OID 0)
--- Dependencies: 217
 -- Name: doc_class_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -747,8 +694,7 @@ ALTER SEQUENCE public.doc_class_codes_id_seq OWNED BY public.doc_class_codes.id;
 
 
 --
--- TOC entry 218 (class 1259 OID 17145)
--- Name: doc_type_codes; Type: TABLE; Schema: public; Owner: postgres
+-- Name: doc_type_codes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.doc_type_codes (
@@ -762,7 +708,6 @@ CREATE TABLE public.doc_type_codes (
 ALTER TABLE public.doc_type_codes OWNER TO postgres;
 
 --
--- TOC entry 219 (class 1259 OID 17148)
 -- Name: doc_type_codes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -777,8 +722,6 @@ CREATE SEQUENCE public.doc_type_codes_id_seq
 ALTER TABLE public.doc_type_codes_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2671 (class 0 OID 0)
--- Dependencies: 219
 -- Name: doc_type_codes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -786,8 +729,7 @@ ALTER SEQUENCE public.doc_type_codes_id_seq OWNED BY public.doc_type_codes.id;
 
 
 --
--- TOC entry 220 (class 1259 OID 17150)
--- Name: document_reference; Type: TABLE; Schema: public; Owner: postgres
+-- Name: document_reference; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.document_reference (
@@ -820,8 +762,7 @@ CREATE TABLE public.document_reference (
 ALTER TABLE public.document_reference OWNER TO postgres;
 
 --
--- TOC entry 221 (class 1259 OID 17156)
--- Name: document_reference_json; Type: TABLE; Schema: public; Owner: postgres
+-- Name: document_reference_json; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.document_reference_json (
@@ -838,7 +779,6 @@ CREATE TABLE public.document_reference_json (
 ALTER TABLE public.document_reference_json OWNER TO postgres;
 
 --
--- TOC entry 222 (class 1259 OID 17162)
 -- Name: document_reference_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -853,8 +793,6 @@ CREATE SEQUENCE public.document_reference_id_seq
 ALTER TABLE public.document_reference_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2672 (class 0 OID 0)
--- Dependencies: 222
 -- Name: document_reference_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -862,7 +800,6 @@ ALTER SEQUENCE public.document_reference_id_seq OWNED BY public.document_referen
 
 
 --
--- TOC entry 223 (class 1259 OID 17164)
 -- Name: document_reference_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -877,8 +814,6 @@ CREATE SEQUENCE public.document_reference_id_seq1
 ALTER TABLE public.document_reference_id_seq1 OWNER TO postgres;
 
 --
--- TOC entry 2673 (class 0 OID 0)
--- Dependencies: 223
 -- Name: document_reference_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -886,7 +821,6 @@ ALTER SEQUENCE public.document_reference_id_seq1 OWNED BY public.document_refere
 
 
 --
--- TOC entry 224 (class 1259 OID 17166)
 -- Name: event_period_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -901,8 +835,6 @@ CREATE SEQUENCE public.event_period_id_seq
 ALTER TABLE public.event_period_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2674 (class 0 OID 0)
--- Dependencies: 224
 -- Name: event_period_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -910,8 +842,7 @@ ALTER SEQUENCE public.event_period_id_seq OWNED BY public.context_period.id;
 
 
 --
--- TOC entry 225 (class 1259 OID 17168)
--- Name: goals; Type: TABLE; Schema: public; Owner: postgres
+-- Name: goals; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.goals (
@@ -931,7 +862,6 @@ CREATE TABLE public.goals (
 ALTER TABLE public.goals OWNER TO postgres;
 
 --
--- TOC entry 226 (class 1259 OID 17174)
 -- Name: goals_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -946,8 +876,6 @@ CREATE SEQUENCE public.goals_id_seq
 ALTER TABLE public.goals_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2675 (class 0 OID 0)
--- Dependencies: 226
 -- Name: goals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -955,8 +883,7 @@ ALTER SEQUENCE public.goals_id_seq OWNED BY public.goals.id;
 
 
 --
--- TOC entry 227 (class 1259 OID 17176)
--- Name: immunization; Type: TABLE; Schema: public; Owner: postgres
+-- Name: immunization; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.immunization (
@@ -978,7 +905,6 @@ CREATE TABLE public.immunization (
 ALTER TABLE public.immunization OWNER TO postgres;
 
 --
--- TOC entry 228 (class 1259 OID 17182)
 -- Name: immunization_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -993,8 +919,6 @@ CREATE SEQUENCE public.immunization_id_seq
 ALTER TABLE public.immunization_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2676 (class 0 OID 0)
--- Dependencies: 228
 -- Name: immunization_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1002,8 +926,41 @@ ALTER SEQUENCE public.immunization_id_seq OWNED BY public.immunization.id;
 
 
 --
--- TOC entry 229 (class 1259 OID 17184)
--- Name: location; Type: TABLE; Schema: public; Owner: postgres
+-- Name: jwks; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE public.jwks (
+    id integer NOT NULL,
+    jwk text,
+    last_updated_datetime date DEFAULT ('now'::text)::date NOT NULL
+);
+
+
+ALTER TABLE public.jwks OWNER TO postgres;
+
+--
+-- Name: jwks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jwks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jwks_id_seq OWNER TO postgres;
+
+--
+-- Name: jwks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jwks_id_seq OWNED BY public.jwks.id;
+
+
+--
+-- Name: location; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.location (
@@ -1028,7 +985,6 @@ CREATE TABLE public.location (
 ALTER TABLE public.location OWNER TO postgres;
 
 --
--- TOC entry 230 (class 1259 OID 17190)
 -- Name: location_location_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1043,8 +999,6 @@ CREATE SEQUENCE public.location_location_id_seq
 ALTER TABLE public.location_location_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2677 (class 0 OID 0)
--- Dependencies: 230
 -- Name: location_location_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1052,8 +1006,7 @@ ALTER SEQUENCE public.location_location_id_seq OWNED BY public.location.location
 
 
 --
--- TOC entry 231 (class 1259 OID 17192)
--- Name: manufacturer; Type: TABLE; Schema: public; Owner: postgres
+-- Name: manufacturer; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.manufacturer (
@@ -1065,8 +1018,7 @@ CREATE TABLE public.manufacturer (
 ALTER TABLE public.manufacturer OWNER TO postgres;
 
 --
--- TOC entry 232 (class 1259 OID 17195)
--- Name: marital_status; Type: TABLE; Schema: public; Owner: postgres
+-- Name: marital_status; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.marital_status (
@@ -1078,8 +1030,7 @@ CREATE TABLE public.marital_status (
 ALTER TABLE public.marital_status OWNER TO postgres;
 
 --
--- TOC entry 233 (class 1259 OID 17198)
--- Name: medication; Type: TABLE; Schema: public; Owner: postgres
+-- Name: medication; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.medication (
@@ -1105,8 +1056,7 @@ CREATE TABLE public.medication (
 ALTER TABLE public.medication OWNER TO postgres;
 
 --
--- TOC entry 234 (class 1259 OID 17204)
--- Name: medication_administration; Type: TABLE; Schema: public; Owner: postgres
+-- Name: medication_administration; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.medication_administration (
@@ -1136,8 +1086,7 @@ CREATE TABLE public.medication_administration (
 ALTER TABLE public.medication_administration OWNER TO postgres;
 
 --
--- TOC entry 235 (class 1259 OID 17210)
--- Name: medication_dispense; Type: TABLE; Schema: public; Owner: postgres
+-- Name: medication_dispense; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.medication_dispense (
@@ -1157,8 +1106,7 @@ CREATE TABLE public.medication_dispense (
 ALTER TABLE public.medication_dispense OWNER TO postgres;
 
 --
--- TOC entry 236 (class 1259 OID 17216)
--- Name: medication_request; Type: TABLE; Schema: public; Owner: postgres
+-- Name: medication_request; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.medication_request (
@@ -1196,7 +1144,6 @@ CREATE TABLE public.medication_request (
 ALTER TABLE public.medication_request OWNER TO postgres;
 
 --
--- TOC entry 237 (class 1259 OID 17222)
 -- Name: medication_request_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1211,8 +1158,6 @@ CREATE SEQUENCE public.medication_request_id_seq
 ALTER TABLE public.medication_request_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2678 (class 0 OID 0)
--- Dependencies: 237
 -- Name: medication_request_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1220,8 +1165,7 @@ ALTER SEQUENCE public.medication_request_id_seq OWNED BY public.medication_reque
 
 
 --
--- TOC entry 238 (class 1259 OID 17224)
--- Name: medication_statement; Type: TABLE; Schema: public; Owner: postgres
+-- Name: medication_statement; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.medication_statement (
@@ -1250,8 +1194,7 @@ CREATE TABLE public.medication_statement (
 ALTER TABLE public.medication_statement OWNER TO postgres;
 
 --
--- TOC entry 239 (class 1259 OID 17230)
--- Name: observation; Type: TABLE; Schema: public; Owner: postgres
+-- Name: observation; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.observation (
@@ -1289,7 +1232,6 @@ CREATE TABLE public.observation (
 ALTER TABLE public.observation OWNER TO postgres;
 
 --
--- TOC entry 240 (class 1259 OID 17237)
 -- Name: observation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1304,8 +1246,6 @@ CREATE SEQUENCE public.observation_id_seq
 ALTER TABLE public.observation_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2679 (class 0 OID 0)
--- Dependencies: 240
 -- Name: observation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1313,8 +1253,7 @@ ALTER SEQUENCE public.observation_id_seq OWNED BY public.observation.id;
 
 
 --
--- TOC entry 241 (class 1259 OID 17239)
--- Name: organization; Type: TABLE; Schema: public; Owner: postgres
+-- Name: organization; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.organization (
@@ -1331,8 +1270,7 @@ CREATE TABLE public.organization (
 ALTER TABLE public.organization OWNER TO postgres;
 
 --
--- TOC entry 242 (class 1259 OID 17245)
--- Name: patient; Type: TABLE; Schema: public; Owner: postgres
+-- Name: patient; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.patient (
@@ -1346,8 +1284,7 @@ CREATE TABLE public.patient (
 ALTER TABLE public.patient OWNER TO postgres;
 
 --
--- TOC entry 243 (class 1259 OID 17248)
--- Name: patient_contact; Type: TABLE; Schema: public; Owner: postgres
+-- Name: patient_contact; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.patient_contact (
@@ -1369,7 +1306,6 @@ CREATE TABLE public.patient_contact (
 ALTER TABLE public.patient_contact OWNER TO postgres;
 
 --
--- TOC entry 244 (class 1259 OID 17254)
 -- Name: patient_contact_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1384,8 +1320,6 @@ CREATE SEQUENCE public.patient_contact_id_seq
 ALTER TABLE public.patient_contact_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2680 (class 0 OID 0)
--- Dependencies: 244
 -- Name: patient_contact_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1393,8 +1327,7 @@ ALTER SEQUENCE public.patient_contact_id_seq OWNED BY public.patient_contact.id;
 
 
 --
--- TOC entry 245 (class 1259 OID 17256)
--- Name: patient_json; Type: TABLE; Schema: public; Owner: postgres
+-- Name: patient_json; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.patient_json (
@@ -1429,7 +1362,6 @@ CREATE TABLE public.patient_json (
 ALTER TABLE public.patient_json OWNER TO postgres;
 
 --
--- TOC entry 246 (class 1259 OID 17262)
 -- Name: patient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1444,8 +1376,6 @@ CREATE SEQUENCE public.patient_id_seq
 ALTER TABLE public.patient_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2681 (class 0 OID 0)
--- Dependencies: 246
 -- Name: patient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1453,7 +1383,6 @@ ALTER SEQUENCE public.patient_id_seq OWNED BY public.patient_json.id;
 
 
 --
--- TOC entry 247 (class 1259 OID 17264)
 -- Name: patient_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1468,8 +1397,6 @@ CREATE SEQUENCE public.patient_id_seq1
 ALTER TABLE public.patient_id_seq1 OWNER TO postgres;
 
 --
--- TOC entry 2682 (class 0 OID 0)
--- Dependencies: 247
 -- Name: patient_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1477,8 +1404,7 @@ ALTER SEQUENCE public.patient_id_seq1 OWNED BY public.patient.id;
 
 
 --
--- TOC entry 248 (class 1259 OID 17266)
--- Name: practitioner; Type: TABLE; Schema: public; Owner: postgres
+-- Name: practitioner; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.practitioner (
@@ -1495,8 +1421,7 @@ CREATE TABLE public.practitioner (
 ALTER TABLE public.practitioner OWNER TO postgres;
 
 --
--- TOC entry 249 (class 1259 OID 17272)
--- Name: procedure; Type: TABLE; Schema: public; Owner: postgres
+-- Name: procedure; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.procedure (
@@ -1530,7 +1455,6 @@ CREATE TABLE public.procedure (
 ALTER TABLE public.procedure OWNER TO postgres;
 
 --
--- TOC entry 250 (class 1259 OID 17278)
 -- Name: procedure_procedure_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1545,8 +1469,6 @@ CREATE SEQUENCE public.procedure_procedure_id_seq
 ALTER TABLE public.procedure_procedure_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2683 (class 0 OID 0)
--- Dependencies: 250
 -- Name: procedure_procedure_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1554,8 +1476,7 @@ ALTER SEQUENCE public.procedure_procedure_id_seq OWNED BY public.procedure.proce
 
 
 --
--- TOC entry 251 (class 1259 OID 17280)
--- Name: questionnaire; Type: TABLE; Schema: public; Owner: postgres
+-- Name: questionnaire; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.questionnaire (
@@ -1567,7 +1488,6 @@ CREATE TABLE public.questionnaire (
 ALTER TABLE public.questionnaire OWNER TO postgres;
 
 --
--- TOC entry 252 (class 1259 OID 17286)
 -- Name: questionnaire_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1582,8 +1502,6 @@ CREATE SEQUENCE public.questionnaire_id_seq
 ALTER TABLE public.questionnaire_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2684 (class 0 OID 0)
--- Dependencies: 252
 -- Name: questionnaire_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1591,8 +1509,7 @@ ALTER SEQUENCE public.questionnaire_id_seq OWNED BY public.questionnaire.id;
 
 
 --
--- TOC entry 253 (class 1259 OID 17288)
--- Name: questionnaireresponse; Type: TABLE; Schema: public; Owner: postgres
+-- Name: questionnaireresponse; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.questionnaireresponse (
@@ -1605,7 +1522,6 @@ CREATE TABLE public.questionnaireresponse (
 ALTER TABLE public.questionnaireresponse OWNER TO postgres;
 
 --
--- TOC entry 254 (class 1259 OID 17294)
 -- Name: questionnaireresponse_qr_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1620,8 +1536,6 @@ CREATE SEQUENCE public.questionnaireresponse_qr_id_seq
 ALTER TABLE public.questionnaireresponse_qr_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2685 (class 0 OID 0)
--- Dependencies: 254
 -- Name: questionnaireresponse_qr_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1629,8 +1543,7 @@ ALTER SEQUENCE public.questionnaireresponse_qr_id_seq OWNED BY public.questionna
 
 
 --
--- TOC entry 255 (class 1259 OID 17296)
--- Name: register; Type: TABLE; Schema: public; Owner: postgres
+-- Name: register; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.register (
@@ -1650,7 +1563,6 @@ CREATE TABLE public.register (
 ALTER TABLE public.register OWNER TO postgres;
 
 --
--- TOC entry 256 (class 1259 OID 17302)
 -- Name: register_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1665,8 +1577,6 @@ CREATE SEQUENCE public.register_id_seq
 ALTER TABLE public.register_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2686 (class 0 OID 0)
--- Dependencies: 256
 -- Name: register_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1674,8 +1584,7 @@ ALTER SEQUENCE public.register_id_seq OWNED BY public.register.id;
 
 
 --
--- TOC entry 257 (class 1259 OID 17304)
--- Name: us_core_birthsex; Type: TABLE; Schema: public; Owner: postgres
+-- Name: us_core_birthsex; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.us_core_birthsex (
@@ -1688,8 +1597,7 @@ CREATE TABLE public.us_core_birthsex (
 ALTER TABLE public.us_core_birthsex OWNER TO postgres;
 
 --
--- TOC entry 258 (class 1259 OID 17307)
--- Name: us_core_ethnicity; Type: TABLE; Schema: public; Owner: postgres
+-- Name: us_core_ethnicity; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.us_core_ethnicity (
@@ -1701,8 +1609,7 @@ CREATE TABLE public.us_core_ethnicity (
 ALTER TABLE public.us_core_ethnicity OWNER TO postgres;
 
 --
--- TOC entry 259 (class 1259 OID 17310)
--- Name: us_core_race; Type: TABLE; Schema: public; Owner: postgres
+-- Name: us_core_race; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.us_core_race (
@@ -1714,8 +1621,7 @@ CREATE TABLE public.us_core_race (
 ALTER TABLE public.us_core_race OWNER TO postgres;
 
 --
--- TOC entry 260 (class 1259 OID 17313)
--- Name: us_core_religion; Type: TABLE; Schema: public; Owner: postgres
+-- Name: us_core_religion; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.us_core_religion (
@@ -1727,8 +1633,7 @@ CREATE TABLE public.us_core_religion (
 ALTER TABLE public.us_core_religion OWNER TO postgres;
 
 --
--- TOC entry 261 (class 1259 OID 17316)
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE public.users (
@@ -1737,14 +1642,15 @@ CREATE TABLE public.users (
     user_email character varying(150),
     user_full_name character varying(255),
     user_password character varying(100) NOT NULL,
-    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL
+    last_updated_ts timestamp without time zone DEFAULT timezone('UTC'::text, now()) NOT NULL,
+    temp_password character varying(225),
+    is_pass boolean DEFAULT true
 );
 
 
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- TOC entry 262 (class 1259 OID 17323)
 -- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
@@ -1759,8 +1665,6 @@ CREATE SEQUENCE public.users_user_id_seq
 ALTER TABLE public.users_user_id_seq OWNER TO postgres;
 
 --
--- TOC entry 2687 (class 0 OID 0)
--- Dependencies: 262
 -- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
@@ -1768,264 +1672,237 @@ ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
 
 
 --
--- TOC entry 2273 (class 2604 OID 17325)
--- Name: auth_temp id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.auth_temp ALTER COLUMN id SET DEFAULT nextval('public.auth_temp_id_seq'::regclass);
 
 
 --
--- TOC entry 2274 (class 2604 OID 17326)
--- Name: authenticator id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.authenticator ALTER COLUMN id SET DEFAULT nextval('public.authenticator_id_seq'::regclass);
 
 
 --
--- TOC entry 2275 (class 2604 OID 17327)
--- Name: author id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.author ALTER COLUMN id SET DEFAULT nextval('public.author_id_seq'::regclass);
 
 
 --
--- TOC entry 2276 (class 2604 OID 17328)
--- Name: careplan id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.careplan ALTER COLUMN id SET DEFAULT nextval('public.careteam_id_seq'::regclass);
 
 
 --
--- TOC entry 2277 (class 2604 OID 17329)
--- Name: careteam id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.careteam ALTER COLUMN id SET DEFAULT nextval('public.careteam_id_seq1'::regclass);
 
 
 --
--- TOC entry 2278 (class 2604 OID 17330)
--- Name: careteam_participant id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.careteam_participant ALTER COLUMN id SET DEFAULT nextval('public.careteam_participant_id_seq'::regclass);
 
 
 --
--- TOC entry 2280 (class 2604 OID 17331)
--- Name: clients id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.clients ALTER COLUMN id SET DEFAULT nextval('public.clients_id_seq'::regclass);
 
 
 --
--- TOC entry 2281 (class 2604 OID 17332)
--- Name: confidentiality id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.confidentiality ALTER COLUMN id SET DEFAULT nextval('public.confidentiality_id_seq'::regclass);
 
 
 --
--- TOC entry 2282 (class 2604 OID 17333)
--- Name: content id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.content ALTER COLUMN id SET DEFAULT nextval('public.content_id_seq'::regclass);
 
 
 --
--- TOC entry 2283 (class 2604 OID 17334)
--- Name: context_event id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.context_event ALTER COLUMN id SET DEFAULT nextval('public.context_event_id_seq'::regclass);
 
 
 --
--- TOC entry 2284 (class 2604 OID 17335)
--- Name: context_facility_type id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.context_facility_type ALTER COLUMN id SET DEFAULT nextval('public.context_facility_type_id_seq'::regclass);
 
 
 --
--- TOC entry 2285 (class 2604 OID 17336)
--- Name: context_period id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.context_period ALTER COLUMN id SET DEFAULT nextval('public.event_period_id_seq'::regclass);
 
 
 --
--- TOC entry 2286 (class 2604 OID 17337)
--- Name: custodian id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.custodian ALTER COLUMN id SET DEFAULT nextval('public.custodian_id_seq'::regclass);
 
 
 --
--- TOC entry 2287 (class 2604 OID 17338)
--- Name: device id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.device ALTER COLUMN id SET DEFAULT nextval('public.device_id_seq'::regclass);
 
 
 --
--- TOC entry 2289 (class 2604 OID 17339)
--- Name: diagnosticreport id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.diagnosticreport ALTER COLUMN id SET DEFAULT nextval('public.diagnosticreport_id_seq'::regclass);
 
 
 --
--- TOC entry 2290 (class 2604 OID 17340)
--- Name: doc_class_codes id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.doc_class_codes ALTER COLUMN id SET DEFAULT nextval('public.doc_class_codes_id_seq'::regclass);
 
 
 --
--- TOC entry 2291 (class 2604 OID 17341)
--- Name: doc_type_codes id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.doc_type_codes ALTER COLUMN id SET DEFAULT nextval('public.doc_type_codes_id_seq'::regclass);
 
 
 --
--- TOC entry 2292 (class 2604 OID 17342)
--- Name: document_reference id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference ALTER COLUMN id SET DEFAULT nextval('public.document_reference_id_seq1'::regclass);
 
 
 --
--- TOC entry 2293 (class 2604 OID 17343)
--- Name: document_reference_json id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference_json ALTER COLUMN id SET DEFAULT nextval('public.document_reference_id_seq'::regclass);
 
 
 --
--- TOC entry 2294 (class 2604 OID 17344)
--- Name: goals id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.goals ALTER COLUMN id SET DEFAULT nextval('public.goals_id_seq'::regclass);
 
 
 --
--- TOC entry 2295 (class 2604 OID 17345)
--- Name: immunization id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.immunization ALTER COLUMN id SET DEFAULT nextval('public.immunization_id_seq'::regclass);
 
 
 --
--- TOC entry 2296 (class 2604 OID 17346)
--- Name: location location_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jwks ALTER COLUMN id SET DEFAULT nextval('public.jwks_id_seq'::regclass);
+
+
+--
+-- Name: location_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.location ALTER COLUMN location_id SET DEFAULT nextval('public.location_location_id_seq'::regclass);
 
 
 --
--- TOC entry 2297 (class 2604 OID 17347)
--- Name: medication_request id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_request ALTER COLUMN id SET DEFAULT nextval('public.medication_request_id_seq'::regclass);
 
 
 --
--- TOC entry 2299 (class 2604 OID 17348)
--- Name: observation id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.observation ALTER COLUMN id SET DEFAULT nextval('public.observation_id_seq'::regclass);
 
 
 --
--- TOC entry 2300 (class 2604 OID 17349)
--- Name: patient id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient ALTER COLUMN id SET DEFAULT nextval('public.patient_id_seq1'::regclass);
 
 
 --
--- TOC entry 2301 (class 2604 OID 17350)
--- Name: patient_contact id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_contact ALTER COLUMN id SET DEFAULT nextval('public.patient_contact_id_seq'::regclass);
 
 
 --
--- TOC entry 2302 (class 2604 OID 17351)
--- Name: patient_json id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_json ALTER COLUMN id SET DEFAULT nextval('public.patient_id_seq'::regclass);
 
 
 --
--- TOC entry 2303 (class 2604 OID 17352)
--- Name: procedure procedure_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: procedure_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.procedure ALTER COLUMN procedure_id SET DEFAULT nextval('public.procedure_procedure_id_seq'::regclass);
 
 
 --
--- TOC entry 2304 (class 2604 OID 17353)
--- Name: questionnaire id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.questionnaire ALTER COLUMN id SET DEFAULT nextval('public.questionnaire_id_seq'::regclass);
 
 
 --
--- TOC entry 2305 (class 2604 OID 17354)
--- Name: questionnaireresponse qr_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: qr_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.questionnaireresponse ALTER COLUMN qr_id SET DEFAULT nextval('public.questionnaireresponse_qr_id_seq'::regclass);
 
 
 --
--- TOC entry 2306 (class 2604 OID 17355)
--- Name: register id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.register ALTER COLUMN id SET DEFAULT nextval('public.register_id_seq'::regclass);
 
 
 --
--- TOC entry 2308 (class 2604 OID 17356)
--- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: user_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
 
 
 --
--- TOC entry 2572 (class 0 OID 17031)
--- Dependencies: 185
 -- Data for Name: allergy_intolerance; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2084,28 +1961,38 @@ COPY public.allergy_intolerance (id, identifier_system, identifier_value, patien
 
 
 --
--- TOC entry 2573 (class 0 OID 17037)
--- Dependencies: 186
 -- Data for Name: auth_temp; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.auth_temp (id, client_id, client_secret, auth_code, access_token, aud, expiry, scope, last_updated_ts, redirect_uri, state, transaction_id, refresh_token, launch_patient_id) FROM stdin;
-1	demo	demo secret	demo code	demoe2dd7906d6cbaccf4576fba1fd65		2025-01-01 01:01:01	launch,launch/patient,user/Patient.read,user/*.read	2016-09-13 17:11:52.189	https://fhirtest.sitenv.org/FHIR                                                                                                                                                                                                                               	demo                                                                                                                                                                                                                                                           	demo1                                                                                                                                                                                                                                                          	teste2dd7906d6cbaccf4576fba1fd65	1
+COPY public.auth_temp (id, client_id, client_secret, auth_code, access_token, aud, expiry, scope, last_updated_ts, redirect_uri, state, transaction_id, refresh_token, launch_patient_id, id_token) FROM stdin;
+1	demo	demo secret	demo code	demoe2dd7906d6cbaccf4576fba1fd65		2025-01-01 01:01:01	launch,launch/patient,user/Patient.read,user/*.read	2016-09-13 17:11:52.189	https://fhirtest.sitenv.org/FHIR                                                                                                                                                                                                                               	demo                                                                                                                                                                                                                                                           	demo1                                                                                                                                                                                                                                                          	teste2dd7906d6cbaccf4576fba1fd65	1	\N
+6	b5A8IR7w2plRoicW3bz97oINasQDf9	V0dXU3JOTGFDMHM5c3QyQkJRYTBrczFUTkUtVjV4YWhZWkNGRDQ0bTZIVFZSS01icEM=	ba3897f2a0344a1cad71ca8e4b341c72	56f5e2eee3c6aa4875734f51181d0a96	\N	2016-10-17 13:52:07	patient/*.read,user/Patient.read,user/*.read,user/*.*	2016-10-17 13:39:02.760065	https://fhir.sitenv.org/fhirconformance/                                                                                                                                                                                                                       	58122757                                                                                                                                                                                                                                                       	Sm2ZO                                                                                                                                                                                                                                                          	\N	\N	\N
+3	93mxM-1VoSqJmjSEjaf59oP7yZLqPj	SldmZGhkZGpPT3ktaHAwcm1UUXVZTzFLbDJvU3E5dWQxdGFyUHdmWWFsVjg5c2RwZmQ=	7efda127c3026e8cd3a40005f11478b1	44658ef87c8440c3bdde42a7fe9d290c	\N	2016-09-26 22:19:16	launch,launch/patient	2016-09-26 22:18:05.269431	https://fhir.sitenv.org/fhirconformance/                                                                                                                                                                                                                       	18856164                                                                                                                                                                                                                                                       	hFwYm                                                                                                                                                                                                                                                          	\N	1	\N
+5	9bnQ9zK-4MsKTr9NmUH35YPZCzksVJ	\N	48094785ff1f9e81ae6a16d3ffd19855	\N	\N	\N	patient/*.read,patient/Patient.read	2016-10-06 13:43:45.311302	https://fhir.sitenv.org/fhirclient/                                                                                                                                                                                                                            	47488511                                                                                                                                                                                                                                                       	mMql3                                                                                                                                                                                                                                                          	\N	\N	\N
+8	qdEQRH8k4UMt5xaoqlqgcSopNazVYG	T21IOW1lQW1iaGFCTDFUTHRhMkdPM0xUMmJzbktxeHZNcGlObndhbXRUTnZFR3Z3U2M=	dec3104c26b0a5d2b0a61e500a9eb115	3321ae4124f86edd18a24640ede73cde	\N	2016-11-01 05:19:37	patient/*.read,user/*.read	2016-11-01 05:19:20.462586	https://fhir.sitenv.org/fhirclient/                                                                                                                                                                                                                            	37880959                                                                                                                                                                                                                                                       	OUjhX                                                                                                                                                                                                                                                          	\N	\N	\N
+4	yQZALVAc4Jcsuuu15EiodG7paUsVNu	bDBwaGdwYjFKMDc3cWphc3VTTXY1TDE3Ykcwa0wyN0hZVU1FVDVTM2ZIVUY4LXo5MlE=	fb04b9e896b00fef8ead5c3de3170a0c	df14c695318f0984e1f6b45bd0171ad7	\N	2017-01-05 22:17:36	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,profile,offline_access,online_access	2016-10-05 14:33:03.575607	https://fhir.sitenv.org/fhirclient/                                                                                                                                                                                                                            	73019698                                                                                                                                                                                                                                                       	F4iUl                                                                                                                                                                                                                                                          	374c8caf27ef713d69498aec2b3be06f	1	\N
+9	V3ksiO6Yxe9fC6vS6TvE4CZKax85IP	V2NJeEVOWHBZWnBBZUllS0NmandwLWpQaG5qOXVUSTBFeFN3VkZhdUItZGJVQ2x1TEQ=	e09af54af6189506c2bc664b88ef4a29	b3d0e05c8d68920714a84846525d035f	\N	2016-11-09 05:49:35	patient/*.read	2016-11-08 06:51:35.96552	https://fhir.sitenv.org/fhirclient/                                                                                                                                                                                                                            	79787372                                                                                                                                                                                                                                                       	a9m4e                                                                                                                                                                                                                                                          	\N	\N	\N
+10	lqqjjYb82GEDHKBlNLh2YtOr6r0yHh	RkE3RE5yOXJFQktlWmtZWUpVVkd4cnVldkttZ0I0ekNodWZhWEJNS2prZFBPOEZVU0k=	dd7c5ed60804d62d8105300402312582	df0c80ebb7e9aa3c718351c02e5b2ca6	\N	2017-01-04 22:11:18	user/*.*	2016-12-05 16:55:35.84702	smartapp://callback                                                                                                                                                                                                                                            	F0AC0505                                                                                                                                                                                                                                                       	WHNwl                                                                                                                                                                                                                                                          	\N	\N	\N
+12	Fgc08G6fxzP9RR6WbsVdFoPLTHlVb0	WHVKWVA4SFo0dFJuWEw3ZkxyOFhoUHBzTXVIdFg0WmRJUHJycS1jbXpGOWVwdE02dVQ=	a95f7f8412ffd546d8d0b890bbf7b0a8	5dff53d09742f0d65088c5af900ad938	\N	2017-03-17 11:19:16	user/*.*	2017-03-10 12:39:55.969291	ctdemoapp://callback                                                                                                                                                                                                                                           	0708643E                                                                                                                                                                                                                                                       	aRe2A                                                                                                                                                                                                                                                          	\N	\N	\N
+11	lSbGfY95XUeXrF5uSx4GbeF2708mUY	\N	ad3e4dcc7b9cb0f440f677e197416762	\N	\N	\N	user/*.*	2016-12-06 14:21:05.53255	smartapp://callback                                                                                                                                                                                                                                            	DFD6A6FF                                                                                                                                                                                                                                                       	WaYmm                                                                                                                                                                                                                                                          	\N	\N	\N
+7	KDblHHbNilqMSsyMBYSa6XZhlKcaTQ	\N	9923568bdcb82f8fafcd448ca6c425f3	\N	\N	\N	patient/*.read,patient/Patient.read	2016-10-19 06:38:26.221158	https://fhirtest.sitenv.org/fhirclient/                                                                                                                                                                                                                        	22046566                                                                                                                                                                                                                                                       	DGWe-                                                                                                                                                                                                                                                          	\N	\N	\N
+13	KJEqPEeFnqrsn5iu9ogqfNyqinmLgq	QnlGU3FEelY3T3R0U2F4M0tFQkE4RFlvSlFqTWE4NkREYmhKRk9DcXRYUDZjbHhNQjk=	a3f8da735a31c2f84d536b41f9a8e32f	bac6aacbb3c7a56a5eb8810cac5ab72f	\N	2017-05-05 15:45:11	launch/patient	2017-05-05 14:32:42.11186	https://fhirtest.sitenv.org/fhirconformance/                                                                                                                                                                                                                   	92582437                                                                                                                                                                                                                                                       	MSRKe                                                                                                                                                                                                                                                          	\N	2	\N
+14	pzSKWGTWhSOKn9xDDB2ovXoIuZvxQS	amlCQW1BQjJLazlqOHUyWUNaQzRRd2tvWmtWTmVFUUtTSlNhQUFFUUdMcnNSU3Y3THY=	e57a7b34e9890bcfab92a09805765f98	257f9c881ec96e6c71ba8a77a5b925c1	\N	2017-07-24 16:20:31	patient/*.read	2017-06-22 21:10:59.583551	https://fhirtest.sitenv.org/fhirclient/                                                                                                                                                                                                                        	87644297                                                                                                                                                                                                                                                       	ON400                                                                                                                                                                                                                                                          	\N	\N	\N
+16	5Ks7YQPNGZGGEN4gNYUNcPGz5j1uaK	ZmI4cFRwSjZmVXNhSWdOS0NmQm9qZVBaenQzZlJzemFBYXV3bGFsTkFyOGwtdC02SzE=	536a19dab2ac03fcf5d94dffa07e938f	1c4b729a4c98db0ec71236ac6128ee04	\N	2017-10-04 12:27:53	user/*.read	2017-10-04 12:27:00.305247	http://localhost:4200/fhir-client                                                                                                                                                                                                                              	epup1wf4fi                                                                                                                                                                                                                                                     	0R7ax                                                                                                                                                                                                                                                          	\N	\N	\N
+2	Q33YtcsVdMt4kB32zumn9jSAznyXim	xMaRMa3-izrr2tqN6rkBhkdIaX1qBPt9DCeRELM43WwP8Na8cC	7991bfc108a522ea646f7c7ad0142cd0	ad433810bc07f4abf6d7ee7fa4dd01b7	\N	2017-12-12 10:34:51	user/*.*	2016-09-20 17:14:16.760776	http://localhost:4200/fhir-conformance                                                                                                                                                                                                                         	9fo247babhu                                                                                                                                                                                                                                                    	q7Ifh                                                                                                                                                                                                                                                          	\N	\N	\N
+15	548OQMHwPUjY03inBwHIg6OUKbqT95	QVZ3WnYtWC0tVEhubmR6YXYwNU5NbUlrLU9mYXZhNTUxSzFHaElxWU95THZlenF3MUE=	fc90f830dbd3ddedca77d4e617a9ce04	f350fb29c98b557ccc2fd2a2ec4736e2	\N	2017-10-25 11:01:53	user/*.read,user/*.*	2017-09-26 08:46:14.972756	http://localhost:4200/fhir-conformance                                                                                                                                                                                                                         	l78upow78a                                                                                                                                                                                                                                                     	8zcDG                                                                                                                                                                                                                                                          	\N	\N	\N
+17	xVXluYXR-Cnaa4FywobtfuZRrV-wDC	TjVXYWpQM0JoRWJXMENzN2lGWm5zYzJhclRuWlBzR1dzTnVONVRkR0xSeUhBMy1SbDc=	76794185a55dfb20636cf883874ccc07	05d39e72e79052fdbaaec943031d9843	\N	2019-04-29 10:49:35	patient/*.read,offline_access,openid,fhirUser	2019-04-29 10:06:17.377847	https://fhir.dev.sitenv.org/stu3openid/                                                                                                                                                                                                                        	state123                                                                                                                                                                                                                                                       	fTKo6                                                                                                                                                                                                                                                          	72ed7fec1bdb2f3e14f3a3db7b5d783d	\N	eyJraWQiOiJndUpBbmFYeWdjIiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiJ0YXJ1bmt1bWFyIiwiYXVkIjoieFZYbHVZWFItQ25hYTRGeXdvYnRmdVpSclYtd0RDIiwiaXNzIjoiaHR0cHM6XC9cL2ZoaXIuZGV2LnNpdGVudi5vcmdcL3N0dTNvcGVuaWQiLCJ1c2VyTmFtZSI6InRhcnVua3VtYXIiLCJleHAiOjE1NTY1NDIxNzUsImZoaXJVc2VyIjoiaHR0cHM6XC9cL2ZoaXIuZGV2LnNpdGVudi5vcmdcL3N0dTNvcGVuaWRcL2ZoaXJcL1BhdGllbnQiLCJpYXQiOjE1NTY1MzQ5NzUsImVtYWlsIjoidGFydW5rdW1hcjk4NUBnbWFpbC5jb20iLCJqdGkiOiI5ODU2OTIyYS0xZjcyLTRkYjYtYmQ4NS0xMmM3Y2QwOWUwZTMifQ.Tx77KMfBWnKAFVqZHRuXmVq96CgKn5Fn5x4npPaWV7uNiWxDOdTWjjZZD4zZjDJ__ZKMJWA36fBTPZ7U62lVdWl9Yo1t2kHy-2LKTi84jWqHRt5pTUfSrn30u-3fwpJ4LU0S7fqcD0HkthfUQqB_9kkJnjUzFlMlQUJFX_ivOyhVsJlCsMbVPIxCkttWGJ60kloeMp_QheBmbrtXkSM8URFsXpLFZs5YcgnqSlE-wdM3_D-AFi9lmv2ujze-v52EmqnPGOLU8BGuJ69xG2HQEQUJJGSIiLXe5Bkcfd1jjj8RtlM1JpJMbsPEkhTssvQUcRa4fLRREO5NyiHp9ijz4Q
 \.
 
 
 --
--- TOC entry 2688 (class 0 OID 0)
--- Dependencies: 187
 -- Name: auth_temp_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_temp_id_seq', 16, true);
+SELECT pg_catalog.setval('public.auth_temp_id_seq', 17, true);
 
 
 --
--- TOC entry 2575 (class 0 OID 17046)
--- Dependencies: 188
 -- Data for Name: authenticator; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2116,8 +2003,6 @@ COPY public.authenticator (id, name) FROM stdin;
 
 
 --
--- TOC entry 2689 (class 0 OID 0)
--- Dependencies: 189
 -- Name: authenticator_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2125,8 +2010,6 @@ SELECT pg_catalog.setval('public.authenticator_id_seq', 2, true);
 
 
 --
--- TOC entry 2577 (class 0 OID 17051)
--- Dependencies: 190
 -- Data for Name: author; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2140,8 +2023,6 @@ COPY public.author (id, name) FROM stdin;
 
 
 --
--- TOC entry 2690 (class 0 OID 0)
--- Dependencies: 191
 -- Name: author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2149,8 +2030,6 @@ SELECT pg_catalog.setval('public.author_id_seq', 5, true);
 
 
 --
--- TOC entry 2579 (class 0 OID 17056)
--- Dependencies: 192
 -- Data for Name: careplan; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2160,8 +2039,6 @@ COPY public.careplan (id, patient, status, cat_code, cat_system, definition, bas
 
 
 --
--- TOC entry 2580 (class 0 OID 17062)
--- Dependencies: 193
 -- Data for Name: careteam; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2171,8 +2048,6 @@ COPY public.careteam (id, identifier, status, category, name, context, period, p
 
 
 --
--- TOC entry 2691 (class 0 OID 0)
--- Dependencies: 194
 -- Name: careteam_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2180,8 +2055,6 @@ SELECT pg_catalog.setval('public.careteam_id_seq', 1, false);
 
 
 --
--- TOC entry 2692 (class 0 OID 0)
--- Dependencies: 195
 -- Name: careteam_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2189,8 +2062,6 @@ SELECT pg_catalog.setval('public.careteam_id_seq1', 1, false);
 
 
 --
--- TOC entry 2583 (class 0 OID 17072)
--- Dependencies: 196
 -- Data for Name: careteam_participant; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2201,8 +2072,6 @@ COPY public.careteam_participant (id, careteam, role_system, role_code, role_dis
 
 
 --
--- TOC entry 2693 (class 0 OID 0)
--- Dependencies: 197
 -- Name: careteam_participant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2210,28 +2079,51 @@ SELECT pg_catalog.setval('public.careteam_participant_id_seq', 1, false);
 
 
 --
--- TOC entry 2585 (class 0 OID 17080)
--- Dependencies: 198
 -- Data for Name: clients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.clients (id, user_id, client_id, client_secret, register_token, name, org_name, contact_name, contact_mail, scope, redirect_uri, last_updated_ts, status) FROM stdin;
-1	1	pzSKWGTWhSOKn9xDDB2ovXoIuZvxQS	amlCQW1BQjJLazlqOHUyWUNaQzRRd2tvWmtWTmVFUUtTSlNhQUFFUUdMcnNSU3Y3THY=	L7-KOcvJfeQIfAoUvd7WwF9Zwbm-yuXklXlUMDhu9wplVxxXZBvRK1pk5cyYl4fWsPRpnP1u0Nq781JGy1RHlRWmiy7qm8WA7MTdjC71vWfsf0iCuB-HtT5shovni5Wyyl5HKI6ohagp7nckxEg2B1EopLt-LsTYviwCnzfQvg8IQUeF-gddN9JEkIYaMK5NzyXkdl95s1mP44umGfjZ3MknFbITfTpsORaOwZA3Pb74bq0j2e56WL675A	democlient	FHIR	Demo User	demo@sitenv.org	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,offline_access,online_access	https://fhirtest.sitenv.org/fhirclient/	2017-06-22 21:08:29.349243	\N
+COPY public.clients (id, user_id, client_id, client_secret, register_token, name, org_name, contact_name, contact_mail, scope, redirect_uri, last_updated_ts, status, launch_id, launch_uri) FROM stdin;
+3	3	6lCTyNF6OH2PbYX-3tZRY0qRicrroz	KNuforKJaKrDpCgj91hTplz2YPXzPCym09B9ujeY-z-wwrpQgj	5vC-JzpjSIddX4Rl2sQveAwRCKeQu36MrvTXLtiE-uetLTT03WjqqwRwPLVkJL10eBffSKKl9mjxVyn7BbinFKdDG4ZwyY34oUeEhUElJcLqaa3XHAMZtlOHbzDq3DPrONOAkgdgHdJ7lRS8eA178u9nsPYMea2bagerQ9yf7EaccWUhIkLF3ZL5f2yB0zNoU0JbPZazhgMzXWxhAPLTjcQX1mm43ACayya8Q0yUQoKUf3HWWrHD-HpmJu	FHIRClient	xyram	Sateesh	sateeshreddy132@gmail.com	address,user/Patient.read,user/*.read,user/*.*	http://localhost:8000/FHIR/index.html	2015-12-22 11:46:20.735	\N	\N	\N
+8	14	5Ks7YQPNGZGGEN4gNYUNcPGz5j1uaK	ZmI4cFRwSjZmVXNhSWdOS0NmQm9qZVBaenQzZlJzemFBYXV3bGFsTkFyOGwtdC02SzE=	g1hZSHBmtxG7bVRQ0CN4Eqs39jyxhH3zuHXQax-jWo7HbpVYP0vvr9TAhKtM5OWL3j-48RJJTIMwIdfqytNUB-Ppmoo97-ny0aVAWWpN-Yaa1g5eUhtrgudTlMiCrhUy3OzKevxH0h8iBIGCUAO3E7rpkKpaaOIaHNpcvTcmBwKss29OqlOGzUbog97hqi47hjiKQ1IMUfubqbL-ApdFhEtKyl8bnmIWkRfvl7bBjB2SQty3MPjUzvlxEF	xyramclient	xyram	Sateesh	sateeshreddy132@gmail.com	launch,user/*.read	http://localhost:8000/FHIR	2016-03-28 14:06:15.03	\N	\N	\N
+4	5	WtVxTEua9NgjkGKKIu0QdBOXzHn0p5	V1pyNHlzYUlWbkx2R0hQaEJjVzN4Ylg1MUFIblBHenlUU3hDaU1MQ3phNGZjVEdrQ2E=	0Fet4EBB2v5X4dS2AdJV7vZHapz6RgFnN4Vt7i9T1LTb3QEgDrasMAIaJnG3haD41wmDJX30eLahbT0JoikxBWLCYcv5hIUgl0DwtiRWtkmvalvAffc3z5uujnvjaNXh8-9nA2kwRzYzhximoI7DUpCt2gTXYLk2MkGhzsgJZfdesKd1oN56vboCIHeV5nn9FGDVnc9IN1gBTcTMUPiT73-UPPam3ZoJjBztiAsXfcxrci6AuOLr8cn2nC	crucible	MITRE	Michael O'Keefe	mokeefe@mitre.org	profile,email,address,phone,user/Patient.read,user/*.read,user/*.*	http://localhost:3000/redirect	2015-12-22 16:29:52.384	\N	\N	\N
+7	13	1ZYrcaH2lIqaLbC7Wa4fvzUmP2aeEs	QnhaWFlPNDlOTEpUTTZJVjhjQjBhV2Nuc0Z6eXJoWDNOSEJNYzUxTHVVLTJ1U2o0elo=	fzyTx-cw4Fd-Y9iYtVyc99BUelOT52o3IcwIy-zghW48suaZxgjwyNuCvtfHA2gUnfT9zKwHArz2lo8n110iyiSOcTHNRblrCJ1DnhQ0EA2zj1I8KG8Ey3xrRP0xJEgUf5DEMVHb7fd943nxT5I1BUAdIAH6-wkLSK3EKz6aQNfw9DHyhXiyQTn5cGTXivaGvPYH17yIPsLnb2G7cCSIWh65m4uGT45YJr64lLuZNaQa-ZPxaSZtj9UmcE	Crucible local	MITRE	Andre Quina	aquina@mitre.org	profile,email,address,phone,user/Patient.read,user/*.read,user/*.*	http://localhost:3000/redirect	2016-01-09 20:40:34.916	\N	\N	\N
+6	12	zgcnXWhZvQIQlKfE5dSRaPjdrx8ArW	dDNaZ3RsTEVUb0RoUnVhZVdmQ3lCNkx5b0VZVlBReDAxcUkwRnd2OE1PQWM0MmExdEM=	p91cCwLkjXsW0QSeyquO1JjaZNNB6scVwnPVi5ma7AdkiRBZU51V2yWdLOpbuypU1tE3oZ73eNBw-31733ZZFahnQVS6hdAecPzAO7YOReQQ0dldMiQK8Ca4RieGHrlWuR2iUriuSlyXP2n5K80iT3ReHhtCBaxgqDzXVKEj7RZ1o8l8aaM22v6WeCKks0cAAa60PWtwphMal3a9kKduT9k5idnEaZfsTMg3pbOuJoWo0li69HHXSQgDW9	Crucible	MITRE	Andre Quina	aquina@mitre.org	launch/patient,patient/*.read,profile,email,address,phone,user/Patient.read,user/*.read,user/*.*	https://projectcrucible.org/redirect	2016-01-09 17:39:52.098	\N	\N	\N
+1	1	wOIObxsVr7pGlogmVO9k4nARGFL7vJ	CY8IHb0JqIaxw4A9oaUtIg-nzsh1Na3gofrm6MnOMhNLZJm-Ff	ga0BNyKsKqM3hehPwlFnk8aeD9VJQP5Ta8aL09chQ7bVBObKSJJ69e7-556jpC6XyWDyc-uafsHVPRJ9a2O7mn3sRGIRNjkfzFb2YrFfiR-6rrLmQ3oaBajxZn1o8C7STA3PioiilPtljeOlRe8CgavYzUvG0p3fOmIaGiopZ4yrqzNa76tfP4zkPaY3H8a8tDqPfco8a36RLhOnuNdGd8eaifojbIfZIAeGZiZzmnJuoCajloMncRzh5X	FHIR Client	Xyram	Raghu	raghunathsandilya@gmail.com	user/*.read	https://projectcrucible.org/redirect	2015-12-08 14:30:32.702	\N	\N	\N
+9	15	BrUalrGn738uUpF7Cnlmd7Ips4YZop	YUZ4VjZ6THZWR0lpNEw2NklDYWNscDlMd3lvblFtRDZDb1J1LWdRWGFMdlAxRWFzZmE=	jUbKjewMPASDZLtiBzpvznVNCb2GudaeKPIoFQf4c4B2VEY5r1JLkIV3h2Aa-79z6qKDHJjVZDTlGCPr3oGuvrUdTIJRFH0etwCD3E5trrYvNgTF4IIhaG3B29VTPNTuJKhLDx3jxyP4dQXv6C5YObQgYs04TaoigGyq-5AwfxLr9tr3CUk0ix5nxaLDqADOEP5JAvdAjJQcj85hVOZ02mQbOIEX-FBRGc5z5yiG3RXwFkPLRsQtizdsIx	xyram fhir client	xyram	sandilya	raghunathsandilya@gmail.com	launch,launch/patient,user/*.read	https://fhirtest.direct.sitenv.org/FHIR/	2016-03-31 11:58:19.722	\N	\N	\N
+10	16	kXOCorNwsP0qKMojLi7e3Dfi0Pc2rv	ME9NbjhnMW1UMmN5Q1ZjQkJhSmVBOUdObUhULXNkbk5qclpGeHhjOFNUT3RSMmFkcnI=	3q4phgahYoau8ESwiuf9MYb4NY1DRC9TItD8PiAOhBSPOCNmmrEvrsSSVWvkoXjrRB9MvpW0bKY3XH3UrUPppBZ1lQxSS004YAapzE71AePCRPgoQaC2VPzaEk1FlKgYT71JMBF2H8KwunHmZZBCH0a7X3WOfCRNcaVtua7Cda6uhPbXJcmlxNdtbSevFhAy0r4DbHuSFMVsbjPJd3taUbfSB9vVQOCWERuKFVaR0Wnu8Xze4oRs1cg3h6	xyram client	xyram	testtest	testtest@gmail.com	launch,launch/patient,user/*.read	https://fhirtest.direct.sitenv.org/FHIR/	2016-03-31 12:02:59.284	\N	\N	\N
+11	17	3o6KDEdEUw7nrP5zNF1-Ezp8dUwUwl	cVVaY2tLaVBkUGpGa0RQYXQtaERWdmo3OUNkRWJmUEdZdjhsRU1NQ3llbWtCOGtCdWo=	fNqomSL5t8FbBHWkPPJZb6GOLqECNQIu4C2O5aPZk9OW-aevtBUyKOoikYYSIDNxtcFvDB-MDY-VyCzbHUaCpLGOw6eAbNts51aPNbBxBeaevDmC0Kyj8VT5VPccOBc7vBcfQDQb1CAyU7HdJYUbd3ALa9GLgXBkYa4h9265XDtvhrq6S9rr9uZMJKYaSCxQp-d6OwUdG1NjOwoNHMZNaC9aI747wwCvByyOgOtr8ZsxkihykUkuR85Ga8	xyram client	xyram	testauth	testauth@gmail.com	launch,launch/patient,user/*.read	https://fhirtest.direct.sitenv.org/FHIR	2016-03-31 12:04:42.112	\N	\N	\N
+12	1	wVZNOEr8kC2yalAZK9Tv6L6iMypam6	ME9kQWRqcEZVc2VJdTNnUDF3T1dXc2VhOFhyWEd5bmZmaTFjOVNPcW1QM0p2WkFXaGk=	IDEKHTyTcb69Is9L8366qfD5iyQJBpachFkSjihokt9tjQAZz5ig52Sc1ObrOaj0CRSIpgEqNlHfDaf16lUXmZrs2kABxLBI3ltcRjddDfNUHnNIp3dMNqR27TcGJnzbdC82U4AiWqZiGjPXQkhmpKN74eIcADuNUz-hxQo3OwrBI33Tx5YUmyFMzVVVYaHdbNLJhCKRnGbfvX-kSpS8Aw3bf4vfcjqOQqQKA9Cvb1kpDadCGn2MGWEjqk	FHIRTest	Xyram	raghu	raghu.sandilya@yahoo.com	launch/patient,user/*.read	http://localhost:8089/FHIRClient	2016-06-27 10:54:34.368	\N	\N	\N
+13	18	NnHuKDN7u3tPcdWwpQdGVbxBNiGGQz	UzBIaTlsYUU4QUt2YWZwODgzakI4SVM3TGdxc29tek5LY21hYzdFeHBhNGdrLXVPMEk=	QIfb5t5ej2WL03YPVP6Nzvu78vfCDadgtJICuCB989c0-gULKI6PRTiwQKb-wO-EKa60e1Bs7GKLAb8R0sehG1jICae1kMCQkSpoqEz2QBHfJM40m-2sT66K-HkB1OKcCmYYmonXm9pWJlnZLzxQyuRg0UCN09j6lPp6AGh2JYyizkAkj9-tde8YoHT5a2TRNOtzr7yqFYBaTbzmA9LupOwg4EJjqO8WaSKnSErQnWjxVUN-tX-RwfWaeH	FHIR TEST 	Xyram	Sateesh	raghunathsandilya@gmail.com	launch/patient,user/*.read	http://localhost:8089/FHIR	2016-06-29 08:25:14.118802	\N	\N	\N
+14	18	GBb-WgxyFp4K7Aq-ePazkZamR0Hb0Z	aklpZk9ZbWltOER6MDBGazQ4SWowcWxzUFlSdkhoMTRtbzlrbWoxa3FDUjF4VDgyZTM=	kICGFG4K5uOcVM6Jwk8aAolwKnts9lHCA2sBtWlCDUHAOV9oxiBbQyX33iEmAeLtCgcvaZlIGmSzNZXUfBOKtfEQeLyk8cYXJibst9oDAqIVZdJP09IpNtykKnoS4afF7MEAX7Y0qDaUvDoEB7f00xLNvz5qf8-69aXSWGtce5aI1YnoC9p0bTAShlLaw9MgvY3a5aiRuOJ-8NwqLdAtefDD5liaVdBZPiQzEvHUrM93RvtIWQ3iZAbaPh	Test FHIR CLIENT	Test Org	TestClient	testclient@gmail.com	launch/patient,user/*.read	http://localhost:8089/FHIR/	2016-06-29 08:37:38.00385	\N	\N	\N
+21	30	b5A8IR7w2plRoicW3bz97oINasQDf9	V0dXU3JOTGFDMHM5c3QyQkJRYTBrczFUTkUtVjV4YWhZWkNGRDQ0bTZIVFZSS01icEM=	gyBGgcg10YyBs5fNGUucBHQWGqbuTkEYJfgGhBhP0phxDuuxuxnYXpgFJL0eMW3547af7eMqo-DqL67iktSfMvJgT7yzWmxqnB46wSJt9uXpjKV3Y7tYimUjoeexPq-GYfd6kfXOvFMhfLE-uFxGUwRYl0ToFX9Jx8Lv0-4NmxxEP07tm7uz-ZZOtTpm9ZfmjYoWJh7HlpsVAFOjYoChqfFW4ZaCr4aZZohMgeVAtXA40DFOlZhbs8qSgJ	Demo User 1	ONC	Demo User	demouser1@sitenv.org	launch,launch/patient,patient/*.read,patient/Patient.read,user/Patient.read,user/*.read,user/*.*	https://fhir.sitenv.org/secure/fhir	2016-10-17 13:34:35.489798	\N	\N	\N
+15	21	IpEZlPbsr8hsyYI3EwCdX5Lvv18Owc	Wk9oMG40WHlOMUVpS1h2WFlILVpOZWFVaThYNGdYOFQtQm43Zjl6NnlOWDJmYTBlWXE=	Z1hojKFJa1SWzL2H7hDQ2wAYNqVhdXdbQ-yFueZ89al-bf0J7Mb7WRsdBC7YXHFH--ZQCuSSpsodjNPy1mkv6LV2U9LxCZggyAItxmGHCVSolUWbrBy-PV52NKNefmEPnb9oCE5ifvRcII5tSYMCzmYYTqdxax4070PqyFs3F6llJI1qXZSyjRjaaMrLwEsP21iTKPZxesLIgFqR3rE0UPvo-pb4woGq2cXsL8N2Rz3sGWF73oQlPpkDC9	Sample App	ONC	Nagesh BAshyam	ONC@sitenv.org	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,user/Patient.read,user/*.read,user/*.*	https://fhirprod.sitenv.org/hapi-resprint/view/clients.html	2016-09-17 20:27:03.116509	\N	\N	\N
+16	22	93mxM-1VoSqJmjSEjaf59oP7yZLqPj	SldmZGhkZGpPT3ktaHAwcm1UUXVZTzFLbDJvU3E5dWQxdGFyUHdmWWFsVjg5c2RwZmQ=	-xXo5RhBjOEDn5qSaU-9byl1jAM1rM9uaASPxIzpIgADDlJrs6jJU0m9lPJKtRw4K9YdZOLNTfgwp6TmBVm8HSBj9kREp-TmEcuaYkvaliwrC-Cs8cdMNkhHM1pbyPy87P6K-SVNOLLkg47BJrz7n7t6z4tvcqYXr2ya2mOgieEyXPBdbgI3d2JpwH6cz3NN88ARGr6FJfnjHfUhww9OoFq-S-0cqZ4ZzDN3sikMMXCDHL5DRXGuObduL7	Deploy Test	TEST	Deploy Test	deploy@test.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,openid profile,offline_access,online_access,profile,email,address,phone,user/Patient.read,user/*.read,user/*.*	https://fhirprod.sitenv.org/hapi-resprint/FHIR	2016-09-20 17:49:06.741486	\N	\N	\N
+18	27	kYPx2FocDdJV8s0rN3JgKf0AKwmgVO	Sm9DQ1VhQ0JxZTlTWjQ4WHRULUh5NHlaZEZSWWx3NmVIdDFUUUIxMUh5NWVDOG1hRnA=	Fl6yriKRbIdHBrzZEaGEYdYC2bl3KR0GhYMvaY0K2Jn4s6MNpATYDk3zFD9NYenczFUyVlnfap72rAi1IjpCFrDV7d9cxuWBX8ZdkSeGEbVAd-svwfhr2o5FSLQPLeMMADtBcwubnxarkOkBZtXNcvqaE1ooQWeYSIuQSdXOKVjTKXc7lQicmJu74ElkXDaymjKkh0cRt40ZfktqR1a32244wLxVI-Ap6Nb2t-6Z7CHScO7LFE1PqaEoma	Fhir Test Client	ONC	Fhir Test	fhirtest@sitenv.org	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,user/Patient.read,user/*.read,user/*.*	https://fhir.sitenv.org/open/fhir	2016-10-04 15:56:26.427448	\N	\N	\N
+19	28	yQZALVAc4Jcsuuu15EiodG7paUsVNu	bDBwaGdwYjFKMDc3cWphc3VTTXY1TDE3Ykcwa0wyN0hZVU1FVDVTM2ZIVUY4LXo5MlE=	qcXKG-k-7cXonSf91LujZwvmA7kGWHKDTtseN4PujC0w7ksNxrMjOOMEkWq5fazaTanLgjVAaepJx720bBI0quap1BPiUHlo7YffFlagLkcUczHXfBJ1byLUgPitHMoBPwcmZQw6YOUgLOGWpUgN3NtunIg547ACDC5pPRBMuwqvwB7y3NnOW4xTAPqMMQZauwA7XHGmYjsGB3aIeA6kG62ieaZBs1YstlDWixTVcDkPBU5gc57yhtlL8h	Avi FHIR Client Tool	ONC	Avinash Shanbhag	avinashshanbhag@gmail.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,openid profile,offline_access,online_access,profile,email,address,phone,user/Patient.read,user/*.read,user/*.*	http://localhost:8000/fhir-app/avifhirclient/oauth	2016-10-04 19:44:54.639209	\N	\N	\N
+20	29	9bnQ9zK-4MsKTr9NmUH35YPZCzksVJ	SEtSc0U3eC0xRUhSSkhiYXlRc2pIS3J3TTdCSXVxRzd2VHRINHJReDZsWjR6WUlMbmU=	ezmSEMP3k6JDy6Lcyi67a2N-YEvZRIkSyWh8iYqiTDsyxQ7hEKy3aDu11ki4b-h3Wx9Qw0J8BsECjABFWWCYXamkb1ob22JUDDE9wSefLHGAUv6p56jmfXaxB45bUKLVHkXgQSRnyw5olDPkBleQxiSRqa0SfUSK-3bnYypo-WOvTxej8GROv3dRYa20BIr6UF0QukVBojJkRCcwV9lnICkKcbflgR5afYY7qaOuPjQFf3aJ2iewGHb2Ff	Snyders	ONC	John Snyder	john.snyder2@hhs.gov	patient/*.read,patient/Patient.read	https://fhir.sitenv.org/secure/fhir	2016-10-06 13:34:38.056061	\N	\N	\N
+17	26	qdEQRH8k4UMt5xaoqlqgcSopNazVYG	T21IOW1lQW1iaGFCTDFUTHRhMkdPM0xUMmJzbktxeHZNcGlObndhbXRUTnZFR3Z3U2M=	IVSfNrg79q6vuUETMjzzOP1hVqGuHs7mhKDXKgJVOXJaPbOBYCRHNJQVxaSBIkRqloC65P7-KyXQe0jVBSXEOdlr59ykRXa0Xao7sWtPsspVNuIlMY-3CN3xMihmgx6Js2SUHGRaUIAepVlJ2rDqeRIM704jikxh5HS5f0-VYCzAy66PLSN43-9ZV17Jp3z9q0ELFVhrZ4N4ELk-ouPcIQ8RzGAAVs3mjtvKX8Zn2wSAPD1EZ6-ieq92s8	my app	Drajer	Prabhu Shankar	prabhu@gmail.com	launch,launch/patient,patient/*.read,user/*.read	http://localhost:8080/fhir	2016-10-04 15:18:14.795933	\N	\N	\N
+2	1	Q33YtcsVdMt4kB32zumn9jSAznyXim	xMaRMa3-izrr2tqN6rkBhkdIaX1qBPt9DCeRELM43WwP8Na8cC	hdOEXfPTET5TuIJ6iXTHCr26prhXGpWr2wBeK58UCzq8N7dSWIeGpqw1SH0WbbI7NABvacGvL0LPn03iEzpTgZ2d9zv32f9Be6pxDKsYJbomAeec299EduerA67GRxCmUvg4xRUnrfczEVR9BrJg5HuN1dbRaGAwYg1JKvbsHd1hNcIAPyhAQ1YagvPsQR4BwQ0eIhWCXLAqvI8PD4eMUqmI3lF2m5fP9I6RKyVNaQEkhh7oBRq8MGZke5	FHIR Client	Xyram	Raghu	raghunath.umapathi@xyramsoft.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid profile,offline_access,online_access	https://projectcrucible.org/redirect	2015-12-21 14:26:37.633	\N	\N	\N
+25	42	lqqjjYb82GEDHKBlNLh2YtOr6r0yHh	RkE3RE5yOXJFQktlWmtZWUpVVkd4cnVldkttZ0I0ekNodWZhWEJNS2prZFBPOEZVU0k=	eo1cPYzxrWFtWUCd7bt-6DYKmkTQv5M2mv1DQFNQc0Hgppec3SL4aqUfbkFUjqNOP8atPt0lCTHBqx6IMUaRB0-M3A-aaaPpWTju5oByYuuGGj1iQPe1DAn0IONGanMJnxpZ82I-xUiwp4zA1Ms7XhdJycnkH9sUaqNRXuaEkvY-3ul1CU-91KDHl2TW100a0-c5-XbmfRPnZyHk1MdslY8xSkkUndMHc0hGUnsPAZTlrKbrO0lT3tMeLf	SMART on FHIR iOS Sample App	Ricky	Ricky Bloomfield	onc@rickybloomfield.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,offline_access,online_access,openid profile	smartapp://callback	2016-12-03 18:15:30.309004	\N	\N	\N
+26	43	lSbGfY95XUeXrF5uSx4GbeF2708mUY	cTlRbmFJZW9YZGF6clhFOXVCNFplSUJFVDBQRnlhano2Q2N1U3JOejR5bEJVd2I5Mm0=	LSXPKUEAOo3jVNiFJZuDEqHBbIE7SEHyj91aHZPnhEaL8siInAzNUCqiCijpxjxQrF8XHdDng2X6KnEQt8WhKlnC0CZrqWMJWSAeaiG-4mo4deqYAFQuLor53zKUf7qOuihNrzanpALoyYLGt8zZlEmYyx0zXvUazGOw3XJ5d8weso3lF2PL8aSWUdmtOBfKkIV9EpoknxNXNKJ91YzG6y7gtGVjd4ZDYH8ivXgpJWaNPBCiarLaB5aWzu	SMART on FHIR iOS Demo	CHIP	Pascal Pfiffner	pascal.pfiffner@childrens.harvard.edu	launch,launch/patient,user/*.*	smartapp://callback	2016-12-06 14:20:07.294584	\N	\N	\N
+27	45	548OQMHwPUjY03inBwHIg6OUKbqT95	QVZ3WnYtWC0tVEhubmR6YXYwNU5NbUlrLU9mYXZhNTUxSzFHaElxWU95THZlenF3MUE=	vqqNBTJ0ggQTCzWDRhuOLf-OHaF7f3w7jImh8BWJ9u6W2AhfjdAvkMR1uqjr4ab75RZeFpMmo3CXSPyOs-o1fKl-mDt1mpiENJQmHk-qCV6bBwqR3XHq4U0abTn4CRrjDbSittEyT5zFhyCNOnDnKRsCUXmeHkbPCyd5L-BjEnFZw5fDAzSJQNpsjSA0ouDMbz6q4KYqE7x6GwxgGgbnLPy7Ubqu0gd8WyDOGaODktkcCToyJkekZiKIQM	Release Test	Test	releasetest	release@dec.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,offline_access,online_access	https://fhirtest.sitenv.org/fhirclient	2016-12-16 09:11:28.106349	\N	\N	\N
+23	39	V3ksiO6Yxe9fC6vS6TvE4CZKax85IP	V2NJeEVOWHBZWnBBZUllS0NmandwLWpQaG5qOXVUSTBFeFN3VkZhdUItZGJVQ2x1TEQ=	0RkXP3w5HEpIk9-nCwszP8MnvS67HESqOdCgSfrsLPAZNaOFcoX8j20bjm5XTjPtGfGfuaUmSFxRDSL6hF2cbx3zad0PKPdbqSezkq36O4hNLehUX-SR0cTlnMhMq7CkgNX5lUNUsZAstx6Wz9f-n75aoy1iYa17BRuGRyP48JCV0htCs4kjVWpUKb1-s07tGk3r7wGXIchtN9DihQeoB-GRvqR8sh-gsDISVI0OwmhWXYh8eZJgdG6HqO	www	gmail	tester	activetester506@gmail.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,user/Patient.read,user/*.read,user/*.*,openid,offline_access,online_access	https://fhirtest.sitenv.org/secure/fhir	2016-11-01 14:45:11.87502	\N	\N	\N
+24	40	Iy8Aamv2yLAtroHZj6W66kUVhz0yQx	c2Ftd2pYMlV1eHlrWlBDSWtuejRBbFd5NmVnV3VEY09uYXVZc1FJZUFtLTNMQ2EyYVk=	cHUrs0GEVo0uwvyCFH6ym5alBFM-yCTystK5taI20DbeQdBlqKa8hMwH9YvoT5H4TgmVndTr4JbeJkHxu3QUV7iiBavFGHVdr5sR2nrT0SJFa5cNurSEAVqXcqdcZFRKrp0-AWBRutNsGf7rCzTdasjyyZ9gWByIIdn9gPbUlQnpzf0xfO8UNOASElca31QuQ1UmNkJm4t5s8Ea8uQd44RlOELR86Rv0ztPSDSm8e0aacRsxJS5BoE59xP	testClient	org	test	test@ab.com	launch,launch/patient,patient/*.read	https://fhirtest.sitenv.org/open/fhir	2016-11-01 19:23:14.09607	\N	\N	\N
+28	48	Fgc08G6fxzP9RR6WbsVdFoPLTHlVb0	WHVKWVA4SFo0dFJuWEw3ZkxyOFhoUHBzTXVIdFg0WmRJUHJycS1jbXpGOWVwdE02dVQ=	jG1jqdbuInPae09vBNzG5WddQF1t4aCV0ZISffMsgu8e7Gy3F9NX5pj3nbg0QfhSg4dJ7UcUdGICI112OZeIvwZ5ZmKIPLMwWAJLPaAg0xK0HHtpAg5gS2V6vL6trhJy8870VOMnCqtiajmi3DWjPWlE1nPjV8j0FrSjqK6eraewKbnzqcjBlovY0HgK7Mf9WRk2rpcM6aPipY3NJ0q9QjNdSxJ5pzyT6KDOXIQR5qLcR2ZbeoQY2e26oC	CTMobile	CitiusTech	Yogendra Shelke	yogendra.shelke@citiustech.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,offline_access,online_access	ctdemoapp://callback	2017-03-10 12:38:22.199905	\N	\N	\N
+22	26	KDblHHbNilqMSsyMBYSa6XZhlKcaTQ	bHBOSXdwUHZOLVJ2NEh5R0JYYzEwWXBreE44eXlaYTdoWk9hNjJUS3JDVzBtcTFHMXU=	vBgJgvFf4gRC9CaQ2MZcbhVnRBZANtggJxrMPMtiAJ3a5tgqpi1aRpb9bZQx-HEgaeZUI318uxXiVlt-6fa9zS1WSu0CL1uZfwoZ7vKiNchsSYQykxtACP29Q951kB8MYjXMMY0eWtancv88ZPAad3s5fA8370scD4MZ8Jvqkbqq3q-A6AGbIrJUY0C6hx17MOB5Y3rfZPcpmlNQyZ7mr5D7ikxOEZlSMxGC-QOefVRFYmQyUgHKhDlmiA	healthapp	NIH	Prabhu	prabhu@prabhu.com	launch/patient	https://fhir.sitenv.org/secure/fhir	2016-10-19 06:09:27.784192	\N	\N	\N
+29	26	KJEqPEeFnqrsn5iu9ogqfNyqinmLgq	QnlGU3FEelY3T3R0U2F4M0tFQkE4RFlvSlFqTWE4NkREYmhKRk9DcXRYUDZjbHhNQjk=	rj7UGJdhltUDwzPhoftTl0skgT0fju3We1HhIfoUYqNuECKW1Wo6frnUXBZnMi-zcA6YbWFpV-hx58MUNbg9nIcZM7b3CFV3Bn4NSl76spWyRAdgD8krhqOwNvbartGjRTmiwW8frRQ-JbS1-URqdmgQLFaQKD7Hb1wCsBniEqHbazb6J1aVIWp-4INslv00jwh98b21Pgf9t8x6MKUzhoJmf3hjDfd6muPrGMdw6SJVdgH7MDsU7Bdtl3	winapp	Apple	Prabhu Shankar	prabhugowda@gmail.com	launch/patient	https://fhirtest.sitenv.org/secure/fhir	2017-05-05 14:31:39.86176	\N	\N	\N
+30	49	pzSKWGTWhSOKn9xDDB2ovXoIuZvxQS	amlCQW1BQjJLazlqOHUyWUNaQzRRd2tvWmtWTmVFUUtTSlNhQUFFUUdMcnNSU3Y3THY=	L7-KOcvJfeQIfAoUvd7WwF9Zwbm-yuXklXlUMDhu9wplVxxXZBvRK1pk5cyYl4fWsPRpnP1u0Nq781JGy1RHlRWmiy7qm8WA7MTdjC71vWfsf0iCuB-HtT5shovni5Wyyl5HKI6ohagp7nckxEg2B1EopLt-LsTYviwCnzfQvg8IQUeF-gddN9JEkIYaMK5NzyXkdl95s1mP44umGfjZ3MknFbITfTpsORaOwZA3Pb74bq0j2e56WL675A	democlient	FHIR	Demo User	demo@sitenv.org	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,offline_access,online_access	https://fhirtest.sitenv.org/fhirclient/	2017-06-22 21:08:29.349243	\N	\N	\N
+31	50	xVXluYXR-Cnaa4FywobtfuZRrV-wDC	TjVXYWpQM0JoRWJXMENzN2lGWm5zYzJhclRuWlBzR1dzTnVONVRkR0xSeUhBMy1SbDc=	10D8LV0dU7Z4ZUVwk0M4Cxd-i0XflyRz0dMA6WNXWvaJDesgbA1yeGDmtIPuwgzE77cK9fA7xQcZMvYmDET3yLgH2eXuCbfc1Trq90JqHfB8XZCNxG3osmKAq19qE4mnBGpGkKtKYdzwuNxNMZzhUXV-cfaBZZb5mzAi34Wm5zhId1sGqG4BR9PeRE7sGaScm0ukqzLAw07Z24uKDIQve2XvfcKSH4L-ParpHps-qjnas6tI1OmGAljCum	Google	Alphabet	Google	google@gmail.com	launch,launch/patient,patient/*.read,patient/Patient.read,patient/DocumentReference.read,patient/MedicationOrder.read,patient/MedicationStatement.read,fhir_complete,user/Patient.read,user/*.read,user/*.*,openid,fhirUser,offline_access,online_access	https://fhir.dev.sitenv.org/stu3openid/fhir	2019-04-29 10:03:59.778342	\N	f4YqB4CV	https://www.google.com/
 \.
 
 
 --
--- TOC entry 2694 (class 0 OID 0)
--- Dependencies: 199
 -- Name: clients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.clients_id_seq', 30, true);
+SELECT pg_catalog.setval('public.clients_id_seq', 31, true);
 
 
 --
--- TOC entry 2587 (class 0 OID 17089)
--- Dependencies: 200
 -- Data for Name: condition; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2290,8 +2182,6 @@ COPY public.condition (id, identifier_system, identifier_value, subject, asserte
 
 
 --
--- TOC entry 2588 (class 0 OID 17095)
--- Dependencies: 201
 -- Data for Name: confidentiality; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2305,8 +2195,6 @@ COPY public.confidentiality (id, code, display, system) FROM stdin;
 
 
 --
--- TOC entry 2695 (class 0 OID 0)
--- Dependencies: 202
 -- Name: confidentiality_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2314,8 +2202,6 @@ SELECT pg_catalog.setval('public.confidentiality_id_seq', 5, true);
 
 
 --
--- TOC entry 2590 (class 0 OID 17100)
--- Dependencies: 203
 -- Data for Name: content; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2330,8 +2216,6 @@ COPY public.content (id, content_type, language, url, content_size, title) FROM 
 
 
 --
--- TOC entry 2696 (class 0 OID 0)
--- Dependencies: 204
 -- Name: content_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2339,8 +2223,6 @@ SELECT pg_catalog.setval('public.content_id_seq', 9, true);
 
 
 --
--- TOC entry 2592 (class 0 OID 17105)
--- Dependencies: 205
 -- Data for Name: context_event; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2358,8 +2240,6 @@ COPY public.context_event (id, code, display, system) FROM stdin;
 
 
 --
--- TOC entry 2697 (class 0 OID 0)
--- Dependencies: 206
 -- Name: context_event_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2367,8 +2247,6 @@ SELECT pg_catalog.setval('public.context_event_id_seq', 26, true);
 
 
 --
--- TOC entry 2594 (class 0 OID 17110)
--- Dependencies: 207
 -- Data for Name: context_facility_type; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2385,8 +2263,6 @@ COPY public.context_facility_type (id, code, display, system) FROM stdin;
 
 
 --
--- TOC entry 2698 (class 0 OID 0)
--- Dependencies: 208
 -- Name: context_facility_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2394,20 +2270,16 @@ SELECT pg_catalog.setval('public.context_facility_type_id_seq', 8, true);
 
 
 --
--- TOC entry 2596 (class 0 OID 17115)
--- Dependencies: 209
 -- Data for Name: context_period; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.context_period (id, start, "end") FROM stdin;
-1	2004-12-23 02:30:00+05:30	2004-12-23 18:31:00+05:30
-2	2004-12-20 19:30:00+05:30	2004-12-20 19:31:00+05:30
+1	2004-12-22 21:00:00+00	2004-12-23 13:01:00+00
+2	2004-12-20 14:00:00+00	2004-12-20 14:01:00+00
 \.
 
 
 --
--- TOC entry 2597 (class 0 OID 17118)
--- Dependencies: 210
 -- Data for Name: custodian; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2422,8 +2294,6 @@ COPY public.custodian (id, name) FROM stdin;
 
 
 --
--- TOC entry 2699 (class 0 OID 0)
--- Dependencies: 211
 -- Name: custodian_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2431,8 +2301,6 @@ SELECT pg_catalog.setval('public.custodian_id_seq', 6, true);
 
 
 --
--- TOC entry 2599 (class 0 OID 17123)
--- Dependencies: 212
 -- Data for Name: device; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2442,8 +2310,6 @@ COPY public.device (id, status, patient, type_code, type_system, type_display, t
 
 
 --
--- TOC entry 2700 (class 0 OID 0)
--- Dependencies: 213
 -- Name: device_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2451,8 +2317,6 @@ SELECT pg_catalog.setval('public.device_id_seq', 1, false);
 
 
 --
--- TOC entry 2601 (class 0 OID 17131)
--- Dependencies: 214
 -- Data for Name: diagnosticreport; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2466,8 +2330,6 @@ COPY public.diagnosticreport (id, status, cat_code, cat_system, cat_display, cat
 
 
 --
--- TOC entry 2701 (class 0 OID 0)
--- Dependencies: 215
 -- Name: diagnosticreport_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2475,8 +2337,6 @@ SELECT pg_catalog.setval('public.diagnosticreport_id_seq', 1, true);
 
 
 --
--- TOC entry 2603 (class 0 OID 17140)
--- Dependencies: 216
 -- Data for Name: doc_class_codes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2492,8 +2352,6 @@ COPY public.doc_class_codes (id, code, display, system) FROM stdin;
 
 
 --
--- TOC entry 2702 (class 0 OID 0)
--- Dependencies: 217
 -- Name: doc_class_codes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2501,8 +2359,6 @@ SELECT pg_catalog.setval('public.doc_class_codes_id_seq', 7, true);
 
 
 --
--- TOC entry 2605 (class 0 OID 17145)
--- Dependencies: 218
 -- Data for Name: doc_type_codes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2517,8 +2373,6 @@ COPY public.doc_type_codes (id, code, display, system) FROM stdin;
 
 
 --
--- TOC entry 2703 (class 0 OID 0)
--- Dependencies: 219
 -- Name: doc_type_codes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2526,32 +2380,28 @@ SELECT pg_catalog.setval('public.doc_type_codes_id_seq', 6, true);
 
 
 --
--- TOC entry 2607 (class 0 OID 17150)
--- Dependencies: 220
 -- Data for Name: document_reference; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.document_reference (id, master_dentifier_system, master_dentifier_value, identifier_use, identifier_system, identifier_value, subject, type, class_code, document_format, author, custodian, authenticator, created, indexed, status, doc_status, description, confidentiality, content, context_event, context_period, context_facility_type) FROM stdin;
-2	https://sitenv.org	882-777-1134	official 	urn:foo	1234	2	1	1	urn:ihe:pcc:xphr:2019	2	2	1	2005-12-23 00:00:00	2005-12-23 20:13:41+05:30	SUPERSEDED	amended	Physical	5	7	21	2	8
-1	https://sitenv.org	222-338-1234	official 	urn:foo	7766	1	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-3	https://sitenv.org	222-338-1234	official 	urn:foo	7766	3	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-4	https://sitenv.org	222-338-1234	official 	urn:foo	7766	4	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-5	https://sitenv.org	222-338-1234	official 	urn:foo	7766	5	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-6	https://sitenv.org	222-338-1234	official 	urn:foo	7766	6	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-7	https://sitenv.org	222-338-1234	official 	urn:foo	7766	7	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-8	https://sitenv.org	222-338-1234	official 	urn:foo	7766	8	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2006-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-9	https://sitenv.org	222-338-1234	official 	urn:foo	7766	9	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-10-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-10	https://sitenv.org	222-338-1234	official 	urn:foo	7766	10	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2003-12-14 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-11	https://sitenv.org	222-338-1234	official 	urn:foo	7766	11	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-12	https://sitenv.org	222-338-1234	official 	urn:foo	7766	12	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2007-09-08 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-13	https://sitenv.org	222-338-1234	official 	urn:foo	7766	13	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2004-12-06 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
-14	https://sitenv.org	222-338-1234	official 	urn:foo	7766	14	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2004-11-25 00:00:00	2005-12-24 20:13:41+05:30	CURRENT	preliminary	Physical	4	6	20	1	7
+2	https://sitenv.org	882-777-1134	official 	urn:foo	1234	2	1	1	urn:ihe:pcc:xphr:2019	2	2	1	2005-12-23 00:00:00	2005-12-23 14:43:41+00	SUPERSEDED	amended	Physical	5	7	21	2	8
+1	https://sitenv.org	222-338-1234	official 	urn:foo	7766	1	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+3	https://sitenv.org	222-338-1234	official 	urn:foo	7766	3	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+4	https://sitenv.org	222-338-1234	official 	urn:foo	7766	4	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+5	https://sitenv.org	222-338-1234	official 	urn:foo	7766	5	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+6	https://sitenv.org	222-338-1234	official 	urn:foo	7766	6	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+7	https://sitenv.org	222-338-1234	official 	urn:foo	7766	7	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+8	https://sitenv.org	222-338-1234	official 	urn:foo	7766	8	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2006-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+9	https://sitenv.org	222-338-1234	official 	urn:foo	7766	9	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-10-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+10	https://sitenv.org	222-338-1234	official 	urn:foo	7766	10	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2003-12-14 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+11	https://sitenv.org	222-338-1234	official 	urn:foo	7766	11	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2005-12-24 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+12	https://sitenv.org	222-338-1234	official 	urn:foo	7766	12	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2007-09-08 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+13	https://sitenv.org	222-338-1234	official 	urn:foo	7766	13	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2004-12-06 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
+14	https://sitenv.org	222-338-1234	official 	urn:foo	7766	14	2	2	urn:ihe:pcc:xphr:2009	1	1	2	2004-11-25 00:00:00	2005-12-24 14:43:41+00	CURRENT	preliminary	Physical	4	6	20	1	7
 \.
 
 
 --
--- TOC entry 2704 (class 0 OID 0)
--- Dependencies: 222
 -- Name: document_reference_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2559,8 +2409,6 @@ SELECT pg_catalog.setval('public.document_reference_id_seq', 2, true);
 
 
 --
--- TOC entry 2705 (class 0 OID 0)
--- Dependencies: 223
 -- Name: document_reference_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2568,8 +2416,6 @@ SELECT pg_catalog.setval('public.document_reference_id_seq1', 2, true);
 
 
 --
--- TOC entry 2608 (class 0 OID 17156)
--- Dependencies: 221
 -- Data for Name: document_reference_json; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2580,8 +2426,6 @@ COPY public.document_reference_json (id, master_dentifier, identifier, subject, 
 
 
 --
--- TOC entry 2706 (class 0 OID 0)
--- Dependencies: 224
 -- Name: event_period_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2589,8 +2433,6 @@ SELECT pg_catalog.setval('public.event_period_id_seq', 2, true);
 
 
 --
--- TOC entry 2612 (class 0 OID 17168)
--- Dependencies: 225
 -- Data for Name: goals; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2600,8 +2442,6 @@ COPY public.goals (id, status, date, subject, status_reason, description, expres
 
 
 --
--- TOC entry 2707 (class 0 OID 0)
--- Dependencies: 226
 -- Name: goals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2609,8 +2449,6 @@ SELECT pg_catalog.setval('public.goals_id_seq', 1, false);
 
 
 --
--- TOC entry 2614 (class 0 OID 17176)
--- Dependencies: 227
 -- Data for Name: immunization; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2629,8 +2467,6 @@ COPY public.immunization (id, status, date, vaccine_system, vaccine_code, vaccin
 
 
 --
--- TOC entry 2708 (class 0 OID 0)
--- Dependencies: 228
 -- Name: immunization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2638,8 +2474,23 @@ SELECT pg_catalog.setval('public.immunization_id_seq', 2, true);
 
 
 --
--- TOC entry 2616 (class 0 OID 17184)
--- Dependencies: 229
+-- Data for Name: jwks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.jwks (id, jwk, last_updated_datetime) FROM stdin;
+1	{"p":"whjBIDBXhFmeborCqjoQv7UyoaJP1OfHj4haCiON7BpD7phM9kt0kGhGUoeQktAwvZCorz0Jg5RqGiRMdl0QVF03upCZ59nggsSEyEkkDgnhm1joMTMwm6JheQpowDJiwv6lc5Hc2j11Ly_q5gcpZxYkugQOQx7XF4SoVClS9Is","kty":"RSA","q":"uwqL8SOVugvcsniKpqeLAIxsrDrr96jdNPhVBkK1Hgru6Fj9ZRT0Bbm7-gV0m0Ck40Y7QsBb0Wp4tQOgUC6OnxbNvMB7SshtDeOFO1uyTp5_dFonJxeXNI_cSoJ679qI6OsdSS4OSQA2Sn9_j3oP25Gmm66rUM96ij2xjMSud6U","d":"Dd_p2JQIN8rVmfgGXlTUHFoW8q6bgXysyObiFkQQkWdbrdGWQhCPagtvoxLw6aFwgO2JMFHUHfd7IniNxYvBGpncQnea5Qa-VPgqiAkxIDtfZfuyUUbHNtcjVxO_hsM9k4zN7ZmyFT26EipeZR78SyUBg-kKrZJRPpt33xAYcB0tkZ2KOxdmUl9TkE0aGFCKLAbJVaN4QStPG4M6VVrKZreNemVsdePT1rmG4W-qX_Uxwb9LcKypSp5LgNleZ046gwIuQvWW4wpLCtPie-IT7H9DRyA390RMLUrufXLTOom7xfHTMSjnUef4hWLY4_ym9zOOIux6q2sGCjlTSqDU4Q","e":"AQAB","use":"sig","kid":"guJAnaXygc","qi":"QEeGt3rrLNS8yHCquwIb5lKqJzCMgNMbT8_xqIoPgIyGWOLJVCUPXEEypMwlGepHlbK_sRnitN0r_r9HXX2NToGsRnP31jTlkjzx6Maf9ChqT7mxyQdQ-TCq3DfBzmjIJe7ZvNMe7tNgPjQeUjVQD2_OHTPHV0m0800qc28X2t8","dp":"Xnwsb135DH2P6WH1F2bCxoAPkK1xzUOzWsTWh_781IWIsjpDpNXgfXe1W_GQSFe-klk8NGozGnGCIQ2whyIQk_D48wH3We0vJJlDxjgMrCTVRYlHJsQzkl--sWyGx6D_gMrzgcnsx_SI-hqKb8Xmur8Fy-OziasWq-UxCB9Bubc","alg":"RS256","dq":"RKKlIbLOMbxCm1cygd8_Wc8t3bGtf27-5X4vLSHzdnfKnYZyTdJ3jVZPzXqNBJ-fIitWebM-vkUU0E_pVyMOgQCMNLRpSdLseclAzbxjXQg6ewbOEUFN4iLcUpc456VI0jfcwkrdQRqL0aChvZOsGAWFnuFkyj2omOv0qFRQNWU","n":"jdAUJFO3AoRyiZEuaECd1M8aioXBuHYcArOfbVIzAMupVF9YJAuOt3M2FDmmwA3RyAbKu-2m4QCF6DEyjJjwcYF4vyf6wU2WvvEgvyaIwrHkRCfv6Lo6_n81ba2J6_z6rnzx4fYV_wjBjYMi9Dy-IPNAE5XnCAZXO8Gn8kOxb4qUPw2pEY5wIlAWTE_On0c1f8i4j6a23woHXsLH6y14Zh1ykZYCZV7p6veA5CigPJNC5KqpAWRzygIx-fdJNRajpv5UjCqC_Q9db_D-XVBdjx0t-m0NiB21v9wtm1ChaZXYTApUGvOe9hh87vOSrvWqS5aG_CHEKAnTKA4U1J46lw"}	2019-04-29
+2	{"p":"whjBIDBXhFmeborCqjoQv7UyoaJP1OfHj4haCiON7BpD7phM9kt0kGhGUoeQktAwvZCorz0Jg5RqGiRMdl0QVF03upCZ59nggsSEyEkkDgnhm1joMTMwm6JheQpowDJiwv6lc5Hc2j11Ly_q5gcpZxYkugQOQx7XF4SoVClS9Is","kty":"RSA","q":"uwqL8SOVugvcsniKpqeLAIxsrDrr96jdNPhVBkK1Hgru6Fj9ZRT0Bbm7-gV0m0Ck40Y7QsBb0Wp4tQOgUC6OnxbNvMB7SshtDeOFO1uyTp5_dFonJxeXNI_cSoJ679qI6OsdSS4OSQA2Sn9_j3oP25Gmm66rUM96ij2xjMSud6U","d":"Dd_p2JQIN8rVmfgGXlTUHFoW8q6bgXysyObiFkQQkWdbrdGWQhCPagtvoxLw6aFwgO2JMFHUHfd7IniNxYvBGpncQnea5Qa-VPgqiAkxIDtfZfuyUUbHNtcjVxO_hsM9k4zN7ZmyFT26EipeZR78SyUBg-kKrZJRPpt33xAYcB0tkZ2KOxdmUl9TkE0aGFCKLAbJVaN4QStPG4M6VVrKZreNemVsdePT1rmG4W-qX_Uxwb9LcKypSp5LgNleZ046gwIuQvWW4wpLCtPie-IT7H9DRyA390RMLUrufXLTOom7xfHTMSjnUef4hWLY4_ym9zOOIux6q2sGCjlTSqDU4Q","e":"AQAB","use":"sig","kid":"guJAnaXygc","qi":"QEeGt3rrLNS8yHCquwIb5lKqJzCMgNMbT8_xqIoPgIyGWOLJVCUPXEEypMwlGepHlbK_sRnitN0r_r9HXX2NToGsRnP31jTlkjzx6Maf9ChqT7mxyQdQ-TCq3DfBzmjIJe7ZvNMe7tNgPjQeUjVQD2_OHTPHV0m0800qc28X2t8","dp":"Xnwsb135DH2P6WH1F2bCxoAPkK1xzUOzWsTWh_781IWIsjpDpNXgfXe1W_GQSFe-klk8NGozGnGCIQ2whyIQk_D48wH3We0vJJlDxjgMrCTVRYlHJsQzkl--sWyGx6D_gMrzgcnsx_SI-hqKb8Xmur8Fy-OziasWq-UxCB9Bubc","alg":"RS256","dq":"RKKlIbLOMbxCm1cygd8_Wc8t3bGtf27-5X4vLSHzdnfKnYZyTdJ3jVZPzXqNBJ-fIitWebM-vkUU0E_pVyMOgQCMNLRpSdLseclAzbxjXQg6ewbOEUFN4iLcUpc456VI0jfcwkrdQRqL0aChvZOsGAWFnuFkyj2omOv0qFRQNWU","n":"jdAUJFO3AoRyiZEuaECd1M8aioXBuHYcArOfbVIzAMupVF9YJAuOt3M2FDmmwA3RyAbKu-2m4QCF6DEyjJjwcYF4vyf6wU2WvvEgvyaIwrHkRCfv6Lo6_n81ba2J6_z6rnzx4fYV_wjBjYMi9Dy-IPNAE5XnCAZXO8Gn8kOxb4qUPw2pEY5wIlAWTE_On0c1f8i4j6a23woHXsLH6y14Zh1ykZYCZV7p6veA5CigPJNC5KqpAWRzygIx-fdJNRajpv5UjCqC_Q9db_D-XVBdjx0t-m0NiB21v9wtm1ChaZXYTApUGvOe9hh87vOSrvWqS5aG_CHEKAnTKA4U1J46lw"}	2019-04-29
+\.
+
+
+--
+-- Name: jwks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.jwks_id_seq', 1, false);
+
+
+--
 -- Data for Name: location; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2649,8 +2500,6 @@ COPY public.location (location_id, identifier, status, name, description, mode, 
 
 
 --
--- TOC entry 2709 (class 0 OID 0)
--- Dependencies: 230
 -- Name: location_location_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2658,8 +2507,6 @@ SELECT pg_catalog.setval('public.location_location_id_seq', 1, false);
 
 
 --
--- TOC entry 2618 (class 0 OID 17192)
--- Dependencies: 231
 -- Data for Name: manufacturer; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2669,8 +2516,6 @@ COPY public.manufacturer (id, name) FROM stdin;
 
 
 --
--- TOC entry 2619 (class 0 OID 17195)
--- Dependencies: 232
 -- Data for Name: marital_status; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2689,8 +2534,6 @@ W	Widowed
 
 
 --
--- TOC entry 2620 (class 0 OID 17198)
--- Dependencies: 233
 -- Data for Name: medication; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2700,8 +2543,6 @@ COPY public.medication (id, med_code, med_isbrand, med_manufacturer, med_display
 
 
 --
--- TOC entry 2621 (class 0 OID 17204)
--- Dependencies: 234
 -- Data for Name: medication_administration; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2711,8 +2552,6 @@ COPY public.medication_administration (id, identifier_system, identifier_value, 
 
 
 --
--- TOC entry 2622 (class 0 OID 17210)
--- Dependencies: 235
 -- Data for Name: medication_dispense; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2748,8 +2587,6 @@ COPY public.medication_dispense (id, identifier_system, identifier_value, patien
 
 
 --
--- TOC entry 2623 (class 0 OID 17216)
--- Dependencies: 236
 -- Data for Name: medication_request; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2759,8 +2596,6 @@ COPY public.medication_request (id, identifier, definition, basedon, groupidenti
 
 
 --
--- TOC entry 2710 (class 0 OID 0)
--- Dependencies: 237
 -- Name: medication_request_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2768,8 +2603,6 @@ SELECT pg_catalog.setval('public.medication_request_id_seq', 1, false);
 
 
 --
--- TOC entry 2625 (class 0 OID 17224)
--- Dependencies: 238
 -- Data for Name: medication_statement; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2803,8 +2636,6 @@ COPY public.medication_statement (id, subject, effectiveperiod, medicationcodeab
 
 
 --
--- TOC entry 2626 (class 0 OID 17230)
--- Dependencies: 239
 -- Data for Name: observation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2820,7 +2651,7 @@ COPY public.observation (id, code, code_system, code_display, code_text, cat_cod
 14	11555-0	http://loinc.org	Base excess Bld-sCnc	Base excess Bld-sCnc	laboratory	http://hl7.org/fhir/observation-category	Laboratory	Laboratory	\N	\N	\N	\N	FINAL	4	2016-08-30 10:47:02.423	6	http://unitsofmeasure.org	mmol/L	2005-07-04 00:00:00	mmol/L	\N	\N	https://sitenv.org	7703	\N	\N	\N
 12	72166-2	http://loinc.org	Tobacco smoking status	Tobacco smoking status	social-history	http://hl7.org/fhir/observation-category	Social History	SOCIAL_HISTORY	8517006	http://snomed.info/sct	Former smoker	Former smoker	FINAL	2	2016-08-30 10:43:04.811	\N	\N	\N	2005-07-05 00:00:00	\N	\N	\N	https://sitenv.org	7701	\N	\N	\N
 13	72166-2	http://loinc.org	Tobacco smoking status	Tobacco smoking status	social-history	http://hl7.org/fhir/observation-category	Social History	SOCIAL_HISTORY	266927001	http://snomed.info/sct	Unknown if ever smoked	Unknown if ever smoked	FINAL	3	2016-08-30 10:45:05.776	\N	\N	\N	2006-08-08 00:00:00	\N	\N	\N	https://sitenv.org	7702	\N	\N	\N
-18	1959-6	http://loinc.org	HCO3 Bld-sCnc	HCO3 Bld-sCnc	laboratory	http://hl7.org/fhir/observation-category	Laboratory	Laboratory	\N	\N	\N	\N	FINAL	8	2016-08-30 11:05:40.097	23.100000000000001	"http://unitsofmeasure.org"	mmol/L	2006-07-22 00:00:00	mmol/L	\N	\N	https://sitenv.org	7707	\N	\N	\N
+18	1959-6	http://loinc.org	HCO3 Bld-sCnc	HCO3 Bld-sCnc	laboratory	http://hl7.org/fhir/observation-category	Laboratory	Laboratory	\N	\N	\N	\N	FINAL	8	2016-08-30 11:05:40.097	23.1000000000000014	"http://unitsofmeasure.org"	mmol/L	2006-07-22 00:00:00	mmol/L	\N	\N	https://sitenv.org	7707	\N	\N	\N
 16	2713-6	http://loinc.org	SaO2% from pO2 Bld	SaO2% from pO2 Bld	laboratory	http://hl7.org/fhir/observation-category	Laboratory	Laboratory	\N	\N	\N	\N	FINAL	6	2016-08-30 11:01:34.491	92	"http://unitsofmeasure.org"	%	2006-07-02 00:00:00	%	\N	\N	https://sitenv.org	7705	\N	\N	\N
 15	20565-8	http://loinc.org	CO2 Bld-sCnc	CO2 Bld-sCnc	laboratory	http://hl7.org/fhir/observation-category	Laboratory	Laboratory	\N	\N	\N	\N	FINAL	5	2016-08-30 10:51:53.144	24	"http://unitsofmeasure.org"	mmol/L	2005-07-02 00:00:00	mmol/L	\N	\N	https://sitenv.org	7704	\N	\N	\N
 3	8310-5	http://loinc.org	Body Temperature	Body Temperature	vital-signs	http://hl7.org/fhir/observation-category	Vital Signs	Vital Signs	8310-5	http://loinc.org	Body Temperature	Body Temperature	FINAL	1	2016-03-24 14:08:28.084	38	http://unitsofmeasure.org	Cel	2005-07-05 00:00:00	Cel	\N	\N	https://sitenv.org	7788	{\r\n        "value": 6.5,\r\n        "unit": "g/dl",\r\n        "system": "http://unitsofmeasure.org",\r\n        "code": "g/dL"\r\n      }	{\r\n        "value": 10,\r\n        "unit": "g/dl",\r\n        "system": "http://unitsofmeasure.org",\r\n        "code": "g/dL"\r\n      }	{\r\n\t\t"type": "has-member",\r\n        "reference": "Observation/body-temperature",\r\n        "display": "Body Temperature"\r\n      }
@@ -2831,8 +2662,6 @@ COPY public.observation (id, code, code_system, code_display, code_text, cat_cod
 
 
 --
--- TOC entry 2711 (class 0 OID 0)
--- Dependencies: 240
 -- Name: observation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2840,8 +2669,6 @@ SELECT pg_catalog.setval('public.observation_id_seq', 5, true);
 
 
 --
--- TOC entry 2628 (class 0 OID 17239)
--- Dependencies: 241
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2851,8 +2678,6 @@ COPY public.organization (id, identifier, active, telecom, type, address, name) 
 
 
 --
--- TOC entry 2629 (class 0 OID 17245)
--- Dependencies: 242
 -- Data for Name: patient; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2875,8 +2700,6 @@ COPY public.patient (id, identifier_system, identifier_value, name) FROM stdin;
 
 
 --
--- TOC entry 2630 (class 0 OID 17248)
--- Dependencies: 243
 -- Data for Name: patient_contact; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2886,8 +2709,6 @@ COPY public.patient_contact (id, patient_id, relationship, contact_name, phone, 
 
 
 --
--- TOC entry 2712 (class 0 OID 0)
--- Dependencies: 244
 -- Name: patient_contact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2895,8 +2716,6 @@ SELECT pg_catalog.setval('public.patient_contact_id_seq', 5, true);
 
 
 --
--- TOC entry 2713 (class 0 OID 0)
--- Dependencies: 246
 -- Name: patient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2904,17 +2723,13 @@ SELECT pg_catalog.setval('public.patient_id_seq', 2, true);
 
 
 --
--- TOC entry 2714 (class 0 OID 0)
--- Dependencies: 247
 -- Name: patient_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.patient_id_seq1', 15, false);
+SELECT pg_catalog.setval('public.patient_id_seq1', 2, true);
 
 
 --
--- TOC entry 2632 (class 0 OID 17256)
--- Dependencies: 245
 -- Data for Name: patient_json; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2937,8 +2752,6 @@ COPY public.patient_json (id, identifier, full_name, telecom, gender, birth_date
 
 
 --
--- TOC entry 2635 (class 0 OID 17266)
--- Dependencies: 248
 -- Data for Name: practitioner; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2957,8 +2770,6 @@ COPY public.practitioner (id, telecom, practitionerrole, text, identifier, famil
 
 
 --
--- TOC entry 2636 (class 0 OID 17272)
--- Dependencies: 249
 -- Data for Name: procedure; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2968,8 +2779,6 @@ COPY public.procedure (procedure_id, identifier, subject, status, category, code
 
 
 --
--- TOC entry 2715 (class 0 OID 0)
--- Dependencies: 250
 -- Name: procedure_procedure_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2977,8 +2786,6 @@ SELECT pg_catalog.setval('public.procedure_procedure_id_seq', 1, false);
 
 
 --
--- TOC entry 2638 (class 0 OID 17280)
--- Dependencies: 251
 -- Data for Name: questionnaire; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -2987,8 +2794,6 @@ COPY public.questionnaire (id, questionnaire) FROM stdin;
 
 
 --
--- TOC entry 2716 (class 0 OID 0)
--- Dependencies: 252
 -- Name: questionnaire_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2996,8 +2801,6 @@ SELECT pg_catalog.setval('public.questionnaire_id_seq', 1, false);
 
 
 --
--- TOC entry 2640 (class 0 OID 17288)
--- Dependencies: 253
 -- Data for Name: questionnaireresponse; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -3006,8 +2809,6 @@ COPY public.questionnaireresponse (qr_id, questionnaire_id, questionnaire_respon
 
 
 --
--- TOC entry 2717 (class 0 OID 0)
--- Dependencies: 254
 -- Name: questionnaireresponse_qr_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -3015,8 +2816,6 @@ SELECT pg_catalog.setval('public.questionnaireresponse_qr_id_seq', 1, false);
 
 
 --
--- TOC entry 2642 (class 0 OID 17296)
--- Dependencies: 255
 -- Data for Name: register; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -3025,8 +2824,6 @@ COPY public.register (id, client_id, client_secret, contact_mail, contact_name, 
 
 
 --
--- TOC entry 2718 (class 0 OID 0)
--- Dependencies: 256
 -- Name: register_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -3034,8 +2831,6 @@ SELECT pg_catalog.setval('public.register_id_seq', 1, false);
 
 
 --
--- TOC entry 2644 (class 0 OID 17304)
--- Dependencies: 257
 -- Data for Name: us_core_birthsex; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -3047,8 +2842,6 @@ UNK	Unknown	http://hl7.org/fhir/v3/NullFlavor
 
 
 --
--- TOC entry 2645 (class 0 OID 17307)
--- Dependencies: 258
 -- Data for Name: us_core_ethnicity; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -3060,8 +2853,6 @@ COPY public.us_core_ethnicity (code, display) FROM stdin;
 
 
 --
--- TOC entry 2646 (class 0 OID 17310)
--- Dependencies: 259
 -- Data for Name: us_core_race; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -3075,8 +2866,6 @@ COPY public.us_core_race (code, display) FROM stdin;
 
 
 --
--- TOC entry 2647 (class 0 OID 17313)
--- Dependencies: 260
 -- Data for Name: us_core_religion; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -3167,28 +2956,65 @@ COPY public.us_core_religion (code, display) FROM stdin;
 
 
 --
--- TOC entry 2648 (class 0 OID 17316)
--- Dependencies: 261
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (user_id, user_name, user_email, user_full_name, user_password, last_updated_ts) FROM stdin;
-1	demouser	demouser@sitenv.org	Demo User	X+zyYwGOEw44HEp8JBBkJg==	2017-06-22 21:03:49.930187
+COPY public.users (user_id, user_name, user_email, user_full_name, user_password, last_updated_ts, temp_password, is_pass) FROM stdin;
+7	testing	testing@testing.com	Testing	rgeT01JiJx2fHdQ4Io34mQ==	2016-09-20 17:37:06.205892	\N	t
+8	testing1	testing1@testing.com	Testing1	rgeT01JiJx2fHdQ4Io34mQ==	2016-09-20 17:40:15.985021	\N	t
+9	testing2	testing2@testing.com	Testing2	rgeT01JiJx2fHdQ4Io34mQ==	2016-09-20 17:41:43.255593	\N	t
+10	testing3	testing3@test.com	Testing3	rgeT01JiJx2fHdQ4Io34mQ==	2016-09-20 17:42:40.693447	\N	t
+1	raghunathsandilya	raghunath.umapathi@xyramsoft.com	Raghunath Sandilya	rgeT01JiJx2fHdQ4Io34mQ==	2015-12-08 14:29:05.655	\N	t
+2	raghunath	raghunathsandilya@gmail.com	Umapathi Raghunath Sandilya	vcxZSf8q9d/Xg21fp9FbMQ==	2015-12-21 14:24:56.711	\N	t
+3	raghunath.sandilya	raghunathsandilya@hotmail.com	raghunath Sandilya	vcxZSf8q9d/Xg21fp9FbMQ==	2015-12-22 11:44:07.734	\N	t
+4	testuser1	testuser1@sitenv.org	Test User1	bbq57XDcicplBNWc8jhPWA==	2015-12-22 16:20:08.415	\N	t
+5	mokeefe	mokeefe@mitre.org	Michael O'Keefe	hiU78yGL552Ve1qJvLu8QQ==	2015-12-22 16:29:02.04	\N	t
+11	testuser2	testuser2@sitenv.org	Test User2	D6EZ0pvKR8iDBx2pRliqQw==	2015-12-23 15:39:08.598	\N	t
+12	aquina	aquina@mitre.org	Andre Quina	XbBMC1ALQvaIPd0bpHT5lQ==	2016-01-09 17:38:22.051	\N	t
+13	aquina2	andre.quina@gmail.com	Andre	XbBMC1ALQvaIPd0bpHT5lQ==	2016-01-09 20:39:47.635	\N	t
+14	sateeshreddy	sateeshreddy132@gmail.com	Sateesh Reddy	vcxZSf8q9d/Xg21fp9FbMQ==	2016-03-28 14:00:29.155	\N	t
+15	sandilya	raghunathsandilya@gmail.com	sandilya raghu	vcxZSf8q9d/Xg21fp9FbMQ==	2016-03-31 11:57:01.003	\N	t
+16	testuser	testuser@gmail.com	test test	vcxZSf8q9d/Xg21fp9FbMQ==	2016-03-31 12:02:07.425	\N	t
+17	testauth	testauth@gmail.com	test auth	vcxZSf8q9d/Xg21fp9FbMQ==	2016-03-31 12:03:45.706	\N	t
+18	Sateesh	sateesh.gottam@xyramsoft.com	Sateesh Reddy	vcxZSf8q9d/Xg21fp9FbMQ==	2016-06-29 08:21:15.28544	\N	t
+19	johnsnyder	john.snyder2@hhs.gov	John Snyder	P6krWaLNJi5WGdODFojHHg==	2016-09-01 17:22:34.627156	\N	t
+20	SampleTestApp	SampleTestApp@sitenv.org	Sample Test App	Pea0nR60XcrN+0poQg02+w==	2016-09-17 20:24:14.855622	\N	t
+21	sampletester	sampletester@sitenv.org	Sample Tester	Pea0nR60XcrN+0poQg02+w==	2016-09-17 20:25:55.170411	\N	t
+22	deploytest	deploytest@test.com	Deploy Test	rgeT01JiJx2fHdQ4Io34mQ==	2016-09-20 17:45:10.452936	\N	t
+26	prabhugowda	prabhu@gmail.com	Prabhu	KoqwMkS1bxK+RB8zBUGqFQ==	2016-10-04 15:16:51.553298	\N	t
+27	fhirtest	fhirtest@sitenv.org	FHIR Test 	yYUu1aPJnMH4SF5LwFusxA==	2016-10-04 15:52:27.174451	\N	t
+28	ashanbhag	AvinashShanbhag@gmail.com	Avinash Shanbhag	Uo05bHBsKBkTeMU472t4Gg==	2016-10-04 19:43:09.459371	\N	t
+29	johnrsnyder	john.snyder2@hhs.gov	John Snyder	P6krWaLNJi5WGdODFojHHg==	2016-10-06 13:31:49.575152	\N	t
+30	demouser1	demouser1@sitenv.org	Demo User	hlD1KS+XSXFqsEJNawt6FQ==	2016-10-17 13:31:57.932633	\N	t
+34	tester	activetester@gmail.com	active tester	cuyKsCD9vrZrC948soUYlQ==	2016-11-01 14:05:16.196894	\N	t
+35	tester1	activetester506@gmail.com	tester a	cuyKsCD9vrZrC948soUYlQ==	2016-11-01 14:06:42.120857	\N	t
+36	kkkk	activetester506@gmail.com	ddd	cuyKsCD9vrZrC948soUYlQ==	2016-11-01 14:09:13.990011	\N	t
+37	ttttttttttttttttt	activetester506@gmail.com	jjjjj	cuyKsCD9vrZrC948soUYlQ==	2016-11-01 14:27:16.761879	\N	t
+38	test	activetester506@gmail.com	testerrrrr	AXJRUqQIbtSzgfBN9M+Aog==	2016-11-01 14:34:06.584098	\N	t
+39	tester101	activetester5106@gmail.com	testertests	wB6SwUo5zTBjOWDNb7NFng==	2016-11-01 14:36:51.591525	\N	t
+40	amore	a@abc.com	test account	OHepkQemzzAyp53WGQsNXg==	2016-11-01 19:12:44.173208	\N	t
+41	JSnyder	john.snyder2@hhs.gov	John Snyder	P6krWaLNJi5WGdODFojHHg==	2016-11-03 15:33:13.221757	\N	t
+42	rickybloomfield	onc@rickybloomfield.com	Ricky Bloomfield	zhwjV1iigCrZGxYt/UkSDw==	2016-12-03 18:14:43.080297	\N	t
+43	pp	pascal.pfiffner@childrens.harvard.edu	Pascal	4zcFdIrm1DRQ/6f6lnO1ew==	2016-12-06 14:04:58.360511	\N	t
+44	amore1	amore@ainq.com	Ashwini More	OHepkQemzzAyp53WGQsNXg==	2016-12-15 15:04:48.702446	\N	t
+45	releasetest	release@dec.com	Release	rgeT01JiJx2fHdQ4Io34mQ==	2016-12-16 09:04:41.264203	\N	t
+46	abc	abc@abc.com	abc	P0g+7AutD0lfUZfNl/K1LA==	2017-01-06 12:57:50.422325	\N	t
+47	medent	medentci@gmail.com	MEDENT	k02gTXfOaw6maWtizavifQ==	2017-02-17 15:33:01.865972	\N	t
+48	yogendras	yogendra.shelke@citiustech.com	Yogendra Shelke	20CdnRmHbGMlDB10+RVOCw==	2017-03-10 12:36:38.908695	\N	t
+49	demouser	demouser@sitenv.org	Demo User	X+zyYwGOEw44HEp8JBBkJg==	2017-06-22 21:03:49.930187	\N	t
+50	tarunkumar	tarunkumar985@gmail.com	tarun	rgeT01JiJx2fHdQ4Io34mQ==	2019-04-29 10:02:37.351805	\N	t
 \.
 
 
 --
--- TOC entry 2719 (class 0 OID 0)
--- Dependencies: 262
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 49, true);
+SELECT pg_catalog.setval('public.users_user_id_seq', 50, true);
 
 
 --
--- TOC entry 2310 (class 2606 OID 17358)
--- Name: allergy_intolerance allergy_intolerance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: allergy_intolerance_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.allergy_intolerance
@@ -3196,8 +3022,7 @@ ALTER TABLE ONLY public.allergy_intolerance
 
 
 --
--- TOC entry 2312 (class 2606 OID 17360)
--- Name: auth_temp auth_temp_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: auth_temp_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.auth_temp
@@ -3205,8 +3030,7 @@ ALTER TABLE ONLY public.auth_temp
 
 
 --
--- TOC entry 2315 (class 2606 OID 17362)
--- Name: authenticator authenticator_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: authenticator_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.authenticator
@@ -3214,8 +3038,7 @@ ALTER TABLE ONLY public.authenticator
 
 
 --
--- TOC entry 2317 (class 2606 OID 17364)
--- Name: author author_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: author_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.author
@@ -3223,8 +3046,7 @@ ALTER TABLE ONLY public.author
 
 
 --
--- TOC entry 2323 (class 2606 OID 17366)
--- Name: careteam_participant careteam_participant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: careteam_participant_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.careteam_participant
@@ -3232,8 +3054,7 @@ ALTER TABLE ONLY public.careteam_participant
 
 
 --
--- TOC entry 2319 (class 2606 OID 17368)
--- Name: careplan careteam_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: careteam_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.careplan
@@ -3241,8 +3062,7 @@ ALTER TABLE ONLY public.careplan
 
 
 --
--- TOC entry 2321 (class 2606 OID 17370)
--- Name: careteam careteam_pkey1; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: careteam_pkey1; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.careteam
@@ -3250,8 +3070,7 @@ ALTER TABLE ONLY public.careteam
 
 
 --
--- TOC entry 2325 (class 2606 OID 17372)
--- Name: clients clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.clients
@@ -3259,8 +3078,7 @@ ALTER TABLE ONLY public.clients
 
 
 --
--- TOC entry 2328 (class 2606 OID 17374)
--- Name: condition condition_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: condition_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.condition
@@ -3268,8 +3086,7 @@ ALTER TABLE ONLY public.condition
 
 
 --
--- TOC entry 2330 (class 2606 OID 17376)
--- Name: confidentiality confidentiality_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: confidentiality_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.confidentiality
@@ -3277,8 +3094,7 @@ ALTER TABLE ONLY public.confidentiality
 
 
 --
--- TOC entry 2332 (class 2606 OID 17378)
--- Name: content content_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: content_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.content
@@ -3286,8 +3102,7 @@ ALTER TABLE ONLY public.content
 
 
 --
--- TOC entry 2334 (class 2606 OID 17380)
--- Name: context_event context_event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: context_event_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.context_event
@@ -3295,8 +3110,7 @@ ALTER TABLE ONLY public.context_event
 
 
 --
--- TOC entry 2336 (class 2606 OID 17382)
--- Name: context_facility_type context_facility_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: context_facility_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.context_facility_type
@@ -3304,8 +3118,7 @@ ALTER TABLE ONLY public.context_facility_type
 
 
 --
--- TOC entry 2338 (class 2606 OID 17384)
--- Name: context_period context_period_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: context_period_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.context_period
@@ -3313,8 +3126,7 @@ ALTER TABLE ONLY public.context_period
 
 
 --
--- TOC entry 2340 (class 2606 OID 17386)
--- Name: custodian custodian_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: custodian_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.custodian
@@ -3322,8 +3134,7 @@ ALTER TABLE ONLY public.custodian
 
 
 --
--- TOC entry 2342 (class 2606 OID 17388)
--- Name: device device_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: device_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.device
@@ -3331,8 +3142,7 @@ ALTER TABLE ONLY public.device
 
 
 --
--- TOC entry 2344 (class 2606 OID 17390)
--- Name: diagnosticreport diagnosticreport_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: diagnosticreport_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.diagnosticreport
@@ -3340,8 +3150,7 @@ ALTER TABLE ONLY public.diagnosticreport
 
 
 --
--- TOC entry 2347 (class 2606 OID 17392)
--- Name: doc_class_codes doc_class_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: doc_class_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.doc_class_codes
@@ -3349,8 +3158,7 @@ ALTER TABLE ONLY public.doc_class_codes
 
 
 --
--- TOC entry 2349 (class 2606 OID 17394)
--- Name: doc_type_codes doc_type_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: doc_type_codes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.doc_type_codes
@@ -3358,8 +3166,7 @@ ALTER TABLE ONLY public.doc_type_codes
 
 
 --
--- TOC entry 2353 (class 2606 OID 17396)
--- Name: document_reference_json document_reference_json_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: document_reference_json_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.document_reference_json
@@ -3367,8 +3174,7 @@ ALTER TABLE ONLY public.document_reference_json
 
 
 --
--- TOC entry 2351 (class 2606 OID 17398)
--- Name: document_reference document_reference_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: document_reference_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3376,8 +3182,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2355 (class 2606 OID 17400)
--- Name: goals goals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: goals_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.goals
@@ -3385,8 +3190,7 @@ ALTER TABLE ONLY public.goals
 
 
 --
--- TOC entry 2357 (class 2606 OID 17402)
--- Name: immunization immunization_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: immunization_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.immunization
@@ -3394,8 +3198,15 @@ ALTER TABLE ONLY public.immunization
 
 
 --
--- TOC entry 2359 (class 2606 OID 17404)
--- Name: location location_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: jwks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY public.jwks
+    ADD CONSTRAINT jwks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: location_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.location
@@ -3403,8 +3214,7 @@ ALTER TABLE ONLY public.location
 
 
 --
--- TOC entry 2362 (class 2606 OID 17406)
--- Name: manufacturer manufacturer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: manufacturer_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.manufacturer
@@ -3412,8 +3222,7 @@ ALTER TABLE ONLY public.manufacturer
 
 
 --
--- TOC entry 2364 (class 2606 OID 17408)
--- Name: marital_status marital_status_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: marital_status_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.marital_status
@@ -3421,8 +3230,7 @@ ALTER TABLE ONLY public.marital_status
 
 
 --
--- TOC entry 2369 (class 2606 OID 17410)
--- Name: medication_administration medication_administration_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_administration_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.medication_administration
@@ -3430,8 +3238,7 @@ ALTER TABLE ONLY public.medication_administration
 
 
 --
--- TOC entry 2372 (class 2606 OID 17412)
--- Name: medication_dispense medication_dispense_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_dispense_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.medication_dispense
@@ -3439,8 +3246,7 @@ ALTER TABLE ONLY public.medication_dispense
 
 
 --
--- TOC entry 2366 (class 2606 OID 17414)
--- Name: medication medication_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.medication
@@ -3448,8 +3254,7 @@ ALTER TABLE ONLY public.medication
 
 
 --
--- TOC entry 2374 (class 2606 OID 17416)
--- Name: medication_request medication_request_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_request_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.medication_request
@@ -3457,8 +3262,7 @@ ALTER TABLE ONLY public.medication_request
 
 
 --
--- TOC entry 2377 (class 2606 OID 17418)
--- Name: medication_statement medication_statement_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_statement_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.medication_statement
@@ -3466,8 +3270,7 @@ ALTER TABLE ONLY public.medication_statement
 
 
 --
--- TOC entry 2379 (class 2606 OID 17420)
--- Name: observation observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: observation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.observation
@@ -3475,8 +3278,7 @@ ALTER TABLE ONLY public.observation
 
 
 --
--- TOC entry 2382 (class 2606 OID 17422)
--- Name: organization organization_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: organization_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.organization
@@ -3484,8 +3286,7 @@ ALTER TABLE ONLY public.organization
 
 
 --
--- TOC entry 2388 (class 2606 OID 17424)
--- Name: patient_contact patient_contact_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: patient_contact_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.patient_contact
@@ -3493,8 +3294,7 @@ ALTER TABLE ONLY public.patient_contact
 
 
 --
--- TOC entry 2385 (class 2606 OID 17426)
--- Name: patient patient_doc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: patient_doc_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.patient
@@ -3502,8 +3302,7 @@ ALTER TABLE ONLY public.patient
 
 
 --
--- TOC entry 2390 (class 2606 OID 17428)
--- Name: patient_json patient_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: patient_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.patient_json
@@ -3511,8 +3310,7 @@ ALTER TABLE ONLY public.patient_json
 
 
 --
--- TOC entry 2392 (class 2606 OID 17430)
--- Name: practitioner practitioner_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: practitioner_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.practitioner
@@ -3520,8 +3318,7 @@ ALTER TABLE ONLY public.practitioner
 
 
 --
--- TOC entry 2394 (class 2606 OID 17432)
--- Name: procedure procedure_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: procedure_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.procedure
@@ -3529,8 +3326,7 @@ ALTER TABLE ONLY public.procedure
 
 
 --
--- TOC entry 2397 (class 2606 OID 17434)
--- Name: questionnaire questionnaire_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: questionnaire_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.questionnaire
@@ -3538,8 +3334,7 @@ ALTER TABLE ONLY public.questionnaire
 
 
 --
--- TOC entry 2400 (class 2606 OID 17436)
--- Name: questionnaireresponse questionnaireresponse_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: questionnaireresponse_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.questionnaireresponse
@@ -3547,8 +3342,7 @@ ALTER TABLE ONLY public.questionnaireresponse
 
 
 --
--- TOC entry 2403 (class 2606 OID 17438)
--- Name: register register_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: register_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.register
@@ -3556,8 +3350,7 @@ ALTER TABLE ONLY public.register
 
 
 --
--- TOC entry 2405 (class 2606 OID 17440)
--- Name: us_core_birthsex us_core_birthsex_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: us_core_birthsex_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.us_core_birthsex
@@ -3565,8 +3358,7 @@ ALTER TABLE ONLY public.us_core_birthsex
 
 
 --
--- TOC entry 2407 (class 2606 OID 17442)
--- Name: us_core_ethnicity us_core_ethnicity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: us_core_ethnicity_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.us_core_ethnicity
@@ -3574,8 +3366,7 @@ ALTER TABLE ONLY public.us_core_ethnicity
 
 
 --
--- TOC entry 2409 (class 2606 OID 17444)
--- Name: us_core_race us_core_race_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: us_core_race_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.us_core_race
@@ -3583,8 +3374,7 @@ ALTER TABLE ONLY public.us_core_race
 
 
 --
--- TOC entry 2411 (class 2606 OID 17446)
--- Name: us_core_religion us_core_religion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: us_core_religion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.us_core_religion
@@ -3592,8 +3382,7 @@ ALTER TABLE ONLY public.us_core_religion
 
 
 --
--- TOC entry 2413 (class 2606 OID 17448)
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY public.users
@@ -3601,120 +3390,112 @@ ALTER TABLE ONLY public.users
 
 
 --
--- TOC entry 2367 (class 1259 OID 17449)
--- Name: fki_medication_administration_prescription_fkey; Type: INDEX; Schema: public; Owner: postgres
+-- Name: fki_medication_administration_prescription_fkey; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE INDEX fki_medication_administration_prescription_fkey ON public.medication_administration USING btree (prescription);
 
 
 --
--- TOC entry 2370 (class 1259 OID 17450)
--- Name: fki_medication_dispense_authorizingprescription_fkey; Type: INDEX; Schema: public; Owner: postgres
+-- Name: fki_medication_dispense_authorizingprescription_fkey; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE INDEX fki_medication_dispense_authorizingprescription_fkey ON public.medication_dispense USING btree (authorizingprescription);
 
 
 --
--- TOC entry 2386 (class 1259 OID 17451)
--- Name: fki_pk_patient; Type: INDEX; Schema: public; Owner: postgres
+-- Name: fki_pk_patient; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE INDEX fki_pk_patient ON public.patient_contact USING btree (patient_id);
 
 
 --
--- TOC entry 2313 (class 1259 OID 17452)
--- Name: xpkauth_temp; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkauth_temp; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkauth_temp ON public.auth_temp USING btree (id);
 
 
 --
--- TOC entry 2326 (class 1259 OID 17453)
--- Name: xpkclients; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkclients; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkclients ON public.clients USING btree (id);
 
 
 --
--- TOC entry 2345 (class 1259 OID 17454)
--- Name: xpkdiagnosticreport; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkdiagnosticreport; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkdiagnosticreport ON public.diagnosticreport USING btree (id);
 
 
 --
--- TOC entry 2360 (class 1259 OID 17455)
--- Name: xpklocation; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkjwks; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX xpkjwks ON public.jwks USING btree (id);
+
+
+--
+-- Name: xpklocation; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpklocation ON public.location USING btree (location_id);
 
 
 --
--- TOC entry 2375 (class 1259 OID 17456)
--- Name: xpkmedicationrequest; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkmedicationrequest; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkmedicationrequest ON public.medication_request USING btree (id);
 
 
 --
--- TOC entry 2380 (class 1259 OID 17457)
--- Name: xpkobservation; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkobservation; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkobservation ON public.observation USING btree (id);
 
 
 --
--- TOC entry 2383 (class 1259 OID 17458)
--- Name: xpkorganization; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkorganization; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkorganization ON public.organization USING btree (id);
 
 
 --
--- TOC entry 2395 (class 1259 OID 17459)
--- Name: xpkprocedure; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkprocedure; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkprocedure ON public.procedure USING btree (procedure_id);
 
 
 --
--- TOC entry 2398 (class 1259 OID 17460)
--- Name: xpkquestionnaire; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkquestionnaire; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkquestionnaire ON public.questionnaire USING btree (id);
 
 
 --
--- TOC entry 2401 (class 1259 OID 17461)
--- Name: xpkquestionnaireresponse; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkquestionnaireresponse; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkquestionnaireresponse ON public.questionnaireresponse USING btree (qr_id);
 
 
 --
--- TOC entry 2414 (class 1259 OID 17462)
--- Name: xpkusers; Type: INDEX; Schema: public; Owner: postgres
+-- Name: xpkusers; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE UNIQUE INDEX xpkusers ON public.users USING btree (user_id);
 
 
 --
--- TOC entry 2415 (class 2606 OID 17463)
--- Name: allergy_intolerance allergy_intolerance_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: allergy_intolerance_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.allergy_intolerance
@@ -3722,8 +3503,7 @@ ALTER TABLE ONLY public.allergy_intolerance
 
 
 --
--- TOC entry 2416 (class 2606 OID 17468)
--- Name: allergy_intolerance allergy_intolerance_recorder_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: allergy_intolerance_recorder_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.allergy_intolerance
@@ -3731,8 +3511,7 @@ ALTER TABLE ONLY public.allergy_intolerance
 
 
 --
--- TOC entry 2417 (class 2606 OID 17473)
--- Name: careplan careteam_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: careteam_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.careplan
@@ -3740,8 +3519,7 @@ ALTER TABLE ONLY public.careplan
 
 
 --
--- TOC entry 2419 (class 2606 OID 17478)
--- Name: careteam_participant careteam_participant_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: careteam_participant_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.careteam_participant
@@ -3749,8 +3527,7 @@ ALTER TABLE ONLY public.careteam_participant
 
 
 --
--- TOC entry 2418 (class 2606 OID 17483)
--- Name: careteam careteam_subject_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: careteam_subject_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.careteam
@@ -3758,8 +3535,7 @@ ALTER TABLE ONLY public.careteam
 
 
 --
--- TOC entry 2421 (class 2606 OID 17488)
--- Name: condition condition_asserter_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: condition_asserter_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.condition
@@ -3767,8 +3543,7 @@ ALTER TABLE ONLY public.condition
 
 
 --
--- TOC entry 2422 (class 2606 OID 17493)
--- Name: condition condition_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: condition_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.condition
@@ -3776,8 +3551,7 @@ ALTER TABLE ONLY public.condition
 
 
 --
--- TOC entry 2423 (class 2606 OID 17498)
--- Name: diagnosticreport d_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: d_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.diagnosticreport
@@ -3785,8 +3559,7 @@ ALTER TABLE ONLY public.diagnosticreport
 
 
 --
--- TOC entry 2424 (class 2606 OID 17503)
--- Name: diagnosticreport d_3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: d_3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.diagnosticreport
@@ -3794,8 +3567,7 @@ ALTER TABLE ONLY public.diagnosticreport
 
 
 --
--- TOC entry 2425 (class 2606 OID 17508)
--- Name: document_reference fk_1q8mubdgsfl88xgdt750e560x; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_1q8mubdgsfl88xgdt750e560x; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3803,8 +3575,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2426 (class 2606 OID 17513)
--- Name: document_reference fk_1tahe0pbr48tgj7xc4ulobsig; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_1tahe0pbr48tgj7xc4ulobsig; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3812,8 +3583,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2427 (class 2606 OID 17518)
--- Name: document_reference fk_3gk0pg0vulct3w40wi905ks16; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_3gk0pg0vulct3w40wi905ks16; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3821,8 +3591,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2428 (class 2606 OID 17523)
--- Name: document_reference fk_3t1eqf1xm3b8lmxkpwnnp59gd; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_3t1eqf1xm3b8lmxkpwnnp59gd; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3830,8 +3599,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2429 (class 2606 OID 17528)
--- Name: document_reference fk_42jdseen1dnvmjflubsm8rwi7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_42jdseen1dnvmjflubsm8rwi7; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3839,8 +3607,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2448 (class 2606 OID 17533)
--- Name: patient_json fk_58gwuapkd08tmx6uf5k1cig59; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_58gwuapkd08tmx6uf5k1cig59; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_json
@@ -3848,8 +3615,7 @@ ALTER TABLE ONLY public.patient_json
 
 
 --
--- TOC entry 2430 (class 2606 OID 17538)
--- Name: document_reference fk_bm380fauc5j7uwk7lqrodgs23; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_bm380fauc5j7uwk7lqrodgs23; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3857,8 +3623,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2431 (class 2606 OID 17543)
--- Name: document_reference fk_c4l8hv3yg0v441sgp9qinq5rf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_c4l8hv3yg0v441sgp9qinq5rf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3866,8 +3631,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2432 (class 2606 OID 17548)
--- Name: document_reference fk_cn20r185drl23h6pu3unu1b5s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_cn20r185drl23h6pu3unu1b5s; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3875,8 +3639,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2433 (class 2606 OID 17553)
--- Name: document_reference fk_driop6965u0ksfbo97k3cidxx; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_driop6965u0ksfbo97k3cidxx; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3884,8 +3647,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2434 (class 2606 OID 17558)
--- Name: document_reference fk_ev4f774kix0uty1dv54iscodl; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_ev4f774kix0uty1dv54iscodl; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3893,8 +3655,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2435 (class 2606 OID 17563)
--- Name: document_reference fk_l9kjioygwvrangj6e6bupdtf3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_l9kjioygwvrangj6e6bupdtf3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.document_reference
@@ -3902,8 +3663,7 @@ ALTER TABLE ONLY public.document_reference
 
 
 --
--- TOC entry 2449 (class 2606 OID 17568)
--- Name: patient_json fk_pjbofgtkq12fic92k5jfma1j0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_pjbofgtkq12fic92k5jfma1j0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_json
@@ -3911,8 +3671,7 @@ ALTER TABLE ONLY public.patient_json
 
 
 --
--- TOC entry 2450 (class 2606 OID 17573)
--- Name: patient_json fk_pvkw0gqb5hv0ilubxj2hr1y0k; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_pvkw0gqb5hv0ilubxj2hr1y0k; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_json
@@ -3920,8 +3679,7 @@ ALTER TABLE ONLY public.patient_json
 
 
 --
--- TOC entry 2451 (class 2606 OID 17578)
--- Name: patient_json fk_rvpuetwi19rnx82s8a9n9130m; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_rvpuetwi19rnx82s8a9n9130m; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_json
@@ -3929,8 +3687,7 @@ ALTER TABLE ONLY public.patient_json
 
 
 --
--- TOC entry 2452 (class 2606 OID 17583)
--- Name: patient_json fk_usbirthsex; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: fk_usbirthsex; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_json
@@ -3938,8 +3695,7 @@ ALTER TABLE ONLY public.patient_json
 
 
 --
--- TOC entry 2437 (class 2606 OID 17588)
--- Name: medication_administration medication_administration_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_administration_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_administration
@@ -3947,8 +3703,7 @@ ALTER TABLE ONLY public.medication_administration
 
 
 --
--- TOC entry 2438 (class 2606 OID 17593)
--- Name: medication_administration medication_administration_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_administration_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_administration
@@ -3956,8 +3711,7 @@ ALTER TABLE ONLY public.medication_administration
 
 
 --
--- TOC entry 2439 (class 2606 OID 17598)
--- Name: medication_administration medication_administration_prescription_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_administration_prescription_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_administration
@@ -3965,8 +3719,7 @@ ALTER TABLE ONLY public.medication_administration
 
 
 --
--- TOC entry 2440 (class 2606 OID 17603)
--- Name: medication_dispense medication_dispense_authorizingprescription_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_dispense_authorizingprescription_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_dispense
@@ -3974,8 +3727,7 @@ ALTER TABLE ONLY public.medication_dispense
 
 
 --
--- TOC entry 2441 (class 2606 OID 17608)
--- Name: medication_dispense medication_dispense_dispenser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_dispense_dispenser_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_dispense
@@ -3983,8 +3735,7 @@ ALTER TABLE ONLY public.medication_dispense
 
 
 --
--- TOC entry 2442 (class 2606 OID 17613)
--- Name: medication_dispense medication_dispense_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_dispense_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_dispense
@@ -3992,8 +3743,7 @@ ALTER TABLE ONLY public.medication_dispense
 
 
 --
--- TOC entry 2443 (class 2606 OID 17618)
--- Name: medication_dispense medication_dispense_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_dispense_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_dispense
@@ -4001,8 +3751,7 @@ ALTER TABLE ONLY public.medication_dispense
 
 
 --
--- TOC entry 2436 (class 2606 OID 17623)
--- Name: medication medication_med_manufacturer_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_med_manufacturer_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication
@@ -4010,8 +3759,7 @@ ALTER TABLE ONLY public.medication
 
 
 --
--- TOC entry 2444 (class 2606 OID 17628)
--- Name: medication_statement medication_statement_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_statement_medicationreference_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_statement
@@ -4019,8 +3767,7 @@ ALTER TABLE ONLY public.medication_statement
 
 
 --
--- TOC entry 2445 (class 2606 OID 17633)
--- Name: medication_statement medication_statement_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: medication_statement_patient_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.medication_statement
@@ -4028,8 +3775,7 @@ ALTER TABLE ONLY public.medication_statement
 
 
 --
--- TOC entry 2446 (class 2606 OID 17638)
--- Name: observation o_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: o_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.observation
@@ -4037,8 +3783,7 @@ ALTER TABLE ONLY public.observation
 
 
 --
--- TOC entry 2453 (class 2606 OID 17643)
--- Name: procedure p_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: p_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.procedure
@@ -4046,8 +3791,7 @@ ALTER TABLE ONLY public.procedure
 
 
 --
--- TOC entry 2447 (class 2606 OID 17648)
--- Name: patient_contact pk_patient; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pk_patient; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.patient_contact
@@ -4055,8 +3799,7 @@ ALTER TABLE ONLY public.patient_contact
 
 
 --
--- TOC entry 2454 (class 2606 OID 17653)
--- Name: questionnaireresponse r_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: r_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.questionnaireresponse
@@ -4064,15 +3807,22 @@ ALTER TABLE ONLY public.questionnaireresponse
 
 
 --
--- TOC entry 2420 (class 2606 OID 17658)
--- Name: clients r_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: r_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.clients
     ADD CONSTRAINT r_1 FOREIGN KEY (user_id) REFERENCES public.users(user_id);
 
 
--- Completed on 2018-06-27 20:41:21
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
 
 --
 -- PostgreSQL database dump complete

@@ -258,6 +258,7 @@ public class TokenEndPoint extends HttpServlet {
 
 								JSONObject jsonOb = new JSONObject();
 								jsonOb.put("access_token", accessToken);
+								jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 								jsonOb.put("token_type", "bearer");
 								jsonOb.put("expires_in", "3600"); // 3600 second is 1hour
 								jsonOb.put("scope", stringScope.toString());

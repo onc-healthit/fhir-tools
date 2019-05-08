@@ -291,14 +291,14 @@
                                         <ul style="list-style:outside none disc;">
                                             <li style="margin-bottom:8px;">
                                                 Create a user account in the FHIR Authorization Server:
-                                                Follow instructions <a href="<a href="<%=request.getScheme() + "://" +
+                                                Follow instructions <a href="<%=request.getScheme() + "://" +
                                                     request.getServerName() +
                                                     ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
                                             %>/secure/stu3/view/newuser.html" target="_blank">here</a> for user creation.
                                             </li>
                                             <li style="margin-bottom:8px;">
                                                 Login and Register a client so that you can get the Client Id and  Client Secret.
-                                                Follow instructions <a href="<a href="<%=request.getScheme() + "://" +
+                                                Follow instructions <a href="<%=request.getScheme() + "://" +
                                                     request.getServerName() +
                                                     ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
                                             %>/secure/stu3/view/clients.html" target="_blank">here</a> for client registration.

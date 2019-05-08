@@ -65,7 +65,7 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
         Criteria crit = getSession().createCriteria(DafClientRegister.class)
                 .add(Restrictions.eq("client_id", clientId));
 
-        //if(clientSecret != null)  crit.add(Restrictions.eq("client_secret", clientSecret));
+        if(clientSecret != null)  crit.add(Restrictions.eq("client_secret", clientSecret));
 
         DafClientRegister client = (DafClientRegister) crit.uniqueResult();
         return client;

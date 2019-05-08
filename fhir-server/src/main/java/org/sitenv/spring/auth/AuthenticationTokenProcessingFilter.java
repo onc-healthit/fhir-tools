@@ -53,16 +53,22 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                     Integer currentTime = Common.convertTimestampToUnixTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis())));
                     if (Common.convertTimestampToUnixTime(expiryTime) + 3600 > currentTime) {
                         List<String> scopes = Arrays.asList(authentication.getScope().split(","));
-                        List<String> patientScopes = Arrays.asList("launch/patient,patient/Patient.read,user/Patient.read".split(","));
-                        List<String> userScopes = Arrays.asList("user/*.read,user/*.*,patient/*.read,fhir_complete".split(","));
-
-                        if (CollectionUtils.containsAny(scopes, userScopes)) {
+                        
+                       	if (scopes.contains("user/*.*") && httpRequest.getRequestURI().contains("/fhir/")){
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (CollectionUtils.containsAny(scopes, patientScopes) && httpRequest.getRequestURI().contains("/fhir/Patient")) {
-                            if (scopes.contains("launch/patient") && !httpRequest.getPathInfo().split("/", 3)[2].equals(String.valueOf(authentication.getLaunchPatientId()))) {
-                                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Access is denied for this Patient");
-                            }
+                            
+                       	}  else  if (scopes.contains("user/*.read") && httpRequest.getRequestURI().contains("/fhir/")){
+                                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                                chain.doFilter(request, response);
+                            
+                        } else if (scopes.contains("patient/*.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if (scopes.contains("patient/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                                chain.doFilter(request, response);
+                        } else if (scopes.contains("user/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
                         } else if (scopes.contains("patient/DocumentReference.read") && httpRequest.getRequestURI().contains("/fhir/DocumentReference")) {
@@ -91,10 +97,6 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
             getServletContext().getRequestDispatcher("/.well-known/smart-configuration").forward(request, response);
         }
         else if (httpRequest.getRequestURI().contains("/jwk")) {
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
-            chain.doFilter(request, response);
-        }
-        else if (httpRequest.getRequestURI().contains("/fhirserver")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         }

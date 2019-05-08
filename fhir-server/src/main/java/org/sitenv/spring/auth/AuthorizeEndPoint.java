@@ -135,7 +135,7 @@ public class AuthorizeEndPoint extends HttpServlet {
                             response.sendRedirect(url.trim());
                         } else {
                             DafUserRegister user = userService.getUserById(client.getUserId());
-                            String url = uri + "/authentication.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim();
+                            String url = uri + "/authentication.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim() + "&cName=" +client.getName().trim();
                             response.sendRedirect(url);
                         }
                     } else {
@@ -220,21 +220,19 @@ public class AuthorizeEndPoint extends HttpServlet {
                 request.getServerName() +
                 ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort())
                 + request.getContextPath();
-		if (user != null) {
-			String scope = tempAuth.getScope();
-			String[] arrayScope = scope.split(",");
-			for (String a : arrayScope) {
-				
-				if ((a.equals("openid"))) {
-
-					String authScope = tempAuth.getScope();
-					tempAuth.setScope(authScope);
-					dao.saveOrUpdate(tempAuth);
-				}
-			}
-            String url = uri + "/authentication.jsp?client_id=" + tempAuth.getClient_id() + "&redirect_uri=" + tempAuth.getRedirect_uri().trim() + "&scope=" + tempAuth.getScope().trim() + "&state=" + tempAuth.getState().trim() + "&transaction_id=" + tempAuth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim();
-            response.sendRedirect(url);
-        } else {
+        if((user != null) && (tempAuth != null)) {
+        	DafClientRegister client=service.getClient(tempAuth.getClient_id());
+        	int clientUserId=client.getUserId();
+        	int userId=user.getUser_id();
+        
+			if (clientUserId == userId) {
+            	String url = uri + "/authentication.jsp?client_id=" + tempAuth.getClient_id() + "&redirect_uri=" + tempAuth.getRedirect_uri().trim() + "&scope=" + tempAuth.getScope().trim() + "&state=" + tempAuth.getState().trim() + "&transaction_id=" + tempAuth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim()+ "&cName=" +client.getName().trim();
+            	response.sendRedirect(url);
+        	} else {
+            	String url = uri + "/login.jsp?error=Invalid Username or Password.&transaction_id=" + transactionId.trim();
+            	response.sendRedirect(url);
+        } 
+	}else {
             String url = uri + "/login.jsp?error=Invalid Username or Password.&transaction_id=" + transactionId.trim();
             response.sendRedirect(url);
         }

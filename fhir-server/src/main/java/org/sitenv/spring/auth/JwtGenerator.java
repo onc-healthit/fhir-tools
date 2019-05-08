@@ -1,18 +1,13 @@
 package org.sitenv.spring.auth;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.Key;
-import java.security.KeyFactory;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.RSAPublicKeySpec;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,10 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.sitenv.spring.dao.JwksDao;
 import org.sitenv.spring.model.Jwks;
 import org.slf4j.Logger;
@@ -35,8 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -59,12 +48,6 @@ import com.nimbusds.jose.util.JSONObjectUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SigningKeyResolver;
-import io.jsonwebtoken.SigningKeyResolverAdapter;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
 
@@ -73,10 +56,7 @@ public class JwtGenerator {
 	RSAKey rsaJWK = null;
 	JWK jwk = null;
 
-	private ObjectMapper mapper = new ObjectMapper();
-    private CloseableHttpClient httpclient = HttpClients.createDefault();
-    private TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {};
-	
+		
     Logger log = (Logger) LoggerFactory.getLogger(JwtGenerator.class);
     
 	@Autowired
@@ -117,9 +97,6 @@ public class JwtGenerator {
 				jwks.setJwk(rsaKey.toString());
 				jwks.setLastUpdatedDatetime(Common.convertToDateFormat(timeStamp));
 				jwksDao.saveOrUpdate(jwks);
-				
-				//jwksDao.updateById(i, rsaKey.toString());
-				System.out.println("This RSA key  " + rsaKey);
 			}
 		}
 
@@ -221,7 +198,6 @@ public class JwtGenerator {
 				rsaJWK = RSAKey.parse(jsonObject);
 
 				JWK publicKey = rsaJWK.toPublicJWK();
-				System.out.println("public key  --"+publicKey);
 				list.add(publicKey);
 				publicKeyList.add(publicKey.toJSONObject());
 			}

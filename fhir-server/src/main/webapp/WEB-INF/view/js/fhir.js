@@ -181,7 +181,7 @@
 		var clientscope = $('#clientscope option:selected').attr('value');
 		var redirecturi = $('#redirecturi').val();
 		if(redirecturi == '' || redirecturi == undefined){
-			bootbox.alert("Please enter Redirect URI");
+			bootbox.alert("Please enter Redirect URL");
 			return false;
 		}
 		//sessionStorage.setItem("redirecturi", redirecturi);

@@ -147,7 +147,7 @@
 			        editredirecturi:{
 			        	validators:{
 			            	notEmpty: {
-			                	message: 'Redirect URI is required'
+			                	message: 'Redirect URL is required'
 			                }
 			            }
 			        },
@@ -155,7 +155,7 @@
 			        editlaunchUri: {
                         validators: {
                             notEmpty: {
-                                message: 'Launch URI is required'
+                                message: 'Launch URL is required'
                             }
                         }
                     },
@@ -414,14 +414,14 @@
 		                redirecturi:{
 		                    validators:{
 		                        notEmpty: {
-		                            message: 'Redirect URI is required'
+		                            message: 'Redirect URL is required'
 		                        }
 		                    }
 		                },
                         launchUri: {
                             validators: {
                                 notEmpty: {
-                                    message: 'Launch URI is required'
+                                    message: 'Launch URL is required'
                                 }
                             }
                         },

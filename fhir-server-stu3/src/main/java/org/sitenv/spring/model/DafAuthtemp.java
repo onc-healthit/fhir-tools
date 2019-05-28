@@ -47,7 +47,18 @@ public class DafAuthtemp {
 
     @Column(name = "launch_patient_id")
     private Integer launchPatientId;
+    
+    @Column(name = "id_token", columnDefinition="text")
+    private String idToken;
 
+	public String getIdToken() {
+		return idToken;
+	}
+
+	public void setIdToken(String idToken) {
+		this.idToken = idToken;
+	}
+    
     public int getId() {
         return id;
     }

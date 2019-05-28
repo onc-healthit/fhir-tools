@@ -29,7 +29,7 @@
             e.preventDefault();
 
             var email = $('#resetpassword_emailaddress').val();
-            var urlReq = main_url + "/user/reset-password?email="+email;											 //api
+            var urlReq = main_url + "/user/reset/password?email="+email;											 //api
             console.log(urlReq);
             $.ajax({
                 url: urlReq,

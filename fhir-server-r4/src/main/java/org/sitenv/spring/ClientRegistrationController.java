@@ -1,16 +1,22 @@
 package org.sitenv.spring;
 
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.service.ClientRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/client")
@@ -29,7 +35,7 @@ public class ClientRegistrationController {
      */
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
-    public DafClientRegister registerClient(@RequestBody DafClientRegister client) throws OAuthSystemException, FHIRHapiException {
+    public DafClientRegister registerClient(@RequestBody DafClientRegister client) throws  FHIRHapiException {
 
         return registerService.registerClient(client);
 

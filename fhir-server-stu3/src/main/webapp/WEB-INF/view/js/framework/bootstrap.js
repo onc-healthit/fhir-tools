@@ -10,8 +10,8 @@
 /**
  * This class supports validating Bootstrap form (http://getbootstrap.com/)
  */
-(function ($) {
-    FormValidation.Framework.Bootstrap = function (element, options, namespace) {
+(function($) {
+    FormValidation.Framework.Bootstrap = function(element, options, namespace) {
         options = $.extend(true, {
             button: {
                 selector: '[type="submit"]',
@@ -69,11 +69,11 @@
          * @param {jQuery} $field The field element
          * @param {jQuery} $icon The icon element
          */
-        _fixIcon: function ($field, $icon) {
-            var ns = this._namespace,
-                type = $field.attr('type'),
-                field = $field.attr('data-' + ns + '-field'),
-                row = this.options.fields[field].row || this.options.row.selector,
+        _fixIcon: function($field, $icon) {
+            var ns      = this._namespace,
+                type    = $field.attr('type'),
+                field   = $field.attr('data-' + ns + '-field'),
+                row     = this.options.fields[field].row || this.options.row.selector,
                 $parent = $field.closest(row);
 
             // Place it after the container of checkbox/radio
@@ -95,7 +95,7 @@
             // Fix feedback icons in input-group
             if ($parent.find('.input-group').length !== 0) {
                 $icon.addClass('fv-bootstrap-icon-input-group')
-                    .insertAfter($parent.find('.input-group').eq(0));
+                     .insertAfter($parent.find('.input-group').eq(0));
             }
         },
 
@@ -107,8 +107,8 @@
          * @param {String} message The message
          * @param {String} type Can be 'tooltip' or 'popover'
          */
-        _createTooltip: function ($field, message, type) {
-            var ns = this._namespace,
+        _createTooltip: function($field, message, type) {
+            var ns    = this._namespace,
                 $icon = $field.data(ns + '.icon');
             if ($icon) {
                 switch (type) {
@@ -154,8 +154,8 @@
          * @param {jQuery} $field The field element
          * @param {String} type Can be 'tooltip' or 'popover'
          */
-        _destroyTooltip: function ($field, type) {
-            var ns = this._namespace,
+        _destroyTooltip: function($field, type) {
+            var ns    = this._namespace,
                 $icon = $field.data(ns + '.icon');
             if ($icon) {
                 switch (type) {
@@ -188,8 +188,8 @@
          * @param {jQuery} $field The field element
          * @param {String} type Can be 'tooltip' or 'popover'
          */
-        _hideTooltip: function ($field, type) {
-            var ns = this._namespace,
+        _hideTooltip: function($field, type) {
+            var ns    = this._namespace,
                 $icon = $field.data(ns + '.icon');
             if ($icon) {
                 switch (type) {
@@ -212,8 +212,8 @@
          * @param {jQuery} $field The field element
          * @param {String} type Can be 'tooltip' or 'popover'
          */
-        _showTooltip: function ($field, type) {
-            var ns = this._namespace,
+        _showTooltip: function($field, type) {
+            var ns    = this._namespace,
                 $icon = $field.data(ns + '.icon');
             if ($icon) {
                 switch (type) {
@@ -239,11 +239,11 @@
      *      framework: 'bootstrap'  // It's equivalent to use data-fv-framework="bootstrap" for <form>
      *  });
      */
-    $.fn.bootstrapValidator = function (option) {
+    $.fn.bootstrapValidator = function(option) {
         var params = arguments;
-        return this.each(function () {
-            var $this = $(this),
-                data = $this.data('formValidation') || $this.data('bootstrapValidator'),
+        return this.each(function() {
+            var $this   = $(this),
+                data    = $this.data('formValidation') || $this.data('bootstrapValidator'),
                 options = 'object' === typeof option && option;
             if (!data) {
                 data = new FormValidation.Framework.Bootstrap(this, $.extend({}, {
@@ -265,8 +265,8 @@
                 }, options), 'bv');
 
                 $this.addClass('fv-form-bootstrap')
-                    .data('formValidation', data)
-                    .data('bootstrapValidator', data);
+                     .data('formValidation', data)
+                     .data('bootstrapValidator', data);
             }
 
             // Allow to call plugin method

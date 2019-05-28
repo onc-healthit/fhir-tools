@@ -1,7 +1,9 @@
 package org.sitenv.spring.service;
 
 import java.util.List;
+
 import javax.transaction.Transactional;
+
 import org.sitenv.spring.dao.DeviceDao;
 import org.sitenv.spring.model.DafDevice;
 import org.sitenv.spring.util.SearchParameterMap;

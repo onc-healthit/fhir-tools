@@ -45,6 +45,13 @@ public class DafClientRegister {
 
     @Column(name = "status")
     private Boolean status;
+    
+    @Column(name = "launch_id")
+    private String launchId;
+
+    @Column(name = "launch_uri")
+    private String launchUri;
+
 
     public int getId() {
         return id;
@@ -141,5 +148,25 @@ public class DafClientRegister {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
+	public String getLaunchId() {
+		return launchId;
+	}
+
+	public void setLaunchId(String launchId) {
+		this.launchId = launchId;
+	}
+
+	public String getLaunchUri() {
+		return launchUri;
+	}
+
+	public void setLaunchUri(String launchUri) {
+		this.launchUri = launchUri;
+	}
+
+	
+
+	
 
 }

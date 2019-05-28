@@ -10,11 +10,13 @@ public interface UserRegistrationService {
 
     public String updateUser(DafUserRegister user);
     
-    public String updateUserPassword(String userName, String password, String oldPassword);
+   
 
     public DafUserRegister getUserById(Integer id);
 
     public DafUserRegister getUserByDetails(String userName, String password, HttpServletRequest request) throws Exception;
+
+    public String updateUserPassword(String userName, String password, String oldPassword);
 
 	public DafUserRegister getUserByEmail(String email);
 

@@ -22,16 +22,13 @@ import java.util.List;
 @Repository("patientDao")
 public class PatientDaoImpl extends AbstractDao implements PatientDao {
 
-
     public DafPatientJson getPatientById(int id) {
         DafPatientJson dafPatientJson = (DafPatientJson) getSession().get(DafPatientJson.class, id);
         return dafPatientJson;
-
     }
 
     @Override
     public List<DafPatientJson> getAllPatient() {
-
         Criteria criteria = getSession().createCriteria(DafPatientJson.class);
         return (List<DafPatientJson>) criteria.list();
     }
@@ -42,7 +39,6 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
     }
 
     public List<DafPatientJson> getPatietnt(PatientSearchCriteria searchOptions) {
-
         Criteria criteria = getSession().createCriteria(DafPatientJson.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         //Identifier

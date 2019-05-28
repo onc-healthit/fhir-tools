@@ -1,5 +1,6 @@
 package org.sitenv.spring.service;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.dao.ClientRegistrationDao;
 import org.sitenv.spring.exception.FHIRHapiException;
@@ -29,24 +30,11 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
 
         String client_secret = CommonUtil.base64Encoder(CommonUtil.generateRandomString(50));
         client.setClient_secret(client_secret);
+        
+       // String clientLaunchId = CommonUtil.base64Encoder(CommonUtil.generateRandomString(8));
+        String clientLaunchId= RandomStringUtils.randomAlphanumeric(8);
+        client.setLaunchId(clientLaunchId);
 
-        /*if (client.getClient_id() == null) {
-            client.setClient_id(client_id);
-        } else {
-            client.setClient_id(client.getClient_id());
-        }
-
-        if (client.getClient_secret() == null) {
-            client.setClient_secret(client_secret);
-        } else {
-            client.setClient_secret(client.getClient_secret());
-        }
-
-        if (client.getRegister_token() == null) {
-            client.setRegister_token(registerToken);
-        } else {
-            client.setRegister_token(client.getRegister_token());
-        }*/
 
         return clientDao.registerClient(client);
     }

@@ -779,9 +779,20 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	}
 
 	@Override
-	public List<PatientList> getPatientsOnAuthorize() {
-		Criteria criteria = getSession().createCriteria(PatientList.class);
-        return (List<PatientList>) criteria.list();
+	public List<DafPatient> getPatientsOnAuthorize() {
+		/*
+		 * List<DafPatient> list = getSession().createNativeQuery(
+		 * "SELECT * FROM patient WHERE data->'meta'->>'versionId' = (SELECT MIN(data->'meta'->>'versionId') FROM patient )"
+		 * , DafPatient.class) .getResultList();
+		 */
+		/*
+		 * List<DafPatient> list = getSession().createNativeQuery(
+		 * "select * from patient GROUP BY id  ORDER BY max(cast(data->'meta'->>'versionId' as float)) "
+		 * , DafPatient.class) .getResultList();
+		 */
+		List<DafPatient> list = getSession().createNativeQuery(
+		"select * from patient GROUP BY id  ORDER BY MAX(id) , MAX(cast(data->'meta'->>'versionId' as float))" , DafPatient.class) .getResultList();
+		return list;
 	}
 
 }

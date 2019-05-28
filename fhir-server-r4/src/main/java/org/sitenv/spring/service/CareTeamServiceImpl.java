@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.sitenv.spring.dao.CareTeamDao;
 import org.sitenv.spring.model.DafCareTeam;
-import org.sitenv.spring.model.DafPatient;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

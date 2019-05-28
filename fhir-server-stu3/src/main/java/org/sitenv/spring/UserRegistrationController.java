@@ -93,7 +93,6 @@ public class UserRegistrationController {
             }catch(Exception e){
             	response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to connect to the Database. Please contact Admin.");
             }
-
         return user;
     }
     
@@ -105,7 +104,7 @@ public class UserRegistrationController {
 	 * @param oldpassword
 	 * @return This method will returns the password updated user.
 	 */
-	@RequestMapping(value = "/update-password", method = RequestMethod.PUT)
+	@RequestMapping(value = "/update/password", method = RequestMethod.PUT)
 	@ResponseBody
 	public String updatePasswordByUsername(@RequestBody Map<String, String> credentials) {
 		return userService.updateUserPassword(credentials.get("userName"),
@@ -113,14 +112,14 @@ public class UserRegistrationController {
 	}
     
 	
-	@RequestMapping(value = "/reset-password", method = RequestMethod.POST)
+	@RequestMapping(value = "/reset/password", method = RequestMethod.POST)
 	@ResponseBody
 	public DafUserRegister getUserByEmail(@RequestParam String email, HttpServletRequest request )throws Exception {
-		System.out.println(email);
+		
 		DafUserRegister checkedEmail = userService.getUserByEmail(email);
 		if (checkedEmail!=null) {
 			String tempPassword = UUID.randomUUID().toString().substring(0, Math.min(UUID.randomUUID().toString().length(), 10));
-			String user_name=checkedEmail.getUser_name();
+			String userName=checkedEmail.getUser_name();
 			 // Recipient's email ID needs to be mentioned.
 		      String to = checkedEmail.getUser_email();
 		      
@@ -166,7 +165,7 @@ public class UserRegistrationController {
 
 		            // Send the actual HTML message, as big as you like
 		            message.setContent( 
-				              "<p><label>We received a request to reset FHIR SITE password for your account, </label>"+user_name+".</p><p><label>Your account password is </label>"+tempPassword 
+				              "<p><label>We received a request to reset FHIR SITE password for your account, </label>"+userName+".</p><p><label>Your account password is </label>"+tempPassword 
 				              +"</p><p><label> Thank You!</label></p>",
 				             "text/html");
 
@@ -186,7 +185,7 @@ public class UserRegistrationController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/change-password", method = RequestMethod.PUT)
+	@RequestMapping(value = "/change/password", method = RequestMethod.PUT)
 	@ResponseBody
 	public String changePasswordByUsername(@RequestBody Map<String, String> credentials) {
 		return userService.changeUserPassword(credentials.get("userName"),

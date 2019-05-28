@@ -19,15 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.sitenv.spring.dao.JwksDao;
 import org.sitenv.spring.model.Jwks;
+import org.sitenv.spring.service.JwksService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -58,14 +56,11 @@ public class JwtGenerator {
 	RSAKey rsaJWK = null;
 	JWK jwk = null;
 
-	private ObjectMapper mapper = new ObjectMapper();
-   // private CloseableHttpClient httpclient = HttpClients.createDefault();
-    private TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {};
-	
+		
     Logger log = (Logger) LoggerFactory.getLogger(JwtGenerator.class);
     
 	@Autowired
-	private JwksDao jwksDao;
+	private JwksService jwksService;
 
 	// map of identifier to signer
 	private Map<String, JWSSigner> signers = new HashMap<>();
@@ -89,7 +84,7 @@ public class JwtGenerator {
 				+ request.getContextPath();
 		//Private key generator
 			for (int i = 1; i <= 1; i++) {
-			jwks = jwksDao.getById(i);
+			jwks = jwksService.getById(i);
 			Date lastUpdatedtime = jwks.getLastUpdatedDatetime();
 			Integer idTokenExpiryTime = Common.convertTimestampToUnixTime(lastUpdatedtime.toString());
 			idTokenExpiryTime += (60 * 60 * 24 * 7);
@@ -98,13 +93,10 @@ public class JwtGenerator {
 			if (currentTime >= idTokenExpiryTime) {
 				String kid = RandomStringUtils.randomAlphanumeric(10);
 				RSAKey rsaKey = new RSAKeyGenerator(2048).keyUse(KeyUse.SIGNATURE).keyID(kid).algorithm(JWSAlgorithm.RS256).generate();
-				jwks=jwksDao.getById(i);
+				jwks=jwksService.getById(i);
 				jwks.setJwk(rsaKey.toString());
 				jwks.setLastUpdatedDatetime(Common.convertToDateFormat(timeStamp));
-				jwksDao.saveOrUpdate(jwks);
-				
-				//jwksDao.updateById(i, rsaKey.toString());
-				//System.out.println("This RSA key  " + rsaKey);
+				jwksService.saveOrUpdate(jwks);
 			}
 		}
 
@@ -115,7 +107,7 @@ public class JwtGenerator {
 		//n += 1;
 		//System.out.println("random" + n);
 		//select key to sing the jwt 	
-		jwks = jwksDao.getById(1);
+		jwks = jwksService.getById(1);
 		String j = jwks.getJwk();
 		jsonObject = JSONObjectUtils.parse(j);
 		jwk = JWK.parse(jsonObject);// return the instance of JWK
@@ -197,7 +189,7 @@ public class JwtGenerator {
 		try {
 
 			for (int i = 1; i <= 1; i++) {
-				Jwks jwks = jwksDao.getById(i);
+				Jwks jwks = jwksService.getById(i);
 				String s = jwks.getJwk();
 				Object object = parser.parse(s);
 
@@ -206,7 +198,6 @@ public class JwtGenerator {
 				rsaJWK = RSAKey.parse(jsonObject);
 
 				JWK publicKey = rsaJWK.toPublicJWK();
-				//System.out.println("public key  --"+publicKey);
 				list.add(publicKey);
 				publicKeyList.add(publicKey.toJSONObject());
 			}

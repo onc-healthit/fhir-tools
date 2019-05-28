@@ -1,5 +1,7 @@
 package org.sitenv.spring.dao;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -37,17 +39,9 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
     }
 
     public DafClientRegister updateClient(DafClientRegister client) throws FHIRHapiException {
-        /* Criteria criteria = getSession().createCriteria(DafClientRegister.class)
-                 .add(Restrictions.eq("name", client.getName()).ignoreCase())
-         		.add(Restrictions.eq("userId", client.getUserId()));
-         
-         @SuppressWarnings("unchecked")
- 		List<DafClientRegister> existedClient =  criteria.list();
-         if(existedClient != null && existedClient.size()>0){
-         	throw new FHIRHapiException("Client Name is already existed. Please use a different Client Name.");
-         	
-         }else{
-*/
+        String clientLaunchId= RandomStringUtils.randomAlphanumeric(8);
+        client.setLaunchId(clientLaunchId);
+
         session = getSession();
 
         session.update(client);
@@ -72,8 +66,10 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
                                                     String clientSecret) {
 
         Criteria crit = getSession().createCriteria(DafClientRegister.class)
-                .add(Restrictions.eq("client_id", clientId))
-                .add(Restrictions.eq("client_secret", clientSecret));
+                .add(Restrictions.eq("client_id", clientId));
+
+        if(clientSecret != null)  crit.add(Restrictions.eq("client_secret", clientSecret));
+
         DafClientRegister client = (DafClientRegister) crit.uniqueResult();
         return client;
     }

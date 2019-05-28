@@ -1,5 +1,7 @@
 package org.sitenv.spring.service;
 
+import java.util.List;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.dao.ClientRegistrationDao;
@@ -10,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service("clientRegistrationService")
 @Transactional
 public class ClientRegistrationServiceImpl implements ClientRegistrationService {
@@ -20,7 +20,7 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
     private ClientRegistrationDao clientDao;
 
     @Override
-    public DafClientRegister registerClient(DafClientRegister client) throws OAuthSystemException, FHIRHapiException {
+    public DafClientRegister registerClient(DafClientRegister client) throws  FHIRHapiException {
 
         String registerToken = CommonUtil.generateRandomString(250);
         client.setRegister_token(registerToken);

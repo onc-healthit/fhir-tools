@@ -32,6 +32,7 @@ public class AuthTempDaoImpl extends AbstractDao implements AuthTempDao {
             auths.setState(auth.getState());
             auths.setRefresh_token(auth.getRefresh_token());
             auths.setLaunchPatientId(auth.getLaunchPatientId());
+            auths.setIdToken(auth.getIdToken());
             session = getSession();
             session.update(auths);
 
@@ -82,5 +83,11 @@ public class AuthTempDaoImpl extends AbstractDao implements AuthTempDao {
         DafAuthtemp auth = (DafAuthtemp) crit.uniqueResult();
         return auth;
     }
+
+	@Override
+	public DafAuthtemp validateIdToken(String idToken) {
+		return (DafAuthtemp) getSession().createCriteria(DafAuthtemp.class)
+				.add(Restrictions.eq("idToken", idToken)).uniqueResult();
+	}
 
 }

@@ -1,6 +1,6 @@
 (function(){
-	//var main_url = geturl()+"/stu3/";
-	var main_url = geturl();
+	var main_url = geturl()+"/r4/";
+	//var main_url = geturl();
 	
 	checkCookie = function() {
 	    var user=getCookie("userdetails");

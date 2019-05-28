@@ -225,22 +225,31 @@
 					"bPaginate": false,
 					"bFilter":false,
 					"info":false,
-					"ajax":geturl()+"/authorize/launchpatient",
-	    			//"ajax":"https://fhirtest.sitenv.org/hapi-resprint/authorize/launchpatient",
+					"ajax":{
+						"url": geturl()+"/r4/authorize/launchpatient",
+						
+					},
+
 	    			"sAjaxDataProp": "",
 	     			"columns": [{
 	     					"data": function (data, type, row) {
-				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+data.id+"</div>";
+	     					   var firstColumn = JSON.parse(data.data);
+				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+firstColumn.id+"</div>";
 				               return userpoc;
 				           }
 	       				},{
 	       					"data": function (data, type, row) {
-				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+data.fullName+"</div>";
+	       					   var secondColumn = JSON.parse(data.data);
+	       					   var family = secondColumn.name[0].family;
+	       					   var given = secondColumn.name[0].given[0];
+	       					   var fullName = family+" "+given;
+				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
 				               return userpoc;
 				           }
 	       				},{
 	       					"data": function (data, type, row) {
-				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+data.birthDate+"</div>";
+	       					   var thirdColumn = JSON.parse(data.data);
+				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+thirdColumn.birthDate+"</div>";
 				               return userpoc;
 				           }
 	       				}
@@ -252,7 +261,6 @@
 
 				$.ajax({
 					url:geturl()+"/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
-					//url:"https://fhirtest.sitenv.org/hapi-resprint/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
 					contentType: 'application/json', 
 					type:"POST",
 					 success:function(data){

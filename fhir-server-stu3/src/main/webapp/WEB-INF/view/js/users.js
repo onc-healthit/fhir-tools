@@ -1,74 +1,71 @@
-(function () {
-    //var main_url = "http://localhost:8000/hapi";
-    //var main_url = "https://fhirtest.direct.sitenv.org/hapi";
-    //var main_url = "https://fhirtest.sitenv.org/hapi-resprint";
-    var main_url = geturl()+"/stu3/";
-    var emailregex = /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
-    var regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/;
+(function(){
+	var main_url = geturl()+"/stu3/";
+	var emailregex = /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
+	var regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#`~_%^&+=.,-?';:{}!()])(?=\S+$).{8,}$/;
     var usernameregex = /^[A-Za-z0-9_]+$/i;
-
-    userlogin = function () {
+    userlogin = function(){
         var uname = $('#username').val();
         var pass = $('#userpass').val();
         var postobj = {"userName":uname,"password":btoa(pass)};
-        if (uname != '' && pass != '') {
+        if(uname != '' && pass != ''){
             $.ajax({
-                url: main_url + "/user/details",
+                url:main_url+"/user/details",
                 type:"POST",
 				data:JSON.stringify(postobj),
                 headers:{
                     "Content-Type":"application/json",
                     "Accept":"application/json"
                 },
-                success: function (data) {
-                    if (data != "") {
+                success: function(data) {
+                    if(data != ""){
                         deleteCookie("userdetails");
                         var cname = "userdetails";
-                        var cvalue = data.user_full_name + "," + data.user_id;
+                        var cvalue = data.user_full_name+","+data.user_id;
                         setCookie("userdetails", cvalue, 1);
                         setCookie("username", data.user_name);
-                        if(data.isPass) {
+                        if(data.pass) {
                         	window.location.replace("clients.html");
                         } else {                        	
                         	window.location.replace("changepassword.html");
                         }
+
                     }
                 },
-                error: function (e) {
-                    console.log(e);
-                    //bootbox.alert("User Login failed. Invalid UserName or Password.");
-                    $('#loginerror').html('Invalid Username or Password');
+                error: function(e){
+                	 console.log(e);
+                     //bootbox.alert("User Login failed. Invalid UserName or Password.");
+                     $('#loginerror').html('Invalid Username or Password');
 
-                }
+                }                
             });
-        } else {
+        }else{
             bootbox.alert("Please enter Username and Password");
         }
     }
 
-    setCookie = function (cname, cvalue, exdays) {
+    setCookie = function(cname,cvalue,exdays) {
         var d = new Date();
         //d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        d.setTime(d.getTime() + (15 * 60 * 1000));
+        d.setTime(d.getTime() + (15*60*1000));
         var expires = "expires=" + d.toGMTString();
-        document.cookie = cname + "=" + cvalue + "; " + expires;
+        document.cookie = cname+"="+cvalue+"; "+expires;
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#userregistration').formValidation({
             framework: 'bootstrap',
             /*err: {
-             container: 'popover'
-             },*/
+                container: 'popover'
+            },*/
             icon: {
                 valid: 'glyphicon glyphicon-ok',
                 invalid: 'glyphicon glyphicon-remove',
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                username: {
-                    validators: {
-                        regexp: {
+                username:{
+                    validators:{
+                        regexp:{
                             regexp: /^[A-Za-z0-9_]+$/i,
                             message: 'The Username can consist of alphanumeric characters only.'
                         },
@@ -78,9 +75,9 @@
                     }
                 },
 
-                fullname: {
-                    validators: {
-                        regexp: {
+                fullname:{
+                    validators:{
+                        regexp:{
                             regexp: /^[a-z\s]+$/i,
                             message: 'The Full name can consist of alphabetical characters and spaces only'
                         },
@@ -100,7 +97,7 @@
                         }
                     }
                 },
-
+            
                 npassword: {
                     validators: {
                         regexp: {
@@ -112,7 +109,7 @@
                         }
                     }
                 },
-
+           
                 cpassword: {
                     validators: {
                         regexp: {
@@ -123,13 +120,13 @@
                             message: 'Password is required'
                         },
                         identical: {
-                            field: 'npassword',
-                            message: 'Password entered and confirmed do not match.'
-                        }
+                         field: 'npassword',
+                         message: 'Password entered and confirmed do not match.'
+                     }
                     }
                 }
             },
-        }).on('success.form.fv', function (e) {
+        }).on('success.form.fv', function(e) {
             // Prevent form submission
             e.preventDefault();
 
@@ -138,30 +135,30 @@
             var fname = $('#fullname').val();
             var password = $('#password').val();
             var cpassword = $('#cpassword').val();
-            var data = {"user_name": username, "user_email": email, "user_full_name": fname, "user_password": password};
+            var data = {"user_name":username,"user_email":email,"user_full_name":fname,"user_password":password};
             $.ajax({
-                url: main_url + "/user/",
-                type: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: JSON.stringify(data),
-                success: function (data) {
-                    if (data == "Username already exists. Please use a different Username." || data == "Useremail already exists. Please use a different Email-id.") {
-                        bootbox.alert(data);
-                        return false;
-                    } else{
-                        $('input[type="text"],input[type="password"]').val('');
-
-                        bootbox.alert(data, function () {
-                            window.location.replace('userlogin.html');
-                        });
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
-                    bootbox.alert("User Registration failed. Please contact Admin.");
+              url:main_url+"/user/",
+              type:"POST",
+              headers:{
+                "Content-Type":"application/json"
+              },
+              data:JSON.stringify(data),
+              success:function(data){
+                if(data == "Username already exists. Please use a different Username."){
+                    bootbox.alert(data);
+                    return false;
+                }else{
+                    $('input[type="text"],input[type="password"]').val('');
+                    
+                    bootbox.alert(data,function(){
+                        window.location.replace('userlogin.html');
+                    });
                 }
+              },
+              error:function(e){
+                console.log(e);
+                bootbox.alert("User Registration failed. Please contact Admin.");
+              }
             });
         });
 
@@ -173,9 +170,9 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                username: {
-                    validators: {
-                        regexp: {
+                username:{
+                    validators:{
+                        regexp:{
                             regexp: /^[A-Za-z0-9_]+$/i,
                             message: 'The Username can consist of alphanumeric characters only.'
                         },
@@ -184,7 +181,7 @@
                         }
                     }
                 },
-
+            
                 password: {
                     validators: {
                         regexp: {

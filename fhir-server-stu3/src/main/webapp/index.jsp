@@ -83,231 +83,395 @@
 
 
 <div class="container" style="margin-top:10px;">
-    <div class="col-md-12">
-        <h1 style="font-size:43px;" align="center" >FHIR Server</h1>
+    <div class="col-md-12" style="margin-top: -40px;">
+        <h1 style="margin-left: 13px;  font-size: 34px;text-align: center;" >FHIR Server</h1>
     </div>
     <div class="col-md-12">
         <div class="col-md-12" align="center" style="font-size:16px;">
-            <p>This is an implementation of the FHIR standard using the <a href="http://www.hl7.org/fhir/us/core/" target="_blank">US Core Implementation guide</a>. We expect client developers to use the server as part of their development activities to work with different data sets.   </p>
-            <hr>
+            <p style="    font-size: 14px;;
+    margin-left: 41px;
+    margin-top: -11px;
+    text-align: center;">This is an implementation of the FHIR standard using the <a href="http://www.hl7.org/fhir/us/core/" target="_blank">US Core Implementation guide</a>. We expect client developers to use the server as part of their development activities to work with different data sets.   </p>
+
         </div>
     </div>
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
-                <h3 style="margin:5px;font-size:20px">Instructions and Guidelines to use the FHIR Server:</h3>
-            </div>
-            <div class="panel-body">
-                <div class="col-md-12">
-                    The FHIR Server can be used in two modes. An open mode (No OAuth token required) and a secure mode (OAuth tokens required).
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <ol>
-                            <li>
-                                The server URI for DSTU2 open mode is : <%=request.getScheme() + "://" +
-                                    request.getServerName() +
-                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-                            %>/open/fhir
-                            </li>
-                            <li>
-                                The server URI for DSTU2 secure mode is : <%=request.getScheme() + "://" +
-                                    request.getServerName() +
-                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-                            %>/secure/fhir
-                            </li>
-                        </ol>
-                    </div>
 
-                    <div class="col-md-6">
-                        <ol>
-                            <li>
-                                The server URI for STU3 open mode is : <%=request.getScheme() + "://" +
-                                    request.getServerName() +
-                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-                            %>/open/stu3/fhir
-                            </li>
-                            <li>
-                                The server URI for STU3 secure mode is : <%=request.getScheme() + "://" +
-                                    request.getServerName() +
-                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-                            %>/secure/stu3/fhir
-                            </li>
-                        </ol>
-                    </div>
-                </div>
+    <div class="col-lg-12" style="margin-bottom: -42px ">
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-default" style="min-height:300px;">
-                            <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
-                                Using the Open FHIR Server For DSTU2:
-                            </div>
+        <!--////////////////////tabs////////////////////////////////-->
+        <div id="exTab2" class="container">
+            <div>
+                <div class="tab" role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation">
+                            <a  href="#1"  role="tab" data-toggle="tab">DSTU2</a>
+                        </li>
+                        <li  role="presentation" class="active"><a href="#2" role="tab" data-toggle="tab">STU3</a>
+                        </li>
+                        <li  role="presentation"><a href="#3" role="tab" data-toggle="tab">R4</a>
+                        </li>
+                    </ul>
+                    <hr style="    margin-top: 1px;"></hr>
+                    <div >
+                        <div  class="panel-heading">
+                            <h3 style="margin-top: -24px;font-size:20px">Instructions and Guidelines to use the FHIR Server:</h3>
+                        </div>
+                        <div style="    margin-top: -25px">
                             <div class="panel-body">
-                                A client can use the open server by making a FHIR request using a FHIR READ or SEARCH operation.
-                                <ol style="margin-top:10px;">
-                                    <li>
-                                        For example a simple READ can be executed as follows:
-                                        <ul style="list-style:outside none disc;margin-bottom:8px;">
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                <div class="col-md-12">
+                                    The FHIR Server can be used in two modes. An open mode (No OAuth token required) and a secure mode (OAuth tokens required).
+
+                                </div>
+
+                                <div class="row" >
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="tab-content ">
+                                <div role="tabpanel" class="tab-pane fade" id="1">
+
+                                    
+                                    <div class="row" >
+                                        <div class="col-md-6">
+                                            <ol>
+                                                <li>
+                                                    The server URI for DSTU2 open mode is : <%=request.getScheme() + "://" +
+                                                        request.getServerName() +
+                                                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                                                %>/open/fhir
+                                                </li>
+                                                <li>
+                                                    The server URI for DSTU2 secure mode is : <%=request.getScheme() + "://" +
+                                                        request.getServerName() +
+                                                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                                                %>/secure/fhir
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <div class="col-md-6 ">
+                                            <button class="btn btn-primary center-block ladda-button btncolor" style="margin-top: -18px;margin-left: 300px; color:white" ><a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/view/newuser.html" style="color:white" target="_blank">Register</a></button>
+                                            <button style="width: 74px; margin-left: 409px; " class="btn btn-primary center-block ladda-button btncolor"  ><a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/view/clients.html" style="color:white" target="_blank">Login</a></button>
+                                        </div>
+                                    </div>
+
+                                    <div  style="min-height:300px;" >
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default" style="min-height:300px;">
+                                                    <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
+                                                        Using the Open FHIR Server For DSTU2:
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        A client can use the open server by making a FHIR request using a FHIR READ or SEARCH operation.
+                                                        <ol style="margin-top:10px;">
+                                                            <li>
+                                                                For example a simple READ can be executed as follows:
+                                                                <ul style="list-style:outside none disc;margin-bottom:8px;">
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
 	                 %>/open/fhir/Patient/1" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1</a> - XML format.</li>
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1</a> - XML format.</li>
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json</a> - JSON format.</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        For example a simple SEARCH can be executed as follows:
-                                        <ul style="list-style:outside none disc;margin-bottom:8px;">
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json</a> - JSON format.</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                For example a simple SEARCH can be executed as follows:
+                                                                <ul style="list-style:outside none disc;margin-bottom:8px;">
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1</a> - XML format.</li>
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1</a> - XML format.</li>
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json</a> -  JSON format.</li>
-                                        </ul>
-                                    </li>
-                                    <li style="margin-bottom:8px;">
-                                        Click here for more details on <a href="http://hl7.org/fhir/search.html" target="_blank">FHIR Search</a>.
-                                    </li>
-                                    <li>
-                                        For a list of Patients <a style="cursor:pointer;" onclick="openPatientlistModalDstu2();">Click here</a>.
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default" style="min-height:300px;">
-                            <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
-                                Using the Secure FHIR Server For DSTU2:
-                            </div>
-                            <div class="panel-body">
-                                <ol>
-                                    <li>
-                                        The Secure FHIR server follows the implementation of Smart On FHIR specifications.
-                                    </li>
-                                    <li>
-                                        In order to use the FHIR Server with the appropriate tokens the following steps need to be followed
-                                        <ul style="list-style:outside none disc;">
-                                            <li style="margin-bottom:8px;">
-                                                Create a user account in the FHIR Authorization Server:
-                                                Follow instructions <a href="view/newuser.html" target="_blank">here</a> for user creation.
-                                            </li>
-                                            <li style="margin-bottom:8px;">
-                                                Login and Register a client so that you can get the Client Id and  Client Secret.
-                                                Follow instructions <a href="view/clients.html" target="_blank">here</a> for client registration.
-                                            </li>
-                                            <li style="margin-bottom:8px;">
-                                                Once you have a Client Id and Client Secret follow the guidelines according to the Smart On FHIR to request resources.
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json</a> -  JSON format.</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li style="margin-bottom:8px;">
+                                                                Click here for more details on <a href="http://hl7.org/fhir/search.html" target="_blank">FHIR Search</a>.
+                                                            </li>
+                                                            <li>
+                                                                For a list of Patients <a style="cursor:pointer;" onclick="loadPatients('dstu2');">Click here</a>.
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default" style="min-height:355px;">
+                                                    <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
+                                                        Using the Secure FHIR Server For DSTU2:
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <ol>
+                                                            <li>
+                                                                The Secure FHIR server follows the implementation of Smart On FHIR specifications.
+                                                            </li>
+                                                            <li>
+                                                                In order to use the FHIR Server with the appropriate tokens the following steps need to be followed
+                                                                <ul style="list-style:outside none disc;">
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Create a user account in the FHIR Authorization Server:
+                                                                        Follow instructions  <a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/view/newuser.html" target="_blank">here</a> for user creation.
+                                                                    </li>
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Login and Register a client so that you can get the Client Id and  Client Secret.
+                                                                        Follow instructions <a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/view/clients.html" target="_blank">here</a> for client registration.
+                                                                    </li>
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Once you have a Client Id and Client Secret follow the guidelines according to the Smart On FHIR to request resources.
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div  role="tabpanel" class="tab-pane fade in active" id="2">
+                                    <div class="row" >
 
+                                        <div class="col-md-6">
+                                            <ol>
+                                                <li>
+                                                    The server URI for STU3 open mode is : <%=request.getScheme() + "://" +
+                                                        request.getServerName() +
+                                                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                                                %>/open/stu3/fhir
+                                                </li>
+                                                <li>
+                                                    The server URI for STU3 secure mode is : <%=request.getScheme() + "://" +
+                                                        request.getServerName() +
+                                                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                                                %>/secure/stu3/fhir
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-primary center-block ladda-button" style="margin-top: -18px;margin-left: 300px;color:white"><a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/stu3/view/newuser.html" target="_blank" style="color:white">Register</a></button>
+                                            <button style="width: 74px; margin-left: 409px;color:white" class="btn btn-primary center-block ladda-button"><a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/stu3/view/clients.html" target="_blank" style="color:white">Login</a></button>
+                                        </div>
+                                    </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="panel panel-default" style="min-height:300px;">
-                            <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
-                                Using the Open FHIR Server For STU3:
-                            </div>
-                            <div class="panel-body">
-                                A client can use the open server by making a FHIR request using a FHIR READ or SEARCH operation.
-                                <ol style="margin-top:10px;">
-                                    <li>
-                                        For example a simple READ can be executed as follows:
-                                        <ul style="list-style:outside none disc;margin-bottom:8px;">
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                    <div  style="min-height:300px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default" style="min-height:300px;">
+                                                    <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
+                                                        Using the Open FHIR Server For STU3:
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        A client can use the open server by making a FHIR request using a FHIR READ or SEARCH operation.
+                                                        <ol style="margin-top:10px;">
+                                                            <li>
+                                                                For example a simple READ can be executed as follows:
+                                                                <ul style="list-style:outside none disc;margin-bottom:8px;">
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
 	                 %>/open/stu3/fhir/Patient/1" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/1</a> - XML format.</li>
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/1</a> - XML format.</li>
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/1?_format=json" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/1?_format=json</a> - JSON format.</li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        For example a simple SEARCH can be executed as follows:
-                                        <ul style="list-style:outside none disc;margin-bottom:8px;">
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/1?_format=json</a> - JSON format.</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                For example a simple SEARCH can be executed as follows:
+                                                                <ul style="list-style:outside none disc;margin-bottom:8px;">
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/?_id=1" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/?_id=1</a> - XML format.</li>
-                                            <li>GET <a href="<%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/?_id=1</a> - XML format.</li>
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/?_id=1&_format=json" target="_blank"><%=request.getScheme() + "://" +
-                                                    request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/?_id=1&_format=json</a> -  JSON format.</li>
-                                        </ul>
-                                    </li>
-                                    <li style="margin-bottom:8px;">
-                                        Click here for more details on <a href="http://hl7.org/fhir/search.html" target="_blank">FHIR Search</a>.
-                                    </li>
-                                    <li>
-                                        For a list of Patients <a style="cursor:pointer;" onclick="openPatientlistModalStu3();">Click here</a>.
-                                    </li>
-                                </ol>
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/stu3/fhir/Patient/?_id=1_format=json</a> -  JSON format.</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li style="margin-bottom:8px;">
+                                                                Click here for more details on <a href="http://hl7.org/fhir/search.html" target="_blank">FHIR Search</a>.
+                                                            </li>
+                                                            <li>
+                                                                For a list of Patients <a style="cursor:pointer;" onclick="loadPatients('stu3');">Click here</a>.
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default" style="min-height:355px;">
+                                                    <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
+                                                        Using the Secure FHIR Server For STU3:
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <ol>
+                                                            <li>
+                                                                The Secure FHIR server follows the implementation of Smart On FHIR specifications.
+                                                            </li>
+                                                            <li>
+                                                                In order to use the FHIR Server with the appropriate tokens the following steps need to be followed
+                                                                <ul style="list-style:outside none disc;">
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Create a user account in the FHIR Authorization Server:
+                                                                        Follow instructions  <a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/stu3/view/newuser.html" target="_blank">here</a> for user creation.
+                                                                    </li>
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Login and Register a client so that you can get the Client Id and  Client Secret.
+                                                                        Follow instructions  <a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/stu3/view/clients.html" target="_blank">here</a> for client registration.
+                                                                    </li>
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Once you have a Client Id and Client Secret follow the guidelines according to the Smart On FHIR to request resources.
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div  role="tabpanel" class="tab-pane fade" id="3">
+                                    <div class="row" >
+
+                                        <div class="col-md-6">
+                                            <ol>
+                                                <li>
+                                                    The server URI for R4 open mode is : <%=request.getScheme() + "://" +
+                                                        request.getServerName() +
+                                                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                                                %>/open/r4/fhir
+                                                </li>
+                                                <li>
+                                                    The server URI for R4 secure mode is : <%=request.getScheme() + "://" +
+                                                        request.getServerName() +
+                                                        ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+                                                %>/secure/r4/fhir
+                                                </li>
+                                            </ol>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <button class="btn btn-primary center-block ladda-button" style="margin-top: -18px;margin-left: 300px;color:white" ><a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/r4/view/newuser.html" target="_blank" style="color:white;">Register</a></button>
+                                            <button style="     width: 74px; margin-left: 409px;color:white" class="btn btn-primary center-block ladda-button"><a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/r4/view/clients.html" target="_blank" style="color:white;">Login</a></button>
+                                        </div>
+                                    </div>
+
+                                    <div  style="min-height:300px;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default" style="min-height:300px;">
+                                                    <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
+                                                        Using the Open FHIR Server For R4:
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        A client can use the open server by making a FHIR request using a FHIR READ or SEARCH operation.
+                                                        <ol style="margin-top:10px;">
+                                                            <li>
+                                                                For example a simple READ can be executed as follows:
+                                                                <ul style="list-style:outside none disc;margin-bottom:8px;">
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
+	                 %>/open/r4/fhir/Patient/1" target="_blank"><%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/1</a> - XML format.</li>
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/1?_format=json" target="_blank"><%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/1?_format=json</a> - JSON format.</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                For example a simple SEARCH can be executed as follows:
+                                                                <ul style="list-style:outside none disc;margin-bottom:8px;">
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1" target="_blank"><%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1</a> - XML format.</li>
+                                                                    <li>GET <a href="<%=request.getScheme() + "://" +
+	                request.getServerName() +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1&_format=json" target="_blank"><%=request.getScheme() + "://" +
+                                                                            request.getServerName() +
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1_format=json</a> -  JSON format.</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li style="margin-bottom:8px;">
+                                                                Click here for more details on <a href="http://hl7.org/fhir/search.html" target="_blank">FHIR Search</a>.
+                                                            </li>
+                                                            <li>
+                                                                For a list of Patients <a style="cursor:pointer;" onclick="loadPatients('r4');">Click here</a>.
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="panel panel-default" style="min-height:355px;">
+                                                    <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
+                                                        Using the Secure FHIR Server For R4:
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <ol>
+                                                            <li>
+                                                                The Secure FHIR server follows the implementation of Smart On FHIR specifications.
+                                                            </li>
+                                                            <li>
+                                                                In order to use the FHIR Server with the appropriate tokens the following steps need to be followed
+                                                                <ul style="list-style:outside none disc;">
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Create a user account in the FHIR Authorization Server:
+                                                                        Follow instructions <a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/r4/view/newuser.html" target="_blank">here</a> for user creation.
+                                                                    </li>
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Login and Register a client so that you can get the Client Id and  Client Secret.
+                                                                        Follow instructions <a href="<%=request.getScheme() + "://" +request.getServerName() + ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )%>/secure/r4/view/clients.html" target="_blank">here</a> for client registration.
+                                                                    </li>
+                                                                    <li style="margin-bottom:8px;">
+                                                                        Once you have a Client Id and Client Secret follow the guidelines according to the Smart On FHIR to request resources.
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel panel-default" style="min-height:300px;">
-                            <div style="background-image:linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);background-repeat:repeat-x" class="panel-heading">
-                                Using the Secure FHIR Server For STU3:
-                            </div>
-                            <div class="panel-body">
-                                <ol>
-                                    <li>
-                                        The Secure FHIR server follows the implementation of Smart On FHIR specifications.
-                                    </li>
-                                    <li>
-                                        In order to use the FHIR Server with the appropriate tokens the following steps need to be followed
-                                        <ul style="list-style:outside none disc;">
-                                            <li style="margin-bottom:8px;">
-                                                Create a user account in the FHIR Authorization Server:
-                                                Follow instructions <a href="stu3/view/newuser.html" target="_blank">here</a> for user creation.
-                                            </li>
-                                            <li style="margin-bottom:8px;">
-                                                Login and Register a client so that you can get the Client Id and  Client Secret.
-                                                Follow instructions <a href="stu3/view/clients.html" target="_blank">here</a> for client registration.
-                                            </li>
-                                            <li style="margin-bottom:8px;">
-                                                Once you have a Client Id and Client Secret follow the guidelines according to the Smart On FHIR to request resources.
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
 </div>
-
-
 
 
 
@@ -352,16 +516,19 @@
 </site-footer>
 
 <%-- Footer ends here --%>
-
-<script src="${pageContext.request.contextPath}/view/js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/view/js/url.js"></script>
+
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 <link href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${pageContext.request.contextPath}/view/js/remarkable.min.js"></script>
 
 <link href="${pageContext.request.contextPath}/view/css/bootstrap.css" rel="stylesheet" type="text/css" />
-<script src="${pageContext.request.contextPath}/view/js/bootstrap.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 <link href="${pageContext.request.contextPath}/view/css/fhir.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/view/css/homepage.css" rel="stylesheet">
+
 
 
 <!-- Patient List Modal-->
@@ -373,7 +540,7 @@
                 <h4 class="modal-title">List of Patients</h4>
             </div>
             <div class="modal-body" style="overflow:auto;">
-                <table id="example" class="display" cellspacing="0" width="100%">
+                <table id="patientList" class="display" cellspacing="0" width="100%">
                     <thead>
                     <tr>
                         <th>Patient Id</th>
@@ -448,28 +615,17 @@
         });
     });
 
-    openPatientlistModalDstu2 = function (){
-        loadPatients("");
-        $("#patientlist-modal").modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-    }
-
-    openPatientlistModalStu3 = function (){
-        loadPatients("stu3");
-        $("#patientlist-modal").modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-    }
     loadPatients = function(val) {
         var url = "/open/authorize/launchpatient";
-
-        if (val == "stu3"){
+        if (val == "dstu2"){
+            url="/open/authorize/launchpatient";
+        }else if (val == "stu3"){
             url="/open/stu3/authorize/launchpatient";
+        }else if(val == "r4"){
+            url="/open/r4/authorize/launchpatient";
         }
-        $('#example').dataTable({
+
+        $('#patientList').dataTable({
             "destroy": true,
             "bLengthChange": false,
             "bPaginate": false,
@@ -494,6 +650,11 @@
                 }
             }
             ]
+        });
+
+        $("#patientlist-modal").modal({
+            backdrop: 'static',
+            keyboard: false
         });
     }
 

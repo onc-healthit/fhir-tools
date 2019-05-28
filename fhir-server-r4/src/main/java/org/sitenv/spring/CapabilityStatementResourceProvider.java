@@ -1,6 +1,7 @@
 package org.sitenv.spring;
 
-import ca.uhn.fhir.rest.annotation.Metadata;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,8 +17,7 @@ import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
 import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.UriType;
 
-import java.util.ArrayList;
-import java.util.List;
+import ca.uhn.fhir.rest.annotation.Metadata;
 
 public class CapabilityStatementResourceProvider extends ServerCapabilityStatementProvider {
 

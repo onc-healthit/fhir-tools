@@ -2,7 +2,6 @@ package org.sitenv.spring.service;
 
 import java.util.List;
 
-import org.sitenv.spring.dao.FamilyMemberHistoryDao;
 import org.sitenv.spring.dao.GoalDao;
 import org.sitenv.spring.model.DafGoal;
 import org.sitenv.spring.util.SearchParameterMap;

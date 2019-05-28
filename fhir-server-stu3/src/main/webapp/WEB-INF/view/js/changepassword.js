@@ -63,7 +63,7 @@
 	            var username = getCookie("username");
 	            var data = {"oldPassword": oldpassword, "password": btoa(newpassword), "userName":username};
 	            $.ajax({
-	                url: main_url + "/user/update-password",
+	                url: main_url + "/user/update/password",
 	                type: "PUT",
 	                headers: {
 	                    "Content-Type": "application/json"

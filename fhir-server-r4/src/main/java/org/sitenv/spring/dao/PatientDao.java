@@ -16,5 +16,5 @@ public interface PatientDao {
 	 
 	 public List<DafPatient> getPatientHistoryById(int theId);
 	 
-	 public List<PatientList> getPatientsOnAuthorize();
+	 public List<DafPatient> getPatientsOnAuthorize();
 }

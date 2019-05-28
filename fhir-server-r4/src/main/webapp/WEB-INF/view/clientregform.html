@@ -27,19 +27,19 @@
 				    </div>    							
     			</div>
     			<div class="form-group">
-					<label for="inputEmail3" class="col-sm-3 control-label">Redirect URI:</label>
+					<label for="inputEmail3" class="col-sm-3 control-label">Redirect URL:</label>
 				    <div class="col-sm-5">
 				      	<input type="text" class="form-control" id="redirecturi" data-fv-notempty name="redirecturi">
 				    </div>    							
     			</div>
     			<div class="form-group">
-    			<label for="inputEmail3" class="col-sm-3 control-label">Issue URI:</label>
+    			<label for="inputEmail3" class="col-sm-3 control-label">Launch URL:</label>
                 <div class="col-sm-5">
                     <input type="text" class="form-control" id="launchUri" data-fv-notempty name="launchUri">
                 </div>
             </div>
             <div class="form-group">
-					<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+					<label for="inputEmail3" class="col-sm-3 control-label">Scope(s):</label>
 				    <div class="col-sm-9">
 						<div class="col-sm-5 regscopes">
 				    		<div class="checkbox">
@@ -49,7 +49,7 @@
 								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="launch/patient" onchange="removeerror();">launch/patient</label>
 							</div>
 							<div class="checkbox">
-								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/*.read" onchange="removeerror();">patient/*.read</label>
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/*.*" onchange="removeerror();">patient/*.*</label>
 							</div>
 							<div class="checkbox">
 								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/Patient.read" onchange="removeerror();">patient/Patient.read</label>
@@ -81,7 +81,7 @@
 								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="openid" onchange="removeerror();">openid</label>
 							</div>
 							<div class="checkbox">
-								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="fhirUser" onchange="removeerror();">fhirUser</label>
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="profile" onchange="removeerror();">profile</label>
 							</div>
 							
 							<div class="checkbox">

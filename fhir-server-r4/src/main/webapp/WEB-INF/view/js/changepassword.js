@@ -1,5 +1,5 @@
 (function () {
-	 var main_url = geturl();
+	 var main_url = geturl()+"/r4/";
 	 var emailregex = /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
 	 $(document).ready(function () {
 	        $('#changepassword').formValidation({

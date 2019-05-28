@@ -10,7 +10,6 @@ header .jumbotron .container {
     height: 160px;
     z-index: 999;
 }
-
 .jumbotron .container {
     max-width: 100%;
 }
@@ -24,13 +23,11 @@ header .navbar-inverse .navbar-inner {
     background-color: #00418d;
     filter: none;
 }
-
 header .navbar .navbar-inner {
     background-color: #00418d;
     background-image: none;
     color: #fff;
 }
-
 header .navbar-inner {
     border: 0 none;
     border-radius: 0;
@@ -45,7 +42,6 @@ header .navbar .nav {
 .navbar-default {
     border-color: #d5d5d5;
 }
-
 .navbar-default {
     border-radius: 0;
 }
@@ -54,7 +50,6 @@ footer {
     background-color: #eee;
     margin-top: 40px;
 }
-
 footer {
     padding-top: 1em;
 }
@@ -82,13 +77,13 @@ header .navbar .nav li a {
 }
 
 header .navbar .nav li a:hover {
-    background-color: #00418d;
+	background-color: #00418d;
     color: #fff;
     text-decoration: underline;
 }
 
-.tooltipright .tooltip {
-    min-width: 300px;
+.tooltipright .tooltip{
+	min-width: 300px;
 }
 
 .bootbox .modal-body {
@@ -114,8 +109,8 @@ header .navbar .nav li a:hover {
     background-color: #eeeeee !important;
 }
 
-.well {
-    background-image: linear-gradient(to bottom, #e8e8e8 0%, #f5f5f5 100%);
+.well{
+	background-image: linear-gradient(to bottom, #e8e8e8 0%, #f5f5f5 100%);
     background-repeat: repeat-x;
     border-color: #dcdcdc;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -128,8 +123,8 @@ header .navbar .nav li a:hover {
     left: 50%;
     margin-left: -50px; /* half width of the spinner gif */
     margin-top: -50px; /* half height of the spinner gif */
-    text-align: center;
-    z-index: 1234;
+    text-align:center;
+    z-index:1234;
     overflow: auto;
     width: 100px; /* width of the spinner gif */
     height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
@@ -140,15 +135,12 @@ header .navbar .nav li a:hover {
     max-width: 330px;
     padding: 15px;
 }
-
 .form-signin .form-signin-heading, .form-signin .checkbox {
     margin-bottom: 10px;
 }
-
 .form-signin .checkbox {
     font-weight: normal;
 }
-
 .form-signin .form-control {
     box-sizing: border-box;
     font-size: 16px;
@@ -156,17 +148,14 @@ header .navbar .nav li a:hover {
     padding: 10px;
     position: relative;
 }
-
 .form-signin .form-control:focus {
     z-index: 2;
 }
-
 .form-signin input[type="email"] {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     margin-bottom: -1px;
 }
-
 .form-signin input[type="password"] {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -178,7 +167,6 @@ header .navbar .nav li a:hover {
     margin-right: -15px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-
 .nav-header {
     color: #999999;
     display: block;
@@ -189,7 +177,6 @@ header .navbar .nav li a:hover {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
 }
-
 .nav-list > li > a {
     padding: 3px 15px;
 }
@@ -200,7 +187,7 @@ header .navbar .nav li a:hover {
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
 }*/
 
-.well .btn {
+.well .btn{
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -226,11 +213,12 @@ header .navbar .nav li a:hover {
     vertical-align: middle;
 }
 
-.well .btn-large {
+.well .btn-large{
     border-radius: 6px;
     font-size: 17.5px;
     padding: 11px 19px;
 }
+
 
 #logo a {
     background: rgba(0, 0, 0, 0) url("../images/logo_maehc.png") no-repeat scroll left top;
@@ -239,7 +227,6 @@ header .navbar .nav li a:hover {
     text-indent: -9999px;
     width: 257px;
 }
-
 #logo {
     float: left;
     margin: 40px 0 0;
@@ -328,20 +315,20 @@ ul {
 }
 
 .dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus {
+.dropdown-menu > li > a:focus{
     background-color: #e8e8e8;
-    /* background-image: linear-gradient(to bottom,#f5f5f5 0%,#e8e8e8 100%);
-     background-repeat: repeat-x;*/
+   /* background-image: linear-gradient(to bottom,#f5f5f5 0%,#e8e8e8 100%);
+    background-repeat: repeat-x;*/
 }
 
-#loginerror, #oldpassworderror, #resetoldpassworderror{
-    color: #a94442;
+#loginerror{
+    color:#a94442;
     text-align: center;
 }
 
 .form-group.required .control-label:after {
-    content: "*";
-    color: red;
+  content:"*";
+  color:red;
 }
 
 table {
@@ -349,12 +336,15 @@ table {
     word-wrap: break-all;
 }
 
-table th, table td {
-    overflow: hidden;
-    word-wrap: break-word;
+#loginerror, #oldpassworderror, #resetoldpassworderror{
+    color: #a94442;
+    text-align: center;
+    font-weight: bold;
 }
 
-.editanchor {
+table th, table td { overflow: hidden;word-wrap: break-word; }
+
+.editanchor{
     cursor: pointer;
 }
 
@@ -407,7 +397,6 @@ header[_ngcontent-vni-17]   .navbar-inverse[_ngcontent-vni-17]   .navbar-inner[_
     -webkit-filter: none;
     filter: none
 }
-
 footer[_ngcontent-vni-31] {
     padding-top: 1em;
     margin-top: 40px;
@@ -417,12 +406,10 @@ footer[_ngcontent-vni-31] {
 footer[_ngcontent-vni-31]    .footer-link-btn {
     padding: 0 !important
 }
-
 modal[_ngcontent-vni-29]    .release-notes-modal-dialog {
     width: 90% !important;
     overflow-y: auto !important
 }
-
 .site-header[_ngcontent-vni-33] {
     background: url(../images/site/bg-header-1920x170.png) repeat-x top #1fdbfe
 }
@@ -478,6 +465,8 @@ modal[_ngcontent-vni-29]    .release-notes-modal-dialog {
     border: 1px solid #ddd;
     padding: 5px
 }
+
+
 
 .sandbox-block {
     color: #036;

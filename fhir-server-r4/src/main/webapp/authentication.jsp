@@ -83,23 +83,23 @@
 
 <%-- header Ends here --%>
 
-<div class="container">
-    <div class="col-md-12" style="margin-top:20px;">
-        <h1>Hi <%= request.getParameter("name") %>!</h1>
-        <h3><b>Admin</b> is requesting <b>full access</b> to your account.</h3>
-        <h3>Do you approve?</h3>
-
-        <div><h4>Requesting access with the following scopes:</h4>
-
-
-            <ul style="margin-bottom:30px;">
-                <li><%= request.getParameter("scope") %>
-                </li>
-            </ul>
-
-
+    <div class="container">
+        <div class="col-md-12" style="margin-top:20px;">
+            <h1>Hi <%= request.getParameter("name") %>!</h1>
+            <h3><b> <%= request.getParameter("cName") %> </b> is requesting access to the following resources :</h3>
+            <h3>Do you approve?</h3>
+            
+            <div> <!-- <h4>Requesting access with the following scopes:</h4> -->
+            
+                <h4>Requested scopes are :</h4>
+                
+                  <ul style="margin-bottom:30px;">
+                    <li><%= request.getParameter("scope") %></li>
+                  </ul>
+                
+                
+            </div>    
         </div>
-    </div>
 
     <form action="<%=request.getScheme() + "://" +
 	                request.getServerName() + 
@@ -132,8 +132,8 @@
                     </site-version>
                 </div>
                 <div _ngcontent-vni-31="" class="col-sm-6 text-right">
-                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:TestingServices@sitenv.org"
-                                                     tabindex="100">TestingServices@sitenv.org</a>
+                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:SITTeam@hhs.gov"
+                                                     tabindex="100">SITTeam@hhs.gov</a>
                 </div>
             </div>
             <div _ngcontent-vni-31="" class="row">

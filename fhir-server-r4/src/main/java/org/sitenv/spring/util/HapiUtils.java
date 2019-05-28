@@ -1,12 +1,12 @@
 package org.sitenv.spring.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Prabhushankar.Byrapp on 8/22/2015.

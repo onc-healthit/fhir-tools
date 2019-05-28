@@ -25,19 +25,19 @@ public class DafUserRegister {
     @Column(name = "user_password")
     private String user_password;
     
+    
     @Column(name = "temp_password")
     private String tempPassword;
     
    
-	@Column(name="is_pass")
+    @Column(name = "is_pass", nullable = false, columnDefinition="boolean default true")
     private boolean isPass;
 	
-
-	public boolean isIsPass() {
+	public boolean isPass() {
 		return isPass;
 	}
 
-	public void setIsPass(boolean isPass) {
+	public void setPass(boolean isPass) {
 		this.isPass = isPass;
 	}
 
@@ -50,7 +50,7 @@ public class DafUserRegister {
 	}
 
 
-	public int getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
@@ -82,13 +82,12 @@ public class DafUserRegister {
         this.user_full_name = user_full_name;
     }
 
-    public String getUser_password() {
+   public String getUser_password() {
         return user_password;
     }
 
     public void setUser_password(String user_password) throws Exception {
         this.user_password = AESencryption.encrypt(user_password);
-    	
     }
 
 }

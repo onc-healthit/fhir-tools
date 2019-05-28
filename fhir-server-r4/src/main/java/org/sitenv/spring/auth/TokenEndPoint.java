@@ -26,6 +26,7 @@ import org.sitenv.spring.dao.AuthTempDao;
 import org.sitenv.spring.model.DafAuthtemp;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.model.DafUserRegister;
+import org.sitenv.spring.service.AuthTempService;
 import org.sitenv.spring.service.ClientRegistrationService;
 import org.sitenv.spring.service.UserRegistrationService;
 import org.sitenv.spring.util.CommonUtil;
@@ -53,7 +54,7 @@ public class TokenEndPoint extends HttpServlet {
 	private UserRegistrationService userService;
 
 	@Autowired
-	private AuthTempDao dao;
+	private AuthTempService authTempService;
 
 	@Autowired
 	private JwtGenerator jwtGenerator;
@@ -85,14 +86,14 @@ public class TokenEndPoint extends HttpServlet {
 			client_secret = credList[1];
 			code = request.getParameter("code");
 			grant_type = request.getParameter("grant_type");
-		} else if (request.getParameter("client_id") != null) {
+		} else if (request.getParameter("client_id") != null) { 			
 			client_id = request.getParameter("client_id");
 			client_secret = request.getParameter("client_secret");
+			
 			code = request.getParameter("code");
 			grant_type = request.getParameter("grant_type");
-		}
-
-		else {
+		}  else {
+		
 			StringBuffer sb = new StringBuffer();
 			BufferedReader bufferedReader = null;
 
@@ -125,7 +126,7 @@ public class TokenEndPoint extends HttpServlet {
 				}
 
 				log.info("body" + jsonString);
-				System.out.println("tests" + sb.toString());
+				
 
 				JSONObject payLoad = new JSONObject(jsonString);
 
@@ -142,165 +143,332 @@ public class TokenEndPoint extends HttpServlet {
 		log.info("grant_type:" + grant_type);
 		if (client_id == null) {
 			response.sendError(401, "client_id is not present");
-
-		} else if (client_secret == null) {
-			response.sendError(401, "client_secret is not present");
 		} else if (code == null && token == null) {
 			response.sendError(401, "code or refresh_token is not present");
 		} else if (grant_type == null) {
 			response.sendError(401, "grant_type is not present");
-		} else {
+		}else if(service.getClient(client_id) == null) {
+			response.sendError(401, "Invalid client_id");
+		}
+		
+
+		else if ((client_secret != null) && (client_id != null)) {
+		
 
 			DafClientRegister client = service.getClientByCredentials(client_id, client_secret);
-			Integer userId = client.getUserId();
-			DafUserRegister user = userService.getUserById(userId);
+			if (client != null) {
 
-			DafAuthtemp authTemp = dao.getAuthById(client_id);
+				Integer userId = client.getUserId();
+				DafUserRegister user = userService.getUserById(userId);
 
-			if (authTemp != null) {
-				List<String> scopes = Arrays.asList(authTemp.getScope().split(","));
-				StringBuilder stringScope=new StringBuilder();
-				int scopesint = scopes.size();
-				for(int i=0;i<scopesint;i++ ) {
-					stringScope.append(scopes.get(i));
-					if(i < scopesint) {
-						stringScope.append(" ");
-					}
-				}
-				stringScope.toString();
+				DafAuthtemp authTemp = authTempService.getAuthById(client_id);
 
-				try {
-					OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
-					if (grant_type.equals(GrantType.AUTHORIZATION_CODE.toString())) {
-						if (!code.equalsIgnoreCase(authTemp.getAuthCode())) {
-							response.sendError(401, "Invalid authorization code");
-							out.println(response);
-						} else if (!client.getClient_id().equals(client_id)) {
-							response.sendError(401, "Invalid Client ID");
-							out.println(response);
-						} else {
-							final String accessToken = oauthIssuerImpl.accessToken();
-							// org.json.JSONObject jsonHash = new org.json.JSONObject(new HashMap<K, V>());
-
-							JSONObject jsonOb = new JSONObject();
-							jsonOb.put("access_token", accessToken);
-							jsonOb.put("token_type", "bearer");
-							jsonOb.put("expires_in", "3600");
-							
-							
-							String refreshToken = null;
-							String idToken = null;
-							if (scopes.contains("launch/patient") || scopes.contains("launch")) {
-								jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
-							}
-							if (scopes.contains("offline_access")) {
-								refreshToken = oauthIssuerImpl.refreshToken();
-								jsonOb.put("refresh_token", refreshToken);
-
-							} else if (scopes.contains("online_access")) {
-								refreshToken = oauthIssuerImpl.refreshToken();
-								jsonOb.put("refresh_token", refreshToken);
-							}
-							if (scopes.contains("openid")) {
-								String sub=user.getUser_name();
-								String aud = client.getClient_id();
-								String email=user.getUser_email();
-								String userName=user.getUser_name();
-								String timeStamp = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy")
-										.format(new Timestamp(System.currentTimeMillis()));
-								Date issueDate = Common.convertToDateFormat(timeStamp);
-								Date expiryTime = new Date(issueDate.getTime() + 2 * HOUR);
-								Map<String, Object> payloadData =new HashMap<>();
-								payloadData.put("sub", sub);
-								payloadData.put("aud", aud);
-								payloadData.put("email", email);
-								payloadData.put("issueDate", issueDate);
-								payloadData.put("expiryTime", expiryTime);
-								payloadData.put("userName", userName);
-								
-								
-								
-								idToken = jwtGenerator.generate(payloadData, request);
-								jsonOb.put("id_token", idToken);
-								jsonOb.put("scope", stringScope.toString());
-								
-							}
-							response.addHeader("Content-Type", "application/json");
-
-							String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-									.format(new Timestamp(System.currentTimeMillis()));
-							// hm1.put(accessToken, timeStamp);
-							authTemp.setClient_secret(client_secret);
-							authTemp.setAccess_token(accessToken);
-							authTemp.setExpiry(timeStamp);
-							authTemp.setRefresh_token(refreshToken);
-							authTemp.setIdToken(idToken);
-
-							dao.saveOrUpdate(authTemp);
-
-							out.println(jsonOb.toString());
+				if (authTemp != null) {
+					List<String> scopes = Arrays.asList(authTemp.getScope().split(","));
+					StringBuilder stringScope = new StringBuilder();
+					int scopesint = scopes.size();
+					for (int i = 0; i < scopesint; i++) {
+						stringScope.append(scopes.get(i));
+						if (i < scopesint) {
+							stringScope.append(" ");
 						}
-					} else if (grant_type.equals(GrantType.REFRESH_TOKEN.toString())) {
-						if (authTemp.getRefresh_token() != null && authTemp.getRefresh_token().equals(token)) {
-							HttpSession session = request.getSession();
-							HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session
-									.getAttribute("user" + client.getUserId());
-							Integer currentTime = (int) (System.currentTimeMillis() / 1000L);
-							if (scopes.contains("online_access") && sessionObj != null
-									&& currentTime > sessionObj.get("expiry")) {
-								response.sendError(401, "Invalid refresh_token");
+					}
+					stringScope.toString();
+
+					try {
+						OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+						if (grant_type.equals(GrantType.AUTHORIZATION_CODE.toString())) {
+							if (!code.equalsIgnoreCase(authTemp.getAuthCode())) {
+								response.sendError(401, "Invalid authorization code");
 								out.println(response);
 							} else if (!client.getClient_id().equals(client_id)) {
 								response.sendError(401, "Invalid Client ID");
 								out.println(response);
 							} else {
 								final String accessToken = oauthIssuerImpl.accessToken();
+								// org.json.JSONObject jsonHash = new org.json.JSONObject(new HashMap<K, V>());
 
 								JSONObject jsonOb = new JSONObject();
 								jsonOb.put("access_token", accessToken);
-								jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 								jsonOb.put("token_type", "bearer");
-								jsonOb.put("expires_in", "3600"); // 3600 second is 1hour
-								jsonOb.put("scope", stringScope.toString());
-								
-								// String refreshToken = null;
-								if (scopes.contains("launch/patient")) {
+								jsonOb.put("expires_in", "3600");
+
+								String refreshToken = null;
+								String idToken = null;
+								if (scopes.contains("launch/patient") || scopes.contains("launch")) {
 									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 								}
-								/*
-								 * if(scopes.contains("offline_access")){ refreshToken =
-								 * oauthIssuerImpl.refreshToken(); jsonOb.put("refresh_token", refreshToken);
-								 * 
-								 * }else if(scopes.contains("online_access")){ refreshToken =
-								 * oauthIssuerImpl.refreshToken(); jsonOb.put("refresh_token", refreshToken); }
-								 */
+								if (scopes.contains("offline_access")) {
+									refreshToken = oauthIssuerImpl.refreshToken();
+									jsonOb.put("refresh_token", refreshToken);
 
+								} else if (scopes.contains("online_access")) {
+									refreshToken = oauthIssuerImpl.refreshToken();
+									jsonOb.put("refresh_token", refreshToken);
+								}
+								if (scopes.contains("openid")) {
+									String sub = user.getUser_name();
+									String aud = client.getClient_id();
+									String email = user.getUser_email();
+									String userName = user.getUser_name();
+									String timeStamp = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy")
+											.format(new Timestamp(System.currentTimeMillis()));
+									Date issueDate = Common.convertToDateFormat(timeStamp);
+									Date expiryTime = new Date(issueDate.getTime() + 2 * HOUR);
+									Map<String, Object> payloadData = new HashMap<>();
+									payloadData.put("sub", sub);
+									payloadData.put("aud", aud);
+									payloadData.put("email", email);
+									payloadData.put("issueDate", issueDate);
+									payloadData.put("expiryTime", expiryTime);
+									payloadData.put("userName", userName);
+
+									idToken = jwtGenerator.generate(payloadData, request);
+									jsonOb.put("id_token", idToken);
+									jsonOb.put("scope", stringScope.toString());
+
+								}
 								response.addHeader("Content-Type", "application/json");
+								response.addHeader("Cache-Control", "no-store");
+								response.addHeader("Pragma", "no-cache");
+								
+
 								String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 										.format(new Timestamp(System.currentTimeMillis()));
+								// hm1.put(accessToken, timeStamp);
 								authTemp.setClient_secret(client_secret);
 								authTemp.setAccess_token(accessToken);
 								authTemp.setExpiry(timeStamp);
-								authTemp.setRefresh_token(authTemp.getRefresh_token());
+								authTemp.setRefresh_token(refreshToken);
+								authTemp.setIdToken(idToken);
 
-								dao.saveOrUpdate(authTemp);
+								authTempService.saveOrUpdate(authTemp);
 
 								out.println(jsonOb.toString());
 							}
-						} else {
-							response.sendError(401, "Invalid refresh_token");
+						} else if (grant_type.equals(GrantType.REFRESH_TOKEN.toString())) {
+							if (authTemp.getRefresh_token() != null && authTemp.getRefresh_token().equals(token)) {
+								HttpSession session = request.getSession();
+								HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session
+										.getAttribute("user" + client.getUserId());
+								Integer currentTime = (int) (System.currentTimeMillis() / 1000L);
+								if (scopes.contains("online_access") && sessionObj != null
+										&& currentTime > sessionObj.get("expiry")) {
+									response.sendError(401, "Invalid refresh_token");
+									out.println(response);
+								} else if (!client.getClient_id().equals(client_id)) {
+									response.sendError(401, "Invalid Client ID");
+									out.println(response);
+								} else {
+									final String accessToken = oauthIssuerImpl.accessToken();
+
+									JSONObject jsonOb = new JSONObject();
+									jsonOb.put("access_token", accessToken);
+									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
+									jsonOb.put("token_type", "bearer");
+									jsonOb.put("expires_in", "3600"); // 3600 second is 1hour
+									jsonOb.put("scope", stringScope.toString());
+
+									// String refreshToken = null;
+									if (scopes.contains("launch/patient")) {
+										jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
+									}
+									/*
+									 * if(scopes.contains("offline_access")){ refreshToken =
+									 * oauthIssuerImpl.refreshToken(); jsonOb.put("refresh_token", refreshToken);
+									 * 
+									 * }else if(scopes.contains("online_access")){ refreshToken =
+									 * oauthIssuerImpl.refreshToken(); jsonOb.put("refresh_token", refreshToken); }
+									 */
+
+									response.addHeader("Content-Type", "application/json");
+									response.addHeader("Cache-Control", "no-store");
+									response.addHeader("Pragma", "no-cache");
+									String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+											.format(new Timestamp(System.currentTimeMillis()));
+									authTemp.setClient_secret(client_secret);
+									authTemp.setAccess_token(accessToken);
+									authTemp.setExpiry(timeStamp);
+									authTemp.setRefresh_token(authTemp.getRefresh_token());
+
+									authTempService.saveOrUpdate(authTemp);
+
+									out.println(jsonOb.toString());
+								}
+							} else {
+								response.sendError(401, "Invalid refresh_token");
+							}
 						}
-					}
 
 				} catch (OAuthSystemException e) {
 					e.printStackTrace();
 				}
 
+				} else {
+					// the auth codes don't match.
+					response.sendError(401, "Invalid authentication");
+				}
 			} else {
-				// the auth codes don't match.
-				response.sendError(401, "Invalid authentication");
+				response.sendError(401, "Invalid client_secret");
+			}
+		} 
+		
+		
+		else {
+			
+			DafClientRegister client = service.getClient(client_id);
+					
+				Integer userId = client.getUserId();
+				DafUserRegister user = userService.getUserById(userId);
+
+				DafAuthtemp authTemp = authTempService.getAuthById(client_id);
+
+				if (authTemp != null) {
+					List<String> scopes = Arrays.asList(authTemp.getScope().split(","));
+					StringBuilder stringScope = new StringBuilder();
+					int scopesint = scopes.size();
+					for (int i = 0; i < scopesint; i++) {
+						stringScope.append(scopes.get(i));
+						if (i < scopesint) {
+							stringScope.append(" ");
+						}
+					}
+					stringScope.toString();
+
+					try {
+						OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
+						if (grant_type.equals(GrantType.AUTHORIZATION_CODE.toString())) {
+							if (!code.equalsIgnoreCase(authTemp.getAuthCode())) {
+								response.sendError(401, "Invalid authorization code");
+								out.println(response);
+							} else if (!client.getClient_id().equals(client_id)) {
+								response.sendError(401, "Invalid Client ID");
+								out.println(response);
+							} else {
+								final String accessToken = oauthIssuerImpl.accessToken();
+								// org.json.JSONObject jsonHash = new org.json.JSONObject(new HashMap<K, V>());
+
+								JSONObject jsonOb = new JSONObject();
+								jsonOb.put("access_token", accessToken);
+								jsonOb.put("token_type", "bearer");
+								jsonOb.put("expires_in", "3600");
+
+								String refreshToken = null;
+								String idToken = null;
+								if (scopes.contains("launch/patient") || scopes.contains("launch")) {
+									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
+								}
+								if (scopes.contains("offline_access")) {
+									refreshToken = oauthIssuerImpl.refreshToken();
+									jsonOb.put("refresh_token", refreshToken);
+
+								} else if (scopes.contains("online_access")) {
+									refreshToken = oauthIssuerImpl.refreshToken();
+									jsonOb.put("refresh_token", refreshToken);
+								}
+								if (scopes.contains("openid")) {
+									String sub = user.getUser_name();
+									String aud = client.getClient_id();
+									String email = user.getUser_email();
+									String userName = user.getUser_name();
+									String timeStamp = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy")
+											.format(new Timestamp(System.currentTimeMillis()));
+									Date issueDate = Common.convertToDateFormat(timeStamp);
+									Date expiryTime = new Date(issueDate.getTime() + 2 * HOUR);
+									Map<String, Object> payloadData = new HashMap<>();
+									payloadData.put("sub", sub);
+									payloadData.put("aud", aud);
+									payloadData.put("email", email);
+									payloadData.put("issueDate", issueDate);
+									payloadData.put("expiryTime", expiryTime);
+									payloadData.put("userName", userName);
+
+									idToken = jwtGenerator.generate(payloadData, request);
+									jsonOb.put("id_token", idToken);
+									jsonOb.put("scope", stringScope.toString());
+
+								}
+								response.addHeader("Content-Type", "application/json");
+								response.addHeader("Cache-Control", "no-store");
+								response.addHeader("Pragma", "no-cache");
+
+								String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+										.format(new Timestamp(System.currentTimeMillis()));
+								// hm1.put(accessToken, timeStamp);
+								authTemp.setClient_secret(client_secret);
+								authTemp.setAccess_token(accessToken);
+								authTemp.setExpiry(timeStamp);
+								authTemp.setRefresh_token(refreshToken);
+								authTemp.setIdToken(idToken);
+
+								authTempService.saveOrUpdate(authTemp);
+
+								out.println(jsonOb.toString());
+							}
+						} else if (grant_type.equals(GrantType.REFRESH_TOKEN.toString())) {
+							if (authTemp.getRefresh_token() != null && authTemp.getRefresh_token().equals(token)) {
+								HttpSession session = request.getSession();
+								HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session
+										.getAttribute("user" + client.getUserId());
+								Integer currentTime = (int) (System.currentTimeMillis() / 1000L);
+								if (scopes.contains("online_access") && sessionObj != null
+										&& currentTime > sessionObj.get("expiry")) {
+									response.sendError(401, "Invalid refresh_token");
+									out.println(response);
+								} else if (!client.getClient_id().equals(client_id)) {
+									response.sendError(401, "Invalid Client ID");
+									out.println(response);
+								} else {
+									final String accessToken = oauthIssuerImpl.accessToken();
+
+									JSONObject jsonOb = new JSONObject();
+									jsonOb.put("access_token", accessToken);
+									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
+									jsonOb.put("token_type", "bearer");
+									jsonOb.put("expires_in", "3600"); // 3600 second is 1hour
+									jsonOb.put("scope", stringScope.toString());
+
+									// String refreshToken = null;
+									if (scopes.contains("launch/patient")) {
+										jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
+									}
+									/*
+									 * if(scopes.contains("offline_access")){ refreshToken =
+									 * oauthIssuerImpl.refreshToken(); jsonOb.put("refresh_token", refreshToken);
+									 * 
+									 * }else if(scopes.contains("online_access")){ refreshToken =
+									 * oauthIssuerImpl.refreshToken(); jsonOb.put("refresh_token", refreshToken); }
+									 */
+
+									response.addHeader("Content-Type", "application/json");
+									response.addHeader("Cache-Control", "no-store");
+									response.addHeader("Pragma", "no-cache");
+									String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+											.format(new Timestamp(System.currentTimeMillis()));
+									authTemp.setClient_secret(client_secret);
+									authTemp.setAccess_token(accessToken);
+									authTemp.setExpiry(timeStamp);
+									authTemp.setRefresh_token(authTemp.getRefresh_token());
+
+									authTempService.saveOrUpdate(authTemp);
+
+									out.println(jsonOb.toString());
+								}
+							} else {
+								response.sendError(401, "Invalid refresh_token");
+							}
+						}
+
+					} catch (OAuthSystemException e) {
+						e.printStackTrace();
+					}
+
+				} else {
+					// the auth codes don't match.
+					response.sendError(401, "Invalid authentication");
+				}
+				
 			}
 		}
 	}
 
-}

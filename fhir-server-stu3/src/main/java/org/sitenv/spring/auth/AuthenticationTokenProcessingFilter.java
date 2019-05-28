@@ -1,23 +1,6 @@
 package org.sitenv.spring.auth;
 
 
-import org.sitenv.spring.dao.AuthTempDao;
-import org.sitenv.spring.model.DafAuthtemp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.filter.GenericFilterBean;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -26,11 +9,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.sitenv.spring.dao.AuthTempDao;
+import org.sitenv.spring.model.DafAuthtemp;
+import org.sitenv.spring.service.AuthTempService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
+
 @WebServlet
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
     @Autowired
-    private AuthTempDao dao;
+    private AuthTempService authTempService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
@@ -47,7 +48,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
         if (authToken != null && "bearer".equalsIgnoreCase(authToken.split(" ", 2)[0].toString())) {
             authToken = authToken.substring(7);
-            DafAuthtemp authentication = dao.validateAccessToken(authToken);
+            DafAuthtemp authentication = authTempService.validateAccessToken(authToken);
 
             if (authentication != null && authToken.equalsIgnoreCase(authentication.getAccess_token())) {
                 try {
@@ -55,16 +56,24 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                     Integer currentTime = Common.convertTimestampToUnixTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis())));
                     if (Common.convertTimestampToUnixTime(expiryTime) + 3600 > currentTime) {
                         List<String> scopes = Arrays.asList(authentication.getScope().split(","));
-                        List<String> patientScopes = Arrays.asList("launch/patient,patient/Patient.read,user/Patient.read".split(","));
-                        List<String> userScopes = Arrays.asList("user/*.read,user/*.*,patient/*.read,fhir_complete".split(","));
-
-                        if (CollectionUtils.containsAny(scopes, userScopes)) {
+                        //List<String> patientScopes = Arrays.asList("launch/patient,patient/Patient.read,user/Patient.read".split(","));
+                        //List<String> userScopes = Arrays.asList("user/*.read,user/*.*,patient/*.read".split(","));
+                        
+                       	if (scopes.contains("user/*.*") && httpRequest.getRequestURI().contains("/fhir/")){
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (CollectionUtils.containsAny(scopes, patientScopes) && httpRequest.getRequestURI().contains("/fhir/Patient")) {
-                            if (scopes.contains("launch/patient") && !httpRequest.getPathInfo().split("/", 3)[2].equals(String.valueOf(authentication.getLaunchPatientId()))) {
-                                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Access is denied for this Patient");
-                            }
+                            
+                       	}  else  if (scopes.contains("user/*.read") && httpRequest.getRequestURI().contains("/fhir/")){
+                                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                                chain.doFilter(request, response);
+                            
+                        } else if (scopes.contains("patient/*.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if (scopes.contains("patient/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                                SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                                chain.doFilter(request, response);
+                        } else if (scopes.contains("user/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
                         } else if (scopes.contains("patient/DocumentReference.read") && httpRequest.getRequestURI().contains("/fhir/DocumentReference")) {
@@ -88,13 +97,25 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
             } else {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token was invalid.");
             }
-        } else if (httpRequest.getRequestURI().contains("/open")) {
+        }else if (httpRequest.getRequestURI().contains("/fhir/.well-known")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            getServletContext().getRequestDispatcher("/.well-known/smart-configuration").forward(request, response);
+        }
+        else if (httpRequest.getRequestURI().contains("/jwk")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
+        }
+        /*else if (httpRequest.getRequestURI().contains("/fhirserver")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
+        }*/
+        else if (httpRequest.getRequestURI().contains("/open")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
-        } else if (httpRequest.getServletPath().equals("/token")) {
+        } else if (httpRequest.getServletPath().contains("/token")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getRequestURI().contains("/metadata")) {

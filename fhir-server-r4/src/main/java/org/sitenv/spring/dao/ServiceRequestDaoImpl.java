@@ -1,6 +1,7 @@
 package org.sitenv.spring.dao;
 
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
@@ -10,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafServiceRequest;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
+
 import ca.uhn.fhir.model.api.IQueryParameterType;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;

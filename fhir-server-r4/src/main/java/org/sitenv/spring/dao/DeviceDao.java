@@ -1,6 +1,7 @@
 package org.sitenv.spring.dao;
 
 import java.util.List;
+
 import org.sitenv.spring.model.DafDevice;
 import org.sitenv.spring.util.SearchParameterMap;
 

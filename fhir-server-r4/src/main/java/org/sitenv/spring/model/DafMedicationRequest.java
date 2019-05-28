@@ -14,7 +14,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
-import org.json.JSONTokener;
 import org.sitenv.spring.configuration.JSONObjectUserType;
 
 @Entity

@@ -31,20 +31,20 @@
 							    </div>    							
     						</div>
     						<div class="form-group">
-								<label for="editredirecturi" class="col-sm-3 control-label">Redirect URI:</label>
+								<label for="editredirecturi" class="col-sm-3 control-label">Redirect URL:</label>
 							    <div class="col-sm-5">
 							      	<input type="text" class="form-control" id="editredirecturi" name="editredirecturi">
 							    </div>    							
     						</div>
     						<div class="form-group">
-    						<label for="inputEmail3" class="col-sm-3 control-label">Launch URI:</label>
+    						<label for="inputEmail3" class="col-sm-3 control-label">Launch URL:</label>
                                         <div class="col-sm-5">
                                                 <input type="text" class="form-control" id="editlaunchUri" name="editlaunchUri">
                                         </div>                                
                                     </div>
                                 
                             <div class="form-group">
-								<label for="editscopes" class="col-sm-3 control-label">Scope:</label>
+								<label for="editscopes" class="col-sm-3 control-label">Scope(s):</label>
 							    <div class="col-sm-9">
 									<div class="col-sm-5 editregscopes">
 								    		<div class="checkbox">
@@ -54,7 +54,7 @@
 												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch/patient" onchange="removeerror();">launch/patient</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/*.read" onchange="removeerror();">patient/*.read</label>
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/*.*" onchange="removeerror();">patient/*.*</label>
 											</div>
 											<div class="checkbox">
 												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Patient.read" onchange="removeerror();">patient/Patient.read</label>
@@ -86,7 +86,7 @@
 												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="openid" onchange="removeerror();">openid</label>
 											</div>
 											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="fhirUser" onchange="removeerror();">fhirUser</label>
+												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="profile" onchange="removeerror();">profile</label>
 											</div>
 						
 											<div class="checkbox">

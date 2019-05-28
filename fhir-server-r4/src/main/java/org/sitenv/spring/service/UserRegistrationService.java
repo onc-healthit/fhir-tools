@@ -1,8 +1,8 @@
 package org.sitenv.spring.service;
 
-import org.sitenv.spring.model.DafUserRegister;
-
 import javax.servlet.http.HttpServletRequest;
+
+import org.sitenv.spring.model.DafUserRegister;
 
 public interface UserRegistrationService {
 

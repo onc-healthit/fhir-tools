@@ -1,0 +1,168 @@
+a:hover,a:focus{
+    text-decoration: none;
+    outline: none;
+}
+.tab .nav-tabs{
+    border-bottom: 0 none;
+    background: transparent;
+}
+.tab .nav-tabs li a{
+    text-align: center;
+    margin-left: 2px;
+    font-size: 16px;
+    color: #333;
+    background: transparent;
+    border: none;
+    padding: 6px 22px;
+    border-radius:  13px;
+    position: relative;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+}
+.tab .nav-tabs li.active a{
+    border: 0 none;
+    background: #fa6e6f;
+    color: #fff;
+}
+.tab .nav-tabs li.active a:after{
+    content: "";
+    position: absolute;
+    left: 45%;
+    bottom: -14px;
+    border: 7px solid transparent;
+    border-top: 7px solid #e6dada;
+}
+.tab .tab-content{
+    padding: 12px;
+    font-size: 14px;
+    color: #5a5c5d;
+    line-height: 20px;
+    margin-top: -24px;
+    background: #fff;
+
+}
+@media only screen and (max-width: 480px) {
+    .tab .nav-tabs li{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .tab .nav-tabs li a{
+        border: 1px solid #d3d3d3;
+
+    }
+    .tab .nav-tabs li.active a:after{
+        border:none;
+    }
+}
+
+
+.panel-body {
+
+    padding: 15px;
+}
+.nav {
+    list-style: outside none none;
+    margin-bottom: 0;
+    padding-left: 17px !important;
+}
+
+.nav-tabs li a {
+
+    background-color: #eeeeee !important;
+    width: 365px !important;
+    height: 34px !important;
+}
+.nav-tabs li.active a {
+    color: #fff;
+    background-color: #337ab7 !important;
+    width: 365px !important;
+    height: 34px!important;
+}
+
+.tab .nav-tabs {
+    border-bottom: 0 none;
+    background: transparent;
+}
+.button {
+    display: block;
+    width: 115px;
+    height: 25px;
+    background: #4E9CAF;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+}
+.btncolor{
+    color:white!important;
+
+}
+
+a {
+
+    text-decoration: none;
+}
+
+.center-block {
+    margin-top: 3px;
+    display: block;
+    margin-right: -91px;
+    margin-bottom: -36px;
+}
+
+
+#exTab1 .tab-content {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+}
+
+#exTab2 h3 {
+    color : white;
+    background-color: #98b0c4;
+    padding : 5px 15px;
+}
+
+/* remove border radius for the tab */
+
+#exTab1 .nav-pills > li > a {
+    border-radius: 0;
+}
+
+/* change border radius for the tab , apply corners on top*/
+
+#exTab3 .nav-pills > li > a {
+    border-radius: 4px 4px 0 0 ;
+}
+
+#exTab3 .tab-content {
+    color : white;
+    background-color: #428bca;
+    padding : 5px 15px;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 5px;
+    margin-bottom: 14px;
+}
+
+.container {
+    margin-bottom: -23px !important;
+    width: 1170px;
+}
+
+@media (min-width: 1200px){
+    .container {
+        margin-bottom: 0px !important;
+        width: 1170px;
+    }
+}
+

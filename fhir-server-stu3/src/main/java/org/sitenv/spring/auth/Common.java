@@ -2,6 +2,8 @@ package org.sitenv.spring.auth;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 
@@ -18,4 +20,21 @@ public class Common {
             return null;
         }
     }
+    
+    public static Date convertToDateFormat(String timeStamp) {
+     	SimpleDateFormat sdf = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",
+                 Locale.ENGLISH);
+     	
+                 Date parsedDate=null;
+				try {
+					parsedDate = sdf.parse(timeStamp);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+                 return parsedDate;
+	     }
+    
+    
+    
+    
 }

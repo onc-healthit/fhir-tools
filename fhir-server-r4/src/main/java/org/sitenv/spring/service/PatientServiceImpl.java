@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.sitenv.spring.dao.PatientDao;
 import org.sitenv.spring.model.DafPatient;
+import org.sitenv.spring.model.PatientList;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,4 +40,10 @@ public class PatientServiceImpl implements PatientService {
    public List<DafPatient> getPatientHistoryById(int theId) {
 	   return this.patientDao.getPatientHistoryById(theId);
    }
+
+	@Override
+	@Transactional
+	public List<DafPatient> getPatientsOnAuthorize() {
+		return this.patientDao.getPatientsOnAuthorize();
+	}
 }

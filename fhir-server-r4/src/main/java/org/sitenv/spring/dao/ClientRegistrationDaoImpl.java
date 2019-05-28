@@ -1,7 +1,8 @@
 package org.sitenv.spring.dao;
 
+import java.util.List;
+
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -9,8 +10,6 @@ import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Transactional
@@ -65,7 +64,7 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
         Criteria crit = getSession().createCriteria(DafClientRegister.class)
                 .add(Restrictions.eq("client_id", clientId));
 
-        //if(clientSecret != null)  crit.add(Restrictions.eq("client_secret", clientSecret));
+        if(clientSecret != null)  crit.add(Restrictions.eq("client_secret", clientSecret));
 
         DafClientRegister client = (DafClientRegister) crit.uniqueResult();
         return client;
@@ -96,6 +95,5 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
         DafClientRegister client = (DafClientRegister) criteria.uniqueResult();
         return client;
     }
-
 
 }

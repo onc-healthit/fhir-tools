@@ -1,5 +1,7 @@
 package org.sitenv.spring.dao;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -7,8 +9,6 @@ import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.util.AESencryption;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional
 @Repository

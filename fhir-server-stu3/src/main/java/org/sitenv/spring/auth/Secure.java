@@ -1,10 +1,10 @@
 package org.sitenv.spring.auth;
 
+import javax.servlet.http.HttpSession;
+
 import org.aspectj.lang.JoinPoint;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-
-import javax.servlet.http.HttpSession;
 
 //@Aspect
 public class Secure {

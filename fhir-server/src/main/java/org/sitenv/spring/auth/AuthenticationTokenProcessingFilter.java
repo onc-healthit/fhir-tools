@@ -57,12 +57,10 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                        	if (scopes.contains("user/*.*") && httpRequest.getRequestURI().contains("/fhir/")){
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                            
                        	}  else  if (scopes.contains("user/*.read") && httpRequest.getRequestURI().contains("/fhir/")){
                                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                                 chain.doFilter(request, response);
-                            
-                        } else if (scopes.contains("patient/*.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                        } else if (scopes.contains("patient/*.read") && httpRequest.getRequestURI().contains("/fhir/")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
                         } else if (scopes.contains("patient/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
@@ -92,15 +90,13 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
             } else {
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Authentication token was invalid.");
             }
-        }else if (httpRequest.getRequestURI().contains("/fhir/.well-known")) {
+        } else if (httpRequest.getRequestURI().contains("/fhir/.well-known")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             getServletContext().getRequestDispatcher("/.well-known/smart-configuration").forward(request, response);
-        }
-        else if (httpRequest.getRequestURI().contains("/jwk")) {
+        } else if (httpRequest.getRequestURI().contains("/jwk")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
-        }
-        else if (httpRequest.getRequestURI().contains("/open")) {
+        } else if (httpRequest.getRequestURI().contains("/open")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {

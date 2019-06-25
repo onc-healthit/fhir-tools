@@ -1,29 +1,22 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.UriAndListParam;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Annotation;
-import org.hl7.fhir.r4.model.CarePlan;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityComponent;
 import org.hl7.fhir.r4.model.CarePlan.CarePlanActivityDetailComponent;
-import org.hl7.fhir.r4.model.CareTeam;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Device;
-import org.hl7.fhir.r4.model.HealthcareService;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Organization;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.Practitioner;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.SimpleQuantity;
-import org.hl7.fhir.r4.model.UriType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
@@ -34,25 +27,10 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.History;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.IncludeParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.param.UriAndListParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class CarePlanResourceProvider implements IResourceProvider {
 	
@@ -229,6 +207,10 @@ public class CarePlanResourceProvider implements IResourceProvider {
         @OptionalParam(name = CarePlan.SP_STATUS)
         TokenAndListParam theStatus,
         
+        @Description(shortDefinition="Type of plan")
+		@OptionalParam(name = CarePlan.SP_CATEGORY)
+		TokenAndListParam theCategory, 
+        
         @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
@@ -255,6 +237,7 @@ public class CarePlanResourceProvider implements IResourceProvider {
         paramMap.add(CarePlan.SP_INSTANTIATES_URI, theInstantiatesUri);
         paramMap.add(CarePlan.SP_CONDITION, theCondition);
         paramMap.add(CarePlan.SP_STATUS, theStatus);
+        paramMap.add(CarePlan.SP_CATEGORY, theCategory);
         
         paramMap.setIncludes(theIncludes);
         paramMap.setSort(theSort);
@@ -931,6 +914,41 @@ public class CarePlanResourceProvider implements IResourceProvider {
         	}
         	carePlan.setNote(noteList);
         }
+        
+     // set category
+     		if (!carePlanJSON.isNull("category")) {
+     			JSONArray categoryJSON = carePlanJSON.getJSONArray("category");
+     			List<CodeableConcept> categoryList = new ArrayList<CodeableConcept>();
+     			int noOfCategories = categoryJSON.length();
+     			for (int i = 0; i < noOfCategories; i++) {
+     				CodeableConcept theCategory = new CodeableConcept();
+     				if (!categoryJSON.getJSONObject(i).isNull("coding")) {
+     					JSONArray codingJSON = categoryJSON.getJSONObject(i).getJSONArray("coding");
+     					List<Coding> codingList = new ArrayList<Coding>();
+     					for (int j = 0; j < codingJSON.length(); j++) {
+     						Coding theCoding = new Coding();
+
+     						if (!codingJSON.getJSONObject(j).isNull("system")) {
+     							theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+     						}
+     						if (!codingJSON.getJSONObject(j).isNull("code")) {
+     							theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+     						}
+     						if (!codingJSON.getJSONObject(j).isNull("display")) {
+     							theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+     						}
+     						codingList.add(theCoding);
+     					}
+     					theCategory.setCoding(codingList);
+     				}
+
+     				if (!categoryJSON.getJSONObject(i).isNull("text")) {
+     					theCategory.setText(categoryJSON.getJSONObject(i).getString("text"));
+     				}
+     				categoryList.add(theCategory);
+     			}
+     			carePlan.setCategory(categoryList);
+     		}
         return carePlan;
     }
 }

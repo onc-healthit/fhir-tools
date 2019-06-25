@@ -1,12 +1,11 @@
 package org.sitenv.spring.util;
 
-import java.security.Key;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import java.security.Key;
 
 public class AESencryption {
     

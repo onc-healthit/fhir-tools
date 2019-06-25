@@ -1,9 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
 import org.sitenv.spring.model.DafRiskAssessment;
 import org.sitenv.spring.util.SearchParameterMap;
+
+import java.util.List;
 
 public interface RiskAssessmentDao {
 

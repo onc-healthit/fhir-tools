@@ -1,7 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.TokenParamModifier;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
@@ -12,10 +14,7 @@ import org.sitenv.spring.model.DafPractitioner;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import java.util.List;
 
 @Repository("practitionerDao")
 public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao {

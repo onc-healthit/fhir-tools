@@ -1,7 +1,7 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.*;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -11,12 +11,7 @@ import org.sitenv.spring.model.DafProcedure;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.UriParam;
+import java.util.List;
 
 @Repository("procedureDao")
 public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
@@ -27,6 +22,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the Procedure
 	 */
+	@Override
 	public DafProcedure getProcedureById(int id) {
 
 		Criteria criteria = getSession().createCriteria(DafProcedure.class)
@@ -61,6 +57,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 * @return criteria : DAF Procedure object
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafProcedure> search(SearchParameterMap theMap) {
 		Criteria criteria = getSession().createCriteria(DafProcedure.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -318,7 +315,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 					if (subject.getValue() != null) {
 						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "%'"),
+										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "'"),
 								Restrictions.sqlRestriction(
 										"{alias}.data->'subject'->>'display' ilike '%" + subject.getValue() + "%'"));
 
@@ -729,11 +726,11 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 * @param theId : ID of the Procedure
 	 * @return : List of Procedure DAF records
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafProcedure> getProcedureHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafProcedure.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafProcedure>) criteria.list();
+		List<DafProcedure> list = getSession().createNativeQuery(
+    			"select * from procedure where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafProcedure.class)
+    				.getResultList();
+		return list;
 	}
 }

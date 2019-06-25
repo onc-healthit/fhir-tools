@@ -1,7 +1,7 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
@@ -9,16 +9,10 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafPatient;
-import org.sitenv.spring.model.PatientList;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import java.util.List;
 
 @Repository("patientDao")
 public class PatientDaoImpl extends AbstractDao implements PatientDao {
@@ -770,14 +764,13 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
      * @param theId : ID of the patient
      * @return : List of patient records
      */
-    @SuppressWarnings("unchecked")
     @Override
 	public List<DafPatient> getPatientHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafPatient.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
-		return (List<DafPatient>) criteria.list();
+    	List<DafPatient> list = getSession().createNativeQuery(
+    			"select * from patient where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafPatient.class)
+    				.getResultList();
+		return list;
 	}
-
 	@Override
 	public List<DafPatient> getPatientsOnAuthorize() {
 		/*
@@ -791,7 +784,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 		 * , DafPatient.class) .getResultList();
 		 */
 		List<DafPatient> list = getSession().createNativeQuery(
-		"select * from patient GROUP BY id  ORDER BY MAX(id) , MAX(cast(data->'meta'->>'versionId' as float))" , DafPatient.class) .getResultList();
+		"SELECT * FROM patient WHERE (data->>'id', data->'meta'->>'versionId') IN ( SELECT data->>'id', MAX(data->'meta'->>'versionId') FROM patient GROUP BY data->>'id' ) ORDER BY data->>'id'" , DafPatient.class) .getResultList();
 		return list;
 	}
 

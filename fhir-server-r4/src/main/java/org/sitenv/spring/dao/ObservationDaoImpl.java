@@ -1,7 +1,10 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.QuantityParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -11,11 +14,7 @@ import org.sitenv.spring.model.DafObservation;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.QuantityParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import java.util.List;
 
 @Repository("observationDao")
 public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
@@ -26,6 +25,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the Observation
 	 */
+	@Override
 	public DafObservation getObservationById(int id) {
 
 		Criteria criteria = getSession().createCriteria(DafObservation.class)
@@ -42,6 +42,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	 * @param versionId : version of the Observation record
 	 * @return : DAF object of the Observation
 	 */
+	@Override
 	public DafObservation getObservationByVersionId(int theId, String versionId) {
 
 		Criteria criteria = getSession().createCriteria(DafObservation.class)
@@ -60,6 +61,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	 * @return criteria : DAF Observation object
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafObservation> search(SearchParameterMap theMap) {
 		Criteria criteria = getSession().createCriteria(DafObservation.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -102,6 +104,9 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 
 		// build criteria for partOf
 		buildPartOfCriteria(theMap, criteria);
+		
+		// build criteria for patient
+		buildPatientCriteria(theMap, criteria);
 
 		return criteria.list();
 	}
@@ -626,6 +631,43 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 			}
 		}
 	}
+	
+	/**
+	 * This method builds criteria for observation patient
+	 * 
+	 * @param theMap   : search parameter "patient"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildPatientCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("patient");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					ReferenceParam patient = (ReferenceParam) params;
+					Criterion criterion = null;
+					if (patient.getValue() != null) {
+						criterion = Restrictions.or(
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'display' ilike '%" + patient.getValue() + "%'"));
+
+					} else if (patient.getMissing()) {
+						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
+
+					} else if (!patient.getMissing()) {
+						criterion = Restrictions
+								.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NOT NULL"));
+
+					}
+					disjunction.add(criterion);
+				}
+				criteria.add(disjunction);
+			}
+		}
+
+	}
 
 	/**
 	 * This method builds criteria for fetching history of the Observation by id
@@ -633,11 +675,11 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	 * @param theId : ID of the Observation
 	 * @return : List of Observation DAF records
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafObservation> getObservationHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafObservation.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafObservation>) criteria.list();
+		List<DafObservation> list = getSession().createNativeQuery(
+    			"select * from observation where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafObservation.class)
+    				.getResultList();
+		return list;
 	}
 }

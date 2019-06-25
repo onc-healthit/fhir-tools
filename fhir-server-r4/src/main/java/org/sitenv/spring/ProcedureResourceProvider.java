@@ -1,23 +1,20 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.CanonicalType;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.DateTimeType;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.Procedure;
+import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.Procedure.ProcedureFocalDeviceComponent;
 import org.hl7.fhir.r4.model.Procedure.ProcedurePerformerComponent;
 import org.hl7.fhir.r4.model.Procedure.ProcedureStatus;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.UriType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
@@ -28,26 +25,10 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.History;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.IncludeParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.param.UriAndListParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class ProcedureResourceProvider implements IResourceProvider {
 	
@@ -579,6 +560,9 @@ public class ProcedureResourceProvider implements IResourceProvider {
         	if (!encounterJSON.isNull("reference")) {
         		theEncounter.setReference(encounterJSON.getString("reference"));
 			}
+        	if (!encounterJSON.isNull("type")) {
+        		theEncounter.setType(encounterJSON.getString("type"));
+			}
         	if (!encounterJSON.isNull("display")) {
         		theEncounter.setDisplay(encounterJSON.getString("display"));
 			}
@@ -677,6 +661,26 @@ public class ProcedureResourceProvider implements IResourceProvider {
 			for (int i = 0; i < noOfReasonCodes; i++) {
 				CodeableConcept theReasonCode = new CodeableConcept();
 				
+				if (!reasonCodeJSON.getJSONObject(i).isNull("coding")) {
+					 JSONArray codingJSON = reasonCodeJSON.getJSONObject(i).getJSONArray("coding");
+					 List<Coding> codingList = new ArrayList<Coding>();
+					 int noOfCodings = codingJSON.length();
+					 for (int k = 0; k < noOfCodings; k++) {
+						Coding theCoding = new Coding();
+						
+						if (!codingJSON.getJSONObject(k).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(k).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(k).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(k).getString("display"));
+						}
+						codingList.add(theCoding);
+					}
+					 theReasonCode.setCoding(codingList);
+				}
 				if (!reasonCodeJSON.getJSONObject(i).isNull("text")) {
 					theReasonCode.setText(reasonCodeJSON.getJSONObject(i).getString("text"));
 				}
@@ -696,6 +700,9 @@ public class ProcedureResourceProvider implements IResourceProvider {
 				if (!reasonReferenceJSON.getJSONObject(j).isNull("reference")) {
 					theReasonReference.setReference(reasonReferenceJSON.getJSONObject(j).getString("reference"));
 				}
+				if (!reasonReferenceJSON.getJSONObject(j).isNull(" type")) {
+					theReasonReference.setType(reasonReferenceJSON.getJSONObject(j).getString(" type"));
+				}
 				if (!reasonReferenceJSON.getJSONObject(j).isNull("display")) {
 					theReasonReference.setDisplay(reasonReferenceJSON.getJSONObject(j).getString("display"));
 				}
@@ -703,6 +710,389 @@ public class ProcedureResourceProvider implements IResourceProvider {
 			}
 			procedure.setReasonReference(reasonReferenceList);
 		}
+        
+        //set bodySite
+        if (!procedureJSON.isNull("bodySite")) {
+			JSONArray bodySiteJSON = procedureJSON.getJSONArray("bodySite");
+			List<CodeableConcept> bodySiteList = new ArrayList<CodeableConcept>();
+			int noOfBodySites= bodySiteJSON.length();
+			
+			for (int j = 0; j < noOfBodySites; j++) {
+				CodeableConcept theBodySite = new CodeableConcept();
+				
+				if (!bodySiteJSON.getJSONObject(j).isNull("coding")) {
+					 JSONArray codingJSON = bodySiteJSON.getJSONObject(j).getJSONArray("coding");
+					 List<Coding> codingList = new ArrayList<Coding>();
+					 int noOfCodings = codingJSON.length();
+					 for (int k = 0; k < noOfCodings; k++) {
+						Coding theCoding = new Coding();
+						
+						if (!codingJSON.getJSONObject(k).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(k).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(k).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(k).getString("display"));
+						}
+						codingList.add(theCoding);
+					}
+					 theBodySite.setCoding(codingList);
+				}
+				if (!bodySiteJSON.getJSONObject(j).isNull("text")) {
+					theBodySite.setText(bodySiteJSON.getJSONObject(j).getString("text"));
+				}
+				bodySiteList.add(theBodySite);
+			}
+			procedure.setBodySite(bodySiteList);
+		}
+		
+        //set outcome
+        if (!procedureJSON.isNull("outcome")) {
+		JSONObject outcomeJSON = procedureJSON.getJSONObject("outcome");
+		CodeableConcept theOutcome = new CodeableConcept();
+		
+		if (!outcomeJSON.isNull("coding")) {
+			JSONArray codingJSON = outcomeJSON.getJSONArray("coding");
+			List<Coding> codingList = new ArrayList<Coding>();
+			int noOfCodings = codingJSON.length();
+			
+			for (int j = 0; j < noOfCodings; j++) {
+				Coding theCoding = new Coding();
+				
+				if (!codingJSON.getJSONObject(j).isNull("system")) {
+					theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+				}
+				if (!codingJSON.getJSONObject(j).isNull("code")) {
+					theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+				}
+				if (!codingJSON.getJSONObject(j).isNull("display")) {
+					theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+				}
+				codingList.add(theCoding);
+			}
+			theOutcome.setCoding(codingList);
+		}
+		if (!outcomeJSON.isNull("text")) {
+			theOutcome.setText(outcomeJSON.getString("text"));
+		}
+		procedure.setOutcome(theOutcome);
+	}
+        
+        //set complication
+        if (!procedureJSON.isNull("complication")) {
+			JSONArray complicationJSON = procedureJSON.getJSONArray("complication");
+			List<CodeableConcept> complicationList = new ArrayList<CodeableConcept>();
+			int noOfComplications= complicationJSON.length();
+			
+			for (int j = 0; j < noOfComplications; j++) {
+				CodeableConcept theComplication = new CodeableConcept();
+				
+				if (!complicationJSON.getJSONObject(j).isNull("coding")) {
+					 JSONArray codingJSON = complicationJSON.getJSONObject(j).getJSONArray("coding");
+					 List<Coding> codingList = new ArrayList<Coding>();
+					 int noOfCodings = codingJSON.length();
+					 for (int k = 0; k < noOfCodings; k++) {
+						Coding theCoding = new Coding();
+						
+						if (!codingJSON.getJSONObject(k).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(k).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(k).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(k).getString("display"));
+						}
+						codingList.add(theCoding);
+					}
+					 theComplication.setCoding(codingList);
+				}
+				if (!complicationJSON.getJSONObject(j).isNull("text")) {
+					theComplication.setText(complicationJSON.getJSONObject(j).getString("text"));
+				}
+				complicationList.add(theComplication);
+			}
+			procedure.setComplication(complicationList);
+		}
+        
+        //set followUp
+        if (!procedureJSON.isNull("followUp")) {
+			JSONArray followUpJSON = procedureJSON.getJSONArray("followUp");
+			List<CodeableConcept> followUpList = new ArrayList<CodeableConcept>();
+			int noOffollowUps= followUpJSON.length();
+			
+			for (int j = 0; j < noOffollowUps; j++) {
+				CodeableConcept theFollowUp = new CodeableConcept();
+				
+				if (!followUpJSON.getJSONObject(j).isNull("coding")) {
+					 JSONArray codingJSON = followUpJSON.getJSONObject(j).getJSONArray("coding");
+					 List<Coding> codingList = new ArrayList<Coding>();
+					 int noOfCodings = codingJSON.length();
+					 for (int k = 0; k < noOfCodings; k++) {
+						Coding theCoding = new Coding();
+						
+						if (!codingJSON.getJSONObject(k).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(k).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(k).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(k).getString("display"));
+						}
+						codingList.add(theCoding);
+					}
+					 theFollowUp.setCoding(codingList);
+				}
+				if (!followUpJSON.getJSONObject(j).isNull("text")) {
+					theFollowUp.setText(followUpJSON.getJSONObject(j).getString("text"));
+				}
+				followUpList.add(theFollowUp);
+			}
+			procedure.setFollowUp(followUpList);
+		}
+		
+        //set note
+        if (!procedureJSON.isNull("note")) {
+        	JSONArray noteJSON = procedureJSON.getJSONArray("note");
+			List<Annotation> noteList = new ArrayList<Annotation>();
+			int length = noteJSON.length();
+			for (int i = 0; i < length; i++) {
+				Annotation theNote = new Annotation();
+				if (!noteJSON.getJSONObject(i).isNull("text")) {
+					theNote.setText(noteJSON.getJSONObject(i).getString("text"));
+				}
+				noteList.add(theNote);
+			}
+			procedure.setNote(noteList);
+		}
+        
+      //set report
+        if (!procedureJSON.isNull("report")) {
+			JSONArray reportJSON = procedureJSON.getJSONArray("report");
+			List<Reference> reportList = new ArrayList<Reference>();
+			
+			for (int j = 0; j < reportJSON.length(); j++) {
+				Reference theReasonReference = new Reference();
+				
+				if (!reportJSON.getJSONObject(j).isNull("reference")) {
+					theReasonReference.setReference(reportJSON.getJSONObject(j).getString("reference"));
+				}
+				if (!reportJSON.getJSONObject(j).isNull("display")) {
+					theReasonReference.setDisplay(reportJSON.getJSONObject(j).getString("display"));
+				}
+				reportList.add(theReasonReference);
+			}
+			procedure.setReport(reportList);
+		}
+        
+        //set focalDevice
+        if (!procedureJSON.isNull("focalDevice")) {
+			JSONArray focalDeviceJSON = procedureJSON.getJSONArray("focalDevice");
+			List<ProcedureFocalDeviceComponent> focalDeviceList = new ArrayList<Procedure.ProcedureFocalDeviceComponent>();
+			int noOfFocalDevices = focalDeviceJSON.length();
+			
+			for (int i = 0; i < noOfFocalDevices; i++) {
+				ProcedureFocalDeviceComponent theFocalDevice = new ProcedureFocalDeviceComponent();
+				
+				if (!focalDeviceJSON.getJSONObject(i).isNull("action")) {
+					JSONObject actionJSON = focalDeviceJSON.getJSONObject(i).getJSONObject("action");
+					CodeableConcept theAction = new CodeableConcept();
+					
+					if (!actionJSON.isNull("coding")) {
+						JSONArray codingJSON = actionJSON.getJSONArray("coding");
+						List<Coding> codingList = new ArrayList<Coding>();
+						int noOfCodings = codingJSON.length();
+						
+						for (int j = 0; j < noOfCodings; j++) {
+							Coding theCoding = new Coding();
+							
+							if (!codingJSON.getJSONObject(j).isNull("system")) {
+								theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+							}
+							if (!codingJSON.getJSONObject(j).isNull("code")) {
+								theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+							}
+							if (!codingJSON.getJSONObject(j).isNull("display")) {
+								theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+							}
+							codingList.add(theCoding);
+						}
+						theAction.setCoding(codingList);
+					}
+					if (!actionJSON.isNull("text")) {
+						theAction.setText(actionJSON.getString("text"));
+					}
+					theFocalDevice.setAction(theAction);
+				}
+				
+				if (!focalDeviceJSON.getJSONObject(i).isNull("manipulated")) {
+					JSONObject manipulatedJSON = focalDeviceJSON.getJSONObject(i).getJSONObject("manipulated");
+					Reference theManipulated = new Reference();
+					
+					if (!manipulatedJSON.isNull("reference")) {
+						theManipulated.setReference(manipulatedJSON.getString("reference"));
+					}
+					if (!manipulatedJSON.isNull("display")) {
+						theManipulated.setDisplay(manipulatedJSON.getString("display"));
+					}
+					theFocalDevice.setManipulated(theManipulated);
+				}
+				
+				focalDeviceList.add(theFocalDevice);
+			}
+			procedure.setFocalDevice(focalDeviceList);
+		}
+        
+        //set usedReference
+        if (!procedureJSON.isNull("usedReference")) {
+			JSONArray usedReferenceJSON = procedureJSON.getJSONArray("usedReference");
+			List<Reference> usedReferenceList = new ArrayList<Reference>();
+			
+			for (int j = 0; j < usedReferenceJSON.length(); j++) {
+				Reference theReasonReference = new Reference();
+				
+				if (!usedReferenceJSON.getJSONObject(j).isNull("reference")) {
+					theReasonReference.setReference(usedReferenceJSON.getJSONObject(j).getString("reference"));
+				}
+				if (!usedReferenceJSON.getJSONObject(j).isNull(" type")) {
+					theReasonReference.setType(usedReferenceJSON.getJSONObject(j).getString(" type"));
+				}
+				if (!usedReferenceJSON.getJSONObject(j).isNull("display")) {
+					theReasonReference.setDisplay(usedReferenceJSON.getJSONObject(j).getString("display"));
+				}
+				usedReferenceList.add(theReasonReference);
+			}
+			procedure.setUsedReference(usedReferenceList);
+		}
+        
+      //set usedCode
+        if (!procedureJSON.isNull("usedCode")) {
+			JSONArray usedCodeJSON = procedureJSON.getJSONArray("usedCode");
+			List<CodeableConcept> usedCodeList = new ArrayList<CodeableConcept>();
+			int noOfUsedCode= usedCodeJSON.length();
+			
+			for (int j = 0; j < noOfUsedCode; j++) {
+				CodeableConcept theUsedCode = new CodeableConcept();
+				
+				if (!usedCodeJSON.getJSONObject(j).isNull("coding")) {
+					 JSONArray codingJSON = usedCodeJSON.getJSONObject(j).getJSONArray("coding");
+					 List<Coding> codingList = new ArrayList<Coding>();
+					 int noOfCodings = codingJSON.length();
+					 for (int k = 0; k < noOfCodings; k++) {
+						Coding theCoding = new Coding();
+						
+						if (!codingJSON.getJSONObject(k).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(k).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(k).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(k).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(k).getString("display"));
+						}
+						codingList.add(theCoding);
+					}
+					 theUsedCode.setCoding(codingList);
+				}
+				if (!usedCodeJSON.getJSONObject(j).isNull("text")) {
+					theUsedCode.setText(usedCodeJSON.getJSONObject(j).getString("text"));
+				}
+				usedCodeList.add(theUsedCode);
+			}
+			procedure.setUsedCode(usedCodeList);
+		}
+        
+        //set statusReason
+        if (!procedureJSON.isNull("statusReason")) {
+			JSONObject actionJSON = procedureJSON.getJSONObject("statusReason");
+			CodeableConcept theStatusReason = new CodeableConcept();
+			
+			if (!actionJSON.isNull("coding")) {
+				JSONArray codingJSON = actionJSON.getJSONArray("coding");
+				List<Coding> codingList = new ArrayList<Coding>();
+				int noOfCodings = codingJSON.length();
+				
+				for (int j = 0; j < noOfCodings; j++) {
+					Coding theCoding = new Coding();
+					
+					if (!codingJSON.getJSONObject(j).isNull("system")) {
+						theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+					}
+					if (!codingJSON.getJSONObject(j).isNull("code")) {
+						theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+					}
+					if (!codingJSON.getJSONObject(j).isNull("display")) {
+						theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+					}
+					codingList.add(theCoding);
+				}
+				theStatusReason.setCoding(codingList);
+			}
+			if (!actionJSON.isNull("text")) {
+				theStatusReason.setText(actionJSON.getString("text"));
+			}
+			procedure.setStatusReason(theStatusReason);
+		}
+        
+        //set recorder
+        if (!procedureJSON.isNull("recorder")) {
+        	JSONObject recorderJSON = procedureJSON.getJSONObject("recorder");
+        	Reference theRecorder = new Reference();
+        	
+        	if (!recorderJSON.isNull("reference")) {
+        		theRecorder.setReference(recorderJSON.getString("reference"));
+			}
+        	if (!recorderJSON.isNull("type")) {
+        		theRecorder.setType(recorderJSON.getString("type"));
+			}
+        	if (!recorderJSON.isNull("display")) {
+        		theRecorder.setDisplay(recorderJSON.getString("display"));
+			}
+			procedure.setRecorder(theRecorder);
+		}
+        
+        //set asserter
+        if (!procedureJSON.isNull("asserter")) {
+        	JSONObject asserterJSON = procedureJSON.getJSONObject("asserter");
+        	Reference theAsserter = new Reference();
+        	
+        	if (!asserterJSON.isNull("reference")) {
+        		theAsserter.setReference(asserterJSON.getString("reference"));
+			}
+        	if (!asserterJSON.isNull("type")) {
+        		theAsserter.setType(asserterJSON.getString("type"));
+			}
+        	if (!asserterJSON.isNull("display")) {
+        		theAsserter.setDisplay(asserterJSON.getString("display"));
+			}
+			procedure.setAsserter(theAsserter);
+		}
+        
+        //set complicationDetail
+        if (!procedureJSON.isNull("complicationDetail")) {
+			JSONArray complicationDetailJSON = procedureJSON.getJSONArray("complicationDetail");
+			List<Reference> complicationDetailList = new ArrayList<Reference>();
+			
+			for (int j = 0; j < complicationDetailJSON.length(); j++) {
+				Reference theReasonReference = new Reference();
+				
+				if (!complicationDetailJSON.getJSONObject(j).isNull("reference")) {
+					theReasonReference.setReference(complicationDetailJSON.getJSONObject(j).getString("reference"));
+				}
+				if (!complicationDetailJSON.getJSONObject(j).isNull(" type")) {
+					theReasonReference.setType(complicationDetailJSON.getJSONObject(j).getString(" type"));
+				}
+				if (!complicationDetailJSON.getJSONObject(j).isNull("display")) {
+					theReasonReference.setDisplay(complicationDetailJSON.getJSONObject(j).getString("display"));
+				}
+				complicationDetailList.add(theReasonReference);
+			}
+			procedure.setComplicationDetail(complicationDetailList);
+		}
+        
         return procedure;
      }
 }

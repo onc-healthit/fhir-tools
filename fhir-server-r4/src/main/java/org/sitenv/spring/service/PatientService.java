@@ -1,10 +1,9 @@
 package org.sitenv.spring.service;
 
-import java.util.List;
-
 import org.sitenv.spring.model.DafPatient;
-import org.sitenv.spring.model.PatientList;
 import org.sitenv.spring.util.SearchParameterMap;
+
+import java.util.List;
 
 public interface PatientService {
 	

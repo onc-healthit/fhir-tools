@@ -1,9 +1,11 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.UriParam;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -11,11 +13,7 @@ import org.sitenv.spring.model.DafCarePlan;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.UriParam;
+import java.util.List;
 
 @Repository("carePlanDao")
 public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
@@ -27,10 +25,10 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
 	 */
 	@Override
 	public DafCarePlan getCarePlanById(int id) {
-		@SuppressWarnings("deprecation")
-		Criteria criteria = getSession().createCriteria(DafCarePlan.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafCarePlan) criteria.list().get(0);
+		List<DafCarePlan> list = getSession().createNativeQuery(
+			"select * from careplan where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafCarePlan.class)
+				.getResultList();
+		return list.get(0);
 	}
 
 
@@ -42,12 +40,10 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
 	 */
 	@Override
 	public DafCarePlan getCarePlanByVersionId(int theId, String versionId) {
-		Criteria criteria = getSession().createCriteria(DafCarePlan.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
-		criteria.add(versionConjunction);
-		return (DafCarePlan) criteria.uniqueResult();
+		DafCarePlan list = getSession().createNativeQuery(
+			"select * from careplan where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafCarePlan.class)
+				.getSingleResult();
+		return list;
 	}
 
 	/**
@@ -55,12 +51,12 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
      * @param theId : ID of the careplan
      * @return : List of careplan records
      */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<DafCarePlan> getCarePlanHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafCarePlan.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
-		return (List<DafCarePlan>) criteria.list();
+		List<DafCarePlan> list = getSession().createNativeQuery(
+    			"select * from careplan where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafCarePlan.class)
+    				.getResultList();
+		return list;
 	}
 
 	/**
@@ -117,6 +113,9 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
         
         //build criteria for status
         buildStatusCriteria(theMap, criteria);
+        
+        // build criteria for category
+     	buildCategoryCriteria(theMap, criteria);
         
 		return criteria.list();
 	}
@@ -603,7 +602,7 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
                     Criterion orCond= null;
                     if(patient.getValue() != null){
     					orCond = Restrictions.or(
-    								Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "%'"),
+    								Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "'"),
     								Restrictions.sqlRestriction("{alias}.data->'subject'->>'display' ilike '%" + patient.getValue() + "%'"),
     								Restrictions.sqlRestriction("{alias}.data->'subject'->>'type' ilike '%" + patient.getValue() + "%'")
     							);
@@ -688,4 +687,58 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
 	    }
 	}
     
+	/**
+	 * This method builds criteria for careplan category
+	 * 
+	 * @param theMap   : search parameter "category"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildCategoryCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("category");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					TokenParam category = (TokenParam) params;
+					Criterion criterion = null;
+					if (!category.isEmpty()) {
+						criterion = Restrictions.or(
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'system' ilike '%"
+												+ category.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'code' ilike '%"
+										+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'display' ilike '%"
+												+ category.getValue() + "%'"),
+										
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'system' ilike '%"
+												+ category.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'code' ilike '%"
+										+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'display' ilike '%"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->>'text' ilike '%"
+												+ category.getValue() + "%'")
+								
+								);
+					} else if (category.getMissing()) {
+						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'category' IS NULL"));
+
+					} else if (!category.getMissing()) {
+						criterion = Restrictions
+								.or(Restrictions.sqlRestriction("{alias}.data->>'category' IS NOT NULL"));
+
+					}
+					disjunction.add(criterion);
+				}
+				criteria.add(disjunction);
+			}
+		}
+
+	}
+
 }

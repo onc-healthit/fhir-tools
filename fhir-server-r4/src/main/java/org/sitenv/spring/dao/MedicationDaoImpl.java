@@ -1,7 +1,10 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -11,11 +14,7 @@ import org.sitenv.spring.model.DafMedication;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import java.util.List;
 
 @Repository("medicationDao")
 public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
@@ -26,6 +25,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the medication
 	 */
+	@Override
 	public DafMedication getMedicationById(int id) {
 
 		Criteria criteria = getSession().createCriteria(DafMedication.class)
@@ -42,6 +42,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @param versionId : version of the medication record
 	 * @return : DAF object of the medication
 	 */
+	@Override
 	public DafMedication getMedicationByVersionId(int theId, String versionId) {
 
 		Criteria criteria = getSession().createCriteria(DafMedication.class)
@@ -60,6 +61,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @return criteria : DAF medication object
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafMedication> search(SearchParameterMap theMap) {
 		Criteria criteria = getSession().createCriteria(DafMedication.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -249,6 +251,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @param theMap   : search parameter "lot-number"
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
+	
 	private void buildLotNumberCriteria(SearchParameterMap theMap, Criteria criteria) {
 		List<List<? extends IQueryParameterType>> list = theMap.get("lot-number");
 		if (list != null) {
@@ -484,11 +487,11 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @param theId : ID of the medication
 	 * @return : List of medication DAF records
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafMedication> getMedicationHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafMedication.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafMedication>) criteria.list();
+		List<DafMedication> list = getSession().createNativeQuery(
+    			"select * from medication where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafMedication.class)
+    				.getResultList();
+		return list;
 	}
 }

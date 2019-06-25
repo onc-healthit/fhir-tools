@@ -1,13 +1,13 @@
 package org.sitenv.spring.service;
 
-import java.util.List;
-
 import org.sitenv.spring.dao.LocationDao;
 import org.sitenv.spring.model.DafLocation;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("locationService")
 @Transactional

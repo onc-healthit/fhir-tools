@@ -1,9 +1,11 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -11,11 +13,7 @@ import org.sitenv.spring.model.DafImmunization;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import java.util.List;
 
 @Repository("ImmunizationDao")
 public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao {
@@ -27,11 +25,10 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 	 * @return : DAF object of the Immunization
 	 */
 	public DafImmunization getImmunizationById(int id) {
-
-		Criteria criteria = getSession().createCriteria(DafImmunization.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafImmunization) criteria.list().get(0);
+		List<DafImmunization> list = getSession().createNativeQuery(
+				"select * from immunization where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafImmunization.class)
+					.getResultList();
+		return list.get(0);
 	}
 
 	/**
@@ -43,14 +40,10 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 	 * @return : DAF object of the Immunization
 	 */
 	public DafImmunization getImmunizationByVersionId(int theId, String versionId) {
-
-		Criteria criteria = getSession().createCriteria(DafImmunization.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" + versionId + "'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		criteria.add(versionConjunction);
-		return (DafImmunization) criteria.uniqueResult();
+		DafImmunization list = getSession().createNativeQuery(
+			"select * from immunization where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafImmunization.class)
+				.getSingleResult();
+		return list;
 	}
 
 	/**
@@ -779,11 +772,11 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 	 * @param theId : ID of the Immunization
 	 * @return : List of Immunization DAF records
 	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafImmunization> getImmunizationHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafImmunization.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafImmunization>) criteria.list();
+		List<DafImmunization> list = getSession().createNativeQuery(
+				"select * from immunization where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc",  DafImmunization.class).getResultList();
+		return list;
+		
 	}
 }

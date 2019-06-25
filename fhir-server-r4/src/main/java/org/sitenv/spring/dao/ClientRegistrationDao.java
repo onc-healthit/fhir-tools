@@ -1,9 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
 import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
+
+import java.util.List;
 
 public interface ClientRegistrationDao {
 
@@ -20,4 +20,6 @@ public interface ClientRegistrationDao {
     public List<DafClientRegister> getClientsByUserId(Integer userId);
 
     public DafClientRegister getDemoClientDetails();
+    
+    public String deleteClientByDetails(String clientId, String regtoken);
 }

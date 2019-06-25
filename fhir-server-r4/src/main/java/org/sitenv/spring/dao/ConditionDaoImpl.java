@@ -1,9 +1,8 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.*;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -11,12 +10,7 @@ import org.sitenv.spring.model.DafCondition;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.QuantityParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import java.util.List;
 
 @Repository("conditionDao")
 public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
@@ -28,10 +22,10 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
 	 * @return : DAF object of the condition
 	 */
 	public DafCondition getConditionById(int id) {
-		Criteria criteria = getSession().createCriteria(DafCondition.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafCondition) criteria.list().get(0);
+		List<DafCondition> list = getSession().createNativeQuery(
+			"select * from condition where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafCondition.class)
+				.getResultList();
+		return list.get(0);
 	}
 
 	/**
@@ -43,13 +37,10 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
 	 * @return : DAF object of the condition
 	 */
 	public DafCondition getConditionByVersionId(int theId, String versionId) {
-		Criteria criteria = getSession().createCriteria(DafCondition.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" + versionId + "'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		criteria.add(versionConjunction);
-		return (DafCondition) criteria.uniqueResult();
+		DafCondition list = getSession().createNativeQuery(
+			"select * from condition where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafCondition.class)
+				.getSingleResult();
+		return list;
 	}
 
 	/**
@@ -58,12 +49,11 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
 	 * @param theId : ID of the condition
 	 * @return : List of condition DAF records
 F	 */
-	@SuppressWarnings("unchecked")
 	public List<DafCondition> getConditionHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafCondition.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafCondition>) criteria.list();
+		List<DafCondition> list = getSession().createNativeQuery(
+				"select * from condition where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafCondition.class)
+		    	.getResultList();
+		return list;
 	}
 
 	/**
@@ -99,8 +89,8 @@ F	 */
 		// build criteria for encounter
 		buildEncounterCriteria(theMap, criteria);
 
-		// build criteria for subject
-		buildSubjectCriteria(theMap, criteria);
+		// build criteria for Patients
+		/* buildPatientCriteria(theMap, criteria); */
 
 		// build criteria for asserter
 		buildAsserterCriteria(theMap, criteria);
@@ -128,8 +118,48 @@ F	 */
 
 		// build criteria for RecordedDate
 		buildRecordedDateCriteria(theMap, criteria);
+		
+		// build criteria for patient
+				buildPatientCriteria(theMap, criteria);
 
 		return criteria.list();
+	}
+
+	/**
+	 * This method builds criteria for condition patient
+	 * 
+	 * @param theMap   : search parameter "patient"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	
+	private void buildPatientCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("patient");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					ReferenceParam subject = (ReferenceParam) params;
+					Criterion criterion = null;
+					if (subject.getValue() != null) {
+						criterion = Restrictions.or(
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'display' ilike '%" + subject.getValue() + "%'"));
+
+					} else if (subject.getMissing()) {
+						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
+
+					} else if (!subject.getMissing()) {
+						criterion = Restrictions
+								.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NOT NULL"));
+
+					}
+					disjunction.add(criterion);
+				}
+				criteria.add(disjunction);
+			}
+		}		
 	}
 
 	/**
@@ -442,41 +472,8 @@ F	 */
 		}
 	}
 
-	/**
-	 * This method builds criteria for condition subject
-	 * 
-	 * @param theMap   : search parameter "subject"
-	 * @param criteria : for retrieving entities by composing Criterion objects
-	 */
-	private void buildSubjectCriteria(SearchParameterMap theMap, Criteria criteria) {
-		List<List<? extends IQueryParameterType>> list = theMap.get("subject");
-		if (list != null) {
-			for (List<? extends IQueryParameterType> values : list) {
-				Disjunction disjunction = Restrictions.disjunction();
-				for (IQueryParameterType params : values) {
-					ReferenceParam subject = (ReferenceParam) params;
-					Criterion orCond = null;
-					if (subject.getValue() != null) {
-						orCond = Restrictions.or(
-								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "%'"),
-								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'display' ilike '%" + subject.getValue() + "%'"),
-								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'type' ilike '%" + subject.getValue() + "%'"));
-					} else if (subject.getMissing()) {
-						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
-					} else if (!subject.getMissing()) {
-						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NOT NULL"));
-					}
-					disjunction.add(orCond);
-				}
-				criteria.add(disjunction);
-			}
-		}
-	}
-
-	/**
+	
+		/**
 	 * This method builds criteria for condition asserter
 	 * 
 	 * @param theMap   : search parameter "asserter"

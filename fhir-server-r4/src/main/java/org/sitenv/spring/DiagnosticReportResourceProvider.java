@@ -1,18 +1,19 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.DateTimeType;
-import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
@@ -23,23 +24,9 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.History;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateAndListParam;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DiagnosticReportResourceProvider implements IResourceProvider {
 
@@ -226,6 +213,10 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 		@Description(shortDefinition = "The time or time-period the observed values are related to") 
 		@OptionalParam(name = DiagnosticReport.SP_DATE)
 		DateAndListParam theDate,
+		
+		@Description(shortDefinition = "The subject of the report if a patient")
+		@OptionalParam(name = DiagnosticReport.SP_PATIENT) 
+		ReferenceAndListParam thePatient,
 
 		@Sort SortSpec theSort,
 		@Count Integer theCount) {
@@ -246,6 +237,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 		paramMap.add(DiagnosticReport.SP_RESULTS_INTERPRETER, theInterpreter);
 		paramMap.add(DiagnosticReport.SP_DATE, theDate);
 		paramMap.add(DiagnosticReport.SP_ISSUED, theIssued);
+		paramMap.add(DiagnosticReport.SP_PATIENT, thePatient);
 		paramMap.setSort(theSort);
 		paramMap.setCount(theCount);
 
@@ -415,36 +407,44 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 		}
 
 		// set category
-		if (!(diagnosticReportJSON.isNull("category"))) {
-			JSONArray categoryJSON = diagnosticReportJSON.getJSONArray("category");
-			int noOfCategaries = categoryJSON.length();
-			List<CodeableConcept> categoryList = new ArrayList<CodeableConcept>();
-			for (int c = 0; c < noOfCategaries; c++) {
-				CodeableConcept theCategory = new CodeableConcept();
-				if (!(categoryJSON.getJSONObject(c).isNull("coding"))) {
-					JSONArray categoryCodingJSON = categoryJSON.getJSONObject(c).getJSONArray("coding");
-					int noOfCategoryCoding = categoryCodingJSON.length();
-					List<Coding> codingList = new ArrayList<Coding>();
-					for (int j = 0; j < noOfCategoryCoding; j++) {
-						Coding categoryCoding = new Coding();
-						if (!(categoryCodingJSON.getJSONObject(j).isNull("system"))) {
-							categoryCoding.setSystem(categoryCodingJSON.getJSONObject(j).getString("system"));
+				if (!(diagnosticReportJSON.isNull("category"))) {
+					JSONArray categoryJSON = diagnosticReportJSON.getJSONArray("category");
+					int noOfCategaries = categoryJSON.length();
+					List<CodeableConcept> categoryList = new ArrayList<CodeableConcept>();
+					for (int c = 0; c < noOfCategaries; c++) {
+						CodeableConcept theCategory = new CodeableConcept();
+						if (!(categoryJSON.getJSONObject(c).isNull("coding"))) {
+							JSONArray categoryCodingJSON = categoryJSON.getJSONObject(c).getJSONArray("coding");
+							int noOfCategoryCoding = categoryCodingJSON.length();
+							List<Coding> codingList = new ArrayList<Coding>();
+							for (int j = 0; j < noOfCategoryCoding; j++) {
+								Coding categoryCoding = new Coding();
+								if (!(categoryCodingJSON.getJSONObject(j).isNull("system"))) {
+									categoryCoding.setSystem(categoryCodingJSON.getJSONObject(j).getString("system"));
+								}
+								if (!(categoryCodingJSON.getJSONObject(j).isNull("version"))) {
+									categoryCoding.setVersion(categoryCodingJSON.getJSONObject(j).getString("version"));
+								}
+								if (!(categoryCodingJSON.getJSONObject(j).isNull("code"))) {
+									categoryCoding.setCode(categoryCodingJSON.getJSONObject(j).getString("code"));
+								}
+								if (!(categoryCodingJSON.getJSONObject(j).isNull("display"))) {
+									categoryCoding.setDisplay(categoryCodingJSON.getJSONObject(j).getString("display"));
+								}
+								if (!(categoryCodingJSON.getJSONObject(j).isNull("userSelected"))) {
+									categoryCoding.setUserSelected(categoryCodingJSON.getJSONObject(j).getBoolean("userSelected"));
+								}
+								codingList.add(categoryCoding);
+							}
+							theCategory.setCoding(codingList);
 						}
-						if (!(categoryCodingJSON.getJSONObject(j).isNull("display"))) {
-							categoryCoding.setDisplay(categoryCodingJSON.getJSONObject(j).getString("display"));
+						if (!(categoryJSON.getJSONObject(c).isNull("text"))) {
+							theCategory.setText(categoryJSON.getJSONObject(c).getString("text"));
 						}
-						if (!(categoryCodingJSON.getJSONObject(j).isNull("code"))) {
-							categoryCoding.setCode(categoryCodingJSON.getJSONObject(j).getString("code"));
-						}
-						codingList.add(categoryCoding);
+						categoryList.add(theCategory);
 					}
-					theCategory.setCoding(codingList);
+					diagnosticReport.setCategory(categoryList);
 				}
-				categoryList.add(theCategory);
-			}
-			diagnosticReport.setCategory(categoryList);
-		}
-
 		// set basedOn
 		if (!(diagnosticReportJSON.isNull("basedOn"))) {
 			JSONArray basedOnJSON = diagnosticReportJSON.getJSONArray("basedOn");

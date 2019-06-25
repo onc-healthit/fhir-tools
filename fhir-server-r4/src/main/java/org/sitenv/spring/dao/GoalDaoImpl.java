@@ -1,7 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -11,10 +13,7 @@ import org.sitenv.spring.model.DafGoal;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import java.util.List;
 
 @Repository("goalDao")
 public class GoalDaoImpl extends AbstractDao implements GoalDao {
@@ -407,12 +406,12 @@ public class GoalDaoImpl extends AbstractDao implements GoalDao {
      * @param theId : ID of the goal
      * @return : List of goal records
      */
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<DafGoal> getGoalHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafGoal.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
-		return (List<DafGoal>) criteria.list();
+		List<DafGoal> list = getSession().createNativeQuery(
+    			"select * from goal where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafGoal.class)
+    				.getResultList();
+		return list;
 	}
 
 }

@@ -1,19 +1,20 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Device;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.Device.DeviceDeviceNameComponent;
 import org.hl7.fhir.r4.model.Device.DeviceUdiCarrierComponent;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.Reference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
@@ -24,22 +25,9 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.History;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DeviceResourceProvider implements IResourceProvider {
 
@@ -447,8 +435,24 @@ public class DeviceResourceProvider implements IResourceProvider {
 			if (!(deviceJSONObj.getJSONObject("patient").isNull("type"))) {
 				thePatient.setType(deviceJSONObj.getJSONObject("patient").getString("type"));
 			}
-			device.setParent(thePatient);
+			device.setPatient(thePatient);
 		}
+		
+		// Set Parent
+		if (!(deviceJSONObj.isNull("parent"))) {
+			Reference theParent = new Reference();
+			if (!(deviceJSONObj.getJSONObject("parent").isNull("reference"))) {
+				theParent.setReference(deviceJSONObj.getJSONObject("parent").getString("reference"));
+			}
+			if (!(deviceJSONObj.getJSONObject("parent").isNull("display"))) {
+				theParent.setDisplay(deviceJSONObj.getJSONObject("parent").getString("display"));
+			}
+			if (!(deviceJSONObj.getJSONObject("parent").isNull("type"))) {
+				theParent.setType(deviceJSONObj.getJSONObject("parent").getString("type"));
+			}
+			device.setParent(theParent);
+		}
+
 
 		// Set owner
 		if (!(deviceJSONObj.isNull("owner"))) {

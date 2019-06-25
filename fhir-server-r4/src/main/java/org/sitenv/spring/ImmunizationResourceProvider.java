@@ -1,24 +1,23 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.DateTimeType;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Immunization;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.Immunization.ImmunizationPerformerComponent;
 import org.hl7.fhir.r4.model.Immunization.ImmunizationProtocolAppliedComponent;
 import org.hl7.fhir.r4.model.Immunization.ImmunizationStatus;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.PositiveIntType;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.StringType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
@@ -29,25 +28,10 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.History;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.IncludeParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class ImmunizationResourceProvider implements IResourceProvider {
 	
@@ -401,6 +385,26 @@ public class ImmunizationResourceProvider implements IResourceProvider {
       		immunization.setStatus(ImmunizationStatus.fromCode(immunizationJSON.getString("status")));
       	}
       	
+      	//set primarySource
+      	if (!immunizationJSON.isNull("primarySource")) {
+			immunization.setPrimarySource(immunizationJSON.getBoolean("primarySource"));
+		}
+      	
+      //set location
+      	if (!immunizationJSON.isNull("location")) {
+			JSONObject locationJSON = immunizationJSON.getJSONObject("location");
+			Reference theLocation = new Reference();
+			if (!locationJSON.isNull("reference")) {
+				theLocation.setReference(locationJSON.getString("reference"));
+			}
+			if (!locationJSON.isNull("display")) {
+				theLocation.setDisplay(locationJSON.getString("display"));
+			}
+			if (!locationJSON.isNull("type")) {
+				theLocation.setType(locationJSON.getString("type"));
+			}
+			immunization.setLocation(theLocation);
+		}
       	//set status reason
       	if (!immunizationJSON.isNull("statusReason")) {
 			JSONObject statusReasonJSON = immunizationJSON.getJSONObject("statusReason");
@@ -498,21 +502,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
 			
 		}
         
-      	//set location
-      	if (!immunizationJSON.isNull("location")) {
-			JSONObject locationJSON = immunizationJSON.getJSONObject("location");
-			Reference theLocation = new Reference();
-			if (!locationJSON.isNull("reference")) {
-				theLocation.setReference(locationJSON.getString("reference"));
-			}
-			if (!locationJSON.isNull("display")) {
-				theLocation.setDisplay(locationJSON.getString("display"));
-			}
-			if (!locationJSON.isNull("type")) {
-				theLocation.setType(locationJSON.getString("type"));
-			}
-			immunization.setLocation(theLocation);
-		}
+      	
         //set manufacturer
       	if (!immunizationJSON.isNull("manufacturer")) {
       		JSONObject manufacturerJSON = immunizationJSON.getJSONObject("manufacturer");
@@ -666,6 +656,38 @@ public class ImmunizationResourceProvider implements IResourceProvider {
 			}
 			immunization.setProtocolApplied(protocolAppliedList);
 		}
+        
+        //set reportOrigin
+        if (!immunizationJSON.isNull("reportOrigin")) {
+		JSONObject codeJSON = immunizationJSON.getJSONObject("reportOrigin");
+		CodeableConcept theCode = new CodeableConcept();
+		if (!codeJSON.isNull("coding")) {
+			JSONArray codingJSON = codeJSON.getJSONArray("coding");
+			List<Coding> codingLists = new ArrayList<Coding>();
+			int noOfCodings = codingJSON.length();
+			for (int i = 0; i < noOfCodings; i++) {
+				Coding theCoding = new Coding();
+				if (!codingJSON.getJSONObject(i).isNull("system")) {
+					theCoding.setSystem(codingJSON.getJSONObject(i).getString("system"));
+				}
+				if (!codingJSON.getJSONObject(i).isNull("code")) {
+					theCoding.setCode(codingJSON.getJSONObject(i).getString("code"));
+				}
+				if (!codingJSON.getJSONObject(i).isNull("display")) {
+					theCoding.setDisplay(codingJSON.getJSONObject(i).getString("display"));
+				}
+				if (!codingJSON.getJSONObject(i).isNull("userSelected")) {
+					theCoding.setUserSelected(codingJSON.getJSONObject(i).getBoolean("userSelected"));
+				}
+				codingLists.add(theCoding);
+			}
+			theCode.setCoding(codingLists);
+		}
+		if (!codeJSON.isNull("text")) {
+			theCode.setText(codeJSON.getString("text"));
+		}
+		immunization.setReportOrigin(theCode);
+	}
 		return immunization;
       }
 }

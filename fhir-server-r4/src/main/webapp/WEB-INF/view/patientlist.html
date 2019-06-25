@@ -227,6 +227,7 @@
 					"info":false,
 					"ajax":{
 						"url": geturl()+"/r4/authorize/launchpatient",
+						//"url": geturl()+"/authorize/launchpatient",
 						
 					},
 
@@ -240,11 +241,15 @@
 	       				},{
 	       					"data": function (data, type, row) {
 	       					   var secondColumn = JSON.parse(data.data);
-	       					   var family = secondColumn.name[0].family;
-	       					   var given = secondColumn.name[0].given[0];
-	       					   var fullName = family+" "+given;
-				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
-				               return userpoc;
+	       						//console.log("data--->", secondColumn.id);
+	       						if(secondColumn.name) {
+	       						   var family = secondColumn.name[0].family;
+	 	       					   var given = secondColumn.name[0].given[0];
+	 	       					   var fullName = family+" "+given;
+	 	       					   var userpoc = "<div onclick='patientId("+secondColumn.id+")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
+ 				            	   return userpoc;	 				              
+	       						}
+	       					   
 				           }
 	       				},{
 	       					"data": function (data, type, row) {
@@ -260,7 +265,8 @@
 			patientId = function(id){
 
 				$.ajax({
-					url:geturl()+"/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
+					url:geturl()+"/r4/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
+					//url:geturl()+"/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
 					contentType: 'application/json', 
 					type:"POST",
 					 success:function(data){

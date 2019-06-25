@@ -1,22 +1,17 @@
 package org.sitenv.spring;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.service.ClientRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/client")
@@ -117,4 +112,18 @@ public class ClientRegistrationController {
         DafClientRegister client = registerService.getDemoClientDetails();
         return client;
     }
+    /**
+     * 
+     * @param clientDetails
+     * @return
+     */
+    
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String getClientByDetails(@RequestBody Map<String, String> clientDetails){
+    	String clientId = clientDetails.get("clientId");
+    	String clientSecret = clientDetails.get("clientSecret");
+     return registerService.deleteClientByDetails(clientId, clientSecret);
+    }  
+    
 }

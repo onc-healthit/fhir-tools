@@ -1,9 +1,6 @@
 package org.sitenv.spring.service;
 
-import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.dao.ClientRegistrationDao;
 import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
@@ -11,6 +8,8 @@ import org.sitenv.spring.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("clientRegistrationService")
 @Transactional
@@ -46,16 +45,13 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
 
     @Override
     @Transactional
-    public DafClientRegister getClientByDetails(String clientId,
-                                                String regtoken) {
-
+    public DafClientRegister getClientByDetails(String clientId, String regtoken) {
         return clientDao.getClientByDetails(clientId, regtoken);
     }
 
     @Override
     @Transactional
-    public DafClientRegister getClientByCredentials(String clientId,
-                                                    String clientSecret) {
+    public DafClientRegister getClientByCredentials(String clientId, String clientSecret) {
         return clientDao.getClientByCredentials(clientId, clientSecret);
     }
 
@@ -73,4 +69,9 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
     public DafClientRegister getDemoClientDetails() {
         return clientDao.getDemoClientDetails();
     }
+
+	@Override
+	public String deleteClientByDetails (String clientId, String clientSecret){
+		return clientDao.deleteClientByDetails(clientId, clientSecret);
+	}
 }

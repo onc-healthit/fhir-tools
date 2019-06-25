@@ -1,17 +1,15 @@
 package org.sitenv.spring.auth;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServlet;
-
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.minidev.json.JSONObject;
+import javax.servlet.http.HttpServlet;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("jwk")

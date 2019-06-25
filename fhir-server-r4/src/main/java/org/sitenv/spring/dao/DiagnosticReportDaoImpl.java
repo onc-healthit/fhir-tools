@@ -1,10 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -12,12 +11,7 @@ import org.sitenv.spring.model.DafDiagnosticReport;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import java.util.List;
 
 @Repository("diagosticReportDao")
 public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticReportDao {
@@ -29,11 +23,10 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	 * @return : DAF object of the DiagnosticReport
 	 */
 	public DafDiagnosticReport getDiagnosticReportById(int id) {
-
-		Criteria criteria = getSession().createCriteria(DafDiagnosticReport.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafDiagnosticReport) criteria.list().get(0);
+		List<DafDiagnosticReport> list = getSession().createNativeQuery(
+				"select * from report where data->>'id' = '" + id + "' order by data->'meta'->>'versionId' desc",
+				DafDiagnosticReport.class).getResultList();
+		return list.get(0);
 	}
 
 	/**
@@ -45,13 +38,11 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	 * @return : DAF object of the DiagnosticReport
 	 */
 	public DafDiagnosticReport getDiagnosticReportByVersionId(int theId, String versionId) {
-		Criteria criteria = getSession().createCriteria(DafDiagnosticReport.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" + versionId + "'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		criteria.add(versionConjunction);
-		return (DafDiagnosticReport) criteria.uniqueResult();
+		DafDiagnosticReport list = getSession()
+				.createNativeQuery("select * from report where data->>'id' = '" + theId
+						+ "' and data->'meta'->>'versionId' = '" + versionId + "'", DafDiagnosticReport.class)
+				.getSingleResult();
+		return list;
 	}
 
 	/**
@@ -61,12 +52,10 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	 * @param theId : ID of the DiagnosticReport
 	 * @return : List of DiagnosticReport DAF records
 	 */
-	@SuppressWarnings("unchecked")
 	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafDiagnosticReport.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafDiagnosticReport>) criteria.list();
+		List<DafDiagnosticReport> list = getSession().createNativeQuery(
+				"select * from report where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc",  DafDiagnosticReport.class).getResultList();
+		return list;
 	}
 
 	/**
@@ -160,7 +149,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 					TokenParam identifier = (TokenParam) params;
 					Criterion orCond = null;
 					if (identifier.getValue() != null) {
-						
+
 						orCond = Restrictions.or(
 								Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'value' ilike '%"
 										+ identifier.getValue() + "%'"),
@@ -169,9 +158,8 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 								Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'system' ilike '%"
 										+ identifier.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'system' ilike '%"
-										+ identifier.getValue() + "%'")
-								);
-					} 
+										+ identifier.getValue() + "%'"));
+					}
 					disjunction.add(orCond);
 				}
 				criteria.add(disjunction);
@@ -225,13 +213,13 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	}
 
 	/**
-	 * This method builds criteria for DiagnosticReport subject
+	 * This method builds criteria for DiagnosticReport patient
 	 * 
 	 * @param theMap   : search parameter "subject"
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
 	private void buildSubjectCriteria(SearchParameterMap theMap, Criteria criteria) {
-		List<List<? extends IQueryParameterType>> list = theMap.get("subject");
+		List<List<? extends IQueryParameterType>> list = theMap.get("patient");
 		if (list != null) {
 			for (List<? extends IQueryParameterType> values : list) {
 				Disjunction disjunction = Restrictions.disjunction();
@@ -350,8 +338,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 								Restrictions.sqlRestriction(
 										"{alias}.data->'performer'->1->>'type' ilike '%" + performer.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'performer'->1->>'display' ilike '%"
-										+ performer.getValue() + "%'")
-								);
+										+ performer.getValue() + "%'"));
 					} else if (performer.getMissing()) {
 						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'performer' IS NULL"));
 					} else if (!performer.getMissing()) {
@@ -427,8 +414,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 								Restrictions.sqlRestriction(
 										"{alias}.data->'result'->1->>'type' ilike '%" + result.getValue() + "%'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'result'->1->>'display' ilike '%" + result.getValue() + "%'")
-								);
+										"{alias}.data->'result'->1->>'display' ilike '%" + result.getValue() + "%'"));
 					} else if (result.getMissing()) {
 						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'result' IS NULL"));
 					} else if (!result.getMissing()) {
@@ -455,44 +441,76 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 				Disjunction disjunction = Restrictions.disjunction();
 				for (IQueryParameterType params : values) {
 					TokenParam category = (TokenParam) params;
+					Criterion orCond = null;
 					if (category.getValue() != null) {
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'system' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(
-								Restrictions.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'code' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'display' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'system' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(
-								Restrictions.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'code' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'display' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'system' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(
+						orCond = Restrictions.or(
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'system' ilike '"
+												+ category.getValue() + "%'"),
+
+								Restrictions.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'version' ilike '"
+										+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'code' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'display' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->0->>'userSelected' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'system' ilike '"
+												+ category.getValue() + "%'"),
+
+								Restrictions.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'version' ilike '"
+										+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'code' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'display' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->0->'coding'->1->>'userSelected' ilike '"
+												+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'system' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'version' ilike '"
+												+ category.getValue() + "%'"),
+
 								Restrictions.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'code' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'display' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'system' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(
+										+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'display' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->0->>'userSelected' ilike '"
+												+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'system' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'version' ilike '"
+												+ category.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'code' ilike '"
-										+ category.getValue() + "%'"));
-						disjunction.add(Restrictions
-								.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'display' ilike '"
-										+ category.getValue() + "%'"));
+										+ category.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'display' ilike '"
+												+ category.getValue() + "%'"),
+										Restrictions
+										.sqlRestriction("{alias}.data->'category'->1->'coding'->1->>'userSelected' ilike '"
+												+ category.getValue() + "%'"));
+					} else if (category.getMissing()) {
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'category' IS NULL"));
+
+					} else if (!category.getMissing()) {
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'category' IS NOT NULL"));
+
 					}
+					disjunction.add(orCond);
 				}
 				criteria.add(disjunction);
 			}
@@ -526,8 +544,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 								Restrictions.sqlRestriction(
 										"{alias}.data->'basedOn'->1->>'type' ilike '%" + basedOn.getValue() + "%'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'basedOn'->1->>'display' ilike '%" + basedOn.getValue() + "%'")
-								);
+										"{alias}.data->'basedOn'->1->>'display' ilike '%" + basedOn.getValue() + "%'"));
 					} else if (basedOn.getMissing()) {
 						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'basedOn' IS NULL"));
 					} else if (!basedOn.getMissing()) {
@@ -563,14 +580,13 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 										"{alias}.data->'specimen'->0->>'type' ilike '%" + specimen.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'specimen'->0->>'display' ilike '%"
 										+ specimen.getValue() + "%'"),
-								
+
 								Restrictions.sqlRestriction("{alias}.data->'specimen'->1->>'reference' ilike '%"
 										+ specimen.getValue() + "%'"),
 								Restrictions.sqlRestriction(
 										"{alias}.data->'specimen'->1->>'type' ilike '%" + specimen.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'specimen'->1->>'display' ilike '%"
-										+ specimen.getValue() + "%'")
-								);
+										+ specimen.getValue() + "%'"));
 					} else if (specimen.getMissing()) {
 						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'specimen' IS NULL"));
 					} else if (!specimen.getMissing()) {

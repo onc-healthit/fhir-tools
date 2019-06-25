@@ -1,7 +1,10 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.DateParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.TokenParamModifier;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
@@ -12,11 +15,7 @@ import org.sitenv.spring.model.DafDevice;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import java.util.List;
 
 @Repository("deviceDao")
 public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
@@ -50,6 +49,7 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" + versionId + "'"));
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
 		criteria.add(versionConjunction);
+		System.out.println("inside getDeviceHistoryById");
 		return (DafDevice) criteria.uniqueResult();
 	}
 
@@ -59,12 +59,12 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 	 * @param theId : ID of the device
 	 * @return : List of device DAF records
 	 */
-	@SuppressWarnings("unchecked")
 	public List<DafDevice> getDeviceHistoryById(int theId) {
-		Criteria criteria = getSession().createCriteria(DafDevice.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		return (List<DafDevice>) criteria.list();
+		
+		List<DafDevice> list = getSession().createNativeQuery(
+				"select * from device where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafDevice.class)
+		    	.getResultList();
+		return list;
 	}
 
 	/**
@@ -464,13 +464,13 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 					} else {
 						orCond = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'patient'->>'reference' ilike '" + patient.getValue() + "%'"),
+										"{alias}.data->'patient'->>'reference' ilike '%" + patient.getValue() + "%'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'patient'->>'display' ilike '" + patient.getValue() + "%'"),
+										"{alias}.data->'patient'->>'display' ilike '%" + patient.getValue() + "%'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'patient'->>'reference' ilike '" + patient.getValue() + "%'"),
+										"{alias}.data->'patient'->>'reference' ilike '%" + patient.getValue() + "%'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'patient'->>'display' ilike '" + patient.getValue() + "%'"));
+										"{alias}.data->'patient'->>'display' ilike '%" + patient.getValue() + "%'"));
 					}
 					disjunction.add(orCond);
 				}

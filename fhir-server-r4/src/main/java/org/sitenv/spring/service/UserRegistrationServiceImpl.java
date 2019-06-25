@@ -1,15 +1,14 @@
 package org.sitenv.spring.service;
 
-import java.util.HashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.sitenv.spring.dao.UserRegistrationDao;
 import org.sitenv.spring.model.DafUserRegister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 @Service("userRegistrationService")
 @Transactional

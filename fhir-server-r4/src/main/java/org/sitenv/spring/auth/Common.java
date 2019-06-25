@@ -1,5 +1,6 @@
 package org.sitenv.spring.auth;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +35,17 @@ public class Common {
                  return parsedDate;
 	     }
     
-    
-    
+    public static String getBaseUrl(HttpServletRequest request) {
+    	String baseUrl = request.getScheme() + "://" + request.getServerName() + ("http".equals(request.getScheme()) && 
+    			request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":"  
+    			+ request.getServerPort()) + request.getContextPath();
+    	
+    	if (!baseUrl.endsWith("/")) {
+			baseUrl = baseUrl.concat("/");
+		}
+
+    	return baseUrl;
+    	
+    }
     
 }

@@ -1,7 +1,7 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
@@ -12,11 +12,7 @@ import org.sitenv.spring.model.DafCareTeam;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import java.util.List;
 
 @Repository("careTeamDao")
 public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
@@ -86,7 +82,10 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
         
         //build criteria for status
         buildStatusCriteria(theMap, criteria);
-
+        
+        //build criteria for status
+        buildPatientCriteria(theMap, criteria);
+      
         return criteria.list();
     }
 	
@@ -149,7 +148,6 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
 	private void buildIdentifierCriteria(SearchParameterMap theMap, Criteria criteria) {
-
 	    List<List<? extends IQueryParameterType>> list = theMap.get("identifier");
 	
 	    if (list != null) {
@@ -179,7 +177,6 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
 	private void buildSubjectCriteria(SearchParameterMap theMap, Criteria criteria) {
-
         List<List<? extends IQueryParameterType>> list = theMap.get("subject");
         if (list != null) {
 
@@ -201,8 +198,8 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
                     			);
                     } else {
                     	orCond = Restrictions.or(
-	                        		Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference' ilike '" + subjectValue.getValue() + "%'"),
-	                        		Restrictions.sqlRestriction("{alias}.data->'subject'->>'display' ilike '" + subjectValue.getValue() + "%'")
+	                        		Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference' ilike '%" + subjectValue.getValue() + "%'"),
+	                        		Restrictions.sqlRestriction("{alias}.data->'subject'->>'display' ilike '%" + subjectValue.getValue() + "%'")
 	                       
                     			);
                     }
@@ -218,8 +215,7 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	 * @param theMap : search parameter "encounter"
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
-	private void buildContextCriteria(SearchParameterMap theMap, Criteria criteria) {
-
+	private void buildContextCriteria(SearchParameterMap theMap, Criteria criteria) {    
         List<List<? extends IQueryParameterType>> list = theMap.get("context");
         if (list != null) {
 
@@ -261,7 +257,6 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
 	private void buildEncounterCriteria(SearchParameterMap theMap, Criteria criteria) {
-
         List<List<? extends IQueryParameterType>> list = theMap.get("encounter");
         if (list != null) {
 
@@ -284,9 +279,9 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	                        );
                     } else {
                     	orCond = Restrictions.or(
-	                        		Restrictions.sqlRestriction("{alias}.data->'encounter'->>'reference' ilike '" + encounterValue.getValue() + "%'"),
-	                        		Restrictions.sqlRestriction("{alias}.data->'encounter'->>'display' ilike '" + encounterValue.getValue() + "%'"),
-	                        		Restrictions.sqlRestriction("{alias}.data->'encounter'->>'type' ilike '" + encounterValue.getValue() + "%'")
+	                        		Restrictions.sqlRestriction("{alias}.data->'encounter'->>'reference' ilike '%" + encounterValue.getValue() + "%'"),
+	                        		Restrictions.sqlRestriction("{alias}.data->'encounter'->>'display' ilike '%" + encounterValue.getValue() + "%'"),
+	                        		Restrictions.sqlRestriction("{alias}.data->'encounter'->>'type' ilike '%" + encounterValue.getValue() + "%'")
 
 	                         );
                     }
@@ -398,10 +393,10 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 		                        );
 	                    } else {
 	                    	orCond = Restrictions.or(
-		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->0->'member'->>'reference' ilike '" + participantValue.getValue() + "%'"),
-		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->0->'member'->>'display' ilike '" + participantValue.getValue() + "%'"),
-		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->1->'member'->>'reference' ilike '" + participantValue.getValue() + "%'"),
-		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->1->'member'->>'display' ilike '" + participantValue.getValue() + "%'")
+		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->0->'member'->>'reference' ilike '%" + participantValue.getValue() + "%'"),
+		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->0->'member'->>'display' ilike '%" + participantValue.getValue() + "%'"),
+		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->1->'member'->>'reference' ilike '%" + participantValue.getValue() + "%'"),
+		                        		Restrictions.sqlRestriction("{alias}.data->'participant'->1->'member'->>'display' ilike '%" + participantValue.getValue() + "%'")
 		                        		);
 	                    }
 	                    disjunction.add(orCond);
@@ -454,4 +449,40 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafCareTeam>) criteria.list();
 	}
+    
+    /**
+	 * This method builds criteria for condition patient
+	 * 
+	 * @param theMap   : search parameter "patient"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildPatientCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("patient");
+		if (list != null) {
+
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					ReferenceParam patient = (ReferenceParam) params;
+					Criterion orCond = null;
+					if (patient.getValue() != null) {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'display' ilike '%" + patient.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'type' ilike '%" + patient.getValue() + "%'"));
+					} else if (patient.getMissing()) {
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
+					} else if (!patient.getMissing()) {
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NOT NULL"));
+					}
+					disjunction.add(orCond);
+				}
+				criteria.add(disjunction);
+			}
+		}
+	}
+     
 }

@@ -1,11 +1,11 @@
 package org.sitenv.spring.util;
 
+import org.apache.commons.codec.binary.Base64;
+import org.hl7.fhir.r4.model.DateTimeType;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
-
-import org.apache.commons.codec.binary.Base64;
-import org.hl7.fhir.r4.model.DateTimeType;
 
 public class CommonUtil {
     private static final String CHAR_LIST =

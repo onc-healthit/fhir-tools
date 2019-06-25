@@ -1,10 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -12,12 +11,7 @@ import org.sitenv.spring.model.DafMedicationRequest;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import java.util.List;
 
 @Repository("medicationRequestDao")
 public class MedicationRequestDaoImpl extends AbstractDao implements MedicationRequestDao {
@@ -27,11 +21,12 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	 * @param id : ID of the resource
 	 * @return : DAF object of the MedicationRequest
 	 */
+	@Override
 	public DafMedicationRequest getMedicationRequestById(int id) {
-		
-		Criteria criteria = getSession().createCriteria(DafMedicationRequest.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafMedicationRequest) criteria.list().get(0);
+		List<DafMedicationRequest> list = getSession().createNativeQuery(
+				"select * from medicationrequest where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafMedicationRequest.class)
+						.getResultList();
+		return list.get(0);
     }
 	
 	/**
@@ -40,14 +35,12 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	 * @param versionId : version of the MedicationRequest record
 	 * @return : DAF object of the MedicationRequest
 	 */
+	@Override
 	public DafMedicationRequest getMedicationRequestByVersionId(int theId, String versionId) {
-		
-		Criteria criteria = getSession().createCriteria(DafMedicationRequest.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
-		criteria.add(versionConjunction);
-		return (DafMedicationRequest) criteria.uniqueResult();
+		DafMedicationRequest list = getSession().createNativeQuery(
+				"select * from medicationrequest where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafMedicationRequest.class)
+					.getSingleResult();
+		return list;
 	}
 
 	/**
@@ -176,37 +169,33 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	 */
 	private void buildSubjectCriteria(SearchParameterMap theMap, Criteria criteria) {
 
-		List<List<? extends IQueryParameterType>> list = theMap.get("subject");
-        if (list != null) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("patient");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					ReferenceParam subject = (ReferenceParam) params;
+					Criterion criterion = null;
+					if (subject.getValue() != null) {
+						criterion = Restrictions.or(
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'subject'->>'display' ilike '%" + subject.getValue() + "%'"));
 
-            for (List<? extends IQueryParameterType> values : list) {
-                Disjunction disjunction = Restrictions.disjunction();
-                for (IQueryParameterType params : values) {
-                    StringParam subjectValue = (StringParam) params;
-                    Criterion orCond= null;
-                    if (subjectValue.isExact()) {
-                    	orCond = Restrictions.or(
-                    				Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference'='" +subjectValue.getValue()+"'"),
-                    				Restrictions.sqlRestriction("{alias}.data->'subject'->>'display'='" +subjectValue.getValue()+"'")
-                    			);
-                    } else if (subjectValue.isContains()) {
-                    	orCond = Restrictions.or(
-                        			Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference' ilike '%" + subjectValue.getValue() + "%'"),
-                        			Restrictions.sqlRestriction("{alias}.data->'subject'->>'display' ilike '%" + subjectValue.getValue() + "%'")
-	                        		
-                    			);
-                    } else {
-                    	orCond = Restrictions.or(
-	                        		Restrictions.sqlRestriction("{alias}.data->'subject'->>'reference' ilike '" + subjectValue.getValue() + "%'"),
-	                        		Restrictions.sqlRestriction("{alias}.data->'subject'->>'display' ilike '" + subjectValue.getValue() + "%'")
-	                       
-                    			);
-                    }
-                    disjunction.add(orCond);
-                }
-                criteria.add(disjunction);
-            }
-        }
+					} else if (subject.getMissing()) {
+						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
+
+					} else if (!subject.getMissing()) {
+						criterion = Restrictions
+								.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NOT NULL"));
+
+					}
+					disjunction.add(criterion);
+				}
+				criteria.add(disjunction);
+			}
+		}
 	}
 
 	/**
@@ -515,13 +504,14 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	/**
      * This method builds criteria for fetching history of the patient by id
      * @param theId : ID of the patient
-     * @return : List of patient DAF records
+     * @return : List of request DAF records
      */
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<DafMedicationRequest> getMedicationRequestHistoryById(int id) {
-		Criteria criteria = getSession().createCriteria(DafMedicationRequest.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"'"));
-		return (List<DafMedicationRequest>) criteria.list();
+		List<DafMedicationRequest> list = getSession().createNativeQuery(
+    			"select * from medicationrequest where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafMedicationRequest.class)
+    				.getResultList();
+		return list;
 	}
 	
 }

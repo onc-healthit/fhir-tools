@@ -1,32 +1,24 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.primitive.InstantDt;
+import ca.uhn.fhir.rest.annotation.Count;
+import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.SortSpec;
+import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Annotation;
-import org.hl7.fhir.r4.model.BooleanType;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Dosage;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.Dosage.DosageDoseAndRateComponent;
-import org.hl7.fhir.r4.model.Duration;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.MedicationRequest;
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestDispenseRequestComponent;
 import org.hl7.fhir.r4.model.MedicationRequest.MedicationRequestSubstitutionComponent;
-import org.hl7.fhir.r4.model.Period;
-import org.hl7.fhir.r4.model.Quantity;
-import org.hl7.fhir.r4.model.Range;
-import org.hl7.fhir.r4.model.Ratio;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.SimpleQuantity;
-import org.hl7.fhir.r4.model.Timing;
 import org.hl7.fhir.r4.model.Timing.TimingRepeatComponent;
-import org.hl7.fhir.r4.model.UriType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
@@ -37,25 +29,10 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.primitive.InstantDt;
-import ca.uhn.fhir.rest.annotation.Count;
-import ca.uhn.fhir.rest.annotation.History;
-import ca.uhn.fhir.rest.annotation.IdParam;
-import ca.uhn.fhir.rest.annotation.IncludeParam;
-import ca.uhn.fhir.rest.annotation.OptionalParam;
-import ca.uhn.fhir.rest.annotation.Read;
-import ca.uhn.fhir.rest.annotation.Search;
-import ca.uhn.fhir.rest.annotation.Sort;
-import ca.uhn.fhir.rest.api.SortSpec;
-import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateAndListParam;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
-import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class MedicationRequestResourceProvider implements IResourceProvider {
 
@@ -199,20 +176,25 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
         TokenAndListParam thePriority,
         
         @Description(shortDefinition="Returns prescriptions prescribed by this prescriber")
-			@OptionalParam(name = MedicationRequest.SP_REQUESTER)
-			ReferenceAndListParam theRequester, 
+		@OptionalParam(name = MedicationRequest.SP_REQUESTER)
+		ReferenceAndListParam theRequester, 
   
-			@Description(shortDefinition="Returns requests for a specific type of performer")
-			@OptionalParam(name = MedicationRequest.SP_INTENDED_PERFORMERTYPE)
-            TokenAndListParam thePerformerType, 
+		@Description(shortDefinition="Returns requests for a specific type of performer")
+		@OptionalParam(name = MedicationRequest.SP_INTENDED_PERFORMERTYPE)
+        TokenAndListParam thePerformerType, 
   
-			@Description(shortDefinition="Returns requests for a specific type of performer")
+		@Description(shortDefinition="Returns requests for a specific type of performer")
 		@OptionalParam(name = MedicationRequest.SP_INTENDED_PERFORMER)
         ReferenceAndListParam thePerformer, 
 
         @Description(shortDefinition = "Return prescriptions written on this date")
         @OptionalParam(name = MedicationRequest.SP_AUTHOREDON)
         DateAndListParam theAuthoredOn,
+        
+        @Description(shortDefinition="Returns prescriptions for a specific patient")
+        @OptionalParam(name = MedicationRequest.SP_PATIENT)
+        ReferenceAndListParam thePatient,
+        
 
         @IncludeParam(allow = {"", "", "*"})
         Set<Include> theIncludes,
@@ -236,6 +218,7 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
             paramMap.add(MedicationRequest.SP_INTENDED_PERFORMERTYPE, thePerformerType);
             paramMap.add(MedicationRequest.SP_INTENDED_PERFORMER, thePerformer);
             paramMap.add(MedicationRequest.SP_AUTHOREDON, theAuthoredOn);
+            paramMap.add(MedicationRequest.SP_PATIENT, thePatient);
             paramMap.setIncludes(theIncludes);
             paramMap.setSort(theSort);
             paramMap.setCount(theCount);
@@ -1185,12 +1168,12 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
         	
         	if(!(dispenseRequestJSONObj.isNull("performer"))) {
 		    	Reference  thePerformer = new Reference();
-		    	
-		    	if(!(dispenseRequestJSONObj.getJSONObject("performer").isNull("reference"))) {
-		    		thePerformer.setReference(medicationRequestJSON.getJSONObject("performer").getString("reference"));    		
+		    	JSONObject performerJSON = dispenseRequestJSONObj.getJSONObject("performer");
+		    	if(!(performerJSON.isNull("reference"))) {
+		    		thePerformer.setReference(performerJSON.getString("reference"));   
 		    	}
-		    	if(!(dispenseRequestJSONObj.getJSONObject("performer").isNull("display"))) {
-		    		thePerformer.setDisplay(medicationRequestJSON.getJSONObject("performer").getString("display"));    		
+		    	if(!(performerJSON.isNull("display"))) {
+		    		thePerformer.setDisplay(performerJSON.getString("display"));    		
 		    	}
 		    	theDispenseRequest.setPerformer(thePerformer); 
 		    }

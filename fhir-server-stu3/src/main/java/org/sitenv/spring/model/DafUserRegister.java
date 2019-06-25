@@ -1,8 +1,8 @@
 package org.sitenv.spring.model;
 
-import javax.persistence.*;
-
 import org.sitenv.spring.util.AESencryption;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "users")

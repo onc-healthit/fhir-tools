@@ -73,4 +73,9 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
     public DafClientRegister getDemoClientDetails() {
         return clientDao.getDemoClientDetails();
     }
+
+	@Override
+	public String deleteClientByDetails(String clientId, String clientSecret) {
+		return clientDao.deleteClientByDetails(clientId, clientSecret);
+	}
 }

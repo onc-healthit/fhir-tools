@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/client")
@@ -111,5 +112,18 @@ public class ClientRegistrationController {
         DafClientRegister client = registerService.getDemoClientDetails();
         return client;
     }
+    
+    /**
+     * 
+     * @param clientDetails
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String getClientByDetails(@RequestBody Map<String, String> clientDetails){
+    	String clientId = clientDetails.get("clientId");
+    	String clientSecret = clientDetails.get("clientSecret");
+     return registerService.deleteClientByDetails(clientId, clientSecret);
+    }  
 
 }

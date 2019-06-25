@@ -225,7 +225,8 @@
 					"bPaginate": false,
 					"bFilter":false,
 					"info":false,
-					"ajax":geturl()+"/authorize/launchpatient",
+					"ajax":geturl()+"/stu3/authorize/launchpatient",
+					//"ajax":geturl()+"/authorize/launchpatient",
 	    			"sAjaxDataProp": "",
 	     			"columns": [{
 	     					"data": function (data, type, row) {
@@ -251,6 +252,7 @@
 
 				$.ajax({
 					url:geturl()+"/stu3/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
+					//url:geturl()+"/authorize/launchpatient?id="+id+"&transaction_id="+transactId+"",
 					contentType: 'application/json', 
 					type:"POST",
 					 success:function(data){

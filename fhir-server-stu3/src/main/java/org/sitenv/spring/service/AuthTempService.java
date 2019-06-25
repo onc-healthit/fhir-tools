@@ -1,8 +1,8 @@
 package org.sitenv.spring.service;
 
-import java.util.List;
-
 import org.sitenv.spring.model.DafAuthtemp;
+
+import java.util.List;
 
 public interface AuthTempService {
 

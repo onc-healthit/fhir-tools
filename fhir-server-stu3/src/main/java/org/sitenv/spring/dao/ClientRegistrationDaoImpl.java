@@ -1,7 +1,6 @@
 package org.sitenv.spring.dao;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -99,5 +98,15 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
         DafClientRegister client = (DafClientRegister) criteria.uniqueResult();
         return client;
     }
+
+    @Override
+	public String deleteClientByDetails(String clientId, String clientSecret) {
+		Criteria criteria = getSession().createCriteria(DafClientRegister.class);
+		criteria.add(Restrictions.eq("client_id", clientId));
+		criteria.add(Restrictions.eq("client_secret", clientSecret));
+		DafClientRegister deleteClient = (DafClientRegister) criteria.uniqueResult();
+		getSession().delete(deleteClient);
+		return "client successfully deleted";
+	}
 
 }

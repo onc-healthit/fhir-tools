@@ -1,11 +1,11 @@
 package org.sitenv.spring.service;
 
-import javax.transaction.Transactional;
-
 import org.sitenv.spring.dao.JwksDao;
 import org.sitenv.spring.model.Jwks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 
 @Service("JwksService")

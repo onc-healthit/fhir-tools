@@ -22,4 +22,6 @@ public interface ClientRegistrationService {
 
     public DafClientRegister getDemoClientDetails();
 
+	public String deleteClientByDetails(String clientId, String clientSecret);
+
 }

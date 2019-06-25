@@ -7,7 +7,6 @@ import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.CarePlan.CarePlanIntent;
 import org.sitenv.spring.configuration.AppConfig;

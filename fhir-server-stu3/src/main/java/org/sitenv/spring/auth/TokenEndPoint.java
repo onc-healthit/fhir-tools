@@ -1,28 +1,11 @@
 package org.sitenv.spring.auth;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.json.JSONObject;
-import org.sitenv.spring.dao.AuthTempDao;
 import org.sitenv.spring.model.DafAuthtemp;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.model.DafUserRegister;
@@ -37,6 +20,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/token")
@@ -59,8 +53,12 @@ public class TokenEndPoint extends HttpServlet {
 	@Autowired
 	private JwtGenerator jwtGenerator;
 
-	// HashMap<String ,String> hm1 = new HashMap<String, String>();
-
+	/** generates access token and other data based on the scopes 
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseBody
 	public void getAuthorization(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -126,10 +124,8 @@ public class TokenEndPoint extends HttpServlet {
 				}
 
 				log.info("body" + jsonString);
-				
 
 				JSONObject payLoad = new JSONObject(jsonString);
-
 				client_id = payLoad.getString("client_id");
 				client_secret = payLoad.getString("client_secret");
 				code = payLoad.getString("code");
@@ -149,12 +145,9 @@ public class TokenEndPoint extends HttpServlet {
 			response.sendError(401, "grant_type is not present");
 		}else if(service.getClient(client_id) == null) {
 			response.sendError(401, "Invalid client_id");
-		}
+		}else if ((client_secret != null) && (client_id != null)) {
+			//verifying client_id and client_secret
 		
-
-		else if ((client_secret != null) && (client_id != null)) {
-		
-
 			DafClientRegister client = service.getClientByCredentials(client_id, client_secret);
 			if (client != null) {
 
@@ -229,6 +222,9 @@ public class TokenEndPoint extends HttpServlet {
 
 								}
 								response.addHeader("Content-Type", "application/json");
+								response.addHeader("Cache-Control", "no-store");
+								response.addHeader("Pragma", "no-cache");
+								
 
 								String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 										.format(new Timestamp(System.currentTimeMillis()));
@@ -244,6 +240,7 @@ public class TokenEndPoint extends HttpServlet {
 								out.println(jsonOb.toString());
 							}
 						} else if (grant_type.equals(GrantType.REFRESH_TOKEN.toString())) {
+							
 							if (authTemp.getRefresh_token() != null && authTemp.getRefresh_token().equals(token)) {
 								HttpSession session = request.getSession();
 								HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session
@@ -256,7 +253,8 @@ public class TokenEndPoint extends HttpServlet {
 								} else if (!client.getClient_id().equals(client_id)) {
 									response.sendError(401, "Invalid Client ID");
 									out.println(response);
-								} else {
+							} else {
+									
 									final String accessToken = oauthIssuerImpl.accessToken();
 
 									JSONObject jsonOb = new JSONObject();
@@ -279,6 +277,8 @@ public class TokenEndPoint extends HttpServlet {
 									 */
 
 									response.addHeader("Content-Type", "application/json");
+									response.addHeader("Cache-Control", "no-store");
+									response.addHeader("Pragma", "no-cache");
 									String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 											.format(new Timestamp(System.currentTimeMillis()));
 									authTemp.setClient_secret(client_secret);
@@ -295,9 +295,9 @@ public class TokenEndPoint extends HttpServlet {
 							}
 						}
 
-				} catch (OAuthSystemException e) {
-					e.printStackTrace();
-				}
+					} catch (OAuthSystemException e) {
+						e.printStackTrace();
+					}
 
 				} else {
 					// the auth codes don't match.
@@ -305,12 +305,10 @@ public class TokenEndPoint extends HttpServlet {
 				}
 			} else {
 				response.sendError(401, "Invalid client_secret");
-			}
-		} 
+		}
+	} else {
+			//verifying client_id 
 		
-		
-		else {
-			
 			DafClientRegister client = service.getClient(client_id);
 					
 				Integer userId = client.getUserId();
@@ -384,6 +382,8 @@ public class TokenEndPoint extends HttpServlet {
 
 								}
 								response.addHeader("Content-Type", "application/json");
+								response.addHeader("Cache-Control", "no-store");
+								response.addHeader("Pragma", "no-cache");
 
 								String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 										.format(new Timestamp(System.currentTimeMillis()));
@@ -434,6 +434,8 @@ public class TokenEndPoint extends HttpServlet {
 									 */
 
 									response.addHeader("Content-Type", "application/json");
+									response.addHeader("Cache-Control", "no-store");
+									response.addHeader("Pragma", "no-cache");
 									String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 											.format(new Timestamp(System.currentTimeMillis()));
 									authTemp.setClient_secret(client_secret);

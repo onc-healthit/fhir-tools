@@ -2,7 +2,6 @@ package org.sitenv.spring;
 
 import ca.uhn.fhir.model.api.ExtensionDt;
 import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.model.api.annotation.Child;
 import ca.uhn.fhir.model.dstu2.composite.AddressDt;
 import ca.uhn.fhir.model.dstu2.composite.ContactPointDt;
 import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
@@ -30,7 +29,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import javax.annotation.Resources;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

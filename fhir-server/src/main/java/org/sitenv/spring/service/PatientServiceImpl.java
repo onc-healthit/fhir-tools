@@ -2,6 +2,7 @@ package org.sitenv.spring.service;
 
 import org.sitenv.spring.dao.PatientDao;
 import org.sitenv.spring.model.DafPatientJson;
+import org.sitenv.spring.model.PatientList;
 import org.sitenv.spring.query.PatientSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,11 @@ public class PatientServiceImpl implements PatientService {
     public List<DafPatientJson> getPatientBySearchOption(PatientSearchCriteria searchCriteria) {
         return this.patientDao.getPatientBySearchOption(searchCriteria);
     }
+
+	@Override
+	@Transactional
+	public List<PatientList> getPatientsOnAuthorize() {
+		return this.patientDao.getPatientsOnAuthorize();
+	}
 
 }

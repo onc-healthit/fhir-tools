@@ -1,17 +1,5 @@
 package org.sitenv.spring.auth;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
@@ -20,13 +8,13 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ResponseType;
 import org.json.JSONObject;
-import org.sitenv.spring.dao.AuthTempDao;
-import org.sitenv.spring.dao.PatientDao;
 import org.sitenv.spring.model.DafAuthtemp;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.model.PatientList;
+import org.sitenv.spring.service.AuthTempService;
 import org.sitenv.spring.service.ClientRegistrationService;
+import org.sitenv.spring.service.PatientService;
 import org.sitenv.spring.service.UserRegistrationService;
 import org.sitenv.spring.util.CommonUtil;
 import org.slf4j.Logger;
@@ -38,6 +26,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 @Controller
 @RequestMapping("/authorize")
 public class AuthorizeEndPoint extends HttpServlet {
@@ -47,16 +46,25 @@ public class AuthorizeEndPoint extends HttpServlet {
     Logger logger = (Logger) LoggerFactory.getLogger(AuthorizeEndPoint.class);
 
     @Autowired
-    private AuthTempDao dao;
+    private AuthTempService authTempService;
 
     @Autowired
     private ClientRegistrationService service;
 
     @Autowired
-    private PatientDao patientDao;
+    private PatientService patientService;
 
     @Autowired
     private UserRegistrationService userService;
+    
+    /** This method verifies the scopes , if scopes is valid
+     * then redirect to authentication page , otherwise error 
+     * message is rendered
+     * 
+     * @param request
+     * @param response
+     * @throws IOException
+     */
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
@@ -119,23 +127,20 @@ public class AuthorizeEndPoint extends HttpServlet {
                         auth.setState(state);
                         auth.setTransaction_id(CommonUtil.generateRandomString(5));
 
-                        dao.saveOrUpdate(auth);
+                        authTempService.saveOrUpdate(auth);
 
-                        String uri = request.getScheme() + "://" +
-                                request.getServerName() +
-                                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort())
-                                + request.getContextPath();
+                        String baseUrl = Common.getBaseUrl(request);
                         HashMap<String, Integer> sessionObj = (HashMap<String, Integer>) session.getAttribute("user" + client.getUserId());
 
                         Integer currentTime = (int) (System.currentTimeMillis() / 1000L);
 
                         if (sessionObj == null || currentTime > sessionObj.get("expiry")) {
 
-                            String url = uri + "/login.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim();
+                            String url = baseUrl + "/login.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim();
                             response.sendRedirect(url.trim());
                         } else {
                             DafUserRegister user = userService.getUserById(client.getUserId());
-                            String url = uri + "/authentication.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim() + "&cName=" +client.getName().trim();
+                            String url = baseUrl + "/authentication.jsp?client_id=" + client_id + "&response_type=" + response_type + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&state=" + state + "&transaction_id=" + auth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim() + "&cName=" +client.getName().trim();
                             response.sendRedirect(url);
                         }
                     } else {
@@ -155,14 +160,20 @@ public class AuthorizeEndPoint extends HttpServlet {
         }
     }
 
-    //at the final step of the Authorize
+    /** User can allow the client or deny to access their data
+     * 
+     * @param request
+     * @param response
+     * @param transactionId
+     * @throws IOException
+     */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public void getAuthentication(HttpServletRequest request, HttpServletResponse response, @RequestParam("transaction_id") String transactionId) throws IOException {
 
         String button = request.getParameter("Allow");
 
-        DafAuthtemp tempAuth = dao.getAuthenticationById(transactionId);
+        DafAuthtemp tempAuth = authTempService.getAuthenticationById(transactionId);
 
         if (button != null && button.equalsIgnoreCase("Allow")) {
 
@@ -170,11 +181,8 @@ public class AuthorizeEndPoint extends HttpServlet {
                 List<String> scopes = Arrays.asList(tempAuth.getScope().split(","));
                 if (scopes.contains("launch/patient") || scopes.contains("launch") ) {
 
-                    String uri = request.getScheme() + "://" +
-                            request.getServerName() +
-                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort())
-                            + request.getContextPath();
-                    String url = uri + "/view/patientlist.html?transaction_id=" + tempAuth.getTransaction_id().trim();
+                    String baseUrl = Common.getBaseUrl(request);
+                    String url = baseUrl + "/view/patientlist.html?transaction_id=" + tempAuth.getTransaction_id().trim();
                     response.sendRedirect(url.trim());
 
                 } else {
@@ -191,15 +199,15 @@ public class AuthorizeEndPoint extends HttpServlet {
     @RequestMapping(value = "/launchpatient", method = RequestMethod.GET)
     @ResponseBody
     public List<PatientList> getAllPatientsList() {
-        return patientDao.getPatientsOnAuthorize();
+        return patientService.getPatientsOnAuthorize();
     }
 
     @RequestMapping(value = "/launchpatient", method = RequestMethod.POST)
     @ResponseBody
     public void authorizeAfterLaunchPatient(HttpServletRequest request, HttpServletResponse response, @RequestParam("transaction_id") String transactionId, @RequestParam("id") Integer launchPatientId) throws IOException, ServletException {
-        DafAuthtemp tempAuth = dao.getAuthenticationById(transactionId);
+        DafAuthtemp tempAuth = authTempService.getAuthenticationById(transactionId);
         tempAuth.setLaunchPatientId(launchPatientId);
-        dao.saveOrUpdate(tempAuth);
+        authTempService.saveOrUpdate(tempAuth);
 
         String url = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode().trim() + "&state=" + tempAuth.getState().trim();
         logger.info("Authorize Endpoint -> formed URL: " + url);
@@ -215,25 +223,23 @@ public class AuthorizeEndPoint extends HttpServlet {
     public void validateUser(HttpServletRequest request, HttpServletResponse response, @RequestParam("userName") String userName, @RequestParam("password") String password, @RequestParam("transaction_id") String transactionId) throws Exception {
 
         DafUserRegister user = userService.getUserByDetails(userName, password, request);
-        DafAuthtemp tempAuth = dao.getAuthenticationById(transactionId);
-        String uri = request.getScheme() + "://" +
-                request.getServerName() +
-                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort())
-                + request.getContextPath();
+        DafAuthtemp tempAuth = authTempService.getAuthenticationById(transactionId);
+        String baseUrl = Common.getBaseUrl(request);
         if((user != null) && (tempAuth != null)) {
         	DafClientRegister client=service.getClient(tempAuth.getClient_id());
         	int clientUserId=client.getUserId();
         	int userId=user.getUser_id();
         
-			if (clientUserId == userId) {
-            	String url = uri + "/authentication.jsp?client_id=" + tempAuth.getClient_id() + "&redirect_uri=" + tempAuth.getRedirect_uri().trim() + "&scope=" + tempAuth.getScope().trim() + "&state=" + tempAuth.getState().trim() + "&transaction_id=" + tempAuth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim()+ "&cName=" +client.getName().trim();
-            	response.sendRedirect(url);
-        	} else {
-            	String url = uri + "/login.jsp?error=Invalid Username or Password.&transaction_id=" + transactionId.trim();
-            	response.sendRedirect(url);
+		if (clientUserId == userId) {
+			
+            String url = baseUrl + "/authentication.jsp?client_id=" + tempAuth.getClient_id() + "&redirect_uri=" + tempAuth.getRedirect_uri().trim() + "&scope=" + tempAuth.getScope().trim() + "&state=" + tempAuth.getState().trim() + "&transaction_id=" + tempAuth.getTransaction_id().trim() + "&name=" + user.getUser_full_name().trim()+ "&cName=" +client.getName().trim();
+            response.sendRedirect(url);
+        } else {
+            String url = baseUrl + "/login.jsp?error=Invalid Username or Password.&transaction_id=" + transactionId.trim();
+            response.sendRedirect(url);
         } 
 	}else {
-            String url = uri + "/login.jsp?error=Invalid Username or Password.&transaction_id=" + transactionId.trim();
+            String url = baseUrl + "/login.jsp?error=Invalid Username or Password.&transaction_id=" + transactionId.trim();
             response.sendRedirect(url);
         }
     }

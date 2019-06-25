@@ -49,6 +49,37 @@
 		window.focus();
 	};
 	
+	deleteClientDetails = function(clientId, clientName, clientSecret, userId) {
+		$('#deleteclientmodal').load('deleteclientmodal.html',function(){
+						
+			if(clientId != '' && clientSecret != '' && clientName != ''){
+				$('#deleteclientname').html(clientName);
+			}
+			$('#deleteclientmodal').modal({backdrop: 'static', keyboard: false});
+			$('#deleteclientformhtml').on('submit.form',function(e){
+	        	e.preventDefault();
+				var data = {"clientId":clientId, "clientSecret":clientSecret}
+			    $.ajax({
+			      	url:main_url+"/client/delete/",
+			      	type:"DELETE",
+			      	headers:{
+			      		"Content-Type":"application/json"
+			      	},
+			      	data:JSON.stringify(data),
+			      	success:function(data){
+			      		$('#deleteclientmodal').modal('hide');
+			    		bootbox.alert("client successfully deleted",function(){
+			    			loadclients(userId);
+			    		});
+			      	},
+			      	error:function(e){
+			        	console.log(e);
+			      	}
+			    })
+	        });
+		});
+	};
+	
 	getClientDetails = function(clientId,regtoken){
 		$('#editclientmodal').load('editclientmodal.html',function(){
 			if(clientId != '' && regtoken != ''){
@@ -301,7 +332,7 @@
 					  			$('<td style="width:30%">').html(data[i].client_secret).appendTo(tr); 
 					  		}else if(props[m] == 'id'){
 					  			var str = 
-					  			$("<td style='width:10%;text-align:center;'>").html("<a class='editanchor' onclick=\"getClientDetails('"+data[i].client_id+"','"+data[i].register_token+"')\">Edit</a>").appendTo(tr);
+					  			$("<td style='width:10%;text-align:center;'>").html("<a class='editanchor' onclick=\"getClientDetails('"+data[i].client_id+"','"+data[i].register_token+"')\">Edit</a> | <a class='editanchor' onclick=\"deleteClientDetails('"+data[i].client_id+"','"+data[i].name+"','"+data[i].client_secret+"', '"+userId+"')\">Delete</a>").appendTo(tr);
 					  		}else if(props[m] == 'launchUri'){
 					  			var str = $("<td style='width:15%;text-align:center;'>").html("<button class=\"btn but-large\" type=\"button\" onclick=\"launchEHR('"+data[i].launchId+"','"+data[i].launchUri+"')\";>Launch App</button>").appendTo(tr);
 						  	}

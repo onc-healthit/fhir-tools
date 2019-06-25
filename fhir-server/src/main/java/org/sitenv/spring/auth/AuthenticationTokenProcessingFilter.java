@@ -1,6 +1,22 @@
 package org.sitenv.spring.auth;
 
 
+import org.sitenv.spring.model.DafAuthtemp;
+import org.sitenv.spring.service.AuthTempService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -9,26 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.sitenv.spring.dao.AuthTempDao;
-import org.sitenv.spring.model.DafAuthtemp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.CollectionUtils;
-import org.springframework.web.filter.GenericFilterBean;
-
 @WebServlet
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
     @Autowired
-    private AuthTempDao dao;
+    private AuthTempService authTempService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
@@ -45,7 +46,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
         if (authToken != null && "bearer".equalsIgnoreCase(authToken.split(" ", 2)[0].toString())) {
             authToken = authToken.substring(7);
-            DafAuthtemp authentication = dao.validateAccessToken(authToken);
+            DafAuthtemp authentication = authTempService.validateAccessToken(authToken);
 
             if (authentication != null && authToken.equalsIgnoreCase(authentication.getAccess_token())) {
                 try {
@@ -96,7 +97,10 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         } else if (httpRequest.getRequestURI().contains("/jwk")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
-        } else if (httpRequest.getRequestURI().contains("/open")) {
+        }else if (httpRequest.getRequestURI().contains("/open")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
+        } else if (httpRequest.getRequestURI().contains("/introspect")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {

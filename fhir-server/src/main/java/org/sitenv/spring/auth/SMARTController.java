@@ -1,38 +1,52 @@
 package org.sitenv.spring.auth;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.inject.internal.util.Lists;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.inject.internal.util.Lists;
-
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
+/*
+ * Provides list of metadata supported by Smart Launch app and
+ * openid connect
+ * 
+ */
 @Controller
-@RequestMapping("/.well-known/*")
+@RequestMapping("/.well-known")
 public class SMARTController extends HttpServlet {
+	
+	public static final String SMART_CONFIGURATION_URL = "smart-configuration";
+	public static final String OPENID_CONFIGURATION_URL = "openid-configuration";
+	public static final String AUTHORIZE_URL = "authorize";
+	public static final String TOKEN_URL = "token";
+	public static final String INTROSPECTION_URL = "introspect";
+	
 
 	private static final long serialVersionUID = 936659617930557226L;
-
-	@RequestMapping(value = "smart-configuration", method = RequestMethod.GET)
+	
+	/** Provides metadata about SMART APP launch
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	
+	@RequestMapping(value = "/" + SMART_CONFIGURATION_URL, method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getWellKnowllSMATConfig(HttpServletRequest request, HttpServletResponse response) throws Exception {
         Map<String, Object> wellKnownConfig= new HashMap<String, Object>();
 
-        String uri = request.getScheme() + "://" +
-                request.getServerName() +
-                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort()) +
-                request.getContextPath();
-
-        wellKnownConfig.put("authorization_endpoint", uri + "/authorize");
-        wellKnownConfig.put("token_endpoint", uri + "/token");
-
+        String baseUrl = Common.getBaseUrl(request);
+        
+        wellKnownConfig.put("authorization_endpoint", baseUrl + AUTHORIZE_URL);
+        wellKnownConfig.put("token_endpoint", baseUrl + TOKEN_URL);
+        wellKnownConfig.put("introspection_endpoint", baseUrl + INTROSPECTION_URL);
 
         String[] stringArrayMethods = { "client_secret_basic","client_secret_post" };
         String[] stringArrayScopes = { "openid", "profile","fhirUser","launch","launch/patient","launch/encounter","patient/*.*","user/*.*","offline_access"};
@@ -61,24 +75,25 @@ public class SMARTController extends HttpServlet {
 
     }
     
-    @RequestMapping(value = "openid-configuration", method = RequestMethod.GET)
+	/** Provides matadata about openid configuration
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	
+    @RequestMapping(value = "/" + OPENID_CONFIGURATION_URL, method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> getAuthorization(HttpServletRequest request, HttpServletResponse response){
 	
-		String baseUrl = request.getScheme() + "://" + request.getServerName()
-		+ ("http".equals(request.getScheme()) && request.getServerPort() == 80
-		|| "https".equals(request.getScheme()) && request.getServerPort() == 443 ? ""
-				: ":" + request.getServerPort())
-		+ request.getContextPath();
-		
-		if (!baseUrl.endsWith("/")) {
-			baseUrl = baseUrl.concat("/");
-		}
+		String baseUrl = Common.getBaseUrl(request);
 
 		Map<String, Object> m = new HashMap<>();
 		m.put("issuer", baseUrl);
-		m.put("authorization_endpoint", baseUrl + "authorize");
-		m.put("token_endpoint", baseUrl + "token/");
+		m.put("authorization_endpoint", baseUrl + AUTHORIZE_URL);
+		m.put("token_endpoint", baseUrl + TOKEN_URL);
+		m.put("introspection_endpoint", baseUrl + INTROSPECTION_URL);
+		
 	    //m.put("userinfo_endpoint", baseUrl + UserInfoEndpoint.URL);
 		m.put("jwks_uri", baseUrl+ "jwk" );
 		m.put("response_types_supported", Lists.newArrayList("code")); 

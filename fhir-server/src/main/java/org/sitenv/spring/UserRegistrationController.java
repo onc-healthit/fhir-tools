@@ -1,10 +1,5 @@
 package org.sitenv.spring;
 
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.UUID;
-
 import org.sitenv.spring.model.DafUserRegister;
 import org.sitenv.spring.service.UserRegistrationService;
 import org.sitenv.spring.util.CommonUtil;
@@ -13,15 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")

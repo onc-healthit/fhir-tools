@@ -3,7 +3,6 @@ package org.sitenv.spring.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import org.sitenv.spring.model.DafAuthtemp;
 import org.sitenv.spring.model.Jwks;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

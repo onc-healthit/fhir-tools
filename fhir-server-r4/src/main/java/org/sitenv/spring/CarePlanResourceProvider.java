@@ -296,6 +296,14 @@ public class CarePlanResourceProvider implements IResourceProvider {
         else {
             carePlan.setId(new IdType(RESOURCE_TYPE, carePlanJSON.getString("id") + "", VERSION_ID));
         }
+        
+        //Set text
+        if(!(carePlanJSON.isNull("text"))) {
+        	Narrative theText = new Narrative();
+        	theText.setStatus(Narrative.NarrativeStatus.fromCode(carePlanJSON.getJSONObject("text").getString("status")));    	
+        	theText.setDivAsString(carePlanJSON.getJSONObject("text").getString("div"));
+        	carePlan.setText(theText);
+        }
 
         //Set identifier
         if(!(carePlanJSON.isNull("identifier"))) {
@@ -372,6 +380,20 @@ public class CarePlanResourceProvider implements IResourceProvider {
         	}
         	carePlan.setIdentifier(identifiers);
         }
+        
+        //set instantiatesCanonical
+        if (!carePlanJSON.isNull("instantiatesCanonical")) {
+			JSONArray  instantiatesCanonicalJSON = carePlanJSON.getJSONArray("instantiatesCanonical");
+			List<CanonicalType> instantiatesCanonicalList =new ArrayList<CanonicalType>();
+			int noOfCanonocals = instantiatesCanonicalJSON.length();
+			
+			for(int i = 0; i < noOfCanonocals; i++) {
+				CanonicalType instantiatesCanonical = new CanonicalType();
+				instantiatesCanonical.setValue(instantiatesCanonicalJSON.getString(i));
+				instantiatesCanonicalList.add(instantiatesCanonical);
+			}
+			carePlan.setInstantiatesCanonical(instantiatesCanonicalList);
+		}
         
         //Set instantiatesUri
         if(!(carePlanJSON.isNull("instantiatesUri"))) {
@@ -556,7 +578,7 @@ public class CarePlanResourceProvider implements IResourceProvider {
         	}
         	carePlan.setAuthor(theAuthor);
         }
-        
+
         //Set careTeam
         if(!(carePlanJSON.isNull("careTeam"))) {
         	JSONArray careTeamJSON = carePlanJSON.getJSONArray("careTeam");
@@ -740,6 +762,41 @@ public class CarePlanResourceProvider implements IResourceProvider {
         				theDetail.setCode(theDetailCode);
         			}
         			
+        			// set reasonCode
+        	 		if (!detailJSON.isNull("reasonCode")) {
+        	 			JSONArray categoryJSON = detailJSON.getJSONArray("reasonCode");
+        	 			List<CodeableConcept> reasonCodeList = new ArrayList<CodeableConcept>();
+        	 			int noOfCategories = categoryJSON.length();
+        	 			for (int r = 0; r < noOfCategories; r++) {
+        	 				CodeableConcept theReasonCode = new CodeableConcept();
+        	 				if (!categoryJSON.getJSONObject(r).isNull("coding")) {
+        	 					JSONArray codingJSON = categoryJSON.getJSONObject(r).getJSONArray("coding");
+        	 					List<Coding> codingList = new ArrayList<Coding>();
+        	 					for (int j = 0; j < codingJSON.length(); j++) {
+        	 						Coding theCoding = new Coding();
+
+        	 						if (!codingJSON.getJSONObject(j).isNull("system")) {
+        	 							theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+        	 						}
+        	 						if (!codingJSON.getJSONObject(j).isNull("code")) {
+        	 							theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+        	 						}
+        	 						if (!codingJSON.getJSONObject(j).isNull("display")) {
+        	 							theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+        	 						}
+        	 						codingList.add(theCoding);
+        	 					}
+        	 					theReasonCode.setCoding(codingList);
+        	 				}
+
+        	 				if (!categoryJSON.getJSONObject(r).isNull("text")) {
+        	 					theReasonCode.setText(categoryJSON.getJSONObject(r).getString("text"));
+        	 				}
+        	 				reasonCodeList.add(theReasonCode);
+        	 			}
+        	 			carePlan.setCategory(reasonCodeList);
+        	 		}
+        	 		
         			//Set goal
         	        if(!(detailJSON.isNull("goal"))) {
         	        	JSONArray dtGoalJSON = carePlanJSON.getJSONArray("goal");
@@ -830,6 +887,35 @@ public class CarePlanResourceProvider implements IResourceProvider {
         				theDetail.setProduct(theProductReference);
         			}
           			
+          			//Set productCodeableConcept
+        			if(!(detailJSON.isNull("productCodeableConcept"))) {
+        				JSONObject productCodeableConceptJSON = detailJSON.getJSONObject("productCodeableConcept");
+        				CodeableConcept theProductCodeableConcept = new CodeableConcept();
+        				if(!(productCodeableConceptJSON.isNull("coding"))) {
+        					JSONArray codingJSON = productCodeableConceptJSON.getJSONArray("coding");
+        					int noOfCodings = codingJSON.length();
+        					List<Coding> codingList = new ArrayList<Coding>();
+        					for(int p = 0; p < noOfCodings; p++) {
+        						Coding theCoding = new Coding();
+        						if(!(codingJSON.getJSONObject(p).isNull("system"))) {
+        							theCoding.setSystem(codingJSON.getJSONObject(p).getString("system"));
+        						}
+        						if(!(codingJSON.getJSONObject(p).isNull("code"))) {
+        							theCoding.setCode(codingJSON.getJSONObject(p).getString("code"));
+        						}
+        						if(!(codingJSON.getJSONObject(p).isNull("display"))) {
+        							theCoding.setDisplay(codingJSON.getJSONObject(p).getString("display"));
+        						}
+        						codingList.add(theCoding);
+        					}
+        					theProductCodeableConcept.setCoding(codingList);
+        				}
+        				if(!(productCodeableConceptJSON.isNull("text"))) {
+        					theProductCodeableConcept.setText(productCodeableConceptJSON.getString("text"));
+        				}
+        				theDetail.setProduct(theProductCodeableConcept);
+        			}
+          			
           			//Set dailyAmount
           			if(!(detailJSON.isNull("dailyAmount"))) {
           				JSONObject dailyAmtJSON = detailJSON.getJSONObject("dailyAmount");
@@ -914,41 +1000,6 @@ public class CarePlanResourceProvider implements IResourceProvider {
         	}
         	carePlan.setNote(noteList);
         }
-        
-     // set category
-     		if (!carePlanJSON.isNull("category")) {
-     			JSONArray categoryJSON = carePlanJSON.getJSONArray("category");
-     			List<CodeableConcept> categoryList = new ArrayList<CodeableConcept>();
-     			int noOfCategories = categoryJSON.length();
-     			for (int i = 0; i < noOfCategories; i++) {
-     				CodeableConcept theCategory = new CodeableConcept();
-     				if (!categoryJSON.getJSONObject(i).isNull("coding")) {
-     					JSONArray codingJSON = categoryJSON.getJSONObject(i).getJSONArray("coding");
-     					List<Coding> codingList = new ArrayList<Coding>();
-     					for (int j = 0; j < codingJSON.length(); j++) {
-     						Coding theCoding = new Coding();
-
-     						if (!codingJSON.getJSONObject(j).isNull("system")) {
-     							theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
-     						}
-     						if (!codingJSON.getJSONObject(j).isNull("code")) {
-     							theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
-     						}
-     						if (!codingJSON.getJSONObject(j).isNull("display")) {
-     							theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
-     						}
-     						codingList.add(theCoding);
-     					}
-     					theCategory.setCoding(codingList);
-     				}
-
-     				if (!categoryJSON.getJSONObject(i).isNull("text")) {
-     					theCategory.setText(categoryJSON.getJSONObject(i).getString("text"));
-     				}
-     				categoryList.add(theCategory);
-     			}
-     			carePlan.setCategory(categoryList);
-     		}
         return carePlan;
     }
 }

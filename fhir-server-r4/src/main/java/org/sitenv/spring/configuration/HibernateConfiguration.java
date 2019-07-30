@@ -1,5 +1,6 @@
 package org.sitenv.spring.configuration;
 
+import ca.uhn.fhir.context.FhirContext;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -59,6 +60,10 @@ public class HibernateConfiguration {
         HibernateTransactionManager txManager = new HibernateTransactionManager();
         txManager.setSessionFactory(s);
         return txManager;
+    }
+    @Bean
+    public FhirContext fhirContext() {
+       return FhirContext.forR4();
     }
 }
 

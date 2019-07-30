@@ -4,6 +4,7 @@ import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.DateAndListParam;
@@ -276,6 +277,35 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 			}
 		};
 	}
+	
+	/**
+     * The create  operation saves a new resource to the server, 
+     * allowing the server to give that resource an ID and version ID.
+     * Create methods must be annotated with the @Create annotation, 
+     * and have a single parameter annotated with the @ResourceParam annotation. 
+     * This parameter contains the resource instance to be created. 
+     * Create methods must return an object of type MethodOutcome . 
+     * This object contains the identity of the created resource.
+     * Example URL to invoke this method (this would be invoked using an HTTP POST, 
+     * with the resource in the POST body): http://<server name>/<context>/fhir/Questionnaire
+     * @param theQuestionnaire
+     * @return
+     */
+	@Create
+	public MethodOutcome createDiagnosticReport(@ResourceParam DiagnosticReport theDiagnosticReport) {	
+
+		// Save this Questionnaire to the database...
+		DafDiagnosticReport dafDiagnosticReport = service.createDiagnosticReport(theDiagnosticReport);
+
+		// This method returns a MethodOutcome object which contains
+		// the ID (composed of the type Patient, the logical ID 3746, and the
+		// version ID 1)
+		MethodOutcome retVal = new MethodOutcome();
+		retVal.setId(new IdType(RESOURCE_TYPE, dafDiagnosticReport.getId().toString()));
+
+		return retVal;
+	}
+	
 
 	/**
 	 * This method converts DafDocumentReference object to DocumentReference object

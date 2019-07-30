@@ -1,5 +1,8 @@
 package org.sitenv.spring.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -8,8 +11,6 @@ import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Transactional
@@ -96,14 +97,20 @@ public class ClientRegistrationDaoImpl extends AbstractDao implements ClientRegi
         return client;
     }
 
-	@Override
-	public String deleteClientByDetails(String clientId, String clientSecret) {
+    @Override
+	public boolean deleteClientByDetails(Map<String, String> clientDetails) {
 		Criteria criteria = getSession().createCriteria(DafClientRegister.class);
-		criteria.add(Restrictions.eq("client_id", clientId));
-		criteria.add(Restrictions.eq("client_secret", clientSecret));
+		criteria.add(Restrictions.eq("client_id", clientDetails.get("clientId")));
+		criteria.add(Restrictions.eq("client_secret", clientDetails.get("clientSecret")));
 		DafClientRegister deleteClient = (DafClientRegister) criteria.uniqueResult();
-		getSession().delete(deleteClient);
-		return "client successfully deleted";
+		
+		if(deleteClient != null) {
+			getSession().delete(deleteClient);
+			return true;
+		}else {
+			return false;
+
+		}
 	}
 
 

@@ -1,21 +1,36 @@
 package org.sitenv.spring.dao;
 
+import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
+import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.sitenv.spring.model.DafDiagnosticReport;
 import org.sitenv.spring.util.SearchParameterMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
 import java.util.List;
 
 @Repository("diagosticReportDao")
 public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticReportDao {
 
+	@Autowired
+    private SessionFactory sessionFactory;
+	
+	@Autowired
+	private FhirContext fhirContext;
+	
+	
 	/**
 	 * This method builds criteria for fetching DiagnosticReport record by id.
 	 * 
@@ -229,11 +244,12 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 					if (subject.getValue() != null) {
 						orCond = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "%'"),
+										"{alias}.data->'subject'->>'reference' = '"+"Patient/"+subject.getValue()+"'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'display' ilike '%" + subject.getValue() + "%'"),
+										"{alias}.data->'subject'->>'display' = '" + subject.getValue() + "'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'type' ilike '%" + subject.getValue() + "%'"));
+										"{alias}.data->'subject'->>'type' = '" + subject.getValue() + "'")
+						);
 					} else if (subject.getMissing()) {
 						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
 					} else if (!subject.getMissing()) {
@@ -672,4 +688,18 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 		}
 	}
 
+	@Override
+	@Transactional(value=TxType.REQUIRES_NEW)
+	public DafDiagnosticReport createDiagnosticReport(DiagnosticReport theDiagnosticReport) {
+			DafDiagnosticReport dafDiagnosticReport = new DafDiagnosticReport();
+			IParser jsonParser = fhirContext.newJsonParser();
+			jsonParser.encodeResourceToString(theDiagnosticReport);
+			dafDiagnosticReport.setData(jsonParser.encodeResourceToString(theDiagnosticReport));
+			Session session = sessionFactory.openSession();
+			session.beginTransaction();
+			session.save(dafDiagnosticReport);
+			session.getTransaction().commit();
+			session.close();
+			return dafDiagnosticReport;
+		}
 }

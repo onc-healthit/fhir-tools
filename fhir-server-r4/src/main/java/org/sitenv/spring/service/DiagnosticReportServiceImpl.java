@@ -1,5 +1,6 @@
 package org.sitenv.spring.service;
 
+import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.sitenv.spring.dao.DiagnosticReportDao;
 import org.sitenv.spring.model.DafDiagnosticReport;
 import org.sitenv.spring.util.SearchParameterMap;
@@ -38,6 +39,11 @@ public class DiagnosticReportServiceImpl implements DiagnosticReportService {
 	@Transactional
 	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(int theId) {
 		return this.diagnosticReportDao.getDiagnosticReportHistoryById(theId);
+	}
+
+	@Override
+	public DafDiagnosticReport createDiagnosticReport(DiagnosticReport theDiagnosticReport) {
+		return this.diagnosticReportDao.createDiagnosticReport(theDiagnosticReport);
 	}
 
 

@@ -1,9 +1,11 @@
 package org.sitenv.spring.dao;
 
+import java.util.List;
+import java.util.Map;
+
+import org.sitenv.spring.exception.ClientNotFoundException;
 import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
-
-import java.util.List;
 
 public interface ClientRegistrationDao {
 
@@ -21,5 +23,6 @@ public interface ClientRegistrationDao {
 
     public DafClientRegister getDemoClientDetails();
     
-    public String deleteClientByDetails(String clientId, String regtoken);
+	public boolean deleteClientByDetails(Map<String, String> clientDetails) ;
+	
 }

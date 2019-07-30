@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServlet;
 import java.util.List;
 import java.util.Map;
 
+
+/*
+ * Provides list of public key(s) for JSON web token
+ * which could be used to verify JWT id token 
+ * 
+ */
 @Controller
 @RequestMapping("jwk")
 public class JWKSetPublishingEndpoint extends HttpServlet {
@@ -19,6 +25,11 @@ public class JWKSetPublishingEndpoint extends HttpServlet {
 	private JwtGenerator jwtGenerator;
 	private static final long serialVersionUID = 1L;
 	public static final String URL = "jwk";
+	
+	/** Provides JSON web key 
+	 * 
+	 * @return
+	 */
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	@ResponseBody

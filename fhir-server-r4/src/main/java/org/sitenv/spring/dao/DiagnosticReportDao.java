@@ -1,5 +1,6 @@
 package org.sitenv.spring.dao;
 
+import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.sitenv.spring.model.DafDiagnosticReport;
 import org.sitenv.spring.util.SearchParameterMap;
 
@@ -14,5 +15,7 @@ public interface DiagnosticReportDao {
 	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(int theId);
 
 	public List<DafDiagnosticReport> search(SearchParameterMap theMap);
+	
+	public DafDiagnosticReport createDiagnosticReport(DiagnosticReport theDiagnosticReport);
 
 }

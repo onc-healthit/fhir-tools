@@ -1,5 +1,8 @@
 package org.sitenv.spring.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.dao.ClientRegistrationDao;
@@ -9,8 +12,6 @@ import org.sitenv.spring.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service("clientRegistrationService")
 @Transactional
@@ -74,8 +75,8 @@ public class ClientRegistrationServiceImpl implements ClientRegistrationService 
         return clientDao.getDemoClientDetails();
     }
 
-	@Override
-	public String deleteClientByDetails(String clientId, String clientSecret) {
-		return clientDao.deleteClientByDetails(clientId, clientSecret);
+    @Override
+	public boolean deleteClientByDetails(Map<String, String> clientDetails ) {
+		return clientDao.deleteClientByDetails(clientDetails);
 	}
 }

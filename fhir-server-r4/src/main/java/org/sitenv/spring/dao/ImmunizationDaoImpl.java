@@ -328,12 +328,13 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 					ReferenceParam patient = (ReferenceParam) params;
 					Criterion criterion = null;
 					if (patient.getValue() != null) {
-						criterion = Restrictions.or(Restrictions.sqlRestriction(
-								"{alias}.data->'patient'->>'reference' ilike '%" + patient.getValue() + "%'"),
+						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'patient'->>'display' ilike '%" + patient.getValue() + "%'"),
+										"{alias}.data->'patient'->>'reference' = '"+"Patient/"+patient.getValue()+"'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'patient'->>'type' ilike '%" + patient.getValue() + "%'")
+										"{alias}.data->'patient'->>'display' = '" + patient.getValue() + "'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'patient'->>'type' = '" + patient.getValue() + "'")
 						);
 					} else if (patient.getMissing()) {
 						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'patient' IS NULL"));
@@ -348,7 +349,6 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 			}
 		}
 	}
-
 	/**
 	 * This method builds criteria for immunization target-disease
 	 * 

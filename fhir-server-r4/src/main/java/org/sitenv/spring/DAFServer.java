@@ -62,6 +62,7 @@ public class DAFServer extends RestfulServer {
         resourceProviders.add(new AllergyIntoleranceResourceProvider());
         resourceProviders.add(new DocumentReferenceResourceProvider());
         resourceProviders.add(new EncounterResourceProvider());
+        resourceProviders.add(new ProvenanceResourceProvider());
         setResourceProviders(resourceProviders);
 
         setServerConformanceProvider(new CapabilityStatementResourceProvider());

@@ -3,30 +3,27 @@ package org.sitenv.spring.model;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.sitenv.spring.configuration.JSONObjectUserType;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "report")
-@TypeDefs({ @TypeDef(name = "StringJsonObject", typeClass = JSONObjectUserType.class) })
-
-public class DafDiagnosticReport {
+@Table(name="Provenance")
+@TypeDefs({@TypeDef(name = "StringJsonObject", typeClass = JSONObjectUserType.class)})
+public class DafProvenance {
 	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
-	@Column(name = "data")
+	
+	@Column(name="data")
 	@Type(type = "StringJsonObject")
 	private String data;
-
-	@Column(name = "last_updated_ts")
-	@Temporal(TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	private Date timestamp;
+	
+	@Column(name="last_updated_ts")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;
 
 	public Integer getId() {
 		return id;
@@ -51,5 +48,4 @@ public class DafDiagnosticReport {
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
-
 }

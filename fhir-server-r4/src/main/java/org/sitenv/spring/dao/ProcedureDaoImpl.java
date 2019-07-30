@@ -3,7 +3,6 @@ package org.sitenv.spring.dao;
 import ca.uhn.fhir.model.api.IQueryParameterType;
 import ca.uhn.fhir.rest.param.*;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -24,12 +23,10 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 */
 	@Override
 	public DafProcedure getProcedureById(int id) {
-
-		Criteria criteria = getSession().createCriteria(DafProcedure.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafProcedure) criteria.list().get(0);
-	}
+		List<DafProcedure> list = getSession().createNativeQuery(
+				"select * from procedure where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafProcedure.class)
+					.getResultList();
+			return list.get(0);	}
 
 	/**
 	 * This method builds criteria for fetching particular version of the Procedure
@@ -41,13 +38,10 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 */
 	public DafProcedure getProcedureByVersionId(int theId, String versionId) {
 
-		Criteria criteria = getSession().createCriteria(DafProcedure.class)
-				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" + versionId + "'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
-		criteria.add(versionConjunction);
-		return (DafProcedure) criteria.uniqueResult();
+		DafProcedure list = getSession().createNativeQuery(
+				"select * from procedure where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafProcedure.class)
+					.getSingleResult();
+				return list;
 	}
 
 	/**
@@ -63,55 +57,70 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 		// build criteria for id
-		buildIdCriteria(theMap, criteria);
+		   buildIdCriteria(theMap, criteria);
 
 		// build criteria for identifier
-		buildIdentifierCriteria(theMap, criteria);
+		   buildIdentifierCriteria(theMap, criteria);
 
 		// build criteria for date
-		buildDateCriteria(theMap, criteria);
+		   buildDateCriteria(theMap, criteria);
+		
+		// build criteria for occurancedate
+		   buildOccurrenceDateTime(theMap, criteria);
+		
+		// build criteria for period
+		   buildPerformedPeriodCriteria(theMap, criteria);
+
+		// build criteria for string
+		   buildPerformedStringCriteria(theMap, criteria);
+
+		// build criteria for age
+		   buildPerformedAgeCriteria(theMap, criteria);
+
+		// build criteria for Range
+		   buildRangeCriteria(theMap, criteria);
 
 		// build criteria for code
-		buildCodeCriteria(theMap, criteria);
+		   buildCodeCriteria(theMap, criteria);
 
 		// build criteria for performer
-		buildPerformerCriteria(theMap, criteria);
+		   buildPerformerCriteria(theMap, criteria);
 
 		// build criteria for subject
-		buildSubjectCriteria(theMap, criteria);
+		   buildSubjectCriteria(theMap, criteria);
 
 		// build criteria for instantiatesCanonical
-		buildInstantiatesCanonicalCriteria(theMap, criteria);
+		   buildInstantiatesCanonicalCriteria(theMap, criteria);
 
 		// build criteria for partOf
-		buildPartOfCriteria(theMap, criteria);
+		   buildPartOfCriteria(theMap, criteria);
 
 		// build criteria for encounter
-		buildEncounterCriteria(theMap, criteria);
+		   buildEncounterCriteria(theMap, criteria);
 
 		// build criteria for reasonCode
-		buildReasonCodeCriteria(theMap, criteria);
+		   buildReasonCodeCriteria(theMap, criteria);
 
 		// build criteria for basedOn
-		buildBasedOnCriteria(theMap, criteria);
+		   buildBasedOnCriteria(theMap, criteria);
 
 		// build criteria for patient
-		buildPatientCriteria(theMap, criteria);
+		   buildPatientCriteria(theMap, criteria);
 
 		// build criteria for reasonReference
 		buildReasonReferenceCriteria(theMap, criteria);
 
 		// build criteria for Location
-		buildLocationCriteria(theMap, criteria);
+		   buildLocationCriteria(theMap, criteria);
 
 		// build criteria for instantiatesUri
-		buildInstantiatesUriCriteria(theMap, criteria);
+		   buildInstantiatesUriCriteria(theMap, criteria);
 
 		// build criteria for category
-		buildCategoryCriteria(theMap, criteria);
+		   buildCategoryCriteria(theMap, criteria);
 
 		// build criteria for status
-		buildStatusCriteria(theMap, criteria);
+		   buildStatusCriteria(theMap, criteria);
 
 		return criteria.list();
 	}
@@ -136,12 +145,11 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 										+ reasonReference.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'reasonReference'->0->>'display' ilike '%"
 										+ reasonReference.getValue() + "%'"),
-				
+
 								Restrictions.sqlRestriction("{alias}.data->'reasonReference'->1->>'reference' ilike '%"
 										+ reasonReference.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'reasonReference'->1->>'display' ilike '%"
-										+ reasonReference.getValue() + "%'")
-								);
+										+ reasonReference.getValue() + "%'"));
 
 					} else if (reasonReference.getMissing()) {
 						criterion = Restrictions
@@ -196,44 +204,49 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 		}
 	}
 
-	 /**
-   	 * This method builds criteria for instantiatesUri: Instantiates external protocol or definition
-   	 * @param theMap : search parameter "instantiates-uri"
-   	 * @param criteria : for retrieving entities by composing Criterion objects
-   	 */
-    private void buildInstantiatesUriCriteria(SearchParameterMap theMap, Criteria criteria) {
-    	List<List<? extends IQueryParameterType>> list = theMap.get("instantiates-uri");
-    	if (list != null) {
-	
-    		for (List<? extends IQueryParameterType> values : list) {
-    			Disjunction disjunction = Restrictions.disjunction();
-    			for (IQueryParameterType params : values) {
-    				UriParam instantiatesUri = (UriParam) params;
-                    Criterion orCond= null;
-                    if(instantiatesUri.getValue() != null){
-    					orCond = Restrictions.or(
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>0 ilike '%" + instantiatesUri.getValue() + "%'"),
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>1 ilike '%" + instantiatesUri.getValue() + "%'"),
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>2 ilike '%" + instantiatesUri.getValue() + "%'"),
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>3 ilike '%" + instantiatesUri.getValue() + "%'"),
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>4 ilike '%" + instantiatesUri.getValue() + "%'"),
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>5 ilike '%" + instantiatesUri.getValue() + "%'")
-    							);
-    				}else if(instantiatesUri.getMissing()){
-    					orCond = Restrictions.or(
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri' IS NULL")
-    							);
-    				}else if(!instantiatesUri.getMissing()){
-    					orCond = Restrictions.or(
-    								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri' IS NOT NULL")
-    							);
-	                }
-    				disjunction.add(orCond);
-    			}
-    			criteria.add(disjunction);
-    		}
-    	}
-    }
+	/**
+	 * This method builds criteria for instantiatesUri: Instantiates external
+	 * protocol or definition
+	 * 
+	 * @param theMap   : search parameter "instantiates-uri"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildInstantiatesUriCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("instantiates-uri");
+		if (list != null) {
+
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					UriParam instantiatesUri = (UriParam) params;
+					Criterion orCond = null;
+					if (instantiatesUri.getValue() != null) {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>0 ilike '%"
+										+ instantiatesUri.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>1 ilike '%"
+										+ instantiatesUri.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>2 ilike '%"
+										+ instantiatesUri.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>3 ilike '%"
+										+ instantiatesUri.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>4 ilike '%"
+										+ instantiatesUri.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'instantiatesUri'->>5 ilike '%"
+										+ instantiatesUri.getValue() + "%'"));
+					} else if (instantiatesUri.getMissing()) {
+						orCond = Restrictions
+								.or(Restrictions.sqlRestriction("{alias}.data->'instantiatesUri' IS NULL"));
+					} else if (!instantiatesUri.getMissing()) {
+						orCond = Restrictions
+								.or(Restrictions.sqlRestriction("{alias}.data->'instantiatesUri' IS NOT NULL"));
+					}
+					disjunction.add(orCond);
+				}
+				criteria.add(disjunction);
+			}
+		}
+	}
 
 	/**
 	 * This method builds criteria for procedure status
@@ -315,9 +328,9 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 					if (subject.getValue() != null) {
 						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' ilike '%" + subject.getValue() + "'"),
+										"{alias}.data->'subject'->>'reference' = '"+"Patient/" + subject.getValue() + "'"),
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'display' ilike '%" + subject.getValue() + "%'"));
+										"{alias}.data->'subject'->>'display' = '" + subject.getValue() + "'"));
 
 					} else if (subject.getMissing()) {
 						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
@@ -729,8 +742,173 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	@Override
 	public List<DafProcedure> getProcedureHistoryById(int theId) {
 		List<DafProcedure> list = getSession().createNativeQuery(
-    			"select * from procedure where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafProcedure.class)
-    				.getResultList();
+				"select * from procedure where data->>'id' = '" + theId + "' order by data->'meta'->>'versionId' desc",
+				DafProcedure.class).getResultList();
 		return list;
 	}
+	
+	/**
+	 * This method builds criteria for procedure OccurrenceDateTime
+	 * 
+	 * @param theMap   : search parameter "OccurrenceDateTime"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildOccurrenceDateTime(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("date");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				for (IQueryParameterType params : values) {
+					DateParam date = (DateParam) params;
+					String dateFormat = date.getValueAsString();
+					if (date.getPrefix() != null) {
+						if (date.getPrefix().getValue() == "gt") {
+							criteria.add(Restrictions
+									.sqlRestriction("{alias}.data->>'occurrenceDateTime' > '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "lt") {
+							criteria.add(Restrictions
+									.sqlRestriction("{alias}.data->>'occurrenceDateTime' < '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "ge") {
+							criteria.add(Restrictions
+									.sqlRestriction("{alias}.data->>'occurrenceDateTime' >= '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "le") {
+							criteria.add(Restrictions
+									.sqlRestriction("{alias}.data->>'occurrenceDateTime' <= '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "ne") {
+							criteria.add(Restrictions
+									.sqlRestriction("{alias}.data->>'occurrenceDateTime' != '" + dateFormat + "'"));
+						} else {
+							criteria.add(Restrictions
+									.sqlRestriction("{alias}.data->>'occurrenceDateTime' = '" + dateFormat + "'"));
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * This method builds criteria for procedure performedPeriod
+	 * 
+	 * @param theMap   : search parameter "performedPeriod"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildPerformedPeriodCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("performedPeriod");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					QuantityParam performedPeriod = (QuantityParam) params;
+					if (performedPeriod.getValue() != null) {
+						disjunction.add(Restrictions
+								.sqlRestriction("{alias}.data->'performedPeriod'->>'start' ilike '%"
+										+ performedPeriod.getValue() + "%'"));
+						disjunction.add(
+								Restrictions.sqlRestriction("{alias}.data->'performedPeriod'->>'end' ilike '%"
+										+ performedPeriod.getValue() + "%'"));
+					}
+				}
+				criteria.add(disjunction);
+			}
+		}
+
+	}
+	
+	/**
+	 * This method builds criteria for procedure performedString
+	 * 
+	 * @param theMap   : search parameter "performedString"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildPerformedStringCriteria(SearchParameterMap theMap, Criteria criteria) {
+		
+			List<List<? extends IQueryParameterType>> list = theMap.get("performedString");
+			if (list != null) {
+				for (List<? extends IQueryParameterType> values : list) {
+					for (IQueryParameterType params : values) {
+						StringParam performedString = (StringParam) params;
+						if (performedString.getValue() != null) {
+							if (performedString.getValue() == "gt") {
+								criteria.add(Restrictions
+										.sqlRestriction("{alias}.data->>'performedString' > '" + performedString + "'"));
+							} else if (performedString.getValue() == "lt") {
+								criteria.add(Restrictions
+										.sqlRestriction("{alias}.data->>'performedString' < '" + performedString + "'"));
+							} else if (performedString.getValue() == "ge") {
+								criteria.add(Restrictions
+										.sqlRestriction("{alias}.data->>'performedString' >= '" + performedString + "'"));
+							} else if (performedString.getValue() == "le") {
+								criteria.add(Restrictions
+										.sqlRestriction("{alias}.data->>'performedString' <= '" + performedString + "'"));
+							} else if (performedString.getValue() == "ne") {
+								criteria.add(Restrictions
+										.sqlRestriction("{alias}.data->>'performedString' != '" + performedString + "'"));
+							} else {
+								criteria.add(Restrictions
+										.sqlRestriction("{alias}.data->>'performedString' = '" + performedString + "'"));
+							}
+						}
+					}
+				}
+			}
+		}
+
+	/**
+	 * This method builds criteria query for performedAge
+	 * @param theMap search parameter
+	 * @param criteria
+	 */
+	private void buildPerformedAgeCriteria(SearchParameterMap theMap, Criteria criteria) {
+		
+			List<List<? extends IQueryParameterType>> list = theMap.get("performedAge");
+			if (list != null) {
+				for (List<? extends IQueryParameterType> values : list) {
+					Disjunction disjunction = Restrictions.disjunction();
+					for (IQueryParameterType params : values) {
+						QuantityParam performedAge = (QuantityParam) params;
+						if (performedAge.getValue() != null) {
+							disjunction.add(Restrictions
+									.sqlRestriction("{alias}.data->'performedAge'->>'system' ilike '%"
+											+ performedAge.getValue() + "%'"));
+							disjunction.add(
+									Restrictions.sqlRestriction("{alias}.data->'performedAge'->>'value' ilike '%"
+											+ performedAge.getValue() + "%'"));
+							disjunction.add(Restrictions
+									.sqlRestriction("{alias}.data->'performedAge'->>'unit' ilike '%"
+											+ performedAge.getValue() + "%'"));
+						}
+					}
+					criteria.add(disjunction);
+				}
+			}
+		}
+
+	/**
+	 * This method builds criteria query for performedRange
+	 * @param theMap search parameter
+	 * @param criteria
+	 */
+	private void buildRangeCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("performedRange");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					QuantityParam performedRange = (QuantityParam) params;
+					if (performedRange.getValue() != null) {
+						disjunction.add(Restrictions
+								.sqlRestriction("{alias}.data->'performedRange'->>'low' ilike '%"
+										+ performedRange.getValue() + "%'"));
+						disjunction.add(
+								Restrictions.sqlRestriction("{alias}.data->'performedRange'->>'high' ilike '%"
+										+ performedRange.getValue() + "%'"));
+						
+					}
+				}
+				criteria.add(disjunction);
+			}
+		}
+
+	}
+
 }

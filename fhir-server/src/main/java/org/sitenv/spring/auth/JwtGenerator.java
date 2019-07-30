@@ -106,10 +106,14 @@ public class JwtGenerator {
 
 		// Prepare JWT with claims set
 		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().subject((String) payloadData.get("sub"))
-				.claim("email", payloadData.get("email")).claim("userName", payloadData.get("userName")).claim("fhirUser", baseUrl+"fhir/Patient")
+				.claim("email", payloadData.get("email"))
+				.claim("userName", payloadData.get("userName"))
+				.claim("fhirUser", baseUrl+"fhir/Patient")
 				.issuer(baseUrl)
-				.audience((String) payloadData.get("aud")).issueTime((Date) payloadData.get("issueDate"))
-				.expirationTime((Date) payloadData.get("expiryTime")).jwtID(UUID.randomUUID().toString()) // unique identifier for JWT
+				.audience((String) payloadData.get("aud"))
+				//.issueTime((Date) payloadData.get("issueDate"))
+				.expirationTime((Date) payloadData.get("expiryTime"))
+				.jwtID(UUID.randomUUID().toString()) // unique identifier for JWT
 				.build();
 
 		SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(jwk.getKeyID()).build(),

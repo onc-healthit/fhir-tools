@@ -182,6 +182,17 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 								Restrictions
 										.sqlRestriction("{alias}.data->'code'->'coding'->1->>'userSelected' ilike '%"
 												+ code.getValue() + "%'"),
+
+								Restrictions.sqlRestriction("{alias}.data->'code'->'coding'->2->>'system' ilike '%"
+										+ code.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'code'->'coding'->2->>'code' ilike '%" + code.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'code'->'coding'->2->>'display' ilike '%"
+										+ code.getValue() + "%'"),
+								Restrictions
+										.sqlRestriction("{alias}.data->'code'->'coding'->2->>'userSelected' ilike '%"
+												+ code.getValue() + "%'"),		
+										
 								Restrictions.sqlRestriction(
 										"{alias}.data->'code'->>'text' ilike '%" + code.getValue() + "%'"));
 					} else if (code.getMissing()) {

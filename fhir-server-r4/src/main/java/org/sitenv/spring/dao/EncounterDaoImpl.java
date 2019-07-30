@@ -24,26 +24,27 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the Encounter
 	 */
-	public DafEncounter getEncounterById(int id) {	
+	public DafEncounter getEncounterById(int id) {
 		List<DafEncounter> list = getSession().createNativeQuery(
-				"select * from encounter where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafEncounter.class)
-					.getResultList();
+				"select * from encounter where data->>'id' = '" + id + "' order by data->'meta'->>'versionId' desc",
+				DafEncounter.class).getResultList();
 		return list.get(0);
 	}
 
 	/**
-	 * This method builds criteria for fetching particular version of the
-	 * Encounter record by id.
+	 * This method builds criteria for fetching particular version of the Encounter
+	 * record by id.
 	 * 
 	 * @param theId     : ID of the Encounter
 	 * @param versionId : version of the Encounter record
 	 * @return : DAF object of the Encounter
 	 */
 	public DafEncounter getEncounterByVersionId(int theId, String versionId) {
-		DafEncounter list = getSession().createNativeQuery(
-			"select * from encounter where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafEncounter.class)
+		DafEncounter list = getSession()
+				.createNativeQuery("select * from encounter where data->>'id' = '" + theId
+						+ "' and data->'meta'->>'versionId' = '" + versionId + "'", DafEncounter.class)
 				.getSingleResult();
-			return list;
+		return list;
 	}
 
 	/**
@@ -72,14 +73,12 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 		// build criteria for patient
 		buildPatientCriteria(theMap, criteria);
 
-		// build criteria for category
+		// build criteria for status
 		buildStatusCriteria(theMap, criteria);
 
-		// build criteria for category
+		// build criteria for class
 		buildClassCriteria(theMap, criteria);
-		
-		
-		
+
 		return criteria.list();
 	}
 
@@ -100,17 +99,16 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 					Criterion criterion = null;
 					if (!theClass.isEmpty()) {
 						criterion = Restrictions.or(
-									Restrictions.sqlRestriction("{alias}.data->'class'->>'system' ilike '%"
-											+ theClass.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'class'->>'version' ilike '%"
-											+ theClass.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'class'->>'code' ilike '%"
-											+ theClass.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'class'->>'display' ilike '%"
-											+ theClass.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'class'->>'userSelected' ilike '%"
-											+ theClass.getValue() + "%'")
-								);
+								Restrictions.sqlRestriction(
+										"{alias}.data->'class'->>'system' ilike '%" + theClass.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'class'->>'version' ilike '%" + theClass.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'class'->>'code' ilike '%" + theClass.getValue() + "%'"),
+								Restrictions.sqlRestriction(
+										"{alias}.data->'class'->>'display' ilike '%" + theClass.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'class'->>'userSelected' ilike '%"
+										+ theClass.getValue() + "%'"));
 					} else if (theClass.getMissing()) {
 						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'class' IS NULL"));
 					} else if (!theClass.getMissing()) {
@@ -122,7 +120,6 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 			}
 		}
 	}
-	
 
 	/**
 	 * This method builds criteria for status
@@ -169,20 +166,19 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 					Criterion criterion = null;
 					if (!type.isEmpty()) {
 						criterion = Restrictions.or(
-									Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->0->>'system' ilike '%"
-											+ type.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->0->>'code' ilike '%"
-											+ type.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->0->>'display' ilike '%"
-											+ type.getValue() + "%'"),
-									
-									Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->1->>'system' ilike '%"
-											+ type.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->1->>'code' ilike '%"
-											+ type.getValue() + "%'"),
-									Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->1->>'display' ilike '%"
-											+ type.getValue() + "%'")
-								);
+								Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->0->>'system' ilike '%"
+										+ type.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->0->>'code' ilike '%"
+										+ type.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->0->>'display' ilike '%"
+										+ type.getValue() + "%'"),
+
+								Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->1->>'system' ilike '%"
+										+ type.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->1->>'code' ilike '%"
+										+ type.getValue() + "%'"),
+								Restrictions.sqlRestriction("{alias}.data->'type'->0->'coding'->1->>'display' ilike '%"
+										+ type.getValue() + "%'"));
 					} else if (type.getMissing()) {
 						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'type' IS NULL"));
 					} else if (!type.getMissing()) {
@@ -194,7 +190,6 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 			}
 		}
 	}
-
 
 	/**
 	 * This method builds criteria for Encounter patient
@@ -213,7 +208,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 					if (patient.getValue() != null) {
 						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "%'"),
+										"{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "'"),
 								Restrictions.sqlRestriction(
 										"{alias}.data->'subject'->>'display' ilike '%" + patient.getValue() + "%'"));
 
@@ -232,8 +227,6 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 		}
 	}
 
-	
-
 	/**
 	 * This method builds criteria for Encounter date
 	 * 
@@ -241,47 +234,52 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	 * @param criteria : for retrieving entities by composing Criterion objects
 	 */
 	private void buildDateCriteria(SearchParameterMap theMap, Criteria criteria) {
-		 List<List<? extends IQueryParameterType>> list = theMap.get("date");
-	        if (list != null) {
-	            for (List<? extends IQueryParameterType> values : list) {
-	            	Disjunction disjunction = Restrictions.disjunction();
-	                for (IQueryParameterType params : values) {
-	                    DateParam date = (DateParam) params;
-	                    String dateFormat = date.getValueAsString();
-	                    Criterion orCond= null;
-	                    if(date.getPrefix() != null) {
-	                        if(date.getPrefix().getValue() == "gt"){
-	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' > '"+dateFormat+ "'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' > '"+dateFormat+ "'")
-	                        			);
-	                        }else if(date.getPrefix().getValue() == "lt"){
-	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' < '"+dateFormat+ "'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' < '"+dateFormat+ "'")
-	                        			);
-	                        }else if(date.getPrefix().getValue() == "ge"){
-	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' >= '"+dateFormat+ "'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' >= '"+dateFormat+ "'")
-	                        			);
-	                        }else if(date.getPrefix().getValue() == "le"){
-	                        	orCond = Restrictions.or(
-		                        			Restrictions.sqlRestriction("{alias}.data->'period'->>'start' <= '"+dateFormat+ "'"),
-		                        			Restrictions.sqlRestriction("{alias}.data->'period'->>'end' <= '"+dateFormat+ "'")
-	                        			);
-	                        }else {
-	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' = '"+dateFormat+"'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' = '"+dateFormat+"'")
-	                        			);
-	                        }
-	                        disjunction.add(orCond);
-	                     }
-	                }
-	                criteria.add(disjunction);
-	            }
-	        }
+		List<List<? extends IQueryParameterType>> list = theMap.get("date");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				for (IQueryParameterType params : values) {
+					DateParam date = (DateParam) params;
+					String dateFormat = date.getValueAsString();
+					Criterion orCond = null;
+					if (date.getPrefix() != null) {
+						if (date.getPrefix().getValue() == "gt") {
+							orCond = Restrictions.or(
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'start' > '" + dateFormat + "'"),
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'end' > '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "lt") {
+							orCond = Restrictions.or(
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'start' < '" + dateFormat + "'"),
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'end' < '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "ge") {
+							orCond = Restrictions.or(
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'start' >= '" + dateFormat + "'"),
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'end' >= '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "le") {
+							orCond = Restrictions.or(
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'start' <= '" + dateFormat + "'"),
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'end' <= '" + dateFormat + "'"));
+						} else {
+							orCond = Restrictions.or(
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'start' = '" + dateFormat + "'"),
+									Restrictions
+											.sqlRestriction("{alias}.data->'period'->>'end' = '" + dateFormat + "'"));
+						}
+						disjunction.add(orCond);
+					}
+				}
+				criteria.add(disjunction);
+			}
+		}
 	}
 
 	/**
@@ -333,8 +331,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 								Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'system' ilike '%"
 										+ identifier.getValue() + "%'"),
 								Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'value' ilike '%"
-										+ identifier.getValue() + "%'")
-								);
+										+ identifier.getValue() + "%'"));
 					}
 					disjunction.add(orCond);
 				}
@@ -344,16 +341,16 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	}
 
 	/**
-	 * This method builds criteria for fetching history of the Encounter by
-	 * id
+	 * This method builds criteria for fetching history of the Encounter by id
 	 * 
 	 * @param theId : ID of the Encounter
 	 * @return : List of Encounter DAF records
 	 */
 	public List<DafEncounter> getEncounterHistoryById(int theId) {
 		List<DafEncounter> list = getSession().createNativeQuery(
-			"select * from encounter where data->>'id' = '"+theId+"'", DafEncounter.class)
-    			.getResultList();
+				"select * from encounter where data->>'id' = '" + theId + "' order by data->'meta'->>'versionId' desc",
+				DafEncounter.class).getResultList();
 		return list;
+		
 	}
 }

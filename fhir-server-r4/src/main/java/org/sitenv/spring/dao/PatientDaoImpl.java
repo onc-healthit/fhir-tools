@@ -4,7 +4,6 @@ import ca.uhn.fhir.model.api.IQueryParameterType;
 import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
@@ -24,10 +23,10 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	 */
 	@Override
 	public DafPatient getPatientById(int id) {
-		
-		Criteria criteria = getSession().createCriteria(DafPatient.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
-		return (DafPatient) criteria.list().get(0);
+		List<DafPatient> list = getSession().createNativeQuery(
+			"select * from patient where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafPatient.class)
+				.getResultList();
+		return list.get(0);
     }
 	
 	/**
@@ -38,15 +37,11 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	 */
 	@Override
 	public DafPatient getPatientByVersionId(int theId, String versionId) {
-		
-		Criteria criteria = getSession().createCriteria(DafPatient.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		Conjunction versionConjunction = Restrictions.conjunction();
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
-		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
-		criteria.add(versionConjunction);
-		return (DafPatient) criteria.uniqueResult();
+		DafPatient list = getSession().createNativeQuery(
+			"select * from patient where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafPatient.class)
+				.getSingleResult();
+			return list;
 	}
-	
 	/**
 	 * This method invokes various methods for search
 	 * @param theMap : parameter for search

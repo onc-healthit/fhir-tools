@@ -1,9 +1,11 @@
 package org.sitenv.spring.service;
 
+import java.util.List;
+import java.util.Map;
+
+import org.sitenv.spring.exception.ClientNotFoundException;
 import org.sitenv.spring.exception.FHIRHapiException;
 import org.sitenv.spring.model.DafClientRegister;
-
-import java.util.List;
 
 public interface ClientRegistrationService {
 
@@ -21,6 +23,6 @@ public interface ClientRegistrationService {
 
     public DafClientRegister getDemoClientDetails();
     
-    public String deleteClientByDetails(String clientId, String clientSecret);
+	public boolean deleteClientByDetails(Map<String, String> clientDetails) ;
 
 }

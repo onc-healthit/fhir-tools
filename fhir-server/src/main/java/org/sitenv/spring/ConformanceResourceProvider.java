@@ -55,7 +55,9 @@ public class ConformanceResourceProvider extends ServerConformanceProvider {
 
         conformanceExtension.addUndeclaredExtension(new ExtensionDt(false, "authorize", new UriDt(uri + "/authorize")));
         conformanceExtension.addUndeclaredExtension(new ExtensionDt(false, "token", new UriDt(uri + "/token")));
-        conformanceExtension.addUndeclaredExtension(new ExtensionDt(false, "register", new UriDt(uri + "/view/newuser.html")));
+        conformanceExtension.addUndeclaredExtension(new ExtensionDt(false, "introspect", new UriDt(uri + "/introspect")));
+
+//        conformanceExtension.addUndeclaredExtension(new ExtensionDt(false, "register", new UriDt(uri + "/view/newuser.html")));
 
         restSecurity.addUndeclaredExtension(conformanceExtension);
 

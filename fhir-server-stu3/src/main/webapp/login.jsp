@@ -90,13 +90,15 @@
 
 <%-- header Ends here --%>
 
-<div class="container" style="margin-top:30px;">
-
-    <h2 class="form-signin-heading" style="text-align: center">Login
-        Using Username and Password</h2>
-    <div style="text-align: center; font-weight: bold">
-        <%
-            if (request.getParameter("error") == null) {
+<div class="col-md-12" style="margin-top: -40px;">
+    <h1 style="margin-left: 13px;  text-align: center;" >FHIR Server - STU3</h1>
+</div>
+<div class="container" style="margin-top:15px;">			
+		<h2 class="form-signin-heading" style="text-align: center">Login
+			Using Username and Password</h2>
+		<div style="text-align: center; font-weight: bold" >
+			<%
+				if (request.getParameter("error") == null) {
 
             } else {
                 out.println("<h5 id='loginerror'>" + request.getParameter("error") + "</h5>");

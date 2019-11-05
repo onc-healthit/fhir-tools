@@ -68,11 +68,24 @@
 			      	data:JSON.stringify(data),
 			      	success:function(data){
 			      		$('#deleteclientmodal').modal('hide');
-			    		bootbox.alert("client successfully deleted",function(){
-			    			loadclients(userId);
-			    		});
+			      		
+			      		if(data == true){
+			      			bootbox.alert("Client deleted successfully",function(){
+				    			loadclients(userId);
+				    		});	
+			      		}else{
+			      			bootbox.alert("Client not found.",function(){
+				    			loadclients(userId);
+				    		});	
+	                    }
+			    		
 			      	},
 			      	error:function(e){
+			      		
+			      		$('#deleteclientmodal').modal('hide');
+			      		bootbox.alert(e.responseText,function(){
+			    			loadclients(userId);
+			    		});	
 			        	console.log(e);
 			      	}
 			    })

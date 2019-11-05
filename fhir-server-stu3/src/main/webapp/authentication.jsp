@@ -83,8 +83,11 @@
 
 <%-- header Ends here --%>
 
+    <div class="col-md-12" style="margin-top: -40px;">
+        <h1 style="margin-left: 13px;  text-align: center;" >FHIR Server - STU3</h1>
+    </div>
     <div class="container">
-        <div class="col-md-12" style="margin-top:20px;">
+        <div class="col-md-12" style="margin-top:10px;">
             <h1>Hi <%= request.getParameter("name") %>!</h1>
             <h3><b> <%= request.getParameter("cName") %> </b> is requesting access to the following resources :</h3>
             <h3>Do you approve?</h3>

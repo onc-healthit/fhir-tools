@@ -80,8 +80,6 @@
 
 <!-- Content starts here -->
 
-
-
 <div class="container" style="margin-top:10px;">
     <div class="col-md-12" style="margin-top: -40px;">
         <h1 style="margin-left: 13px;  font-size: 34px;text-align: center;" >FHIR Server</h1>

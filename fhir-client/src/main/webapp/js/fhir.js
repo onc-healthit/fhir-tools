@@ -237,11 +237,7 @@
         var clientscope = val.join(",");
         console.log(clientscope);
         var redirecturi = location.protocol + '//' + location.host + location.pathname;
-        /*var redirecturi = $('#redirecturi').val();
-         if(redirecturi == '' || redirecturi == undefined){
-         bootbox.alert("Please enter Redirect URI");
-         return false;
-         }*/
+
         $.ajax({
             url:baseurl+"/metadata?_format=json",
             type:"GET",

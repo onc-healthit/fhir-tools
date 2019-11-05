@@ -74,5 +74,4 @@ public class ConformanceResourceProvider extends ServerConformanceProvider {
 
         return conformance;
     }
-
 }

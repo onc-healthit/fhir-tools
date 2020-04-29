@@ -18,13 +18,13 @@ public class MedicationServiceImpl implements MedicationService {
 	
 	@Override
     @Transactional
-    public DafMedication getMedicationById(int id) {
+    public DafMedication getMedicationById(String id) {
         return this.medicationDao.getMedicationById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafMedication getMedicationByVersionId(int theId, String versionId) {
+	public DafMedication getMedicationByVersionId(String theId, String versionId) {
 		return this.medicationDao.getMedicationByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,14 @@ public class MedicationServiceImpl implements MedicationService {
 
    @Override
    @Transactional
-   public List<DafMedication> getMedicationHistoryById(int theId) {
+   public List<DafMedication> getMedicationHistoryById(String theId) {
 	   return this.medicationDao.getMedicationHistoryById(theId);
    }
+
+    @Override
+    @Transactional
+    public List<DafMedication> getMedicationByResourceId(List<String> resourceID) {
+        return this.medicationDao.getMedicationByResourceId(resourceID);
+    }
+
 }

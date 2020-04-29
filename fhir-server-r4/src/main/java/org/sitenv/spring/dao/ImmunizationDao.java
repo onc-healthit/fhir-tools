@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ImmunizationDao {
 	
-	 public DafImmunization getImmunizationById(int id);
+	 public DafImmunization getImmunizationById(String id);
 	 
-	 public DafImmunization getImmunizationByVersionId(int theId, String versionId);
+	 public DafImmunization getImmunizationByVersionId(String theId, String versionId);
 	 
 	 public List<DafImmunization> search(SearchParameterMap theMap);
 	 
-	 public List<DafImmunization> getImmunizationHistoryById(int theId);
+	 public List<DafImmunization> getImmunizationHistoryById(String theId);
 }

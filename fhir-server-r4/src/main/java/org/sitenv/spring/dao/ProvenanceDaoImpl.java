@@ -10,6 +10,7 @@ import org.hibernate.criterion.Restrictions;
 import org.sitenv.spring.model.DafProvenance;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 @Repository("provenanceDao")
@@ -21,7 +22,7 @@ public class ProvenanceDaoImpl extends AbstractDao implements ProvenanceDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the proveance
 	 */
-	public DafProvenance getProvenanceById(int id) {
+	public DafProvenance getProvenanceById(String id) {
 		List<DafProvenance> list = getSession().createNativeQuery(
 				"select * from provenance where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafProvenance.class)
 					.getResultList();
@@ -35,7 +36,7 @@ public class ProvenanceDaoImpl extends AbstractDao implements ProvenanceDao {
 	 * @param versionId : version of the provenance record
 	 * @return : DAF object of the provenance
 	 */
-	public DafProvenance getProvenanceByVersionId(int theId, String versionId) {
+	public DafProvenance getProvenanceByVersionId(String theId, String versionId) {
 		DafProvenance list = getSession().createNativeQuery(
 				"select * from provenance where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafProvenance.class)
 					.getSingleResult();
@@ -48,14 +49,47 @@ public class ProvenanceDaoImpl extends AbstractDao implements ProvenanceDao {
 	 * @param theId : ID of the provenance
 	 * @return : List of provenance DAF records
 	 */
-	public List<DafProvenance> getProvenanceHistoryById(int theId) {
+	public List<DafProvenance> getProvenanceHistoryById(String theId) {
 		List<DafProvenance> list = getSession().createNativeQuery(
 				"select * from provenance where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafProvenance.class)
 		    	.getResultList();
 		return list;
 	}
 
+	/**
+	 * This method builds criteria for fetching history of the provenance by id
+	 *
+	 * @param resourceIDs : ID of the resource
+	 * @return : List of provenance DAF records
+	 */
+	public List<DafProvenance> getProvenanceByResourceId(List<String> resourceIDs) {
+		StringBuffer resourceIDForINOperator = new StringBuffer();
+		if(resourceIDs.size() > 0) {
+			boolean first = true;
+			for(String resourceID : resourceIDs) {
+				if(first)  resourceIDForINOperator.append("'"+resourceID+"'");
+				else resourceIDForINOperator.append(",'"+resourceID+"'");
+				first=false;
+			}
+		}
+
+		List<DafProvenance> list = getSession().createNativeQuery(
+				"select * from provenance\n" +
+						"where id in (\n" +
+						"select distinct(id) from provenance r,\n" +
+						"LATERAL json_array_elements(r.data->'target') segment\n" +
+						"WHERE segment ->>'reference' in ("+ resourceIDForINOperator.toString() +")"+
+						")"	, DafProvenance.class)
+				.getResultList();
+		return list;
+
+	}
+
+
+
+
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<DafProvenance> search(SearchParameterMap theMap) {
 		Criteria criteria = getSession().createCriteria(DafProvenance.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);

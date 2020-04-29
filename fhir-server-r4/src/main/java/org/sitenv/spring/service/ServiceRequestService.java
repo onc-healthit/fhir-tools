@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ServiceRequestService {
 
-	public DafServiceRequest getServiceRequestById(int id);
+	public DafServiceRequest getServiceRequestById(String id);
 
-	public DafServiceRequest getServiceRequestByVersionId(int theId, String versionId);
+	public DafServiceRequest getServiceRequestByVersionId(String theId, String versionId);
 
-	public List<DafServiceRequest> getServiceRequestHistoryById(int theId);
+	public List<DafServiceRequest> getServiceRequestHistoryById(String theId);
 
 	public List<DafServiceRequest> search(SearchParameterMap theMap);
 }

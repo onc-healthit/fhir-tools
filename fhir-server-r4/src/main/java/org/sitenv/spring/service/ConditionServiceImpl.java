@@ -18,13 +18,13 @@ public class ConditionServiceImpl implements ConditionService {
 
 	@Override
 	@Transactional
-	public DafCondition getConditionById(int id) {
+	public DafCondition getConditionById(String id) {
 		return this.conditionDao.getConditionById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafCondition getConditionByVersionId(int theId, String versionId) {
+	public DafCondition getConditionByVersionId(String theId, String versionId) {
 		return this.conditionDao.getConditionByVersionId(theId, versionId);
 	}
 
@@ -36,7 +36,7 @@ public class ConditionServiceImpl implements ConditionService {
 
 	@Override
 	@Transactional
-	public List<DafCondition> getConditionHistoryById(int theId) {
+	public List<DafCondition> getConditionHistoryById(String theId) {
 		return this.conditionDao.getConditionHistoryById(theId);
 	}
 }

@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface RiskAssessmentService {
 	
-	public DafRiskAssessment getRiskAssessmentById(int id);
+	public DafRiskAssessment getRiskAssessmentById(String id);
 
-	public DafRiskAssessment getRiskAssessmentByVersionId(int id, String versionIdPart);
+	public DafRiskAssessment getRiskAssessmentByVersionId(String id, String versionIdPart);
 
 	public List<DafRiskAssessment> search(SearchParameterMap paramMap);
 
-	public List<DafRiskAssessment> getRiskAssessmentHistoryById(int id);
+	public List<DafRiskAssessment> getRiskAssessmentHistoryById(String id);
 
 	
 

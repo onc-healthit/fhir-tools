@@ -6,11 +6,11 @@ import org.sitenv.spring.util.SearchParameterMap;
 import java.util.List;
 
 public interface SpecimenDao {
-	public DafSpecimen getSpecimenById(int id);
+	public DafSpecimen getSpecimenById(String id);
 	
-	public DafSpecimen getSpecimenByVersionId(int theId, String versionId);
+	public DafSpecimen getSpecimenByVersionId(String theId, String versionId);
 	
-	public List<DafSpecimen> getSpecimenHistoryById(int theId);
+	public List<DafSpecimen> getSpecimenHistoryById(String theId);
 	
 	public List<DafSpecimen> search(SearchParameterMap paramMap);
 }

@@ -34,7 +34,7 @@ import java.util.Set;
 public class MedicationStatementResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "MedicationStatement";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     MedicationStatementService service;
     
@@ -65,10 +65,10 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public MedicationStatement readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafMedicationStatement dafMedicationStatement;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
 	@History()
     public List<MedicationStatement> getMedicationStatementHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -264,7 +264,9 @@ public class MedicationStatementResourceProvider implements IResourceProvider {
         if(!(medicationStatementJSON.isNull("meta"))) {
         	if(!(medicationStatementJSON.getJSONObject("meta").isNull("versionId"))) {
                 medicationStatement.setId(new IdType(RESOURCE_TYPE, medicationStatementJSON.getString("id") + "", medicationStatementJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				medicationStatement.setId(new IdType(RESOURCE_TYPE, medicationStatementJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             medicationStatement.setId(new IdType(RESOURCE_TYPE, medicationStatementJSON.getString("id") + "", VERSION_ID));

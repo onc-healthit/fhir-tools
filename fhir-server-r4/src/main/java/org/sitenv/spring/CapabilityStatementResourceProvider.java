@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
 import org.hl7.fhir.r4.model.CapabilityStatement;
 import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestComponent;
@@ -23,14 +24,14 @@ public class CapabilityStatementResourceProvider extends ServerCapabilityStateme
 
 
     @Metadata
-    public CapabilityStatement getConformance(HttpServletRequest request) {
+    public CapabilityStatement getConformance(HttpServletRequest request, RequestDetails theRequestDetails) {
 
         String uri = request.getScheme() + "://" +
                 request.getServerName() +
                 ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort()) +
                 request.getContextPath();
 
-        CapabilityStatement conformance = super.getServerConformance(request);
+        CapabilityStatement conformance = super.getServerConformance(request,theRequestDetails);
         conformance.getFhirVersion();
         conformance.setId("ONC FHIR Server");
         conformance.setUrl("/fhir/metadata");
@@ -57,6 +58,7 @@ public class CapabilityStatementResourceProvider extends ServerCapabilityStateme
         conformanceExtension.addExtension(new Extension("authorize", new UriType(uri + "/authorize")));
         conformanceExtension.addExtension(new Extension("token", new UriType(uri + "/token")));
         conformanceExtension.addExtension(new Extension("register", new UriType(uri + "/view/newuser.html")));
+        //conformanceExtension.addExtension(new Extension("introspect", new UriType(uri + "/introspect")));
 
         restSecurity.addExtension(conformanceExtension);
 
@@ -64,7 +66,7 @@ public class CapabilityStatementResourceProvider extends ServerCapabilityStateme
         List<Coding> theCodingList = new ArrayList<>();
         Coding theCoding = new Coding();
         theCoding.setCode("SMART-on-FHIR");
-        theCoding.setSystem("http://hl7.org/fhir/restful-security-service");
+        theCoding.setSystem("http://terminology.hl7.org/CodeSystem/restful-security-service");
         theCodingList.add(theCoding);
         serviceCC.setCoding(theCodingList);
         serviceCC.setText("OAuth2 using SMART-on-FHIR profile (see http://docs.smarthealthit.org)");
@@ -72,7 +74,15 @@ public class CapabilityStatementResourceProvider extends ServerCapabilityStateme
         restSecurity.setCors(true);
         rest.setSecurity(restSecurity);
 
-        rest.setResource(conformance.getRest().get(0).getResource());
+
+        List<CapabilityStatement.CapabilityStatementRestResourceComponent> resources = conformance.getRest().get(0).getResource();
+        for(CapabilityStatement.CapabilityStatementRestResourceComponent resource:resources){
+            resource.setSearchRevInclude(resource.getSearchInclude()); // HAPI Fhir is not setting this value as per design, manually setting the values
+        }
+        rest.setResource(resources);
+
+
+       // rest.setResource(conformance.getRest().get(0).getResource());
         restList.add(rest);
         conformance.setRest(restList);
 

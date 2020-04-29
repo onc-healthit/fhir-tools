@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface DocumentReferenceDao {
 	
-	 public DafDocumentReference getDocumentReferenceById(int id);
+	 public DafDocumentReference getDocumentReferenceById(String id);
 	 
-	 public DafDocumentReference getDocumentReferenceByVersionId(int theId, String versionId);
+	 public DafDocumentReference getDocumentReferenceByVersionId(String theId, String versionId);
 	 
 	 public List<DafDocumentReference> search(SearchParameterMap theMap);
 	 
-	 public List<DafDocumentReference> getDocumentReferenceHistoryById(int theId);
+	 public List<DafDocumentReference> getDocumentReferenceHistoryById(String theId);
 }

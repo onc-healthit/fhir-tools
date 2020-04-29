@@ -19,13 +19,13 @@ public class DiagnosticReportServiceImpl implements DiagnosticReportService {
 
 	@Override
 	@Transactional
-	public DafDiagnosticReport getDiagnosticReportById(int id) {
+	public DafDiagnosticReport getDiagnosticReportById(String id) {
 		return this.diagnosticReportDao.getDiagnosticReportById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafDiagnosticReport getDiagnosticReportByVersionId(int theId, String versionId) {
+	public DafDiagnosticReport getDiagnosticReportByVersionId(String theId, String versionId) {
 		return this.diagnosticReportDao.getDiagnosticReportByVersionId(theId, versionId);
 	}
 
@@ -37,7 +37,7 @@ public class DiagnosticReportServiceImpl implements DiagnosticReportService {
 
 	@Override
 	@Transactional
-	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(int theId) {
+	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(String theId) {
 		return this.diagnosticReportDao.getDiagnosticReportHistoryById(theId);
 	}
 

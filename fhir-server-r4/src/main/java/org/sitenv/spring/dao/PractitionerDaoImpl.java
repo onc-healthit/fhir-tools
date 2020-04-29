@@ -25,7 +25,7 @@ public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao 
 	 * @return : DafPractitioner object
 	 */
 	@Override
-	public DafPractitioner getPractitionerById(int id) {
+	public DafPractitioner getPractitionerById(String id) {
 		
 		Criteria criteria = getSession().createCriteria(DafPractitioner.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
@@ -39,7 +39,7 @@ public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao 
 	 * @return : DafPractitioner object
 	 */
 	@Override
-	public DafPractitioner getPractitionerByVersionId(int theId, String versionId) {
+	public DafPractitioner getPractitionerByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafPractitioner.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -50,11 +50,11 @@ public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao 
 	
 	/**
 	 * This method invokes various methods for search
-	 * @param theMap : parameter for search
+	 * @param theId : parameter for search
 	 * @return criteria : DafPractitioner object
 	 */
 	@SuppressWarnings("unchecked")
-	public List<DafPractitioner> getPractitionerHistoryById(int theId) {
+	public List<DafPractitioner> getPractitionerHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafPractitioner.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafPractitioner>)criteria.list();
@@ -323,7 +323,7 @@ public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao 
                         	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' not ilike '"+gender.getValue()+"'"));
                         }
                     }else if(StringUtils.isNoneEmpty(gender.getValue())){
-                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' ilike '%" + gender.getValue() + "%'"));
+                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' ilike '" + gender.getValue() + "'"));
                     }else if(gender.getMissing()){
                     	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' IS NULL"));
                     }else if(!gender.getMissing()){

@@ -25,7 +25,7 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
 	 * @param id : ID of the resource
 	 * @return : DAF object of the AllergyIntolerance
 	 */
-	public DafAllergyIntolerance getAllergyIntoleranceById(int id) {
+	public DafAllergyIntolerance getAllergyIntoleranceById(String id) {
 
 		Criteria criteria = getSession().createCriteria(DafAllergyIntolerance.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -41,7 +41,7 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
 	 * @param versionId : version of the AllergyIntolerance record
 	 * @return : DAF object of the AllergyIntolerance
 	 */
-	public DafAllergyIntolerance getAllergyIntoleranceByVersionId(int theId, String versionId) {
+	public DafAllergyIntolerance getAllergyIntoleranceByVersionId(String theId, String versionId) {
 
 		Criteria criteria = getSession().createCriteria(DafAllergyIntolerance.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -234,21 +234,18 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
 					String dateFormat = lastOccurrence.getValueAsString();
 					if (lastOccurrence.getPrefix() != null) {
 						if (lastOccurrence.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'lastOccurrence' > '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'lastOccurrence')::DATE > '" + dateFormat + "'"));
 						} else if (lastOccurrence.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'lastOccurrence' < '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'lastOccurrence')::DATE < '" + dateFormat + "'"));
 						} else if (lastOccurrence.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'lastOccurrence' >= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'lastOccurrence')::DATE >= '" + dateFormat + "'"));
 						} else if (lastOccurrence.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'lastOccurrence' <= '" + dateFormat + "'"));
-						}  else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'lastOccurrence' = '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'lastOccurrence')::DATE <= '" + dateFormat + "'"));
+						}else if (lastOccurrence.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'lastOccurrence')::DATE = '" + dateFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'lastOccurrence')::DATE = '" + dateFormat + "'"));
 					}
 				}
 			}
@@ -384,21 +381,18 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
 					String dateFormat = onset.getValueAsString();
 					if (onset.getPrefix() != null) {
 						if (onset.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->reaction'->0->>'onset' > '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->reaction'->0->>'onset')::DATE > '" + dateFormat + "'"));
 						} else if (onset.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->reaction'->0->>'onset' < '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->reaction'->0->>'onset')::DATE < '" + dateFormat + "'"));
 						} else if (onset.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->reaction'->0->>'onset' >= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->reaction'->0->>'onset')::DATE >= '" + dateFormat + "'"));
 						} else if (onset.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->reaction'->0->>'onset' <= '" + dateFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->reaction'->0->>'onset' = '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->reaction'->0->>'onset')::DATE <= '" + dateFormat + "'"));
+						} else if (onset.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->reaction'->0->>'onset')::DATE <= '" + dateFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->reaction'->0->>'onset')::DATE = '" + dateFormat + "'"));
 					}
 				}
 			}
@@ -637,21 +631,18 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
 					String dateFormat = recordedDate.getValueAsString();
 					if (recordedDate.getPrefix() != null) {
 						if (recordedDate.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' > '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE > '" + dateFormat + "'"));
 						} else if (recordedDate.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' < '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE < '" + dateFormat + "'"));
 						} else if (recordedDate.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' >= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE >= '" + dateFormat + "'"));
 						} else if (recordedDate.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' <= '" + dateFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' = '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE <= '" + dateFormat + "'"));
+						} else if (recordedDate.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE = '" + dateFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE = '" + dateFormat + "'"));
 					}
 				}
 			}
@@ -722,7 +713,7 @@ public class AllergyIntoleranceDaoImpl extends AbstractDao implements AllergyInt
 	 * @return : List of AllergyIntolerance DAF records
 	 */
 	@SuppressWarnings("unchecked")
-	public List<DafAllergyIntolerance> getAllergyIntoleranceHistoryById(int theId) {
+	public List<DafAllergyIntolerance> getAllergyIntoleranceHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafAllergyIntolerance.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));

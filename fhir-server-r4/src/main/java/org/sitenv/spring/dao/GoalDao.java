@@ -7,11 +7,11 @@ import java.util.List;
 
 	public interface GoalDao {
 	
-	public DafGoal getGoalById(int id);
+	public DafGoal getGoalById(String id);
 	
-	public DafGoal getGoalByVersionId(int theId, String versionId);
+	public DafGoal getGoalByVersionId(String theId, String versionId);
 
 	public List<DafGoal> search(SearchParameterMap paramMap);
 	
-	public List<DafGoal> getGoalHistoryById(int theId);
+	public List<DafGoal> getGoalHistoryById(String theId);
 }

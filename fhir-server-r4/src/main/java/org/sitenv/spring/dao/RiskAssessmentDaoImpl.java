@@ -24,7 +24,7 @@ public class RiskAssessmentDaoImpl  extends AbstractDao implements RiskAssessmen
 	 * @return : DAF object of the RiskAssessment
 	 */
 	@Override
-	public DafRiskAssessment getRiskAssessmentById(int id) {
+	public DafRiskAssessment getRiskAssessmentById(String id) {
 		Criteria criteria = getSession().createCriteria(DafRiskAssessment.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafRiskAssessment) criteria.list().get(0);
@@ -38,7 +38,7 @@ public class RiskAssessmentDaoImpl  extends AbstractDao implements RiskAssessmen
 	 * @return : DAF object of the RiskAssessment
 	 */
 	@Override
-	public DafRiskAssessment getRiskAssessmentByVersionId(int theId, String versionId) {
+	public DafRiskAssessment getRiskAssessmentByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafRiskAssessment.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -520,9 +520,9 @@ public class RiskAssessmentDaoImpl  extends AbstractDao implements RiskAssessmen
 	     * @return : List of riskAssessment DAF records
 	     */
 		@SuppressWarnings("unchecked")
-		public List<DafRiskAssessment> getRiskAssessmentHistoryById(int id) {
+		public List<DafRiskAssessment> getRiskAssessmentHistoryById(String theId) {
 			Criteria criteria = getSession().createCriteria(DafRiskAssessment.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"'"));
+			criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 			return (List<DafRiskAssessment>) criteria.list();
 		}
 }

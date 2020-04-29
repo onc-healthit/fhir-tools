@@ -28,7 +28,7 @@ import java.util.List;
 public class ServiceRequestResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "ServiceRequest";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	ServiceRequestService service;
 
@@ -62,10 +62,10 @@ public class ServiceRequestResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public ServiceRequest readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafServiceRequest dafServiceRequest;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -100,9 +100,9 @@ public class ServiceRequestResourceProvider implements IResourceProvider {
 	@History()
 	public List<ServiceRequest> getServiceRequestHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -141,15 +141,9 @@ public class ServiceRequestResourceProvider implements IResourceProvider {
 	 * @param theRequistion
 	 * @param theAuthoredOn
 	 * @param theOccurance
-	 * @param theSupportingInfo
-	 * @param theReasonCode
-	 * @param theNote
 	 * @param theBasedOn
-	 * @param Replaces
 	 * @param thePerformerType
 	 * @param thePriority
-	 * @param theInstantiatesuri
-	 * @param theInstantiatesCanonical
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -314,6 +308,8 @@ public class ServiceRequestResourceProvider implements IResourceProvider {
 			if (!(serviceRequestJSON.getJSONObject("meta").isNull("versionId"))) {
 				serviceRequest.setId(new IdType(RESOURCE_TYPE, serviceRequestJSON.getString("id") + "",
 						serviceRequestJSON.getJSONObject("meta").getString("versionId")));
+			}else {
+				serviceRequest.setId(new IdType(RESOURCE_TYPE, serviceRequestJSON.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			serviceRequest.setId(new IdType(RESOURCE_TYPE, serviceRequestJSON.getString("id") + "", VERSION_ID));

@@ -34,7 +34,7 @@ import java.util.Set;
 public class AllergyIntoleranceResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "AllergyIntolerance";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     AllergyIntoleranceService service;
 
@@ -65,10 +65,10 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public AllergyIntolerance readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafAllergyIntolerance dafAllergyIntolerance;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
 	@History()
     public List<AllergyIntolerance> getAllergyIntoleranceHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -216,8 +216,11 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
         @OptionalParam(name = AllergyIntolerance.SP_LAST_DATE)
         DateRangeParam theLastDate,
 
-        @IncludeParam(allow = {"*"})
-        Set<Include> theIncludes,
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
+		@IncludeParam(allow= {"*"})
+		Set<Include> theIncludes,
 
         @Sort
         SortSpec theSort,
@@ -254,9 +257,15 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
             @Override
             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                 List<IBaseResource> allergyIntoleranceList = new ArrayList<IBaseResource>();
-                for(DafAllergyIntolerance dafAllergyIntolerance : results){
-                	allergyIntoleranceList.add(createAllergyIntoleranceObject(dafAllergyIntolerance));
-                }
+				List<String> ids = new ArrayList<String>();
+				for(DafAllergyIntolerance dafAllergyIntolerance : results){
+					AllergyIntolerance allergyIntolerance = createAllergyIntoleranceObject(dafAllergyIntolerance);
+                	allergyIntoleranceList.add(allergyIntolerance);
+					ids.add(((IdType)allergyIntolerance.getIdElement()).getResourceType()+"/"+((IdType)allergyIntolerance.getIdElement()).getIdPart());
+				}
+				if(theRevIncludes.size() >0 ){
+					allergyIntoleranceList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
                 return allergyIntoleranceList;
             }
 
@@ -295,7 +304,9 @@ public class AllergyIntoleranceResourceProvider implements IResourceProvider {
         if(!(allergyIntoleranceJSON.isNull("meta"))) {
         	if(!(allergyIntoleranceJSON.getJSONObject("meta").isNull("versionId"))) {
         		allergyIntolerance.setId(new IdType(RESOURCE_TYPE, allergyIntoleranceJSON.getString("id") + "", allergyIntoleranceJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				allergyIntolerance.setId(new IdType(RESOURCE_TYPE, allergyIntoleranceJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	allergyIntolerance.setId(new IdType(RESOURCE_TYPE, allergyIntoleranceJSON.getString("id") + "", VERSION_ID));

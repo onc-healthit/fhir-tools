@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface LocationService {
 
-	public DafLocation getLocationById(int id);
+	public DafLocation getLocationById(String id);
 
-	public DafLocation getLocationByVersionId(int theId, String versionId);
+	public DafLocation getLocationByVersionId(String theId, String versionId);
 
-	public List<DafLocation> getLocationHistoryById(int theId);
+	public List<DafLocation> getLocationHistoryById(String theId);
 
 	public List<DafLocation> search(SearchParameterMap searchParameterMap);
 

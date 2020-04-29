@@ -16,12 +16,12 @@ public class MedicationRequestServiceImpl implements MedicationRequestService {
     private MedicationRequestDao medicationRequestDao;
 	
 	@Transactional
-    public DafMedicationRequest getMedicationRequestById(int id) {
+    public DafMedicationRequest getMedicationRequestById(String id) {
         return this.medicationRequestDao.getMedicationRequestById(id);
     }
 	
 	@Transactional
-	public DafMedicationRequest getMedicationRequestByVersionId(int theId, String versionId) {
+	public DafMedicationRequest getMedicationRequestByVersionId(String theId, String versionId) {
 		return this.medicationRequestDao.getMedicationRequestByVersionId(theId, versionId);
 	}
 	
@@ -31,7 +31,7 @@ public class MedicationRequestServiceImpl implements MedicationRequestService {
     }
 
 	@Override
-	public List<DafMedicationRequest> getMedicationRequestHistoryById(int id) {
+	public List<DafMedicationRequest> getMedicationRequestHistoryById(String id) {
 		return this.medicationRequestDao.getMedicationRequestHistoryById(id);
 	}
 

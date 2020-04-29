@@ -621,22 +621,25 @@
             "columns": [{
                 "data": function (data, type, row) {
                     var firstColumn = JSON.parse(data.data);
-                    var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+firstColumn.id+"</div>";
+                    var userpoc = "<div onclick='patientId(\""+firstColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+firstColumn.id+"</div>";
                     return userpoc;
                 }
             },{
                 "data": function (data, type, row) {
                     var secondColumn = JSON.parse(data.data);
-                    var family = secondColumn.name[0].family;
-                    var given = secondColumn.name[0].given[0];
-                    var fullName = family+" "+given;
-                    var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
-                    return userpoc;
+                    if(secondColumn.name) {
+                        var family = secondColumn.name[0].family;
+                        var given = secondColumn.name[0].given;
+                        var fullName = family+" "+given;
+                        var userpoc = "<div onclick='patientId(\""+secondColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
+                        return userpoc;
+                    }
+
                 }
             },{
                 "data": function (data, type, row) {
                     var thirdColumn = JSON.parse(data.data);
-                    var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+thirdColumn.birthDate+"</div>";
+                    var userpoc = "<div onclick='patientId(\""+thirdColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+thirdColumn.birthDate+"</div>";
                     return userpoc;
                 }
             }

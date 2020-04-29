@@ -24,7 +24,7 @@ public class GoalDaoImpl extends AbstractDao implements GoalDao {
 	 * @return : DafGoal object
 	 */
 	@Override
-	public DafGoal getGoalById(int id) {
+	public DafGoal getGoalById(String id) {
 		Criteria criteria = getSession().createCriteria(DafGoal.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafGoal) criteria.list().get(0);
@@ -37,7 +37,7 @@ public class GoalDaoImpl extends AbstractDao implements GoalDao {
 	 * @return : DafGoal object
 	 */
 	@Override
-	public DafGoal getGoalByVersionId(int theId, String versionId) {
+	public DafGoal getGoalByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafGoal.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -328,44 +328,51 @@ public class GoalDaoImpl extends AbstractDao implements GoalDao {
                     if(targetDate.getPrefix() != null) {
                         if(targetDate.getPrefix().getValue() == "gt"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->0->>'dueDate' > '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->1->>'dueDate' > '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->2->>'dueDate' > '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->3->>'dueDate' > '"+theTargetDate+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->0->>'dueDate')::DATE > '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->1->>'dueDate')::DATE > '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->2->>'dueDate')::DATE > '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->3->>'dueDate')::DATE > '"+theTargetDate+ "'")
                         			);
                         }else if(targetDate.getPrefix().getValue() == "lt"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->0->>'dueDate' < '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->1->>'dueDate' < '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->2->>'dueDate' < '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->3->>'dueDate' < '"+theTargetDate+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->0->>'dueDate')::DATE < '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->1->>'dueDate')::DATE < '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->2->>'dueDate')::DATE < '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->3->>'dueDate')::DATE < '"+theTargetDate+ "'")
                         			);
                         }else if(targetDate.getPrefix().getValue() == "ge"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->0->>'dueDate' >= '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->1->>'dueDate' >= '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->2->>'dueDate' >= '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->3->>'dueDate' >= '"+theTargetDate+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->0->>'dueDate')::DATE >= '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->1->>'dueDate')::DATE >= '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->2->>'dueDate')::DATE >= '"+theTargetDate+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'target'->3->>'dueDate')::DATE >= '"+theTargetDate+ "'")
                         			);
                         }else if(targetDate.getPrefix().getValue() == "le"){
-                        	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->0->>'dueDate' <= '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->1->>'dueDate' <= '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->2->>'dueDate' <= '"+theTargetDate+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->3->>'dueDate' <= '"+theTargetDate+ "'")
-                        			);
-                        }else {
-                        	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->0->>'dueDate' = '"+theTargetDate+"'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->1->>'dueDate' = '"+theTargetDate+"'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->2->>'dueDate' = '"+theTargetDate+"'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'target'->3->>'dueDate' = '"+theTargetDate+"'")
-                        			);
-                        }
-                        disjunction.add(orCond);
-                    }
-                    criteria.add(disjunction);
-                }            
+							orCond = Restrictions.or(
+									Restrictions.sqlRestriction("({alias}.data->'target'->0->>'dueDate')::DATE <= '"+theTargetDate+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'target'->1->>'dueDate')::DATE <= '"+theTargetDate+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'target'->2->>'dueDate')::DATE <= '"+theTargetDate+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'target'->3->>'dueDate')::DATE <= '"+theTargetDate+ "'")
+							);
+						}else if(targetDate.getPrefix().getValue() == "eq"){
+							orCond = Restrictions.or(
+									Restrictions.sqlRestriction("({alias}.data->'target'->0->>'dueDate')::DATE = '"+theTargetDate+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'target'->1->>'dueDate')::DATE = '"+theTargetDate+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'target'->2->>'dueDate')::DATE = '"+theTargetDate+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'target'->3->>'dueDate')::DATE = '"+theTargetDate+ "'")
+							);
+						}
+                    }else {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'target'->0->>'dueDate')::DATE = '"+theTargetDate+"'"),
+								Restrictions.sqlRestriction("({alias}.data->'target'->1->>'dueDate')::DATE = '"+theTargetDate+"'"),
+								Restrictions.sqlRestriction("({alias}.data->'target'->2->>'dueDate')::DATE = '"+theTargetDate+"'"),
+								Restrictions.sqlRestriction("({alias}.data->'target'->3->>'dueDate')::DATE = '"+theTargetDate+"'")
+						);
+					}
+					disjunction.add(orCond);
+                }
+				criteria.add(disjunction);
             }
         }
     }
@@ -385,17 +392,19 @@ public class GoalDaoImpl extends AbstractDao implements GoalDao {
 	               String theStartDate = startDate.getValueAsString();
 	               if(startDate.getPrefix() != null) {
 	                   if(startDate.getPrefix().getValue() == "gt"){
-	                       criteria.add(Restrictions.sqlRestriction("{alias}.data->>'startDate' > '"+theStartDate+ "'"));
+	                       criteria.add(Restrictions.sqlRestriction("({alias}.data->>'startDate')::DATE > '"+theStartDate+ "'"));
 	                   }else if(startDate.getPrefix().getValue() == "lt"){
-	                       criteria.add(Restrictions.sqlRestriction("{alias}.data->>'startDate' < '"+theStartDate+ "'"));
+	                       criteria.add(Restrictions.sqlRestriction("({alias}.data->>'startDate')::DATE < '"+theStartDate+ "'"));
 	                   }else if(startDate.getPrefix().getValue() == "ge"){
-	                       criteria.add(Restrictions.sqlRestriction("{alias}.data->>'startDate' >= '"+theStartDate+ "'"));
+	                       criteria.add(Restrictions.sqlRestriction("({alias}.data->>'startDate')::DATE >= '"+theStartDate+ "'"));
 	                   }else if(startDate.getPrefix().getValue() == "le"){
-	                       criteria.add(Restrictions.sqlRestriction("{alias}.data->>'startDate' <= '"+theStartDate+ "'"));
-	                   }else {
-	                   		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'startDate' = '"+theStartDate+"'"));                    
-	                   }
-                   }
+						   criteria.add(Restrictions.sqlRestriction("({alias}.data->>'startDate')::DATE <= '"+theStartDate+ "'"));
+					   }else if(startDate.getPrefix().getValue() == "eq"){
+						   criteria.add(Restrictions.sqlRestriction("({alias}.data->>'startDate')::DATE = '"+theStartDate+ "'"));
+					   }
+                   }else {
+					   criteria.add(Restrictions.sqlRestriction("({alias}.data->>'startDate')::DATE = '"+theStartDate+"'"));
+				   }
                }            
            }
 	    }
@@ -407,7 +416,7 @@ public class GoalDaoImpl extends AbstractDao implements GoalDao {
      * @return : List of goal records
      */
 	@Override
-	public List<DafGoal> getGoalHistoryById(int theId) {
+	public List<DafGoal> getGoalHistoryById(String theId) {
 		List<DafGoal> list = getSession().createNativeQuery(
     			"select * from goal where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafGoal.class)
     				.getResultList();

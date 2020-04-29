@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface MedicationDispenseService {
 	
-	public DafMedicationDispense getMedicationDispenseById(int id);
+	public DafMedicationDispense getMedicationDispenseById(String id);
 	
-	public DafMedicationDispense getMedicationDispenseByVersionId(int theId, String versionId);
+	public DafMedicationDispense getMedicationDispenseByVersionId(String theId, String versionId);
 		
 	public List<DafMedicationDispense> search(SearchParameterMap paramMap);
 	
-	public List<DafMedicationDispense> getMedicationDispenseHistoryById(int theId);
+	public List<DafMedicationDispense> getMedicationDispenseHistoryById(String theId);
 
 }

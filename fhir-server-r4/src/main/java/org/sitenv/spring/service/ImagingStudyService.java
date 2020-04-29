@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface ImagingStudyService {
 
-	DafImagingStudy getImagingStudyByVersionId(int id, String versionIdPart);
+	DafImagingStudy getImagingStudyByVersionId(String id, String versionIdPart);
 
-	DafImagingStudy getImagingStudyById(int id);
+	DafImagingStudy getImagingStudyById(String id);
 
 	List<DafImagingStudy> search(SearchParameterMap paramMap);
 
-	List<DafImagingStudy> getImagingStudyHistoryById(int id);
+	List<DafImagingStudy> getImagingStudyHistoryById(String id);
 
 }

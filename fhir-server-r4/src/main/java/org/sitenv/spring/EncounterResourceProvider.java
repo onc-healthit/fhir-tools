@@ -36,7 +36,7 @@ import java.util.Set;
 public class EncounterResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "Encounter";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     EncounterService service;
 
@@ -67,10 +67,10 @@ public class EncounterResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Encounter readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafEncounter dafEncounter;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -100,9 +100,9 @@ public class EncounterResourceProvider implements IResourceProvider {
 	@History()
     public List<Encounter> getEncounterHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -131,6 +131,7 @@ public class EncounterResourceProvider implements IResourceProvider {
 	 * @param theStatus
 	 * @param theClass
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -171,6 +172,9 @@ public class EncounterResourceProvider implements IResourceProvider {
         @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
         @Sort
         SortSpec theSort,
 
@@ -196,9 +200,15 @@ public class EncounterResourceProvider implements IResourceProvider {
             @Override
             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                 List<IBaseResource> encounterList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
                 for(DafEncounter dafEncounter : results){
-                	encounterList.add(createEncounterObject(dafEncounter));
-                }
+					Encounter encounter = createEncounterObject(dafEncounter);
+                	encounterList.add(encounter);
+					ids.add(((IdType)encounter.getIdElement()).getResourceType()+"/"+((IdType)encounter.getIdElement()).getIdPart());
+				}
+				if(theRevIncludes.size() >0 ){
+					encounterList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
                 return encounterList;
             }
 
@@ -237,7 +247,9 @@ public class EncounterResourceProvider implements IResourceProvider {
         if(!(encounterJSON.isNull("meta"))) {
         	if(!(encounterJSON.getJSONObject("meta").isNull("versionId"))) {
         		encounter.setId(new IdType(RESOURCE_TYPE, encounterJSON.getString("id") + "", encounterJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				encounter.setId(new IdType(RESOURCE_TYPE, encounterJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	encounter.setId(new IdType(RESOURCE_TYPE, encounterJSON.getString("id") + "", VERSION_ID));
@@ -570,9 +582,9 @@ public class EncounterResourceProvider implements IResourceProvider {
 	        	
 	            	Identifier theIdentifier = new Identifier();
 	        		if(!(identifierJSON.isNull("use"))) {
-	                	theIdentifier.setUse(Identifier.IdentifierUse.fromCode(identifierJSON.getString("use")));	
+	                	theIdentifier.setUse(Identifier.IdentifierUse.fromCode(identifierJSON.getString("use")));
 	            	}
-	        		
+
 	        		if(!(identifierJSON.isNull("type"))) {
 	        			CodeableConcept theType = new CodeableConcept();
 	            		if(!(identifierJSON.getJSONObject("type").isNull("coding"))) {
@@ -592,21 +604,21 @@ public class EncounterResourceProvider implements IResourceProvider {
 	                			}
 	                			theCodingList.add(theCoding);
 	            			}
-	                    	
+
 	            			theType.setCoding(theCodingList);
 	            		}
 	                	theIdentifier.setType(theType);
 	            	}
-	        		
+
 	        		if(!(identifierJSON.isNull("system"))) {
 	                	theIdentifier.setSystem(identifierJSON.getString("system"));
 	            	}
-	            	
+
 	            	if(!(identifierJSON.isNull("value"))) {
 	                	theIdentifier.setValue(identifierJSON.getString("value"));
 	            	}
 	            	theHospitalization.setPreAdmissionIdentifier(theIdentifier);
-	    			
+
 	        	}
 	        	
 			
@@ -822,12 +834,11 @@ public class EncounterResourceProvider implements IResourceProvider {
 				  theDischargeDisposition.setCoding(codingList); 
 				  }
 				  if (!dischargeDispositionJSON.isNull("text")) { 
-					  theDischargeDisposition.setText(hospitalizationJSON.getString("text"));
+					  theDischargeDisposition.setText(dischargeDispositionJSON.getString("text"));
 				  }
-				  theHospitalization.setAdmitSource(theDischargeDisposition);
+				  theHospitalization.setDischargeDisposition(theDischargeDisposition);
 			}
-			
-			
+
 			encounter.setHospitalization(theHospitalization);
         }
 		//set period	
@@ -842,8 +853,99 @@ public class EncounterResourceProvider implements IResourceProvider {
 			}
 			encounter.setPeriod(thePeriod);
 		}
-     	
-           
-        return encounter;
+
+
+		//set participant
+		if(!encounterJSON.isNull("participant")){
+			JSONArray participantJSON=encounterJSON.getJSONArray("participant");
+			int noOfparticipants=participantJSON.length();
+			List<Encounter.EncounterParticipantComponent> participantList = new ArrayList<Encounter.EncounterParticipantComponent>();
+			for(int i = 0; i < noOfparticipants; i++) {
+				Encounter.EncounterParticipantComponent participantComponent = new Encounter.EncounterParticipantComponent();
+				if (!(participantJSON.getJSONObject(i).isNull("type"))) {
+					JSONArray participantTypeJSON = participantJSON.getJSONObject(i).getJSONArray("type");
+					int noOfparticipantRole = participantTypeJSON.length();
+					List<CodeableConcept> typeList = new ArrayList<CodeableConcept>();
+					for(int j = 0; j < noOfparticipantRole; j++) {
+						CodeableConcept participantRole = new CodeableConcept();
+						if(!(participantTypeJSON.getJSONObject(j).isNull("text"))) {
+							participantRole.setText(participantTypeJSON.getJSONObject(j).getString("text"));
+						}
+						typeList.add(participantRole);
+					}
+					participantComponent.setType(typeList);
+				}
+				if (!(participantJSON.getJSONObject(i).isNull("member"))) {
+					JSONObject memberJSON=participantJSON.getJSONObject(i).getJSONObject("member");
+					Reference  theMember = new Reference();
+					if(!(memberJSON.isNull("reference"))){
+						theMember.setReference(memberJSON.getString("reference"));
+					}
+					if(!(memberJSON.isNull("display"))) {
+						theMember.setDisplay(memberJSON.getString("display"));
+					}
+					if(!(memberJSON.isNull("type"))) {
+						theMember.setType(memberJSON.getString("type"));
+					}
+					participantComponent.setIndividual(theMember);
+				}
+
+
+				if(!(participantJSON.getJSONObject(i).isNull("period"))) {
+					JSONObject periodJSON = participantJSON.getJSONObject(i).getJSONObject("period");
+					Period participantPeriod=new Period();
+					if(!(periodJSON.isNull("end"))) {
+						Date participantDate=CommonUtil.convertStringToDate(periodJSON.getString("end"));
+						participantPeriod.setEnd(participantDate);
+					}
+					participantComponent.setPeriod(participantPeriod);
+				}
+
+				if(!(participantJSON.getJSONObject(i).isNull("individual"))) {
+					JSONObject individualJSON = participantJSON.getJSONObject(i).getJSONObject("individual");
+					Reference theReference = new Reference();
+
+					if (!individualJSON.isNull("reference")) {
+						theReference.setReference(individualJSON.getString("reference"));
+					}
+					if (!individualJSON.isNull("type")) {
+						theReference.setType(individualJSON.getString("type"));
+					}
+					if (!individualJSON.isNull("display")) {
+						theReference.setDisplay(individualJSON.getString("display"));
+					}
+					participantComponent.setIndividual(theReference);
+				}
+				participantList.add(participantComponent);
+			}
+			encounter.setParticipant(participantList);
+		}
+
+		//Set Location
+		if(!encounterJSON.isNull("location")){
+			List<Encounter.EncounterLocationComponent> locationList = new ArrayList<Encounter.EncounterLocationComponent>();
+			JSONArray locationJSON=encounterJSON.getJSONArray("location");
+
+			for(int i=0; i<locationJSON.length(); i++) {
+				Encounter.EncounterLocationComponent locationComponent = new Encounter.EncounterLocationComponent();
+				JSONObject  locationRef = locationJSON.getJSONObject(i).getJSONObject("location");
+				if (locationRef != null){
+					Reference theReference = new Reference();
+					if(!locationRef.isNull("reference")){
+						theReference.setReference(locationRef.getString("reference"));
+					}
+					if (!locationRef.isNull("display")) {
+						theReference.setDisplay(locationRef.getString("display"));
+					}
+					locationComponent.setLocation(theReference);
+				}
+				locationList.add(locationComponent);
+			}
+			encounter.setLocation(locationList);
+		}
+
+
+
+		return encounter;
     }
 }

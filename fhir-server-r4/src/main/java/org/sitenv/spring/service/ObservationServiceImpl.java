@@ -18,13 +18,13 @@ public class ObservationServiceImpl implements ObservationService {
 	
 	@Override
     @Transactional
-    public DafObservation getObservationById(int id) {
+    public DafObservation getObservationById(String id) {
         return this.observationDao.getObservationById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafObservation getObservationByVersionId(int theId, String versionId) {
+	public DafObservation getObservationByVersionId(String theId, String versionId) {
 		return this.observationDao.getObservationByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class ObservationServiceImpl implements ObservationService {
 
    @Override
    @Transactional
-   public List<DafObservation> getObservationHistoryById(int theId) {
+   public List<DafObservation> getObservationHistoryById(String theId) {
 	   return this.observationDao.getObservationHistoryById(theId);
    }
 }

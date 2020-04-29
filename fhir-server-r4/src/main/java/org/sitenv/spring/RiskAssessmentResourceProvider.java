@@ -34,7 +34,7 @@ public class RiskAssessmentResourceProvider implements IResourceProvider{
 
 
 	public static final String RESOURCE_TYPE = "RiskAssessment";
-    public static final String VERSION_ID = "2.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     RiskAssessmentService service;
   
@@ -67,11 +67,11 @@ public class RiskAssessmentResourceProvider implements IResourceProvider{
 	 */	
 	@Read(version=true)
     public RiskAssessment readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		
 		DafRiskAssessment dafRiskAssessment;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -101,9 +101,9 @@ public class RiskAssessmentResourceProvider implements IResourceProvider{
 	@History()
     public List<RiskAssessment> getRiskAssessmentHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -256,7 +256,9 @@ public class RiskAssessmentResourceProvider implements IResourceProvider{
         if(!(riskAssessmentJSON.isNull("meta"))) {
         	if(!(riskAssessmentJSON.getJSONObject("meta").isNull("versionId"))) {
         		riskAssessment.setId(new IdType(RESOURCE_TYPE, riskAssessmentJSON.getString("id") + "", riskAssessmentJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				riskAssessment.setId(new IdType(RESOURCE_TYPE, riskAssessmentJSON.getString("id") + "", VERSION_ID));
+			}
         }else {
         	riskAssessment.setId(new IdType(RESOURCE_TYPE, riskAssessmentJSON.getString("id") + "", VERSION_ID));
         }

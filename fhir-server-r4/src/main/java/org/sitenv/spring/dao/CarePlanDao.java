@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CarePlanDao {
 	
-	public DafCarePlan getCarePlanById(int id);
+	public DafCarePlan getCarePlanById(String id);
 	
-	public DafCarePlan getCarePlanByVersionId(int theId, String versionId);
+	public DafCarePlan getCarePlanByVersionId(String theId, String versionId);
 	
-	public List<DafCarePlan> getCarePlanHistoryById(int theId);
+	public List<DafCarePlan> getCarePlanHistoryById(String theId);
 
 	public List<DafCarePlan> search(SearchParameterMap paramMap);
 }

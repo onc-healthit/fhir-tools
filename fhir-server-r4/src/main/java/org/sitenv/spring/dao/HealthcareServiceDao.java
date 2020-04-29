@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface HealthcareServiceDao {
 	
-	public DafHealthcareService getHealthcareServiceById(int id);
+	public DafHealthcareService getHealthcareServiceById(String id);
 	
-	public DafHealthcareService getHealthcareServiceByVersionId(int theId, String versionId);
+	public DafHealthcareService getHealthcareServiceByVersionId(String theId, String versionId);
 
 	public List<DafHealthcareService> search(SearchParameterMap paramMap);
 
-	public List<DafHealthcareService> getHealthcareServiceHistoryById(int theId);
+	public List<DafHealthcareService> getHealthcareServiceHistoryById(String theId);
 }

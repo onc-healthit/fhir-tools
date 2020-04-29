@@ -46,7 +46,7 @@ public class DafAuthtemp {
     private String refresh_token;
 
     @Column(name = "launch_patient_id")
-    private Integer launchPatientId;
+    private String launchPatientId;
     
     @Column(name = "id_token", columnDefinition="text")
     private String idToken;
@@ -155,12 +155,12 @@ public class DafAuthtemp {
         this.refresh_token = refresh_token;
     }
 
-    public Integer getLaunchPatientId() {
-        return launchPatientId;
-    }
+	public String getLaunchPatientId() {
+		return launchPatientId;
+	}
 
-    public void setLaunchPatientId(Integer launchPatientId) {
-        this.launchPatientId = launchPatientId;
-    }
+	public void setLaunchPatientId(String launchPatientId) {
+		this.launchPatientId = launchPatientId;
+	}
 
 }

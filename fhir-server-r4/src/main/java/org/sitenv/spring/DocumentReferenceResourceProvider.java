@@ -27,15 +27,12 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DocumentReferenceResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "DocumentReference";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     DocumentReferenceService service;
 
@@ -66,10 +63,10 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public DocumentReference readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafDocumentReference dafDocumentReference;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -99,9 +96,9 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
 	@History()
     public List<DocumentReference> getDocumentReferenceHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -131,6 +128,7 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
 	 * @param theStatus
 	 * @param thePeriod
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -171,9 +169,12 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         @Description(shortDefinition = "Time of service that is being documented")
         @OptionalParam(name = DocumentReference.SP_PERIOD)
         DateRangeParam thePeriod,
-       
+
         @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
+
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
 
         @Sort
         SortSpec theSort,
@@ -200,11 +201,17 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         	final InstantDt published = InstantDt.withCurrentTime();
             @Override
             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
-                List<IBaseResource> DocumentReferenceList = new ArrayList<IBaseResource>();
+                List<IBaseResource> documentReferenceList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
                 for(DafDocumentReference dafDocumentReference : results){
-                	DocumentReferenceList.add(createDocumentReferenceObject(dafDocumentReference));
+					DocumentReference documentReference = createDocumentReferenceObject(dafDocumentReference);
+					documentReferenceList.add(documentReference);
+					ids.add(((IdType)documentReference.getIdElement()).getResourceType()+"/"+((IdType)documentReference.getIdElement()).getIdPart());
                 }
-                return DocumentReferenceList;
+				if(theRevIncludes.size() >0 ){
+					documentReferenceList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
+				return documentReferenceList;
             }
 
             @Override
@@ -242,7 +249,9 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
         if(!(documentReferenceJSON.isNull("meta"))) {
         	if(!(documentReferenceJSON.getJSONObject("meta").isNull("versionId"))) {
         		documentReference.setId(new IdType(RESOURCE_TYPE, documentReferenceJSON.getString("id") + "", documentReferenceJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				documentReference.setId(new IdType(RESOURCE_TYPE, documentReferenceJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	documentReference.setId(new IdType(RESOURCE_TYPE, documentReferenceJSON.getString("id") + "", VERSION_ID));
@@ -732,6 +741,11 @@ public class DocumentReferenceResourceProvider implements IResourceProvider {
 						if (!attachmentJSON.isNull("contentType")) {
 							theAttachment.setContentType(attachmentJSON.getString("contentType"));
 						}
+
+						if (!attachmentJSON.isNull("data")) {
+							theAttachment.setData(Base64.getDecoder().decode(attachmentJSON.getString("data")));
+						}
+
 						if (!attachmentJSON.isNull("language")) {
 							theAttachment.setLanguage(attachmentJSON.getString("language"));
 						}

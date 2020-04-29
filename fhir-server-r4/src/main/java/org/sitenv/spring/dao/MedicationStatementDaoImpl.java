@@ -25,7 +25,7 @@ public class MedicationStatementDaoImpl extends AbstractDao implements Medicatio
 	 * @return : DafMedicationStatement object
 	 */
 	@Override
-	public DafMedicationStatement getMedicationStatementById(int id) {
+	public DafMedicationStatement getMedicationStatementById(String id) {
 		Criteria criteria = getSession().createCriteria(DafMedicationStatement.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions
@@ -44,7 +44,7 @@ public class MedicationStatementDaoImpl extends AbstractDao implements Medicatio
 	 * @return : DafMedicationStatement object
 	 */
 	@Override
-	public DafMedicationStatement getMedicationStatementByVersionId(int theId, String versionId) {
+	public DafMedicationStatement getMedicationStatementByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafMedicationStatement.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
@@ -181,7 +181,7 @@ public class MedicationStatementDaoImpl extends AbstractDao implements Medicatio
 					Criterion orCond = null;
 					if (status.getValue() != null) {
 						orCond = Restrictions.or(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					}
 					disjunction.add(orCond);
 				}
@@ -550,7 +550,7 @@ public class MedicationStatementDaoImpl extends AbstractDao implements Medicatio
 	 * @return : List of DafMedicationStatement records
 	 */
 	@Override
-	public List<DafMedicationStatement> getMedicationStatementHistoryById(int theId) {
+	public List<DafMedicationStatement> getMedicationStatementHistoryById(String theId) {
 		List<DafMedicationStatement> list = getSession()
 				.createNativeQuery("select * from medicationstatement where data->>'id' = '" + theId
 						+ "' order by data->'meta'->>'versionId' desc", DafMedicationStatement.class)

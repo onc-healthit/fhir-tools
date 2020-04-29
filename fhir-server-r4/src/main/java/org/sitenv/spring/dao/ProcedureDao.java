@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ProcedureDao {
 	
-	 public DafProcedure getProcedureById(int id);
+	 public DafProcedure getProcedureById(String id);
 	 
-	 public DafProcedure getProcedureByVersionId(int theId, String versionId);
+	 public DafProcedure getProcedureByVersionId(String theId, String versionId);
 	 
 	 public List<DafProcedure> search(SearchParameterMap theMap);
 	 
-	 public List<DafProcedure> getProcedureHistoryById(int theId);
+	 public List<DafProcedure> getProcedureHistoryById(String theId);
 }

@@ -18,13 +18,13 @@ public class EncounterServiceImpl implements EncounterService {
 	
 	@Override
     @Transactional
-    public DafEncounter getEncounterById(int id) {
+    public DafEncounter getEncounterById(String id) {
         return this.encounterDao.getEncounterById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafEncounter getEncounterByVersionId(int theId, String versionId) {
+	public DafEncounter getEncounterByVersionId(String theId, String versionId) {
 		return this.encounterDao.getEncounterByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class EncounterServiceImpl implements EncounterService {
 
    @Override
    @Transactional
-   public List<DafEncounter> getEncounterHistoryById(int theId) {
+   public List<DafEncounter> getEncounterHistoryById(String theId) {
 	   return this.encounterDao.getEncounterHistoryById(theId);
    }
 }

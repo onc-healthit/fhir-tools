@@ -18,13 +18,13 @@ public class AllergyIntoleranceServiceImpl implements AllergyIntoleranceService 
 	
 	@Override
     @Transactional
-    public DafAllergyIntolerance getAllergyIntoleranceById(int id) {
+    public DafAllergyIntolerance getAllergyIntoleranceById(String id) {
         return this.allergyIntoleranceDao.getAllergyIntoleranceById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafAllergyIntolerance getAllergyIntoleranceByVersionId(int theId, String versionId) {
+	public DafAllergyIntolerance getAllergyIntoleranceByVersionId(String theId, String versionId) {
 		return this.allergyIntoleranceDao.getAllergyIntoleranceByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class AllergyIntoleranceServiceImpl implements AllergyIntoleranceService 
 
    @Override
    @Transactional
-   public List<DafAllergyIntolerance> getAllergyIntoleranceHistoryById(int theId) {
+   public List<DafAllergyIntolerance> getAllergyIntoleranceHistoryById(String theId) {
 	   return this.allergyIntoleranceDao.getAllergyIntoleranceHistoryById(theId);
    }
 }

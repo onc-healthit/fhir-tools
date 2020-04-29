@@ -18,13 +18,13 @@ public class ImagingStudyServiceImpl implements ImagingStudyService{
 	
 	@Transactional
 	@Override
-	public DafImagingStudy getImagingStudyById(int id) {
+	public DafImagingStudy getImagingStudyById(String id) {
 		 return this.imagingStudyDao.getImagingStudyById(id);
 	}
 	
 	@Override
 	@Transactional
-	public DafImagingStudy getImagingStudyByVersionId(int theId, String versionId) {
+	public DafImagingStudy getImagingStudyByVersionId(String theId, String versionId) {
 		return this.imagingStudyDao.getImagingStudyByVersionId(theId, versionId);
 	}
 
@@ -34,7 +34,7 @@ public class ImagingStudyServiceImpl implements ImagingStudyService{
 	}
 
 	@Override
-	public List<DafImagingStudy> getImagingStudyHistoryById(int id) {
+	public List<DafImagingStudy> getImagingStudyHistoryById(String id) {
 		return this.imagingStudyDao.getImagingStudyHistoryById(id);
 	}
 	

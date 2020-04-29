@@ -25,7 +25,7 @@ public class HealthcareServiceDaoImpl extends AbstractDao implements HealthcareS
 	 * @return : DafHealthcareService object
 	 */
 	@Override
-	public DafHealthcareService getHealthcareServiceById(int id) {
+	public DafHealthcareService getHealthcareServiceById(String id) {
 		Criteria criteria = getSession().createCriteria(DafHealthcareService.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafHealthcareService) criteria.list().get(0);
@@ -38,7 +38,7 @@ public class HealthcareServiceDaoImpl extends AbstractDao implements HealthcareS
 	 * @return : DafHealthcareService object
 	 */
 	@Override
-	public DafHealthcareService getHealthcareServiceByVersionId(int theId, String versionId) {
+	public DafHealthcareService getHealthcareServiceByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafHealthcareService.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -562,7 +562,7 @@ public class HealthcareServiceDaoImpl extends AbstractDao implements HealthcareS
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafHealthcareService> getHealthcareServiceHistoryById(int theId) {
+	public List<DafHealthcareService> getHealthcareServiceHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafHealthcareService.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafHealthcareService>) criteria.list();

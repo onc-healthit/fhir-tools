@@ -34,7 +34,7 @@ import java.util.Set;
 public class SpecimenResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Specimen";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     SpecimenService service;
     
@@ -65,10 +65,10 @@ public class SpecimenResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Specimen readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafSpecimen dafSpecimen;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class SpecimenResourceProvider implements IResourceProvider {
 	@History()
     public List<Specimen> getSpecimenById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -266,7 +266,9 @@ public class SpecimenResourceProvider implements IResourceProvider {
         if(!(specimenJSON.isNull("meta"))) {
         	if(!(specimenJSON.getJSONObject("meta").isNull("versionId"))) {
                 specimen.setId(new IdType(RESOURCE_TYPE, specimenJSON.getString("id") + "", specimenJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				specimen.setId(new IdType(RESOURCE_TYPE, specimenJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             specimen.setId(new IdType(RESOURCE_TYPE, specimenJSON.getString("id") + "", VERSION_ID));

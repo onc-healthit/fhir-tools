@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface DeviceDao {
 	
-	public DafDevice getDeviceById(int id);
+	public DafDevice getDeviceById(String id);
 	
-	public DafDevice getDeviceByVersionId(int theId, String versionId);
+	public DafDevice getDeviceByVersionId(String theId, String versionId);
 	
-	public List<DafDevice> getDeviceHistoryById(int theId);
+	public List<DafDevice> getDeviceHistoryById(String theId);
 	
 	public List<DafDevice> search(SearchParameterMap theMap);
 }

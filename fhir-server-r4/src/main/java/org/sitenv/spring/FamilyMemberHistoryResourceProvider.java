@@ -34,7 +34,7 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
 	
 
 	public static final String RESOURCE_TYPE = "FamilyMemberHistory";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     FamilyMemberHistoryService service;
     
@@ -65,10 +65,10 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public FamilyMemberHistory readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafFamilyMemberHistory dafFamilyMemberHistory;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
 	@History()
     public List<FamilyMemberHistory> getFamilyMemberHistoryHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -159,7 +159,7 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
         UriAndListParam theInstantiatesUri,
         
         @Description(shortDefinition = "A search by a sex code of a family member")
-        @OptionalParam(name = FamilyMemberHistory.SP_SEX)
+        @OptionalParam(name = FamilyMemberHistory.SP_GENDER)
         TokenAndListParam theSex,
         
         @Description(shortDefinition = "The identity of a subject to list family member history items for")
@@ -186,7 +186,7 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
 	        paramMap.add(FamilyMemberHistory.SP_STATUS, theStatus);
 	        paramMap.add(FamilyMemberHistory.SP_RELATIONSHIP, theRelationship);
 	        paramMap.add(FamilyMemberHistory.SP_INSTANTIATES_URI, theInstantiatesUri);
-	        paramMap.add(FamilyMemberHistory.SP_SEX, theSex);
+	        paramMap.add(FamilyMemberHistory.SP_GENDER, theSex);
 	        paramMap.add(FamilyMemberHistory.SP_PATIENT, thePatient);
 	        paramMap.add(FamilyMemberHistory.SP_CODE, theCode);
 	        paramMap.setIncludes(theIncludes);
@@ -229,7 +229,7 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
     }
 	/**
      * This method converts DafDocumentReference object to DocumentReference object
-     * @param dafFamilyMemberhistory : DafDocumentReference familymemberhistory object
+     * @param dafFamilyMemberHistory : DafDocumentReference familymemberhistory object
      * @return : DocumentReference familymemberhistory object
      */
     private FamilyMemberHistory createFamilyMemberHistoryObject(DafFamilyMemberHistory dafFamilyMemberHistory) {
@@ -240,7 +240,9 @@ public class FamilyMemberHistoryResourceProvider implements IResourceProvider {
         if(!(familyMemberHistoryJSON.isNull("meta"))) {
         	if(!(familyMemberHistoryJSON.getJSONObject("meta").isNull("versionId"))) {
                 familyMemberHistory.setId(new IdType(RESOURCE_TYPE, familyMemberHistoryJSON.getString("id") + "", familyMemberHistoryJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				familyMemberHistory.setId(new IdType(RESOURCE_TYPE, familyMemberHistoryJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             familyMemberHistory.setId(new IdType(RESOURCE_TYPE, familyMemberHistoryJSON.getString("id") + "", VERSION_ID));

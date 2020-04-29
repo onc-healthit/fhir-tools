@@ -22,7 +22,7 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	 * @return : DAF object of the careTeam
 	 */
 	@Override
-	public DafCareTeam getCareTeamById(int id) {
+	public DafCareTeam getCareTeamById(String id) {
 		List<DafCareTeam> list = getSession().createNativeQuery(
 			"select * from careteam where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafCareTeam.class)
 				.getResultList();
@@ -37,7 +37,7 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	 * @return : DAF object of the careTeam
 	 */
 	@Override
-	public DafCareTeam getCareTeamByVersionId(int theId, String versionId) {
+	public DafCareTeam getCareTeamByVersionId(String theId, String versionId) {
 		DafCareTeam list = getSession().createNativeQuery(
 			"select * from careteam where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafCareTeam.class)
 				.getSingleResult();
@@ -79,7 +79,7 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
         //build criteria for status
         buildStatusCriteria(theMap, criteria);
         
-        //build criteria for status
+        //build criteria for Patient
         buildPatientCriteria(theMap, criteria);
       
         return criteria.list();
@@ -120,19 +120,21 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
 	                String dateFormat = date.getValueAsString();
 	                if(date.getPrefix() != null) {
 	                    if(date.getPrefix().getValue() == "gt"){
-	                        criteria.add(Restrictions.sqlRestriction("{alias}.data->'period'->>'end' > '"+dateFormat+ "'"));
+	                        criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE > '"+dateFormat+ "'"));
 	                    }else if(date.getPrefix().getValue() == "lt"){
-	                        criteria.add(Restrictions.sqlRestriction("{alias}.data->'period'->>'end' < '"+dateFormat+ "'"));
+	                        criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE < '"+dateFormat+ "'"));
 	                    }else if(date.getPrefix().getValue() == "ge"){
-	                        criteria.add(Restrictions.sqlRestriction("{alias}.data->'period'->>'end' >= '"+dateFormat+ "'"));
+	                        criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE >= '"+dateFormat+ "'"));
 	                    }else if(date.getPrefix().getValue() == "le"){
-	                        criteria.add(Restrictions.sqlRestriction("{alias}.data->'period'->>'end' <= '"+dateFormat+ "'"));
+	                        criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE <= '"+dateFormat+ "'"));
 	                    }else if(date.getPrefix().getValue() == "ne"){
-	                        criteria.add(Restrictions.sqlRestriction("{alias}.data->'period'->>'end' != '"+dateFormat+ "'"));
-	                    } else {
-	                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->'period'->>'end' = '"+dateFormat+"'"));                    
-	                    }
-	                }
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE != '"+dateFormat+ "'"));
+						}else if(date.getPrefix().getValue() == "eq"){
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '"+dateFormat+ "'"));
+						}
+	                }else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '"+dateFormat+"'"));
+					}
 	            }            
         	}
         }
@@ -413,21 +415,25 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
         if (list != null) {
 
             for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
                 for (IQueryParameterType params : values) {
                 	TokenParam status = (TokenParam) params;
+					Criterion orCond = null;
                 	if(status.getModifier() != null) {
                         TokenParamModifier modifier = status.getModifier();
                         if(modifier.getValue() == ":not") {
-                        	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' not ilike '"+status.getValue()+"'"));
+							orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'status' not ilike '"+status.getValue()+"'"));
                         }
                 	}else if(StringUtils.isNoneEmpty(status.getValue())){
-                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
                     }else if(status.getMissing()){
-                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
                     } else if(!status.getMissing()){
-                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NOT NULL"));
+						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'status' IS NOT NULL"));
                     }
+					disjunction.add(orCond);
                 }
+				criteria.add(disjunction);
             }
         }	
 		
@@ -440,7 +446,7 @@ public class CareTeamDaoImpl extends AbstractDao implements CareTeamDao {
      */
     @SuppressWarnings("unchecked")
 	@Override
-	public List<DafCareTeam> getCareTeamHistoryById(int theId) {
+	public List<DafCareTeam> getCareTeamHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafCareTeam.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafCareTeam>) criteria.list();

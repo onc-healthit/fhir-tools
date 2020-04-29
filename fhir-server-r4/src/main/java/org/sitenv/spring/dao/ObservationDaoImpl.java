@@ -1,10 +1,7 @@
 package org.sitenv.spring.dao;
 
 import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.QuantityParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.*;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -26,7 +23,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	 * @return : DAF object of the Observation
 	 */
 	@Override
-	public DafObservation getObservationById(int id) {
+	public DafObservation getObservationById(String id) {
 
 		Criteria criteria = getSession().createCriteria(DafObservation.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -43,7 +40,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	 * @return : DAF object of the Observation
 	 */
 	@Override
-	public DafObservation getObservationByVersionId(int theId, String versionId) {
+	public DafObservation getObservationByVersionId(String theId, String versionId) {
 
 		Criteria criteria = getSession().createCriteria(DafObservation.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -107,6 +104,9 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 		
 		// build criteria for patient
 		buildPatientCriteria(theMap, criteria);
+
+		// build criteria for effectiveDateTime
+		buildEffectiveDateCriteria(theMap, criteria);
 
 		return criteria.list();
 	}
@@ -172,7 +172,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 								Restrictions
 										.sqlRestriction("{alias}.data->'code'->'coding'->0->>'userSelected' ilike '%"
 												+ code.getValue() + "%'"),
-										
+
 								Restrictions.sqlRestriction("{alias}.data->'code'->'coding'->1->>'system' ilike '%"
 										+ code.getValue() + "%'"),
 								Restrictions.sqlRestriction(
@@ -191,8 +191,8 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 										+ code.getValue() + "%'"),
 								Restrictions
 										.sqlRestriction("{alias}.data->'code'->'coding'->2->>'userSelected' ilike '%"
-												+ code.getValue() + "%'"),		
-										
+												+ code.getValue() + "%'"),
+
 								Restrictions.sqlRestriction(
 										"{alias}.data->'code'->>'text' ilike '%" + code.getValue() + "%'"));
 					} else if (code.getMissing()) {
@@ -344,7 +344,7 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 					TokenParam status = (TokenParam) params;
 					if (!status.isEmpty()) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 					} else if (!status.getMissing()) {
@@ -681,13 +681,46 @@ public class ObservationDaoImpl extends AbstractDao implements ObservationDao {
 	}
 
 	/**
+	 * This method builds criteria for DiagnosticReport date
+	 *
+	 * @param theMap   : search parameter "date"
+	 * @param criteria : for retrieving entities by composing Criterion objects
+	 */
+	private void buildEffectiveDateCriteria(SearchParameterMap theMap, Criteria criteria) {
+		List<List<? extends IQueryParameterType>> list = theMap.get("date");
+		if (list != null) {
+			for (List<? extends IQueryParameterType> values : list) {
+				for (IQueryParameterType params : values) {
+					DateParam effectiveDate = (DateParam) params;
+					String issuedFormat = effectiveDate.getValueAsString();
+					if (effectiveDate.getPrefix() != null) {
+						if (effectiveDate.getPrefix().getValue() == "gt") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE > '" + issuedFormat + "'"));
+						} else if (effectiveDate.getPrefix().getValue() == "lt") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE < '" + issuedFormat + "'"));
+						} else if (effectiveDate.getPrefix().getValue() == "ge") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE >= '" + issuedFormat + "'"));
+						} else if (effectiveDate.getPrefix().getValue() == "le") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE <= '" + issuedFormat + "'"));
+						}else if (effectiveDate.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE = '" + issuedFormat + "'"));
+						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE = '" + issuedFormat + "'"));
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * This method builds criteria for fetching history of the Observation by id
 	 * 
 	 * @param theId : ID of the Observation
 	 * @return : List of Observation DAF records
 	 */
 	@Override
-	public List<DafObservation> getObservationHistoryById(int theId) {
+	public List<DafObservation> getObservationHistoryById(String theId) {
 		List<DafObservation> list = getSession().createNativeQuery(
     			"select * from observation where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafObservation.class)
     				.getResultList();

@@ -24,7 +24,7 @@ public class FamilyMemberHistoryDaoImpl extends AbstractDao implements FamilyMem
 	 * @return : DafFamilyMemberHistory object
 	 */
 	@Override
-	public DafFamilyMemberHistory getFamilyMemberHistoryById(int id) {
+	public DafFamilyMemberHistory getFamilyMemberHistoryById(String id) {
 		Criteria criteria = getSession().createCriteria(DafFamilyMemberHistory.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafFamilyMemberHistory) criteria.list().get(0);
@@ -37,7 +37,7 @@ public class FamilyMemberHistoryDaoImpl extends AbstractDao implements FamilyMem
 	 * @return : DafFamilyMemberHistory object
 	 */
 	@Override
-	public DafFamilyMemberHistory getFamilyMemberHistoryByVersionId(int theId, String versionId) {
+	public DafFamilyMemberHistory getFamilyMemberHistoryByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafFamilyMemberHistory.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -147,7 +147,7 @@ public class FamilyMemberHistoryDaoImpl extends AbstractDao implements FamilyMem
 	                Criterion orCond= null;
 	                if (status.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'")
+	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'")
 	                			);
 	                } 
 	                disjunction.add(orCond);
@@ -246,16 +246,16 @@ public class FamilyMemberHistoryDaoImpl extends AbstractDao implements FamilyMem
 	                Criterion orCond= null;
 	                if (sex.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->0->>'system' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->0->>'code' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->0->>'display' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->1->>'system' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->1->>'code' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->1->>'display' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->2->>'system' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->2->>'code' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->2->>'display' ilike '%" + sex.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->>'text' ilike '%" + sex.getValue() + "%'")
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->0->>'system' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->0->>'code' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->0->>'display' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->1->>'system' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->1->>'code' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->1->>'display' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->2->>'system' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->2->>'code' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->'coding'->2->>'display' ilike '" + sex.getValue() + "'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'sex'->>'text' ilike '" + sex.getValue() + "'")
 	                			);
 	                } 
 	                disjunction.add(orCond);
@@ -349,7 +349,7 @@ public class FamilyMemberHistoryDaoImpl extends AbstractDao implements FamilyMem
      */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafFamilyMemberHistory> getFamilyMemberHistoryHistoryById(int theId) {
+	public List<DafFamilyMemberHistory> getFamilyMemberHistoryHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafFamilyMemberHistory.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafFamilyMemberHistory>) criteria.list();

@@ -22,7 +22,7 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	 * @return : DAF object of the MedicationRequest
 	 */
 	@Override
-	public DafMedicationRequest getMedicationRequestById(int id) {
+	public DafMedicationRequest getMedicationRequestById(String id) {
 		List<DafMedicationRequest> list = getSession().createNativeQuery(
 				"select * from medicationrequest where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafMedicationRequest.class)
 						.getResultList();
@@ -36,7 +36,7 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	 * @return : DAF object of the MedicationRequest
 	 */
 	@Override
-	public DafMedicationRequest getMedicationRequestByVersionId(int theId, String versionId) {
+	public DafMedicationRequest getMedicationRequestByVersionId(String theId, String versionId) {
 		DafMedicationRequest list = getSession().createNativeQuery(
 				"select * from medicationrequest where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafMedicationRequest.class)
 					.getSingleResult();
@@ -222,7 +222,7 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
                     			);
                     } else {
                     	orCond = Restrictions.or(
-	                        		Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + statusName.getValue() + "%'")
+	                        		Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + statusName.getValue() + "'")
                     			);
                     }
                     disjunction.add(orCond);
@@ -480,21 +480,18 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 					String authoredFormat = authored.getValueAsString();
 					if (authored.getPrefix() != null) {
 						if (authored.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'authoredOn' > '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE > '" + authoredFormat + "'"));
 						} else if (authored.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'authoredOn' < '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE < '" + authoredFormat + "'"));
 						} else if (authored.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'authoredOn' >= '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE >= '" + authoredFormat + "'"));
 						} else if (authored.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'authoredOn' <= '" + authoredFormat + "'"));
-						} else {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'authoredOn' = '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE <= '" + authoredFormat + "'"));
+						} else if (authored.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE = '" + authoredFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE = '" + authoredFormat + "'"));
 					}
 				}
 			}
@@ -507,9 +504,9 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
      * @return : List of request DAF records
      */
 	@Override
-	public List<DafMedicationRequest> getMedicationRequestHistoryById(int id) {
+	public List<DafMedicationRequest> getMedicationRequestHistoryById(String theId) {
 		List<DafMedicationRequest> list = getSession().createNativeQuery(
-    			"select * from medicationrequest where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafMedicationRequest.class)
+    			"select * from medicationrequest where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafMedicationRequest.class)
     				.getResultList();
 		return list;
 	}

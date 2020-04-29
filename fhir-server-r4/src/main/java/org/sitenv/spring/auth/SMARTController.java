@@ -1,16 +1,18 @@
 package org.sitenv.spring.auth;
 
-import com.google.inject.internal.util.Lists;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.inject.internal.util.Lists;
 /*
  * Provides list of metadata supported by Smart Launch app and
  * openid connect
@@ -25,6 +27,7 @@ public class SMARTController extends HttpServlet {
 	public static final String AUTHORIZE_URL = "authorize";
 	public static final String TOKEN_URL = "token";
 	public static final String INTROSPECTION_URL = "introspect";
+	public static final String REGISTRATION_URL = "view/newuser.html";
 	
 
 	private static final long serialVersionUID = 936659617930557226L;
@@ -46,7 +49,8 @@ public class SMARTController extends HttpServlet {
         
         wellKnownConfig.put("authorization_endpoint", baseUrl + AUTHORIZE_URL);
         wellKnownConfig.put("token_endpoint", baseUrl + TOKEN_URL);
-        wellKnownConfig.put("introspection_endpoint", baseUrl + INTROSPECTION_URL);
+        //wellKnownConfig.put("introspection_endpoint", baseUrl + INTROSPECTION_URL);
+        wellKnownConfig.put("registration_endpoint", baseUrl + REGISTRATION_URL);
 
         String[] stringArrayMethods = { "client_secret_basic","client_secret_post" };
         String[] stringArrayScopes = { "openid", "profile","fhirUser","launch","launch/patient","launch/encounter","patient/*.*","user/*.*","offline_access"};
@@ -63,14 +67,19 @@ public class SMARTController extends HttpServlet {
                 "context-standalone-encounter",
                 "permission-offline",
                 "permission-patient",
-                "permission-user"};
+                "permission-user",
+                "sso-openid-connect", 
+                "context-banner", 
+                "context-style"};
+        
+        String[] idTokenSigningAlgoSupported = {"RS256"};
 
         wellKnownConfig.put("token_endpoint_auth_methods_supported", stringArrayMethods);
         wellKnownConfig.put("scopes_supported", stringArrayScopes);
         wellKnownConfig.put("response_types_supported", stringArrayResponce);
-
         wellKnownConfig.put("capabilities", stringArrayCapabilities);
-
+        wellKnownConfig.put("id_token_signing_alg_values_supported", idTokenSigningAlgoSupported);
+        
         return wellKnownConfig;
 
     }
@@ -92,7 +101,7 @@ public class SMARTController extends HttpServlet {
 		m.put("issuer", baseUrl);
 		m.put("authorization_endpoint", baseUrl + AUTHORIZE_URL);
 		m.put("token_endpoint", baseUrl + TOKEN_URL);
-		m.put("introspection_endpoint", baseUrl + INTROSPECTION_URL);
+		//m.put("introspection_endpoint", baseUrl + INTROSPECTION_URL);
 		
 	    //m.put("userinfo_endpoint", baseUrl + UserInfoEndpoint.URL);
 		m.put("jwks_uri", baseUrl+ "jwk" );
@@ -104,6 +113,7 @@ public class SMARTController extends HttpServlet {
 				"profile",
 				"email"
 				));
+		m.put("id_token_signing_alg_values_supported", Lists.newArrayList("RS256"));
 		
 		m.put("claims_parameter_supported", false);
 		m.put("request_parameter_supported", false);

@@ -36,7 +36,7 @@ import java.util.Set;
 public class ImmunizationResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "Immunization";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     ImmunizationService service;
 
@@ -67,10 +67,10 @@ public class ImmunizationResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Immunization readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafImmunization dafImmunization;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -100,9 +100,9 @@ public class ImmunizationResourceProvider implements IResourceProvider {
 	@History()
     public List<Immunization> getImmunizationHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -142,6 +142,7 @@ public class ImmunizationResourceProvider implements IResourceProvider {
 	 * @param theStatus
 	 * @param theReactionDate
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -221,6 +222,9 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
         @Sort
         SortSpec theSort,
 
@@ -256,9 +260,16 @@ public class ImmunizationResourceProvider implements IResourceProvider {
             @Override
             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                 List<IBaseResource> immunizationList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
                 for(DafImmunization dafImmunization : results){
-                	immunizationList.add(createImmunizationObject(dafImmunization));
-                }
+					Immunization immunization = createImmunizationObject(dafImmunization);
+					immunizationList.add(immunization);
+					ids.add(((IdType)immunization.getIdElement()).getResourceType()+"/"+((IdType)immunization.getIdElement()).getIdPart());
+				}
+
+				if(theRevIncludes.size() >0 ){
+					immunizationList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
                 return immunizationList;
             }
 
@@ -298,7 +309,9 @@ public class ImmunizationResourceProvider implements IResourceProvider {
         if(!(immunizationJSON.isNull("meta"))) {
         	if(!(immunizationJSON.getJSONObject("meta").isNull("versionId"))) {
         		immunization.setId(new IdType(RESOURCE_TYPE, immunizationJSON.getString("id") + "", immunizationJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				immunization.setId(new IdType(RESOURCE_TYPE, immunizationJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	immunization.setId(new IdType(RESOURCE_TYPE, immunizationJSON.getString("id") + "", VERSION_ID));

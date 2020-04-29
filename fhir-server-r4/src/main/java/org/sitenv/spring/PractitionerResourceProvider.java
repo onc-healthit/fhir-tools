@@ -32,7 +32,7 @@ import java.util.Set;
 public class PractitionerResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Practitioner";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     PractitionerService service;
 
@@ -64,10 +64,10 @@ public class PractitionerResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Practitioner readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafPractitioner dafPractitioner;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class PractitionerResourceProvider implements IResourceProvider {
 	@History()
     public List<Practitioner> getPractitionerHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -127,7 +127,6 @@ public class PractitionerResourceProvider implements IResourceProvider {
 	 * @param theName
 	 * @param theFamily
 	 * @param theGiven
-	 * @param theOrganization
 	 * @param theTelecom
 	 * @param theAddress
 	 * @param theAddressCity
@@ -135,11 +134,9 @@ public class PractitionerResourceProvider implements IResourceProvider {
 	 * @param theAddressPostalcode
 	 * @param theAddressCountry
 	 * @param theGender
-	 * @param theLanguage
-	 * @param theBirthdate
 	 * @param theActive
-	 * @param theLink
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -219,6 +216,9 @@ public class PractitionerResourceProvider implements IResourceProvider {
             @IncludeParam(allow = {"*"})
             Set<Include> theIncludes,
 
+			@IncludeParam(reverse=true, allow= {"*"})
+			Set<Include> theRevIncludes,
+
             @Sort
             SortSpec theSort,
 
@@ -253,11 +253,18 @@ public class PractitionerResourceProvider implements IResourceProvider {
 	                final InstantDt published = InstantDt.withCurrentTime();
 	                @Override
 	                public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
-	                    List<IBaseResource> PractitionerList = new ArrayList<IBaseResource>();
-	                    for(DafPractitioner dafPractitioner : results){
-	                        PractitionerList.add(createPractitionerObject(dafPractitioner));
-	                    }
-	                    return PractitionerList;
+	                    List<IBaseResource> practitionerList = new ArrayList<IBaseResource>();
+						List<String> ids = new ArrayList<String>();
+						for(DafPractitioner dafPractitioner : results){
+							Practitioner practitioner = createPractitionerObject(dafPractitioner);
+							practitionerList.add(practitioner);
+							ids.add(((IdType)practitioner.getIdElement()).getResourceType()+"/"+((IdType)practitioner.getIdElement()).getIdPart());
+						}
+						if(theRevIncludes.size() >0 ){
+							practitionerList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+						}
+
+	                    return practitionerList;
 	                }
 	
 	                @Override
@@ -294,7 +301,9 @@ public class PractitionerResourceProvider implements IResourceProvider {
         if(!(practitionerJSON.isNull("meta"))) {
         	if(!(practitionerJSON.getJSONObject("meta").isNull("versionId"))) {
                 practitioner.setId(new IdType(RESOURCE_TYPE, practitionerJSON.getString("id") + "", practitionerJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				practitioner.setId(new IdType(RESOURCE_TYPE, practitionerJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             practitioner.setId(new IdType(RESOURCE_TYPE, practitionerJSON.getString("id") + "", VERSION_ID));

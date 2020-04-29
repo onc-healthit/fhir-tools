@@ -18,13 +18,13 @@ public class ImmunizationServiceImpl implements ImmunizationService {
 	
 	@Override
     @Transactional
-    public DafImmunization getImmunizationById(int id) {
+    public DafImmunization getImmunizationById(String id) {
         return this.immunizationDao.getImmunizationById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafImmunization getImmunizationByVersionId(int theId, String versionId) {
+	public DafImmunization getImmunizationByVersionId(String theId, String versionId) {
 		return this.immunizationDao.getImmunizationByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class ImmunizationServiceImpl implements ImmunizationService {
 
    @Override
    @Transactional
-   public List<DafImmunization> getImmunizationHistoryById(int theId) {
+   public List<DafImmunization> getImmunizationHistoryById(String theId) {
 	   return this.immunizationDao.getImmunizationHistoryById(theId);
    }
 }

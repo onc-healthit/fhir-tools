@@ -33,7 +33,7 @@ import java.util.Set;
 public class GoalResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Goal";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     GoalService service;
     
@@ -64,10 +64,10 @@ public class GoalResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Goal readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafGoal dafGoal;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -97,9 +97,9 @@ public class GoalResourceProvider implements IResourceProvider {
 	@History()
     public List<Goal> getGoalHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -130,6 +130,7 @@ public class GoalResourceProvider implements IResourceProvider {
 	 * @param thePatient
 	 * @param theSubject
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -177,6 +178,9 @@ public class GoalResourceProvider implements IResourceProvider {
         @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
         @Sort
         SortSpec theSort,
 
@@ -205,10 +209,18 @@ public class GoalResourceProvider implements IResourceProvider {
                 @Override
                 public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                     List<IBaseResource> goalList = new ArrayList<IBaseResource>();
+					List<String> ids = new ArrayList<String>();
                     for(DafGoal dafGoal : results){
-                    	goalList.add(createGoalObject(dafGoal));
-                    }
-                    return goalList;
+						Goal goal= createGoalObject(dafGoal);
+						goalList.add(goal);
+						ids.add(((IdType)goal.getIdElement()).getResourceType()+"/"+((IdType)goal.getIdElement()).getIdPart());
+					}
+
+					if(theRevIncludes.size() >0 ){
+						goalList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+					}
+
+					return goalList;
                 }
 
                 @Override
@@ -234,7 +246,7 @@ public class GoalResourceProvider implements IResourceProvider {
     }
 	/**
      * This method converts DafDocumentReference object to DocumentReference object
-     * @param dafCarePlan : DafDocumentReference goal object
+     * @param dafGoal : DafDocumentReference goal object
      * @return : DocumentReference goal object
      */
     private Goal createGoalObject(DafGoal dafGoal) {
@@ -245,7 +257,9 @@ public class GoalResourceProvider implements IResourceProvider {
         if(!(goalJSON.isNull("meta"))) {
         	if(!(goalJSON.getJSONObject("meta").isNull("versionId"))) {
                 goal.setId(new IdType(RESOURCE_TYPE, goalJSON.getString("id") + "", goalJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				goal.setId(new IdType(RESOURCE_TYPE, goalJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             goal.setId(new IdType(RESOURCE_TYPE, goalJSON.getString("id") + "", VERSION_ID));

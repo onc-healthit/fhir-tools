@@ -33,7 +33,7 @@ import java.util.Set;
 public class OrganizationResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Organization";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	OrganizationService service;
 
@@ -67,10 +67,10 @@ public class OrganizationResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public Organization readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafOrganization dafOrganization;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -103,9 +103,9 @@ public class OrganizationResourceProvider implements IResourceProvider {
 	@History()
 	public List<Organization> getOrganizationHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			// If we can't parse the ID as a long, it's not valid so this is an unknown
 			// resource
@@ -131,19 +131,17 @@ public class OrganizationResourceProvider implements IResourceProvider {
 	 * @param theServletRequest
 	 * @param theId
 	 * @param theIdentifier
-	 * @param thePartOff
 	 * @param theAddress
 	 * @param theActive
 	 * @param theAddressCity
 	 * @param theAddressState
-	 * @param theAddressPostalcode
 	 * @param theAddressCountry
 	 * @param theType
 	 * @param theEndPoint
-	 * @param theUse
 	 * @param theName
 	 * @param theTelecom
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -208,10 +206,14 @@ public class OrganizationResourceProvider implements IResourceProvider {
 	    @OptionalParam(name = "telecom")
 	    StringAndListParam theTelecom,
 	    
-	    @IncludeParam(allow = {"Organization.managingOrganization", "Organization.link.other", "*"})
+	    @IncludeParam(allow = {"*"})
 	    Set<Include> theIncludes,
-	
-	    @Sort
+
+		@IncludeParam(reverse=true, allow = {"*"})
+		Set<Include> theRevIncludes,
+
+
+		@Sort
 	    SortSpec theSort,
 	
 	    @Count
@@ -244,9 +246,18 @@ public class OrganizationResourceProvider implements IResourceProvider {
 				@Override
 				public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 					List<IBaseResource> organizationList = new ArrayList<IBaseResource>();
+					List<String> ids = new ArrayList<String>();
 					for (DafOrganization dafOrganization : results) {
-						organizationList.add(createOrganizationObject(dafOrganization));
+						Organization organization = createOrganizationObject(dafOrganization);
+						organizationList.add(organization);
+						ids.add(((IdType)organization.getIdElement()).getResourceType()+"/"+((IdType)organization.getIdElement()).getIdPart());
 					}
+
+					if(theRevIncludes.size() >0 ){
+						organizationList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+					}
+
+
 					return organizationList;
 				}
 
@@ -285,6 +296,8 @@ public class OrganizationResourceProvider implements IResourceProvider {
 			if (!(organizationJsonObj.getJSONObject("meta").isNull("versionId"))) {
 				organization.setId(new IdType(RESOURCE_TYPE, organizationJsonObj.getString("id") + "",
 						organizationJsonObj.getJSONObject("meta").getString("versionId")));
+			}else {
+				organization.setId(new IdType(RESOURCE_TYPE, organizationJsonObj.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			organization.setId(new IdType(RESOURCE_TYPE, organizationJsonObj.getString("id") + "", VERSION_ID));

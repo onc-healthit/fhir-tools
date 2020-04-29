@@ -18,19 +18,19 @@ public class MedicationAdministrationServiceImpl implements MedicationAdministra
 
 	@Override
 	@Transactional
-	public DafMedicationAdministration getMedicationAdministrationById(int id) {
+	public DafMedicationAdministration getMedicationAdministrationById(String id) {
 		return this.medicationAdministrationDao.getMedicationAdministrationById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafMedicationAdministration getMedicationAdministrationByVersionId(int theId, String versionId) {
+	public DafMedicationAdministration getMedicationAdministrationByVersionId(String theId, String versionId) {
 		return this.medicationAdministrationDao.getMedicationAdministrationByVersionId(theId, versionId);
 	}
 
 	@Override
 	@Transactional
-	public List<DafMedicationAdministration> getMedicationAdministrationHistoryById(int theId) {
+	public List<DafMedicationAdministration> getMedicationAdministrationHistoryById(String theId) {
 		return this.medicationAdministrationDao.getMedicationAdministrationHistoryById(theId);
 	}
 

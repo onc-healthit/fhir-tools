@@ -1,6 +1,7 @@
 package org.sitenv.spring;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 
@@ -63,6 +64,9 @@ public class DAFServer extends RestfulServer {
         resourceProviders.add(new DocumentReferenceResourceProvider());
         resourceProviders.add(new EncounterResourceProvider());
         resourceProviders.add(new ProvenanceResourceProvider());
+        resourceProviders.add(new PractitionerRoleResourceProvider());
+
+       // resourceProviders.add(new GroupResourceProvider());
         setResourceProviders(resourceProviders);
 
         setServerConformanceProvider(new CapabilityStatementResourceProvider());
@@ -83,6 +87,7 @@ public class DAFServer extends RestfulServer {
 		 */
         //setUseBrowserFriendlyContentTypes(true);
         setDefaultPrettyPrint(true);
+        setDefaultResponseEncoding(EncodingEnum.JSON);
 
     }
 

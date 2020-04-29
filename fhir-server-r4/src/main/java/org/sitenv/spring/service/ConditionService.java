@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ConditionService {
 
-    public DafCondition getConditionById(int id);
+    public DafCondition getConditionById(String id);
 	
-	public DafCondition getConditionByVersionId(int theId, String versionId);
+	public DafCondition getConditionByVersionId(String theId, String versionId);
 	
-	public List<DafCondition> getConditionHistoryById(int theId);
+	public List<DafCondition> getConditionHistoryById(String theId);
 	
 	public List<DafCondition> search(SearchParameterMap theMap);
 }

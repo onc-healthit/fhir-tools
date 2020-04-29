@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface EncounterDao {
 	
-	 public DafEncounter getEncounterById(int id);
+	 public DafEncounter getEncounterById(String id);
 	 
-	 public DafEncounter getEncounterByVersionId(int theId, String versionId);
+	 public DafEncounter getEncounterByVersionId(String theId, String versionId);
 	 
 	 public List<DafEncounter> search(SearchParameterMap theMap);
 	 
-	 public List<DafEncounter> getEncounterHistoryById(int theId);
+	 public List<DafEncounter> getEncounterHistoryById(String theId);
 }

@@ -17,13 +17,13 @@ public class ProvenanceServiceImpl implements ProvenanceService{
 
 	@Override
 	@Transactional
-	public DafProvenance getProvenanceById(int id) {
+	public DafProvenance getProvenanceById(String id) {
 		return this.provenanceDao.getProvenanceById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafProvenance getProvenanceByVersionId(int theId, String versionId) {
+	public DafProvenance getProvenanceByVersionId(String theId, String versionId) {
 		return this.provenanceDao.getProvenanceByVersionId(theId, versionId);
 	}
 
@@ -36,8 +36,14 @@ public class ProvenanceServiceImpl implements ProvenanceService{
 
 	@Override
 	@Transactional
-	public List<DafProvenance> getProvenanceHistoryById(int theId) {
+	public List<DafProvenance> getProvenanceHistoryById(String theId) {
 		return this.provenanceDao.getProvenanceHistoryById(theId);
+	}
+
+	@Override
+	@Transactional
+	public List<DafProvenance> getProvenanceByResourceId(List<String> resourceID) {
+		return this.provenanceDao.getProvenanceByResourceId(resourceID);
 	}
 
 }

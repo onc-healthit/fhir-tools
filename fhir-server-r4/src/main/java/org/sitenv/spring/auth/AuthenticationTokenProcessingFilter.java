@@ -52,7 +52,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                 try {
                     String expiryTime = authentication.getExpiry();
                     Integer currentTime = Common.convertTimestampToUnixTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis())));
-                    if (Common.convertTimestampToUnixTime(expiryTime) + 3600 > currentTime) {
+                    if (Common.convertTimestampToUnixTime(expiryTime) + 1800 > currentTime) {
                         List<String> scopes = Arrays.asList(authentication.getScope().split(","));
                        	if (scopes.contains("user/*.*") && httpRequest.getRequestURI().contains("/fhir/")){
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
@@ -81,6 +81,12 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                         } else if (scopes.contains("patient/MedicationStatement.read") && httpRequest.getRequestURI().contains("/fhir/MedicationStatement")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
+                        } else if (scopes.contains("patient/Condition.read") && httpRequest.getRequestURI().contains("/fhir/Condition")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        }else if (scopes.contains("patient/Observation.read") && httpRequest.getRequestURI().contains("/fhir/Observation")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
                         } else {
                             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access denied: scope is not valid to access the resource.");
                         }
@@ -99,10 +105,15 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         }else if (httpRequest.getRequestURI().contains("/jwk")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
-        }else if (httpRequest.getRequestURI().contains("/open")) {
+        }
+        /*else if (httpRequest.getRequestURI().contains("/r4")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
-        } else if (httpRequest.getRequestURI().contains("/introspect")) {
+        }*/
+        else if (httpRequest.getRequestURI().contains("/open")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
+        }else if (httpRequest.getRequestURI().contains("/introspect")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {

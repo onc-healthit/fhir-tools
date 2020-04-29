@@ -7,12 +7,13 @@ import java.util.List;
 
 public interface ProvenanceDao {
 	
-     public DafProvenance getProvenanceById(int id);
+     public DafProvenance getProvenanceById(String id);
 	 
-	 public DafProvenance getProvenanceByVersionId(int theId, String versionId);
+	 public DafProvenance getProvenanceByVersionId(String theId, String versionId);
 	 
 	 public List<DafProvenance> search(SearchParameterMap theMap);
 	 
-	 public List<DafProvenance> getProvenanceHistoryById(int theId);
+	 public List<DafProvenance> getProvenanceHistoryById(String theId);
 
+	public List<DafProvenance> getProvenanceByResourceId(List<String> resourceID);
 }

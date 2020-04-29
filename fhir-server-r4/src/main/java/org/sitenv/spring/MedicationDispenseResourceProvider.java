@@ -35,7 +35,7 @@ import java.util.Set;
 public class MedicationDispenseResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "MedicationDispense";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     MedicationDispenseService service;
     
@@ -65,10 +65,10 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public MedicationDispense readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafMedicationDispense dafMedicationDispense;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
 	@History()
     public List<MedicationDispense> getMedicationDispenseHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -270,7 +270,9 @@ public class MedicationDispenseResourceProvider implements IResourceProvider {
         if(!(medicationDispenseJSON.isNull("meta"))) {
         	if(!(medicationDispenseJSON.getJSONObject("meta").isNull("versionId"))) {
                 medicationDispense.setId(new IdType(RESOURCE_TYPE, medicationDispenseJSON.getString("id") + "", medicationDispenseJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				medicationDispense.setId(new IdType(RESOURCE_TYPE, medicationDispenseJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             medicationDispense.setId(new IdType(RESOURCE_TYPE, medicationDispenseJSON.getString("id") + "", VERSION_ID));

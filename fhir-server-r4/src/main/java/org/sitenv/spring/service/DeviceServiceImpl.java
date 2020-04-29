@@ -18,18 +18,18 @@ public  class DeviceServiceImpl implements DeviceService{
 	
 	@Override
     @Transactional
-    public DafDevice getDeviceById(int id) {
+    public DafDevice getDeviceById(String id) {
         return this.deviceDao.getDeviceById(id);
     }
 	@Override
 	@Transactional
-	public DafDevice getDeviceByVersionId(int theId, String versionId) {
+	public DafDevice getDeviceByVersionId(String theId, String versionId) {
 		return this.deviceDao.getDeviceByVersionId(theId, versionId);
 	}
 	
 	@Override
 	@Transactional
-    public List<DafDevice> getDeviceHistoryById(int theId) {
+    public List<DafDevice> getDeviceHistoryById(String theId) {
 		 return this.deviceDao.getDeviceHistoryById(theId);
     }
 	

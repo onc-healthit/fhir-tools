@@ -18,19 +18,19 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	@Transactional
-	public DafLocation getLocationById(int id) {
+	public DafLocation getLocationById(String id) {
 		return locationDao.getLocationById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafLocation getLocationByVersionId(int theId, String versionId) {
+	public DafLocation getLocationByVersionId(String theId, String versionId) {
 		return locationDao.getLocationByVersionId(theId, versionId);
 	}
 
 	@Override
 	@Transactional
-	public List<DafLocation> getLocationHistoryById(int theId) {
+	public List<DafLocation> getLocationHistoryById(String theId) {
 		return locationDao.getLocationHistoryById(theId);
 	}
 

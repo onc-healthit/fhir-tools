@@ -23,7 +23,7 @@ public class ImagingStudyDaoImpl extends AbstractDao implements ImagingStudyDao 
 	 * @param id : ID of the resource
 	 * @return : DAF object of the ImagingStudy
 	 */
-	public DafImagingStudy getImagingStudyById(int id) {
+	public DafImagingStudy getImagingStudyById(String id) {
 		
 		Criteria criteria = getSession().createCriteria(DafImagingStudy.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
@@ -37,7 +37,7 @@ public class ImagingStudyDaoImpl extends AbstractDao implements ImagingStudyDao 
 	 * @param versionId : version of the ImagingStudy record
 	 * @return : DAF object of the ImagingStudy
 	 */
-	public DafImagingStudy getImagingStudyByVersionId(int theId, String versionId) {
+	public DafImagingStudy getImagingStudyByVersionId(String theId, String versionId) {
 		
 		Criteria criteria = getSession().createCriteria(DafImagingStudy.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
@@ -164,7 +164,7 @@ public class ImagingStudyDaoImpl extends AbstractDao implements ImagingStudyDao 
                     			);
                     } else {
                     	orCond = Restrictions.or(
-	                        		Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + statusName.getValue() + "%'")
+	                        		Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + statusName.getValue() + "'")
                     			);
                     }
                     disjunction.add(orCond);
@@ -271,19 +271,21 @@ public class ImagingStudyDaoImpl extends AbstractDao implements ImagingStudyDao 
                     String startedDateFormat = startedDate.getValueAsString();
                     if(startedDate.getPrefix() != null) {
                         if(startedDate.getPrefix().getValue() == "gt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'started' > '"+startedDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE > '"+startedDateFormat+ "'"));
                         }else if(startedDate.getPrefix().getValue() == "lt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'started' < '"+startedDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE < '"+startedDateFormat+ "'"));
                         }else if(startedDate.getPrefix().getValue() == "ge"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'started' >= '"+startedDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE >= '"+startedDateFormat+ "'"));
                         }else if(startedDate.getPrefix().getValue() == "le"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'started' <= '"+startedDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE <= '"+startedDateFormat+ "'"));
                         }else if(startedDate.getPrefix().getValue() == "ne"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'started' != '"+startedDateFormat+ "'"));
-                        } else {
-                        	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'started' = '"+startedDateFormat+"'"));                    
-                        }
-                    }
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE != '"+startedDateFormat+ "'"));
+						}else if(startedDate.getPrefix().getValue() == "eq"){
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE = '"+startedDateFormat+ "'"));
+						}
+                    }else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'started')::DATE = '"+startedDateFormat+"'"));
+					}
                 }            
             }
         }
@@ -469,11 +471,11 @@ public class ImagingStudyDaoImpl extends AbstractDao implements ImagingStudyDao 
 
 	/**
      * This method builds criteria for fetching history of the patient by id
-     * @param theId : ID of the patient
+     * @param id : ID of the patient
      * @return : List of patient DAF records
      */
 	@SuppressWarnings("unchecked")
-	public List<DafImagingStudy> getImagingStudyHistoryById(int id) {
+	public List<DafImagingStudy> getImagingStudyHistoryById(String id) {
 		Criteria criteria = getSession().createCriteria(DafImagingStudy.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"'"));
 		return (List<DafImagingStudy>) criteria.list();

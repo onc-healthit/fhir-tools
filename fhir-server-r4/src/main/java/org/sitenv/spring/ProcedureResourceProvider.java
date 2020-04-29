@@ -33,7 +33,7 @@ import java.util.Set;
 public class ProcedureResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "Procedure";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     ProcedureService service;
 
@@ -64,10 +64,10 @@ public class ProcedureResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Procedure readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafProcedure dafProcedure;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -97,9 +97,9 @@ public class ProcedureResourceProvider implements IResourceProvider {
 	@History()
     public List<Procedure> getProcedureHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -139,6 +139,7 @@ public class ProcedureResourceProvider implements IResourceProvider {
 	 * @param theCategory
 	 * @param theStatus
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -215,13 +216,14 @@ public class ProcedureResourceProvider implements IResourceProvider {
             @Description(shortDefinition="preparation | in-progress | not-done | suspended | aborted | completed | entered-in-error | unknown")
             @OptionalParam(name=Procedure.SP_STATUS)
             TokenAndListParam theStatus,
-            
-          
 
             @IncludeParam(allow = {"*"})
             Set<Include> theIncludes,
 
-            @Sort
+			@IncludeParam(reverse=true, allow= {"*"})
+			Set<Include> theRevIncludes,
+
+			@Sort
             SortSpec theSort,
 
             @Count
@@ -256,9 +258,15 @@ public class ProcedureResourceProvider implements IResourceProvider {
                 @Override
                 public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                     List<IBaseResource> procedureList = new ArrayList<IBaseResource>();
-                    for(DafProcedure dafProcedure : results){
-                    	procedureList.add(createProcedureObject(dafProcedure));
-                    }
+					List<String> ids = new ArrayList<String>();
+					for(DafProcedure dafProcedure : results){
+						Procedure procedure = createProcedureObject(dafProcedure);
+						procedureList.add(procedure);
+						ids.add(((IdType)procedure.getIdElement()).getResourceType()+"/"+((IdType)procedure.getIdElement()).getIdPart());
+					}
+					if(theRevIncludes.size() >0 ){
+						procedureList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+					}
                     return procedureList;
                 }
 
@@ -297,7 +305,9 @@ public class ProcedureResourceProvider implements IResourceProvider {
         if(!(procedureJSON.isNull("meta"))) {
         	if(!(procedureJSON.getJSONObject("meta").isNull("versionId"))) {
         		procedure.setId(new IdType(RESOURCE_TYPE, procedureJSON.getString("id") + "", procedureJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				procedure.setId(new IdType(RESOURCE_TYPE, procedureJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	procedure.setId(new IdType(RESOURCE_TYPE, procedureJSON.getString("id") + "", VERSION_ID));

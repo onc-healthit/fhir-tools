@@ -18,19 +18,19 @@ public class CarePlanServiceImpl implements CarePlanService {
 
 	@Override
 	@Transactional
-	public DafCarePlan getCarePlanById(int id) {
+	public DafCarePlan getCarePlanById(String id) {
 		return this.carePlanDao.getCarePlanById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafCarePlan getCarePlanByVersionId(int theId, String versionId) {
+	public DafCarePlan getCarePlanByVersionId(String theId, String versionId) {
 		return this.carePlanDao.getCarePlanByVersionId(theId, versionId);
 	}
 
 	@Override
 	@Transactional
-	public List<DafCarePlan> getCarePlanHistoryById(int theId) {
+	public List<DafCarePlan> getCarePlanHistoryById(String theId) {
 		return this.carePlanDao.getCarePlanHistoryById(theId);
 	}
 

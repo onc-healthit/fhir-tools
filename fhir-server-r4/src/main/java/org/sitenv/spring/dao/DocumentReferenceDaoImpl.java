@@ -24,7 +24,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	 * @param id : ID of the resource
 	 * @return : DAF object of the DocumentReference
 	 */
-	public DafDocumentReference getDocumentReferenceById(int id) {	
+	public DafDocumentReference getDocumentReferenceById(String id) {
 		List<DafDocumentReference> list = getSession().createNativeQuery(
 				"select * from documentreference where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafDocumentReference.class)
 					.getResultList();
@@ -39,7 +39,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	 * @param versionId : version of the DocumentReference record
 	 * @return : DAF object of the DocumentReference
 	 */
-	public DafDocumentReference getDocumentReferenceByVersionId(int theId, String versionId) {
+	public DafDocumentReference getDocumentReferenceByVersionId(String theId, String versionId) {
 		DafDocumentReference list = getSession().createNativeQuery(
 			"select * from documentreference where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafDocumentReference.class)
 				.getSingleResult();
@@ -87,7 +87,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	/**
 	 * This method builds criteria for Period
 	 * 
-	 * @param searchParameterMap : search parameter "Period"
+	 * @param theMap : search parameter "Period"
 	 * @param criteria           : for retrieving entities by composing Criterion
 	 *                           objects
 	 */
@@ -103,32 +103,37 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	                    if(date.getPrefix() != null) {
 	                        if(date.getPrefix().getValue() == "gt"){
 	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' > '"+dateFormat+ "'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' > '"+dateFormat+ "'")
+	                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE > '"+dateFormat+ "'"),
+	                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE > '"+dateFormat+ "'")
 	                        			);
 	                        }else if(date.getPrefix().getValue() == "lt"){
 	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' < '"+dateFormat+ "'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' < '"+dateFormat+ "'")
+	                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE < '"+dateFormat+ "'"),
+	                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE < '"+dateFormat+ "'")
 	                        			);
 	                        }else if(date.getPrefix().getValue() == "ge"){
 	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' >= '"+dateFormat+ "'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' >= '"+dateFormat+ "'")
+	                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE >= '"+dateFormat+ "'"),
+	                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE >= '"+dateFormat+ "'")
 	                        			);
 	                        }else if(date.getPrefix().getValue() == "le"){
-	                        	orCond = Restrictions.or(
-		                        			Restrictions.sqlRestriction("{alias}.data->'period'->>'start' <= '"+dateFormat+ "'"),
-		                        			Restrictions.sqlRestriction("{alias}.data->'period'->>'end' <= '"+dateFormat+ "'")
-	                        			);
-	                        }else {
-	                        	orCond = Restrictions.or(
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' = '"+dateFormat+"'"),
-	                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' = '"+dateFormat+"'")
-	                        			);
-	                        }
-	                        disjunction.add(orCond);
-	                     }
+								orCond = Restrictions.or(
+										Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE <= '"+dateFormat+ "'"),
+										Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE <= '"+dateFormat+ "'")
+								);
+							}else if(date.getPrefix().getValue() == "eq"){
+								orCond = Restrictions.or(
+										Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE = '"+dateFormat+ "'"),
+										Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '"+dateFormat+ "'")
+								);
+							}
+	                     }else {
+							orCond = Restrictions.or(
+									Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE = '"+dateFormat+"'"),
+									Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '"+dateFormat+"'")
+							);
+						}
+						disjunction.add(orCond);
 	                }
 	                criteria.add(disjunction);
 	            }
@@ -138,7 +143,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	/**
 	 * This method builds criteria for Status
 	 * 
-	 * @param searchParameterMap : search parameter "status"
+	 * @param theMap : search parameter "status"
 	 * @param criteria           : for retrieving entities by composing Criterion
 	 *                           objects
 	 */
@@ -150,7 +155,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 						TokenParam status = (TokenParam) params;
 						if (!status.isEmpty()) {
 							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+									.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 						} else if (status.getMissing()) {
 							criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 
@@ -167,7 +172,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	/**
 	 * This method builds criteria for type
 	 * 
-	 * @param searchParameterMap : search parameter "type"
+	 * @param theMap : search parameter "type"
 	 * @param criteria           : for retrieving entities by composing Criterion
 	 *                           objects
 	 */
@@ -268,10 +273,8 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 					if (patient.getValue() != null) {
 						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "%'"),
-								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'display' ilike '%" + patient.getValue() + "%'"));
-
+										"{alias}.data->'subject'->>'reference' ilike '%" + patient.getValue() + "%'")
+							);
 					} else if (patient.getMissing()) {
 						criterion = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
 
@@ -304,21 +307,18 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 					String dateFormat = date.getValueAsString();
 					if (date.getPrefix() != null) {
 						if (date.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'date' > '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'date')::DATE > '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'date' < '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'date')::DATE < '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'date' >= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'date')::DATE >= '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'date' <= '" + dateFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'date' = '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'date')::DATE <= '" + dateFormat + "'"));
+						}else if (date.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'date')::DATE = '" + dateFormat + "'"));
 						}
+					} else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'date')::DATE = '" + dateFormat + "'"));
 					}
 				}
 			}
@@ -388,7 +388,7 @@ public class DocumentReferenceDaoImpl extends AbstractDao implements DocumentRef
 	 * @param theId : ID of the DocumentReference
 	 * @return : List of DocumentReference DAF records
 	 */
-	public List<DafDocumentReference> getDocumentReferenceHistoryById(int theId) {
+	public List<DafDocumentReference> getDocumentReferenceHistoryById(String theId) {
 		List<DafDocumentReference> list = getSession().createNativeQuery(
 			"select * from documentreference where data->>'id' = '"+theId+"'", DafDocumentReference.class)
     			.getResultList();

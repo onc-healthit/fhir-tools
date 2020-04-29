@@ -22,7 +22,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	 * @return : DafPatient object
 	 */
 	@Override
-	public DafPatient getPatientById(int id) {
+	public DafPatient getPatientById(String id) {
 		List<DafPatient> list = getSession().createNativeQuery(
 			"select * from patient where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafPatient.class)
 				.getResultList();
@@ -36,7 +36,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	 * @return : DafPatient object
 	 */
 	@Override
-	public DafPatient getPatientByVersionId(int theId, String versionId) {
+	public DafPatient getPatientByVersionId(String theId, String versionId) {
 		DafPatient list = getSession().createNativeQuery(
 			"select * from patient where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafPatient.class)
 				.getSingleResult();
@@ -150,9 +150,9 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	                Criterion orCond= null;
 	                if (identifier.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'system' ilike '%" + identifier.getValue() + "%'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'system' ilike '%" + identifier.getSystem() + "%'"),
 	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'value' ilike '%" + identifier.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'system' ilike '%" + identifier.getValue() + "%'"),
+	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'system' ilike '%" + identifier.getSystem() + "%'"),
 	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'value' ilike '%" + identifier.getValue() + "%'")
 	                			);
 	                } 
@@ -310,7 +310,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
                         	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' not ilike '"+gender.getValue()+"'"));
                         }
                     }else if(StringUtils.isNoneEmpty(gender.getValue())){
-                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' ilike '%" + gender.getValue() + "%'"));
+                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' ilike '" + gender.getValue() + "'"));
                     }else if(gender.getMissing()){
                     	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'gender' IS NULL"));
                     }else if(!gender.getMissing()){
@@ -334,7 +334,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
                 for (IQueryParameterType params : values) {
                     TokenParam active = (TokenParam) params;
                     if(StringUtils.isNoneEmpty(active.getValue())){
-                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'active' ilike '%" + active.getValue() + "%'"));
+                    	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'active' ilike '" + active.getValue() + "'"));
                     }else if(active.getMissing()){
                     	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'active' IS NULL"));
 
@@ -359,7 +359,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
     			for (IQueryParameterType params : values) {
     				TokenParam deceased = (TokenParam) params;
     				if(StringUtils.isNoneEmpty(deceased.getValue())){
-    					criteria.add(Restrictions.sqlRestriction("{alias}.data->>'deceasedBoolean' ilike '%" + deceased.getValue() + "%'"));
+    					criteria.add(Restrictions.sqlRestriction("{alias}.data->>'deceasedBoolean' ilike '" + deceased.getValue() + "'"));
     				}else if(deceased.getMissing()){
     					criteria.add(Restrictions.sqlRestriction("{alias}.data->>'deceasedBoolean' IS NULL"));
 	
@@ -445,17 +445,19 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
                     String birthDateFormat = birthDate.getValueAsString();
                     if(birthDate.getPrefix() != null) {
                         if(birthDate.getPrefix().getValue() == "gt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'birthDate' > '"+birthDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'birthDate')::DATE > '"+birthDateFormat+ "'"));
                         }else if(birthDate.getPrefix().getValue() == "lt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'birthDate' < '"+birthDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'birthDate')::DATE < '"+birthDateFormat+ "'"));
                         }else if(birthDate.getPrefix().getValue() == "ge"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'birthDate' >= '"+birthDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'birthDate')::DATE >= '"+birthDateFormat+ "'"));
                         }else if(birthDate.getPrefix().getValue() == "le"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'birthDate' <= '"+birthDateFormat+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'birthDate')::DATE <= '"+birthDateFormat+ "'"));
                         }else if(birthDate.getPrefix().getValue() == "eq"){
-                        	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'birthDate' = '"+birthDateFormat+"'"));                    
-                        }
-                    }
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'birthDate')::DATE = '"+birthDateFormat+"'"));
+						}
+                    }else{
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'birthDate')::DATE = '"+birthDateFormat+"'"));
+					}
                 }            
             }
         }
@@ -760,7 +762,7 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
      * @return : List of patient records
      */
     @Override
-	public List<DafPatient> getPatientHistoryById(int theId) {
+	public List<DafPatient> getPatientHistoryById(String theId) {
     	List<DafPatient> list = getSession().createNativeQuery(
     			"select * from patient where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafPatient.class)
     				.getResultList();
@@ -778,8 +780,11 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 		 * "select * from patient GROUP BY id  ORDER BY max(cast(data->'meta'->>'versionId' as float)) "
 		 * , DafPatient.class) .getResultList();
 		 */
+	//	List<DafPatient> list = getSession().createNativeQuery(
+	//	"SELECT * FROM patient WHERE (data->>'id', data->'meta'->>'versionId') IN ( SELECT data->>'id', MAX(data->'meta'->>'versionId') FROM patient GROUP BY data->>'id' ) ORDER BY data->>'id'" , DafPatient.class) .getResultList();
+		
 		List<DafPatient> list = getSession().createNativeQuery(
-		"SELECT * FROM patient WHERE (data->>'id', data->'meta'->>'versionId') IN ( SELECT data->>'id', MAX(data->'meta'->>'versionId') FROM patient GROUP BY data->>'id' ) ORDER BY data->>'id'" , DafPatient.class) .getResultList();
+		"SELECT * FROM patient  ORDER BY data->>'id'"  , DafPatient.class) .getResultList();
 		return list;
 	}
 

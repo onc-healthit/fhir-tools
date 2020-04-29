@@ -18,13 +18,13 @@ public class FamilyMemberHistoryServiceImpl implements FamilyMemberHistoryServic
 
 	@Override
 	@Transactional
-	public DafFamilyMemberHistory getFamilyMemberHistoryById(int id) {
+	public DafFamilyMemberHistory getFamilyMemberHistoryById(String id) {
 		return this.familyMemberHistoryDao.getFamilyMemberHistoryById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafFamilyMemberHistory getFamilyMemberHistoryByVersionId(int theId, String versionId) {
+	public DafFamilyMemberHistory getFamilyMemberHistoryByVersionId(String theId, String versionId) {
 		return this.familyMemberHistoryDao.getFamilyMemberHistoryByVersionId(theId, versionId);
 	}
 
@@ -36,7 +36,7 @@ public class FamilyMemberHistoryServiceImpl implements FamilyMemberHistoryServic
 
 	@Override
 	@Transactional
-	public List<DafFamilyMemberHistory> getFamilyMemberHistoryHistoryById(int theId) {
+	public List<DafFamilyMemberHistory> getFamilyMemberHistoryHistoryById(String theId) {
 		return this.familyMemberHistoryDao.getFamilyMemberHistoryHistoryById(theId);
 	}
 

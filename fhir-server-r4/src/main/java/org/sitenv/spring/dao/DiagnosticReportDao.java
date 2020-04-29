@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface DiagnosticReportDao {
 	
-	public DafDiagnosticReport getDiagnosticReportById(int id);
+	public DafDiagnosticReport getDiagnosticReportById(String id);
 
-	public DafDiagnosticReport getDiagnosticReportByVersionId(int theId, String versionId);
+	public DafDiagnosticReport getDiagnosticReportByVersionId(String theId, String versionId);
 
-	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(int theId);
+	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(String theId);
 
 	public List<DafDiagnosticReport> search(SearchParameterMap theMap);
 	

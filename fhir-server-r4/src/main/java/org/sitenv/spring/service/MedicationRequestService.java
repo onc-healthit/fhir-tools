@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface MedicationRequestService {
 
-	DafMedicationRequest getMedicationRequestById(int id);
+	DafMedicationRequest getMedicationRequestById(String id);
 
-	DafMedicationRequest getMedicationRequestByVersionId(int theId, String versionId);
+	DafMedicationRequest getMedicationRequestByVersionId(String theId, String versionId);
 
 	List<DafMedicationRequest> search(SearchParameterMap paramMap);
 
-	List<DafMedicationRequest> getMedicationRequestHistoryById(int id);
+	List<DafMedicationRequest> getMedicationRequestHistoryById(String id);
 
 }

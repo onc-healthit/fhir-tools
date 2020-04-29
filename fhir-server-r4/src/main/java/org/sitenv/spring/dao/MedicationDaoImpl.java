@@ -26,7 +26,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @return : DAF object of the medication
 	 */
 	@Override
-	public DafMedication getMedicationById(int id) {
+	public DafMedication getMedicationById(String id) {
 
 		Criteria criteria = getSession().createCriteria(DafMedication.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -43,7 +43,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @return : DAF object of the medication
 	 */
 	@Override
-	public DafMedication getMedicationByVersionId(int theId, String versionId) {
+	public DafMedication getMedicationByVersionId(String theId, String versionId) {
 
 		Criteria criteria = getSession().createCriteria(DafMedication.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -53,6 +53,33 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 		criteria.add(versionConjunction);
 		return (DafMedication) criteria.uniqueResult();
 	}
+
+
+	/**
+	 * This method builds criteria for fetching history of the Medication by id
+	 *
+	 * @param resourceIDs : ID of the resource
+	 * @return : List of MedicationDAF records
+	 */
+	public List<DafMedication> getMedicationByResourceId(List<String> resourceIDs) {
+		StringBuffer resourceIDForINOperator = new StringBuffer();
+		if(resourceIDs.size() > 0) {
+			boolean first = true;
+			for(String resourceID : resourceIDs) {
+				if(first)  resourceIDForINOperator.append("'"+resourceID+"'");
+				else resourceIDForINOperator.append(",'"+resourceID+"'");
+				first=false;
+			}
+		}
+
+		List<DafMedication> list = getSession().createNativeQuery(
+				"select * from Medication where data->>'id' in ("+ resourceIDForINOperator.toString() +")"	, DafMedication.class)
+				.getResultList();
+		return list;
+
+	}
+
+
 
 	/**
 	 * This method invokes various methods for search
@@ -114,21 +141,18 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 					String expDateFormat  = expirationDate.getValueAsString();
 					if (expirationDate.getPrefix() != null) {
 						if (expirationDate.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->'batch'->>'expirationDate' > '" + expDateFormat  + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'batch'->>'expirationDate')::DATE > '" + expDateFormat  + "'"));
 						} else if (expirationDate.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->'batch'->>'expirationDate' < '" + expDateFormat  + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'batch'->>'expirationDate')::DATE < '" + expDateFormat  + "'"));
 						} else if (expirationDate.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->'batch'->>'expirationDate' >= '" + expDateFormat  + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'batch'->>'expirationDate')::DATE >= '" + expDateFormat  + "'"));
 						} else if (expirationDate.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->'batch'->>'expirationDate' <= '" + expDateFormat  + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->'batch'->>'expirationDate' = '" + expDateFormat  + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'batch'->>'expirationDate')::DATE <= '" + expDateFormat  + "'"));
+						} else if (expirationDate.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'batch'->>'expirationDate')::DATE = '" + expDateFormat  + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->'batch'->>'expirationDate')::DATE = '" + expDateFormat  + "'"));
 					}
 				}
 			}
@@ -285,7 +309,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 					TokenParam status = (TokenParam) params;
 					if (!status.isEmpty()) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 
@@ -488,7 +512,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 	 * @return : List of medication DAF records
 	 */
 	@Override
-	public List<DafMedication> getMedicationHistoryById(int theId) {
+	public List<DafMedication> getMedicationHistoryById(String theId) {
 		List<DafMedication> list = getSession().createNativeQuery(
     			"select * from medication where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafMedication.class)
     				.getResultList();

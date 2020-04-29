@@ -18,13 +18,13 @@ public class HealthcareServiceServiceImpl implements HealthcareServiceService{
 
 	@Override
 	@Transactional
-	public DafHealthcareService getHealthcareServiceById(int id) {
+	public DafHealthcareService getHealthcareServiceById(String id) {
 		return this.healthcareServiceDao.getHealthcareServiceById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafHealthcareService getHealthcareServiceByVersionId(int theId, String versionId) {
+	public DafHealthcareService getHealthcareServiceByVersionId(String theId, String versionId) {
 		return this.healthcareServiceDao.getHealthcareServiceByVersionId(theId, versionId);
 	}
 
@@ -36,7 +36,7 @@ public class HealthcareServiceServiceImpl implements HealthcareServiceService{
 
 	@Override
 	@Transactional
-	public List<DafHealthcareService> getHealthcareServiceHistoryById(int theId) {
+	public List<DafHealthcareService> getHealthcareServiceHistoryById(String theId) {
 		return this.healthcareServiceDao.getHealthcareServiceHistoryById(theId);
 	}
 

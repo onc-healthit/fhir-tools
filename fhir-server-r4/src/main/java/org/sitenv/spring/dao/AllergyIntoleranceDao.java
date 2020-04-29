@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface AllergyIntoleranceDao {
 	
-	 public DafAllergyIntolerance getAllergyIntoleranceById(int id);
+	 public DafAllergyIntolerance getAllergyIntoleranceById(String id);
 	 
-	 public DafAllergyIntolerance getAllergyIntoleranceByVersionId(int theId, String versionId);
+	 public DafAllergyIntolerance getAllergyIntoleranceByVersionId(String theId, String versionId);
 	 
 	 public List<DafAllergyIntolerance> search(SearchParameterMap theMap);
 	 
-	 public List<DafAllergyIntolerance> getAllergyIntoleranceHistoryById(int theId);
+	 public List<DafAllergyIntolerance> getAllergyIntoleranceHistoryById(String theId);
 }

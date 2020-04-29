@@ -18,19 +18,19 @@ public class SpecimenServiceImpl implements SpecimenService {
 	
 	@Override
 	@Transactional
-	public DafSpecimen getSpecimenById(int id) {
+	public DafSpecimen getSpecimenById(String id) {
 		return this.specimenDao.getSpecimenById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafSpecimen getSpecimenByVersionId(int theId, String versionId) {
+	public DafSpecimen getSpecimenByVersionId(String theId, String versionId) {
 		return this.specimenDao.getSpecimenByVersionId(theId, versionId);
 	}
 
 	@Override
 	@Transactional
-	public List<DafSpecimen> getSpecimenHistoryById(int theId) {
+	public List<DafSpecimen> getSpecimenHistoryById(String theId) {
 		return this.specimenDao.getSpecimenHistoryById(theId);
 	}
 

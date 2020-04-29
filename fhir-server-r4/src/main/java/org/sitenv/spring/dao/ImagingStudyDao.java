@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ImagingStudyDao {
 
-	DafImagingStudy getImagingStudyById(int id);
+	DafImagingStudy getImagingStudyById(String id);
 	
-	DafImagingStudy getImagingStudyByVersionId(int theId, String versionId);
+	DafImagingStudy getImagingStudyByVersionId(String theId, String versionId);
 
 	List<DafImagingStudy> search(SearchParameterMap paramMap);
 
-	List<DafImagingStudy> getImagingStudyHistoryById(int id);
+	List<DafImagingStudy> getImagingStudyHistoryById(String id);
 
 
 }

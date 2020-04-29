@@ -1,15 +1,23 @@
 package org.sitenv.spring.auth;
 
-import com.google.common.collect.ImmutableMap;
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.*;
-import com.nimbusds.jose.jwk.*;
-import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
-import com.nimbusds.jose.util.JSONObjectUtils;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
+import java.io.IOException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.sitenv.spring.model.Jwks;
 import org.sitenv.spring.service.JwksService;
@@ -18,16 +26,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.google.common.collect.ImmutableMap;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.ECDSASigner;
+import com.nimbusds.jose.crypto.ECDSAVerifier;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.nimbusds.jose.jwk.ECKey;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.OctetSequenceKey;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
+import com.nimbusds.jose.util.JSONObjectUtils;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
+
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 
 /*
  * This class generate JWT id token which is signed by the issuer using
@@ -108,13 +130,13 @@ public class JwtGenerator {
 		JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder().subject((String) payloadData.get("sub"))
 				.claim("email", payloadData.get("email"))
 				.claim("userName", payloadData.get("userName"))
-				.claim("fhirUser", baseUrl+"fhir/Patient")
+				.claim("fhirUser", baseUrl+"fhir/Patient/"+payloadData.get("fhirUser"))
 				.issuer(baseUrl)
 				.audience((String) payloadData.get("aud"))
-				//.issueTime((Date) payloadData.get("issueDate"))
+				.issueTime((Date) payloadData.get("issueDate"))
 				.expirationTime((Date) payloadData.get("expiryTime"))
-				.jwtID(UUID.randomUUID().toString()) 
-				.build();	// unique identifier for JWT
+				.jwtID(UUID.randomUUID().toString()) // unique identifier for JWT
+				.build();
 
 		SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256).keyID(jwk.getKeyID()).build(),
 				jwtClaims);

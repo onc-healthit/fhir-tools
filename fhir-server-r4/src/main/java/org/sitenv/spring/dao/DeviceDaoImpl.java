@@ -26,7 +26,7 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the device
 	 */
-	public DafDevice getDeviceById(int id) {
+	public DafDevice getDeviceById(String id) {
 
 		Criteria criteria = getSession().createCriteria(DafDevice.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
@@ -42,7 +42,7 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 	 * @param versionId : version of the device record
 	 * @return : DAF object of the device
 	 */
-	public DafDevice getDeviceByVersionId(int theId, String versionId) {
+	public DafDevice getDeviceByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafDevice.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
@@ -59,7 +59,7 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 	 * @param theId : ID of the device
 	 * @return : List of device DAF records
 	 */
-	public List<DafDevice> getDeviceHistoryById(int theId) {
+	public List<DafDevice> getDeviceHistoryById(String theId) {
 		
 		List<DafDevice> list = getSession().createNativeQuery(
 				"select * from device where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafDevice.class)
@@ -135,21 +135,18 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 					String expirationDateFormat = expirationDate.getValueAsString();
 					if (expirationDate.getPrefix() != null) {
 						if (expirationDate.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'expirationDate' > '" + expirationDateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'expirationDate')::DATE > '" + expirationDateFormat + "'"));
 						} else if (expirationDate.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'expirationDate' < '" + expirationDateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'expirationDate')::DATE < '" + expirationDateFormat + "'"));
 						} else if (expirationDate.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'expirationDate' >= '" + expirationDateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'expirationDate')::DATE >= '" + expirationDateFormat + "'"));
 						} else if (expirationDate.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'expirationDate' <= '" + expirationDateFormat + "'"));
-						} else {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'expirationDate' = '" + expirationDateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'expirationDate')::DATE <= '" + expirationDateFormat + "'"));
+						} else if (expirationDate.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'expirationDate')::DATE = '" + expirationDateFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'expirationDate')::DATE = '" + expirationDateFormat + "'"));
 					}
 				}
 			}
@@ -554,7 +551,7 @@ public class DeviceDaoImpl extends AbstractDao implements DeviceDao {
 						}
 					} else if (StringUtils.isNoneEmpty(status.getValue())) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 					} else if (!status.getMissing()) {

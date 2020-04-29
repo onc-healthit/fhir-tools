@@ -66,6 +66,12 @@
 							<div class="checkbox">
 								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="patient/MedicationStatement.read" onchange="removeerror();">patient/MedicationStatement.read</label>
 							</div>
+							<div class="checkbox">
+								<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Condition.read" onchange="removeerror();">patient/Condition.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Observation.read" onchange="removeerror();">patient/Observation.read</label>
+							</div>
 						</div>
 						<div class="col-sm-5 regscopes">
 							<div class="checkbox">
@@ -84,7 +90,10 @@
 								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="openid" onchange="removeerror();">openid</label>
 							</div>
 							<div class="checkbox">
-								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="fhirUser" onchange="removeerror();">fhirUser</label>
+								<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="fhirUser" onchange="removeerror();">fhirUser</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="profile" onchange="removeerror();">profile</label>
 							</div>
 							
 							<div class="checkbox">

@@ -207,7 +207,7 @@
 			        	validators: {
 			            	choice: {
 			        	    	min: 1,
-			                	max:16,
+			                	max:19,
 			                	message: 'Please choose atleast one scope'
 			                }
 			            }
@@ -474,7 +474,7 @@
 		                	validators: {
 		                    	choice: {
 		                        	min: 1,
-		                        	max:16,
+		                        	max:19,
 		                        	message: 'Please choose atleast one scope'
 		                    	}
 		                	}

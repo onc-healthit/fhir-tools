@@ -23,7 +23,7 @@ public class ServiceRequestDaoImpl extends AbstractDao implements ServiceRequest
 	 * @param id : ID of the resource
 	 * @return : DAF object of the serviceRequest
 	 */
-	public DafServiceRequest getServiceRequestById(int id) {
+	public DafServiceRequest getServiceRequestById(String id) {
 		Criteria criteria = getSession().createCriteria(DafServiceRequest.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
@@ -39,7 +39,7 @@ public class ServiceRequestDaoImpl extends AbstractDao implements ServiceRequest
 	 * @return : DAF object of the serviceRequest
 	 */
 	@Override
-	public DafServiceRequest getServiceRequestByVersionId(int theId, String versionId) {
+	public DafServiceRequest getServiceRequestByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafServiceRequest.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
@@ -57,7 +57,7 @@ public class ServiceRequestDaoImpl extends AbstractDao implements ServiceRequest
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafServiceRequest> getServiceRequestHistoryById(int id) {
+	public List<DafServiceRequest> getServiceRequestHistoryById(String id) {
 		Criteria criteria = getSession().createCriteria(DafServiceRequest.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + id + "'"));
@@ -213,7 +213,7 @@ public class ServiceRequestDaoImpl extends AbstractDao implements ServiceRequest
 						}
 					} else if (StringUtils.isNoneEmpty(status.getValue())) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 					} else if (!status.getMissing()) {
@@ -619,21 +619,18 @@ public class ServiceRequestDaoImpl extends AbstractDao implements ServiceRequest
 					String authoredFormat = authored.getValueAsString();
 					if (authored.getPrefix() != null) {
 						if (authored.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'authoredOn' > '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE > '" + authoredFormat + "'"));
 						} else if (authored.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'authoredOn' < '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE < '" + authoredFormat + "'"));
 						} else if (authored.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'authoredOn' >= '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE >= '" + authoredFormat + "'"));
 						} else if (authored.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'authoredOn' <= '" + authoredFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'authoredOn' = '" + authoredFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE <= '" + authoredFormat + "'"));
+						}else if (authored.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE = '" + authoredFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'authoredOn')::DATE = '" + authoredFormat + "'"));
 					}
 				}
 			}
@@ -655,21 +652,18 @@ public class ServiceRequestDaoImpl extends AbstractDao implements ServiceRequest
 					String occurenceFormat = occurrence.getValueAsString();
 					if (occurrence.getPrefix() != null) {
 						if (occurrence.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' > '" + occurenceFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE > '" + occurenceFormat + "'"));
 						} else if (occurrence.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' < '" + occurenceFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE < '" + occurenceFormat + "'"));
 						} else if (occurrence.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'occurrenceDateTime' >= '" + occurenceFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE >= '" + occurenceFormat + "'"));
 						} else if (occurrence.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions.sqlRestriction(
-									"{alias}.data->>'occurrenceDateTime' <= '" + occurenceFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' = '" + occurenceFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE <= '" + occurenceFormat + "'"));
+						}else if (occurrence.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE = '" + occurenceFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE = '" + occurenceFormat + "'"));
 					}
 				}
 			}

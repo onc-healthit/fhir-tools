@@ -21,7 +21,7 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the condition
 	 */
-	public DafCondition getConditionById(int id) {
+	public DafCondition getConditionById(String id) {
 		List<DafCondition> list = getSession().createNativeQuery(
 			"select * from condition where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafCondition.class)
 				.getResultList();
@@ -36,7 +36,7 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
 	 * @param versionId : version of the condition record
 	 * @return : DAF object of the condition
 	 */
-	public DafCondition getConditionByVersionId(int theId, String versionId) {
+	public DafCondition getConditionByVersionId(String theId, String versionId) {
 		DafCondition list = getSession().createNativeQuery(
 			"select * from condition where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafCondition.class)
 				.getSingleResult();
@@ -49,7 +49,7 @@ public class ConditionDaoImpl extends AbstractDao implements ConditionDao {
 	 * @param theId : ID of the condition
 	 * @return : List of condition DAF records
 F	 */
-	public List<DafCondition> getConditionHistoryById(int theId) {
+	public List<DafCondition> getConditionHistoryById(String theId) {
 		List<DafCondition> list = getSession().createNativeQuery(
 				"select * from condition where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafCondition.class)
 		    	.getResultList();
@@ -665,21 +665,18 @@ F	 */
 					String issuedFormat = onsetDateTime.getValueAsString();
 					if (onsetDateTime.getPrefix() != null) {
 						if (onsetDateTime.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'onsetDateTime' > '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'onsetDateTime')::DATE > '" + issuedFormat + "'"));
 						} else if (onsetDateTime.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'onsetDateTime' < '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'onsetDateTime')::DATE < '" + issuedFormat + "'"));
 						} else if (onsetDateTime.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'onsetDateTime' >= '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'onsetDateTime')::DATE >= '" + issuedFormat + "'"));
 						} else if (onsetDateTime.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'onsetDateTime' <= '" + issuedFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'onsetDateTime' = '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'onsetDateTime')::DATE <= '" + issuedFormat + "'"));
+						} else if (onsetDateTime.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'onsetDateTime')::DATE = '" + issuedFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'onsetDateTime')::DATE = '" + issuedFormat + "'"));
 					}
 				}
 			}
@@ -701,21 +698,18 @@ F	 */
 					String issuedFormat = abatementDateTime.getValueAsString();
 					if (abatementDateTime.getPrefix() != null) {
 						if (abatementDateTime.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'abatementDateTime' > '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'abatementDateTime')::DATE > '" + issuedFormat + "'"));
 						} else if (abatementDateTime.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'abatementDateTime' < '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'abatementDateTime')::DATE < '" + issuedFormat + "'"));
 						} else if (abatementDateTime.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'abatementDateTime' >= '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'abatementDateTime')::DATE >= '" + issuedFormat + "'"));
 						} else if (abatementDateTime.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'abatementDateTime' <= '" + issuedFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'abatementDateTime' = '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'abatementDateTime')::DATE <= '" + issuedFormat + "'"));
+						} else if (abatementDateTime.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'abatementDateTime')::DATE = '" + issuedFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'abatementDateTime')::DATE = '" + issuedFormat + "'"));
 					}
 				}
 			}
@@ -737,21 +731,18 @@ F	 */
 					String issuedFormat = recordedDate.getValueAsString();
 					if (recordedDate.getPrefix() != null) {
 						if (recordedDate.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' > '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE > '" + issuedFormat + "'"));
 						} else if (recordedDate.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' < '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE < '" + issuedFormat + "'"));
 						} else if (recordedDate.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' >= '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE >= '" + issuedFormat + "'"));
 						} else if (recordedDate.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' <= '" + issuedFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'recordedDate' = '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE <= '" + issuedFormat + "'"));
+						} else if (recordedDate.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE = '" + issuedFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'recordedDate')::DATE = '" + issuedFormat + "'"));
 					}
 				}
 			}

@@ -18,18 +18,18 @@ public  class ServiceRequestServiceImpl implements ServiceRequestService{
 	
 	@Override
     @Transactional
-    public DafServiceRequest getServiceRequestById(int id) {
+    public DafServiceRequest getServiceRequestById(String id) {
         return this.serviceRequestDao.getServiceRequestById(id);
     }
 	@Override
 	@Transactional
-	public DafServiceRequest getServiceRequestByVersionId(int theId, String versionId) {
+	public DafServiceRequest getServiceRequestByVersionId(String theId, String versionId) {
 		return this.serviceRequestDao.getServiceRequestByVersionId(theId, versionId);
 	}
 	
 	@Override
 	@Transactional
-    public List<DafServiceRequest> getServiceRequestHistoryById(int theId) {
+    public List<DafServiceRequest> getServiceRequestHistoryById(String theId) {
 		 return this.serviceRequestDao.getServiceRequestHistoryById(theId);
     }
 	

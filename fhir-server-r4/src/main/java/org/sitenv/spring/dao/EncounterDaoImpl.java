@@ -24,7 +24,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	 * @param id : ID of the resource
 	 * @return : DAF object of the Encounter
 	 */
-	public DafEncounter getEncounterById(int id) {
+	public DafEncounter getEncounterById(String id) {
 		List<DafEncounter> list = getSession().createNativeQuery(
 				"select * from encounter where data->>'id' = '" + id + "' order by data->'meta'->>'versionId' desc",
 				DafEncounter.class).getResultList();
@@ -39,7 +39,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	 * @param versionId : version of the Encounter record
 	 * @return : DAF object of the Encounter
 	 */
-	public DafEncounter getEncounterByVersionId(int theId, String versionId) {
+	public DafEncounter getEncounterByVersionId(String theId, String versionId) {
 		DafEncounter list = getSession()
 				.createNativeQuery("select * from encounter where data->>'id' = '" + theId
 						+ "' and data->'meta'->>'versionId' = '" + versionId + "'", DafEncounter.class)
@@ -85,7 +85,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	/**
 	 * This method builds criteria for class
 	 * 
-	 * @param searchParameterMap : search parameter "class"
+	 * @param theMap : search parameter "class"
 	 * @param criteria           : for retrieving entities by composing Criterion
 	 *                           objects
 	 */
@@ -124,7 +124,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	/**
 	 * This method builds criteria for status
 	 * 
-	 * @param searchParameterMap : search parameter "status"
+	 * @param theMap : search parameter "status"
 	 * @param criteria           : for retrieving entities by composing Criterion
 	 *                           objects
 	 */
@@ -136,7 +136,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 					TokenParam status = (TokenParam) params;
 					if (!status.isEmpty()) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 
@@ -152,7 +152,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	/**
 	 * This method builds criteria for type
 	 * 
-	 * @param searchParameterMap : search parameter "type"
+	 * @param theMap : search parameter "type"
 	 * @param criteria           : for retrieving entities by composing Criterion
 	 *                           objects
 	 */
@@ -242,40 +242,33 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 					DateParam date = (DateParam) params;
 					String dateFormat = date.getValueAsString();
 					Criterion orCond = null;
-					if (date.getPrefix() != null) {
-						if (date.getPrefix().getValue() == "gt") {
-							orCond = Restrictions.or(
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'start' > '" + dateFormat + "'"),
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'end' > '" + dateFormat + "'"));
-						} else if (date.getPrefix().getValue() == "lt") {
-							orCond = Restrictions.or(
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'start' < '" + dateFormat + "'"),
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'end' < '" + dateFormat + "'"));
-						} else if (date.getPrefix().getValue() == "ge") {
-							orCond = Restrictions.or(
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'start' >= '" + dateFormat + "'"),
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'end' >= '" + dateFormat + "'"));
-						} else if (date.getPrefix().getValue() == "le") {
-							orCond = Restrictions.or(
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'start' <= '" + dateFormat + "'"),
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'end' <= '" + dateFormat + "'"));
-						} else {
-							orCond = Restrictions.or(
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'start' = '" + dateFormat + "'"),
-									Restrictions
-											.sqlRestriction("{alias}.data->'period'->>'end' = '" + dateFormat + "'"));
-						}
-						disjunction.add(orCond);
+					if (date.getPrefix().getValue() == "gt") {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE > '" + dateFormat + "'"),
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE > '" + dateFormat + "'")
+						);
+					} else if (date.getPrefix().getValue() == "lt") {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE < '" + dateFormat + "'"),
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE < '" + dateFormat + "'")
+						);
+					} else if (date.getPrefix().getValue() == "ge") {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE >= '" + dateFormat + "'"),
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE >= '" + dateFormat + "'")
+						);
+					} else if (date.getPrefix().getValue() == "le") {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE <= '" + dateFormat + "'"),
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE <= '" + dateFormat + "'")
+						);
+					} else {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE = '" + dateFormat + "'"),
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '" + dateFormat + "'")
+						);
 					}
+					disjunction.add(orCond);
 				}
 				criteria.add(disjunction);
 			}
@@ -346,7 +339,7 @@ public class EncounterDaoImpl extends AbstractDao implements EncounterDao {
 	 * @param theId : ID of the Encounter
 	 * @return : List of Encounter DAF records
 	 */
-	public List<DafEncounter> getEncounterHistoryById(int theId) {
+	public List<DafEncounter> getEncounterHistoryById(String theId) {
 		List<DafEncounter> list = getSession().createNativeQuery(
 				"select * from encounter where data->>'id' = '" + theId + "' order by data->'meta'->>'versionId' desc",
 				DafEncounter.class).getResultList();

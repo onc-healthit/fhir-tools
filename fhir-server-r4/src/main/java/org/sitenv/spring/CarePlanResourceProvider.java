@@ -35,7 +35,7 @@ import java.util.Set;
 public class CarePlanResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "CarePlan";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     CarePlanService service;
     
@@ -66,10 +66,10 @@ public class CarePlanResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public CarePlan readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafCarePlan dafCarePlan;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -99,9 +99,9 @@ public class CarePlanResourceProvider implements IResourceProvider {
 	@History()
     public List<CarePlan> getCarePlanHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -138,6 +138,7 @@ public class CarePlanResourceProvider implements IResourceProvider {
 	 * @param theInstantiatesUri
 	 * @param theStatus
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -214,6 +215,9 @@ public class CarePlanResourceProvider implements IResourceProvider {
         @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
         @Sort
         SortSpec theSort,
 
@@ -248,13 +252,19 @@ public class CarePlanResourceProvider implements IResourceProvider {
         return new IBundleProvider() {
             final InstantDt published = InstantDt.withCurrentTime();
             @Override
-            public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
-                List<IBaseResource> carePlanList = new ArrayList<IBaseResource>();
-                for(DafCarePlan dafCarePlan : results){
-                	carePlanList.add(createCarePlanObject(dafCarePlan));
-                }
-                return carePlanList;
-            }
+			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
+				List<IBaseResource> carePlanList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
+				for(DafCarePlan dafCarePlan : results){
+					CarePlan carePlan = createCarePlanObject(dafCarePlan);
+					carePlanList.add(carePlan);
+					ids.add(((IdType)carePlan.getIdElement()).getResourceType()+"/"+((IdType)carePlan.getIdElement()).getIdPart());
+				}
+				if(theRevIncludes.size() >0 ){
+					carePlanList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
+				return carePlanList;
+			}
 
             @Override
             public Integer size() {
@@ -291,7 +301,9 @@ public class CarePlanResourceProvider implements IResourceProvider {
         if(!(carePlanJSON.isNull("meta"))) {
         	if(!(carePlanJSON.getJSONObject("meta").isNull("versionId"))) {
                 carePlan.setId(new IdType(RESOURCE_TYPE, carePlanJSON.getString("id") + "", carePlanJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				carePlan.setId(new IdType(RESOURCE_TYPE, carePlanJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             carePlan.setId(new IdType(RESOURCE_TYPE, carePlanJSON.getString("id") + "", VERSION_ID));

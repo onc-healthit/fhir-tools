@@ -37,7 +37,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	 * @param id : ID of the resource
 	 * @return : DAF object of the DiagnosticReport
 	 */
-	public DafDiagnosticReport getDiagnosticReportById(int id) {
+	public DafDiagnosticReport getDiagnosticReportById(String id) {
 		List<DafDiagnosticReport> list = getSession().createNativeQuery(
 				"select * from report where data->>'id' = '" + id + "' order by data->'meta'->>'versionId' desc",
 				DafDiagnosticReport.class).getResultList();
@@ -52,7 +52,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	 * @param versionId : version of the DiagnosticReport record
 	 * @return : DAF object of the DiagnosticReport
 	 */
-	public DafDiagnosticReport getDiagnosticReportByVersionId(int theId, String versionId) {
+	public DafDiagnosticReport getDiagnosticReportByVersionId(String theId, String versionId) {
 		DafDiagnosticReport list = getSession()
 				.createNativeQuery("select * from report where data->>'id' = '" + theId
 						+ "' and data->'meta'->>'versionId' = '" + versionId + "'", DafDiagnosticReport.class)
@@ -67,7 +67,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 	 * @param theId : ID of the DiagnosticReport
 	 * @return : List of DiagnosticReport DAF records
 	 */
-	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(int theId) {
+	public List<DafDiagnosticReport> getDiagnosticReportHistoryById(String theId) {
 		List<DafDiagnosticReport> list = getSession().createNativeQuery(
 				"select * from report where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc",  DafDiagnosticReport.class).getResultList();
 		return list;
@@ -163,6 +163,14 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 				for (IQueryParameterType params : values) {
 					TokenParam identifier = (TokenParam) params;
 					Criterion orCond = null;
+
+					if (identifier.getValue() != null) {
+
+					}
+					if(identifier.getSystem() != null){
+
+					}
+
 					if (identifier.getValue() != null) {
 
 						orCond = Restrictions.or(
@@ -208,18 +216,6 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 								"{alias}.data->'code'->'coding'->1->>'code' ilike '%" + code.getValue() + "%'"));
 						disjunction.add(Restrictions.sqlRestriction(
 								"{alias}.data->'code'->'coding'->1->>'display' ilike '%" + code.getValue() + "%'"));
-						disjunction.add(Restrictions.sqlRestriction(
-								"{alias}.data->'code'->'coding'->0->>'system' ilike '%" + code.getValue() + "%'"));
-						disjunction.add(Restrictions.sqlRestriction(
-								"{alias}.data->'code'->'coding'->0->>'code' ilike '%" + code.getValue() + "%'"));
-						disjunction.add(Restrictions.sqlRestriction(
-								"{alias}.data->'code'->'coding'->0->>'display' ilike '%" + code.getValue() + "%'"));
-						disjunction.add(Restrictions.sqlRestriction(
-								"{alias}.data->'code'->'coding'->1->>'system' ilike '%" + code.getValue() + "%'"));
-						disjunction.add(Restrictions.sqlRestriction(
-								"{alias}.data->'code'->'coding'->1->>'code' ilike '%" + code.getValue() + "%'"));
-						disjunction.add(Restrictions.sqlRestriction(
-								"{alias}.data->'code'->'coding'->1->>'display' ilike '%" + code.getValue() + "%'"));
 					}
 				}
 				criteria.add(disjunction);
@@ -244,11 +240,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 					if (subject.getValue() != null) {
 						orCond = Restrictions.or(
 								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'reference' = '"+"Patient/"+subject.getValue()+"'"),
-								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'display' = '" + subject.getValue() + "'"),
-								Restrictions.sqlRestriction(
-										"{alias}.data->'subject'->>'type' = '" + subject.getValue() + "'")
+										"{alias}.data->'subject'->>'reference' = '"+"Patient/"+subject.getValue()+"'")
 						);
 					} else if (subject.getMissing()) {
 						orCond = Restrictions.or(Restrictions.sqlRestriction("{alias}.data->>'subject' IS NULL"));
@@ -316,7 +308,7 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 						}
 					} else if (StringUtils.isNoneEmpty(status.getValue())) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 					} else if (!status.getMissing()) {
@@ -631,21 +623,18 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 					String issuedFormat = issued.getValueAsString();
 					if (issued.getPrefix() != null) {
 						if (issued.getPrefix().getValue() == "gt") {
-							criteria.add(
-									Restrictions.sqlRestriction("{alias}.data->>'issued' > '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'issued')::DATE > '" + issuedFormat + "'"));
 						} else if (issued.getPrefix().getValue() == "lt") {
-							criteria.add(
-									Restrictions.sqlRestriction("{alias}.data->>'issued' < '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'issued')::DATE < '" + issuedFormat + "'"));
 						} else if (issued.getPrefix().getValue() == "ge") {
-							criteria.add(
-									Restrictions.sqlRestriction("{alias}.data->>'issued' >= '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'issued')::DATE >= '" + issuedFormat + "'"));
 						} else if (issued.getPrefix().getValue() == "le") {
-							criteria.add(
-									Restrictions.sqlRestriction("{alias}.data->>'issued' <= '" + issuedFormat + "'"));
-						} else {
-							criteria.add(
-									Restrictions.sqlRestriction("{alias}.data->>'issued' = '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'issued')::DATE <= '" + issuedFormat + "'"));
+						} else if (issued.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'issued')::DATE = '" + issuedFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'issued')::DATE = '" + issuedFormat + "'"));
 					}
 				}
 			}
@@ -665,23 +654,21 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 				for (IQueryParameterType params : values) {
 					DateParam effectiveDate = (DateParam) params;
 					String issuedFormat = effectiveDate.getValueAsString();
+
 					if (effectiveDate.getPrefix() != null) {
 						if (effectiveDate.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'effectiveDateTime' > '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE > '" + issuedFormat + "'"));
 						} else if (effectiveDate.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'effectiveDateTime' < '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE < '" + issuedFormat + "'"));
 						} else if (effectiveDate.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'effectiveDateTime' >= '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE >= '" + issuedFormat + "'"));
 						} else if (effectiveDate.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'effectiveDateTime' <= '" + issuedFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'effectiveDateTime' = '" + issuedFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE <= '" + issuedFormat + "'"));
+						}else if (effectiveDate.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE = '" + issuedFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'effectiveDateTime')::DATE = '" + issuedFormat + "'"));
 					}
 				}
 			}

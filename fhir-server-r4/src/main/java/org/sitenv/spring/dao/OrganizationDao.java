@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface OrganizationDao {
 	
-	public DafOrganization getOrganizationById(int id);
+	public DafOrganization getOrganizationById(String id);
 	
-	public DafOrganization getOrganizationByVersionId(int theId, String versionId);
+	public DafOrganization getOrganizationByVersionId(String theId, String versionId);
 	
-	public List<DafOrganization> getOrganizationHistoryById(int theId);
+	public List<DafOrganization> getOrganizationHistoryById(String theId);
 	
 	public List<DafOrganization> search(SearchParameterMap theMap);
 }

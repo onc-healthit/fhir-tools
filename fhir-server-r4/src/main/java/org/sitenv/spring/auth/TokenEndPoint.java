@@ -1,5 +1,21 @@
 package org.sitenv.spring.auth;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.oltu.oauth2.as.issuer.MD5Generator;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuer;
 import org.apache.oltu.oauth2.as.issuer.OAuthIssuerImpl;
@@ -21,23 +37,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 @Controller
 @RequestMapping("/token")
 public class TokenEndPoint extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final int HOUR = 3600 * 1000; // in milli-seconds.
+	public static final String SMART_STYLE_URL = "view/css/smart_v1.json";
 
 	Logger log = (Logger) LoggerFactory.getLogger(TokenEndPoint.class);
 
@@ -172,7 +178,7 @@ public class TokenEndPoint extends HttpServlet {
 						OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
 						if (grant_type.equals(GrantType.AUTHORIZATION_CODE.toString())) {
 							if (!code.equalsIgnoreCase(authTemp.getAuthCode())) {
-								response.sendError(401, "Invalid authorization code");
+								response.sendError(400, "Invalid authorization code");
 								out.println(response);
 							} else if (!client.getClient_id().equals(client_id)) {
 								response.sendError(401, "Invalid Client ID");
@@ -184,18 +190,19 @@ public class TokenEndPoint extends HttpServlet {
 								JSONObject jsonOb = new JSONObject();
 								jsonOb.put("access_token", accessToken);
 								jsonOb.put("token_type", "bearer");
-								jsonOb.put("expires_in", "3600");
+								jsonOb.put("expires_in", 3600);
+								jsonOb.put("scope", stringScope.toString());
 
 								String refreshToken = null;
 								String idToken = null;
+								String fhirUser = "";
 								if (scopes.contains("launch/patient") || scopes.contains("launch")) {
+									fhirUser=authTemp.getLaunchPatientId();
 									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
+									jsonOb.put("need_patient_banner", true);
+									jsonOb.put("smart_style_url", Common.getBaseUrl(request)+SMART_STYLE_URL);
 								}
-								if (scopes.contains("offline_access")) {
-									refreshToken = oauthIssuerImpl.refreshToken();
-									jsonOb.put("refresh_token", refreshToken);
-
-								} else if (scopes.contains("online_access")) {
+								if (scopes.contains("offline_access") || scopes.contains("online_access")) {
 									refreshToken = oauthIssuerImpl.refreshToken();
 									jsonOb.put("refresh_token", refreshToken);
 								}
@@ -215,11 +222,11 @@ public class TokenEndPoint extends HttpServlet {
 									payloadData.put("issueDate", issueDate);
 									payloadData.put("expiryTime", expiryTime);
 									payloadData.put("userName", userName);
+									payloadData.put("fhirUser", fhirUser);
+									
 
 									idToken = jwtGenerator.generate(payloadData, request);
 									jsonOb.put("id_token", idToken);
-									jsonOb.put("scope", stringScope.toString());
-
 								}
 								response.addHeader("Content-Type", "application/json");
 								response.addHeader("Cache-Control", "no-store");
@@ -261,7 +268,7 @@ public class TokenEndPoint extends HttpServlet {
 									jsonOb.put("access_token", accessToken);
 									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 									jsonOb.put("token_type", "bearer");
-									jsonOb.put("expires_in", "3600"); // 3600 second is 1hour
+									jsonOb.put("expires_in", 3600); // 3600 second is 1hour
 									jsonOb.put("scope", stringScope.toString());
 
 									// String refreshToken = null;
@@ -332,7 +339,7 @@ public class TokenEndPoint extends HttpServlet {
 						OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(new MD5Generator());
 						if (grant_type.equals(GrantType.AUTHORIZATION_CODE.toString())) {
 							if (!code.equalsIgnoreCase(authTemp.getAuthCode())) {
-								response.sendError(401, "Invalid authorization code");
+								response.sendError(400, "Invalid authorization code");
 								out.println(response);
 							} else if (!client.getClient_id().equals(client_id)) {
 								response.sendError(401, "Invalid Client ID");
@@ -344,7 +351,7 @@ public class TokenEndPoint extends HttpServlet {
 								JSONObject jsonOb = new JSONObject();
 								jsonOb.put("access_token", accessToken);
 								jsonOb.put("token_type", "bearer");
-								jsonOb.put("expires_in", "3600");
+								jsonOb.put("expires_in", 3600);
 
 								String refreshToken = null;
 								String idToken = null;
@@ -418,7 +425,7 @@ public class TokenEndPoint extends HttpServlet {
 									jsonOb.put("access_token", accessToken);
 									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 									jsonOb.put("token_type", "bearer");
-									jsonOb.put("expires_in", "3600"); // 3600 second is 1hour
+									jsonOb.put("expires_in", 3600); // 3600 second is 1hour
 									jsonOb.put("scope", stringScope.toString());
 
 									// String refreshToken = null;

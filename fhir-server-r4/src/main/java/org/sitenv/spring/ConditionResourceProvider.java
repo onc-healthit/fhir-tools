@@ -1,6 +1,7 @@
  
 package org.sitenv.spring;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -25,11 +26,12 @@ import org.springframework.context.support.AbstractApplicationContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class ConditionResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Condition";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	ConditionService service;
 
@@ -63,10 +65,10 @@ public class ConditionResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public Condition readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafCondition dafCondition;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -102,9 +104,9 @@ public class ConditionResourceProvider implements IResourceProvider {
 	@History()
 	public List<Condition> getConditionHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -134,7 +136,6 @@ public class ConditionResourceProvider implements IResourceProvider {
 	 * @param theClinicalStatus
 	 * @param theVerificationStatus
 	 * @param theCategory
-	 * @param theSevirity
 	 * @param theCode
 	 * @param theBodySite
 	 * @param theSubject
@@ -145,12 +146,14 @@ public class ConditionResourceProvider implements IResourceProvider {
 	 * @param theAbatementDate
 	 * @param theAbatementString
 	 * @param theRecordedDate
-	 * @param theAsseter
 	 * @param theOnsetAge
 	 * @param theStage
 	 * @param theEvidence
+	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
+	 *
 	 * @return
 	 */
 	@Search()
@@ -238,6 +241,14 @@ public class ConditionResourceProvider implements IResourceProvider {
 		@OptionalParam(name = Condition.SP_EVIDENCE) 
 		TokenAndListParam theEvidence,
 
+		@IncludeParam(allow = {"*"})
+		Set<Include> theIncludes,
+
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
+
+
 		@Sort SortSpec theSort,
 		@Count Integer theCount) {
 		
@@ -272,9 +283,16 @@ public class ConditionResourceProvider implements IResourceProvider {
 			@Override
 			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 				List<IBaseResource> conditionList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
 				for (DafCondition dafCondition : results) {
-					conditionList.add(createConditionObject(dafCondition));
+					Condition condition = createConditionObject(dafCondition);
+					conditionList.add(condition);
+					ids.add(((IdType)condition.getIdElement()).getResourceType()+"/"+((IdType)condition.getIdElement()).getIdPart());
 				}
+				if(theRevIncludes.size() >0 ){
+					conditionList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
+
 				return conditionList;
 			}
 
@@ -312,7 +330,9 @@ public class ConditionResourceProvider implements IResourceProvider {
         if(!(conditionJSON.isNull("meta"))) {
         	if(!(conditionJSON.getJSONObject("meta").isNull("versionId"))) {
         		condition.setId(new IdType(RESOURCE_TYPE, conditionJSON.getString("id") + "", conditionJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				condition.setId(new IdType(RESOURCE_TYPE, conditionJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	condition.setId(new IdType(RESOURCE_TYPE, conditionJSON.getString("id") + "", VERSION_ID));

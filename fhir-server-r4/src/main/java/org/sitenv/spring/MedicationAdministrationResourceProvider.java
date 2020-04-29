@@ -34,7 +34,7 @@ import java.util.Set;
 public class MedicationAdministrationResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "MedicationAdministration";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     MedicationAdministrationService service;
     
@@ -65,10 +65,10 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
 	 */
 	@Read(version=true)
     public MedicationAdministration readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafMedicationAdministration dafMedicationAdministration;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -98,9 +98,9 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
 	@History()
     public List<MedicationAdministration> getMedicationAdministrationHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -269,7 +269,9 @@ public class MedicationAdministrationResourceProvider implements IResourceProvid
         if(!(medicationadministrationJSON.isNull("meta"))) {
         	if(!(medicationadministrationJSON.getJSONObject("meta").isNull("versionId"))) {
                 medicationAdministration.setId(new IdType(RESOURCE_TYPE, medicationadministrationJSON.getString("id") + "", medicationadministrationJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				medicationAdministration.setId(new IdType(RESOURCE_TYPE, medicationadministrationJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             medicationAdministration.setId(new IdType(RESOURCE_TYPE, medicationadministrationJSON.getString("id") + "", VERSION_ID));

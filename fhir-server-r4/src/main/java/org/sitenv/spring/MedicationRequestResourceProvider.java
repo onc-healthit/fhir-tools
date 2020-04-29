@@ -13,6 +13,7 @@ import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.Dosage.DosageDoseAndRateComponent;
@@ -37,7 +38,7 @@ import java.util.Set;
 public class MedicationRequestResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "MedicationRequest";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     MedicationRequestService service;
 
@@ -68,11 +69,11 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public MedicationRequest readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		
 		DafMedicationRequest dafMedicationRequest;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -102,9 +103,9 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 	@History()
     public List<MedicationRequest> getMedicationRequestHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -137,6 +138,8 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 	 * @param thePerformer
 	 * @param thePerformerType
 	 * @param theAuthoredOn
+	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @return
 	 */
     @Search()
@@ -196,10 +199,13 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
         ReferenceAndListParam thePatient,
         
 
-        @IncludeParam(allow = {"", "", "*"})
+        @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
-        @Sort
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
+		@Sort
         SortSpec theSort,
 
         @Count
@@ -225,15 +231,30 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
             
             final List<DafMedicationRequest> results = service.search(paramMap);
 
-            //ca.uhn.fhir.rest.server.IBundleProvider retVal = getDao().search(paramMap);
             return new IBundleProvider() {
                 final InstantDt published = InstantDt.withCurrentTime();
                 @Override
                 public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                     List<IBaseResource> medicationRequestList = new ArrayList<IBaseResource>();
+					List<String> medicationRequesIDs = new ArrayList<String>();
+					List<String> medicationIds = new ArrayList<String>();
                     for(DafMedicationRequest dafMedicationRequest : results){
-                    	medicationRequestList.add(createMedicationRequestObject(dafMedicationRequest));
+						MedicationRequest medicationRequest = createMedicationRequestObject(dafMedicationRequest);
+						medicationRequestList.add(medicationRequest);
+						medicationRequesIDs.add(((IdType)medicationRequest.getIdElement()).getResourceType()+"/"+((IdType)medicationRequest.getIdElement()).getIdPart());
+
+						if((medicationRequest.getMedication() instanceof Reference)) {
+							medicationIds.add(StringUtils.remove(((Reference) medicationRequest.getMedication()).getReference(),"Medication/"));
+						}
                     }
+					if(theIncludes.size() >0 && medicationIds.size() > 0){
+						medicationRequestList.addAll(new MedicationResourceProvider().getMedicationByResourceId(medicationIds));
+					}
+
+                    if(theRevIncludes.size() >0 ){
+                        medicationRequestList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(medicationRequesIDs));
+                    }
+
                     return medicationRequestList;
                 }
 
@@ -268,7 +289,9 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 	    if(!(medicationRequestJSON.isNull("meta"))) {
 	    	if(!(medicationRequestJSON.getJSONObject("meta").isNull("versionId"))) {
 	    		medicationRequest.setId(new IdType(RESOURCE_TYPE, medicationRequestJSON.getString("id") + "", medicationRequestJSON.getJSONObject("meta").getString("versionId")));
-	    	}
+	    	}else {
+				medicationRequest.setId(new IdType(RESOURCE_TYPE, medicationRequestJSON.getString("id") + "", VERSION_ID));
+			}
 	    }
 	    else {
 	    	medicationRequest.setId(new IdType(RESOURCE_TYPE, medicationRequestJSON.getString("id") + "", VERSION_ID));
@@ -1244,15 +1267,22 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 	    	if(!(medicationRequestJSON.getJSONObject("medicationReference").isNull("type"))) {
 	    		theMedicationReference.setType(medicationRequestJSON.getJSONObject("medicationReference").getString("type"));    		
 	    	}
-	    	medicationRequest.setMedication(theMedicationReference); 
+	    	medicationRequest.setMedication(theMedicationReference);
 	    }
 			
 		// Set priority
 		if (!(medicationRequestJSON.isNull("priority"))) {
 			medicationRequest.setPriority(MedicationRequest.MedicationRequestPriority.fromCode(medicationRequestJSON.getString("priority")));
 		}
-			
-	    //Set medicationCodeableConcept
+
+		//Set Reported
+		if(!(medicationRequestJSON.isNull("reported"))) {
+			Reference reported = new Reference();
+			reported.setReference(medicationRequestJSON.getJSONObject("reported").getString("reference"));
+			medicationRequest.setReported(reported);
+		}
+
+			//Set medicationCodeableConcept
        	if(!(medicationRequestJSON.isNull("medicationCodeableConcept"))) {
     		JSONObject medicationCodeableConceptJSON = medicationRequestJSON.getJSONObject("medicationCodeableConcept");
     		CodeableConcept theMedicationCodeableConcept = new CodeableConcept();

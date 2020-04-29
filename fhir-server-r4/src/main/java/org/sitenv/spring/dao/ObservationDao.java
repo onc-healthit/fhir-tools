@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ObservationDao {
 	
-	 public DafObservation getObservationById(int id);
+	 public DafObservation getObservationById(String id);
 	 
-	 public DafObservation getObservationByVersionId(int theId, String versionId);
+	 public DafObservation getObservationByVersionId(String theId, String versionId);
 	 
 	 public List<DafObservation> search(SearchParameterMap theMap);
 	 
-	 public List<DafObservation> getObservationHistoryById(int theId);
+	 public List<DafObservation> getObservationHistoryById(String theId);
 }

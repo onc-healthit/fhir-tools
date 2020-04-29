@@ -1,5 +1,6 @@
 package org.sitenv.spring;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -7,6 +8,7 @@ import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringAndListParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -27,11 +29,12 @@ import org.springframework.context.support.AbstractApplicationContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class ProvenanceResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "Provenance";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	ProvenanceService service;
 	
@@ -66,10 +69,10 @@ public class ProvenanceResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public Provenance readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafProvenance dafProvenance;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -106,9 +109,9 @@ public class ProvenanceResourceProvider implements IResourceProvider {
 	@History()
 	public List<Provenance> getProvenanceHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -124,8 +127,20 @@ public class ProvenanceResourceProvider implements IResourceProvider {
 		}
 		return provenanceList;
 	}
-	
-	
+
+
+	public List<Provenance> getProvenanceByResourceId(List<String> resourceID) {
+
+		List<DafProvenance> results = service.getProvenanceByResourceId(resourceID);
+		List<Provenance> provenanceList = new ArrayList<Provenance>();
+
+		for (DafProvenance dafProvenance : results) {
+			provenanceList.add(createProvenanceObject(dafProvenance));
+		}
+		return provenanceList;
+	}
+
+
 	@Search()
 	public IBundleProvider search(
 			javax.servlet.http.HttpServletRequest theServletRequest,
@@ -192,7 +207,7 @@ public class ProvenanceResourceProvider implements IResourceProvider {
 		paramMap.setSort(theSort);
 		paramMap.setCount(theCount);
 
-		final List<DafProvenance> results = service.search(paramMap);
+        final List<DafProvenance> results = service.search(paramMap);
 		return new IBundleProvider() {
 			final InstantDt published = InstantDt.withCurrentTime();
 
@@ -240,7 +255,9 @@ public class ProvenanceResourceProvider implements IResourceProvider {
         if(!(provenanceJSON.isNull("meta"))) {
         	if(!(provenanceJSON.getJSONObject("meta").isNull("versionId"))) {
         		provenance.setId(new IdType(RESOURCE_TYPE, provenanceJSON.getString("id") + "", provenanceJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				provenance.setId(new IdType(RESOURCE_TYPE, provenanceJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
         	provenance.setId(new IdType(RESOURCE_TYPE, provenanceJSON.getString("id") + "", VERSION_ID));
@@ -397,7 +414,7 @@ public class ProvenanceResourceProvider implements IResourceProvider {
         	for(int i = 0; i < noOfAgents; i++) {
         		ProvenanceAgentComponent theAgent = new ProvenanceAgentComponent();
         		//Set agent type
-        		if(!(agentJSON.getJSONObject(i).isNull(" type"))) {
+        		if(!(agentJSON.getJSONObject(i).isNull("type"))) {
         			JSONObject typeJSON = agentJSON.getJSONObject(i).getJSONObject("type");
         			CodeableConcept theType = new CodeableConcept();
             		if(!(typeJSON.isNull("coding"))) {

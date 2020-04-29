@@ -35,7 +35,7 @@ import java.util.Set;
 public class HealthcareServiceResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "HealthcareService";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     HealthcareServiceService service;
     
@@ -66,10 +66,10 @@ public class HealthcareServiceResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public HealthcareService readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafHealthcareService dafHealthcareService;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -99,9 +99,9 @@ public class HealthcareServiceResourceProvider implements IResourceProvider {
 	@History()
     public List<HealthcareService> getHealthcareServiceHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -127,12 +127,10 @@ public class HealthcareServiceResourceProvider implements IResourceProvider {
 	 * @param theIdentifier
 	 * @param theName
 	 * @param theEndpoint
-	 * @param theProgramName
 	 * @param theOrganization
 	 * @param theTelecom
 	 * @param theLocation
 	 * @param theCategory
-	 * @param theType
 	 * @param theCharacteristic
 	 * @param theActive
 	 * @param theIncludes
@@ -271,7 +269,9 @@ public class HealthcareServiceResourceProvider implements IResourceProvider {
         if(!(healthcareServiceJSON.isNull("meta"))) {
         	if(!(healthcareServiceJSON.getJSONObject("meta").isNull("versionId"))) {
                 healthcareService.setId(new IdType(RESOURCE_TYPE, healthcareServiceJSON.getString("id") + "", healthcareServiceJSON.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else {
+				healthcareService.setId(new IdType(RESOURCE_TYPE, healthcareServiceJSON.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             healthcareService.setId(new IdType(RESOURCE_TYPE, healthcareServiceJSON.getString("id") + "", VERSION_ID));

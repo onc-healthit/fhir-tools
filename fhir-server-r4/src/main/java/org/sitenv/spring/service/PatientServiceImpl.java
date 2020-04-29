@@ -18,13 +18,13 @@ public class PatientServiceImpl implements PatientService {
 	
 	@Override
     @Transactional
-    public DafPatient getPatientById(int id) {
+    public DafPatient getPatientById(String id) {
         return this.patientDao.getPatientById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafPatient getPatientByVersionId(int theId, String versionId) {
+	public DafPatient getPatientByVersionId(String theId, String versionId) {
 		return this.patientDao.getPatientByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class PatientServiceImpl implements PatientService {
 
    @Override
    @Transactional
-   public List<DafPatient> getPatientHistoryById(int theId) {
+   public List<DafPatient> getPatientHistoryById(String theId) {
 	   return this.patientDao.getPatientHistoryById(theId);
    }
 

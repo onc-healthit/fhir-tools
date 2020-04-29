@@ -24,7 +24,7 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
 	 * @return : DafCarePlan object
 	 */
 	@Override
-	public DafCarePlan getCarePlanById(int id) {
+	public DafCarePlan getCarePlanById(String id) {
 		List<DafCarePlan> list = getSession().createNativeQuery(
 			"select * from careplan where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafCarePlan.class)
 				.getResultList();
@@ -39,7 +39,7 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
 	 * @return : DafCarePlan object
 	 */
 	@Override
-	public DafCarePlan getCarePlanByVersionId(int theId, String versionId) {
+	public DafCarePlan getCarePlanByVersionId(String theId, String versionId) {
 		DafCarePlan list = getSession().createNativeQuery(
 			"select * from careplan where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafCarePlan.class)
 				.getSingleResult();
@@ -52,7 +52,7 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
      * @return : List of careplan records
      */
 	@Override
-	public List<DafCarePlan> getCarePlanHistoryById(int theId) {
+	public List<DafCarePlan> getCarePlanHistoryById(String theId) {
 		List<DafCarePlan> list = getSession().createNativeQuery(
     			"select * from careplan where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc", DafCarePlan.class)
     				.getResultList();
@@ -184,34 +184,39 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
                     String dateFormat = date.getValueAsString();
                     Criterion orCond= null;
                     if(date.getPrefix() != null) {
-                        if(date.getPrefix().getValue() == "gt"){
+						if(date.getPrefix().getValue() == "eq"){
+							orCond = Restrictions.or(
+									Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE = '"+dateFormat+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '"+dateFormat+ "'")
+							);
+						}else if(date.getPrefix().getValue() == "gt"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' > '"+dateFormat+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' > '"+dateFormat+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE > '"+dateFormat+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE > '"+dateFormat+ "'")
                         			);
                         }else if(date.getPrefix().getValue() == "lt"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' < '"+dateFormat+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' < '"+dateFormat+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE < '"+dateFormat+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE < '"+dateFormat+ "'")
                         			);
                         }else if(date.getPrefix().getValue() == "ge"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' >= '"+dateFormat+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' >= '"+dateFormat+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE >= '"+dateFormat+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE >= '"+dateFormat+ "'")
                         			);
                         }else if(date.getPrefix().getValue() == "le"){
                         	orCond = Restrictions.or(
-	                        			Restrictions.sqlRestriction("{alias}.data->'period'->>'start' <= '"+dateFormat+ "'"),
-	                        			Restrictions.sqlRestriction("{alias}.data->'period'->>'end' <= '"+dateFormat+ "'")
-                        			);
-                        }else {
-                        	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'start' = '"+dateFormat+"'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'period'->>'end' = '"+dateFormat+"'")
+	                        			Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE <= '"+dateFormat+ "'"),
+	                        			Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE <= '"+dateFormat+ "'")
                         			);
                         }
-                        disjunction.add(orCond);
-                     }
+                     }else {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'start')::DATE = '"+dateFormat+"'"),
+								Restrictions.sqlRestriction("({alias}.data->'period'->>'end')::DATE = '"+dateFormat+"'")
+						);
+					}
+					disjunction.add(orCond);
                 }
                 criteria.add(disjunction);
             }
@@ -677,7 +682,7 @@ public class CarePlanDaoImpl extends AbstractDao implements CarePlanDao {
 	                Criterion orCond= null;
 	                if (status.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'")
+	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'")
 	                			);
 	                } 
 	                disjunction.add(orCond);

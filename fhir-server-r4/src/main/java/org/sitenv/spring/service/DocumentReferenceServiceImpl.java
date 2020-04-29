@@ -18,13 +18,13 @@ public class DocumentReferenceServiceImpl implements DocumentReferenceService {
 	
 	@Override
     @Transactional
-    public DafDocumentReference getDocumentReferenceById(int id) {
+    public DafDocumentReference getDocumentReferenceById(String id) {
         return this.documentReferenceDao.getDocumentReferenceById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafDocumentReference getDocumentReferenceByVersionId(int theId, String versionId) {
+	public DafDocumentReference getDocumentReferenceByVersionId(String theId, String versionId) {
 		return this.documentReferenceDao.getDocumentReferenceByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class DocumentReferenceServiceImpl implements DocumentReferenceService {
 
    @Override
    @Transactional
-   public List<DafDocumentReference> getDocumentReferenceHistoryById(int theId) {
+   public List<DafDocumentReference> getDocumentReferenceHistoryById(String theId) {
 	   return this.documentReferenceDao.getDocumentReferenceHistoryById(theId);
    }
 }

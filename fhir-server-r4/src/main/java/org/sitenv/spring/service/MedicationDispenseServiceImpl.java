@@ -18,13 +18,13 @@ public class MedicationDispenseServiceImpl implements MedicationDispenseService 
 
 	@Override
 	@Transactional
-	public DafMedicationDispense getMedicationDispenseById(int id) {
+	public DafMedicationDispense getMedicationDispenseById(String id) {
 		return this.medicationDispenseDao.getMedicationDispenseById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafMedicationDispense getMedicationDispenseByVersionId(int theId, String versionId) {
+	public DafMedicationDispense getMedicationDispenseByVersionId(String theId, String versionId) {
 		return this.medicationDispenseDao.getMedicationDispenseByVersionId(theId, versionId);
 	}
 
@@ -36,7 +36,7 @@ public class MedicationDispenseServiceImpl implements MedicationDispenseService 
 
 	@Override
 	@Transactional
-	public List<DafMedicationDispense> getMedicationDispenseHistoryById(int theId) {
+	public List<DafMedicationDispense> getMedicationDispenseHistoryById(String theId) {
 		return this.medicationDispenseDao.getMedicationDispenseHistoryById(theId);
 	}
 

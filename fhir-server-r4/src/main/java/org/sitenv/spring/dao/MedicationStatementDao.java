@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface MedicationStatementDao {
 	
-public DafMedicationStatement getMedicationStatementById(int id);
+public DafMedicationStatement getMedicationStatementById(String id);
 	
-	public DafMedicationStatement getMedicationStatementByVersionId(int theId, String versionId);
+	public DafMedicationStatement getMedicationStatementByVersionId(String theId, String versionId);
 		
 	public List<DafMedicationStatement> search(SearchParameterMap paramMap);
 	
-	public List<DafMedicationStatement> getMedicationStatementHistoryById(int theId);
+	public List<DafMedicationStatement> getMedicationStatementHistoryById(String theId);
 }

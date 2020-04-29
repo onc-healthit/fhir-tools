@@ -7,10 +7,7 @@ import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.DateRangeParam;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.StringAndListParam;
-import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.*;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -20,6 +17,7 @@ import org.hl7.fhir.r4.model.Patient.PatientCommunicationComponent;
 import org.hl7.fhir.r4.model.Patient.PatientLinkComponent;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.parboiled.common.StringUtils;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafPatient;
 import org.sitenv.spring.service.PatientService;
@@ -36,7 +34,7 @@ import java.util.Set;
 public class PatientResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "Patient";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     PatientService service;
 
@@ -67,10 +65,10 @@ public class PatientResourceProvider implements IResourceProvider {
 	 */
 	@Read(version=true)
     public Patient readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafPatient dafPatient;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -100,9 +98,9 @@ public class PatientResourceProvider implements IResourceProvider {
 	@History()
     public List<Patient> getPatientHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -142,6 +140,7 @@ public class PatientResourceProvider implements IResourceProvider {
 	 * @param theActive
 	 * @param theLink
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -161,6 +160,7 @@ public class PatientResourceProvider implements IResourceProvider {
         @Description(shortDefinition = "A portion of either family or given name of the patient")
         @OptionalParam(name = Patient.SP_NAME)
         StringAndListParam theName,
+
 
         @Description(shortDefinition = "A portion of the family name of the patient")
         @OptionalParam(name = Patient.SP_FAMILY)
@@ -183,16 +183,16 @@ public class PatientResourceProvider implements IResourceProvider {
         StringAndListParam theAddress,
         
         @Description(shortDefinition="A city specified in an address")
-			@OptionalParam(name = Patient.SP_ADDRESS_CITY)
-			StringAndListParam theAddressCity, 
-  
-			@Description(shortDefinition="A state specified in an address")
-			@OptionalParam(name = Patient.SP_ADDRESS_STATE)
-			StringAndListParam theAddressState, 
-  
-			@Description(shortDefinition="A postalCode specified in an address")
-			@OptionalParam(name = Patient.SP_ADDRESS_POSTALCODE)
-			StringAndListParam theAddressPostalcode, 
+		@OptionalParam(name = Patient.SP_ADDRESS_CITY)
+		StringAndListParam theAddressCity,
+
+		@Description(shortDefinition="A state specified in an address")
+		@OptionalParam(name = Patient.SP_ADDRESS_STATE)
+		StringAndListParam theAddressState,
+
+		@Description(shortDefinition="A postalCode specified in an address")
+		@OptionalParam(name = Patient.SP_ADDRESS_POSTALCODE)
+		StringAndListParam theAddressPostalcode,
   
 			@Description(shortDefinition="A country specified in an address")
 		@OptionalParam(name = Patient.SP_ADDRESS_COUNTRY)
@@ -226,15 +226,20 @@ public class PatientResourceProvider implements IResourceProvider {
         @OptionalParam(name = Patient.SP_DECEASED)
         TokenAndListParam theDeceased,
 
-        @IncludeParam(allow = {"Patient.managingOrganization", "Patient.link.other", "*"})
-        Set<Include> theIncludes,
-
         @Sort
         SortSpec theSort,
 
         @Count
-        Integer theCount
-    ) {
+        Integer theCount,
+
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
+		@IncludeParam(allow= {"*"})
+		Set<Include> theIncludes
+	)
+
+    {
         SearchParameterMap paramMap = new SearchParameterMap();
         paramMap.add(Patient.SP_RES_ID, theId);
         paramMap.add(Patient.SP_IDENTIFIER, theIdentifier);
@@ -254,20 +259,29 @@ public class PatientResourceProvider implements IResourceProvider {
         paramMap.add(Patient.SP_ACTIVE, theActive);
         paramMap.add(Patient.SP_LINK, theLink);
         paramMap.setIncludes(theIncludes);
+		paramMap.setRevIncludes(theRevIncludes);
+
         paramMap.setSort(theSort);
         paramMap.setCount(theCount);
         
         final List<DafPatient> results = service.search(paramMap);
 
-        //ca.uhn.fhir.rest.server.IBundleProvider retVal = getDao().search(paramMap);
+		//ca.uhn.fhir.rest.server.IBundleProvider retVal = getDao().search(paramMap);
         return new IBundleProvider() {
             final InstantDt published = InstantDt.withCurrentTime();
             @Override
             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
-                List<IBaseResource> patientList = new ArrayList<IBaseResource>();
+            	List<IBaseResource> patientList = new ArrayList<IBaseResource>();
+            	List<String> patientIDs = new ArrayList<String>();
                 for(DafPatient dafPatient : results){
-                    patientList.add(createPatientObject(dafPatient));
-                }
+                    Patient patient = createPatientObject(dafPatient);
+                	patientList.add(patient);
+					patientIDs.add(((IdType)patient.getIdElement()).getResourceType()+"/"+((IdType)patient.getIdElement()).getIdPart());
+				}
+				if(theRevIncludes.size() >0 ){
+					patientList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(patientIDs));
+				}
+
                 return patientList;
             }
 
@@ -293,7 +307,7 @@ public class PatientResourceProvider implements IResourceProvider {
 			}
         };
     }
-    
+
     /**
      * This method converts DafDocumentReference object to DocumentReference object
      * @param dafPatient : DafDocumentReference patient object
@@ -307,12 +321,75 @@ public class PatientResourceProvider implements IResourceProvider {
         if(!(patientJSONObj.isNull("meta"))) {
         	if(!(patientJSONObj.getJSONObject("meta").isNull("versionId"))) {
                 patient.setId(new IdType(RESOURCE_TYPE, patientJSONObj.getString("id") + "", patientJSONObj.getJSONObject("meta").getString("versionId")));
-        	}
+        	}else{
+				patient.setId(new IdType(RESOURCE_TYPE, patientJSONObj.getString("id") + "", VERSION_ID));
+			}
         }
         else {
             patient.setId(new IdType(RESOURCE_TYPE, patientJSONObj.getString("id") + "", VERSION_ID));
         }
 
+		// set extensions
+		if (!(patientJSONObj.isNull("extension"))) {
+			JSONArray externalExtensionJSON = patientJSONObj.getJSONArray("extension");
+			int noOfExternalExtensions = externalExtensionJSON.length();
+			List<Extension> extension = new ArrayList<>();
+			for (int i = 0; i < noOfExternalExtensions; i++) {
+				Extension theExtension = new Extension();
+				if (!(externalExtensionJSON.getJSONObject(i).isNull("url"))) {
+					theExtension.setUrl((externalExtensionJSON.getJSONObject(i).getString("url")));
+				}
+
+				if (!(externalExtensionJSON.getJSONObject(i).isNull("valueCode"))) {
+					CodeType theCoding = new CodeType();
+					theCoding.setValue(externalExtensionJSON.getJSONObject(i).getString("valueCode"));
+					theExtension.setValue(theCoding);
+				}
+
+				if (!(externalExtensionJSON.getJSONObject(i).isNull("valueString"))) {
+					StringType valueCode = new StringType(externalExtensionJSON.getJSONObject(i).getString("valueString"));
+					theExtension.setValue(valueCode);
+				}
+
+
+				if (!(externalExtensionJSON.getJSONObject(i).isNull("extension"))) {
+					JSONArray iExtensionJSON = externalExtensionJSON.getJSONObject(i).getJSONArray("extension");
+					int noOfExtensions = iExtensionJSON.length();
+					List<Extension> childList = new ArrayList<Extension>();
+					for (int k = 0; k < noOfExtensions; k++) {
+						Extension childExt = new Extension();
+						if (!(iExtensionJSON.getJSONObject(k).isNull("url"))) {
+							childExt.setUrl((iExtensionJSON.getJSONObject(k).getString("url")));
+						}
+
+						if (!(iExtensionJSON.getJSONObject(k).isNull("valueString"))) {
+							StringType value = new StringType(iExtensionJSON.getJSONObject(k).getString("valueString"));
+							childExt.setValue(value);
+						}
+						if (!(iExtensionJSON.getJSONObject(k).isNull("valueCoding"))) {
+							Coding theCoding = new Coding();
+							if (!(iExtensionJSON.getJSONObject(k).getJSONObject("valueCoding").isNull("code"))) {
+								theCoding.setCode(iExtensionJSON.getJSONObject(k).getJSONObject("valueCoding").getString("code"));
+							}
+
+							if (!(iExtensionJSON.getJSONObject(k).getJSONObject("valueCoding").isNull("system"))) {
+								theCoding.setSystem(iExtensionJSON.getJSONObject(k).getJSONObject("valueCoding").getString("system"));
+							}
+							if (!(iExtensionJSON.getJSONObject(k).getJSONObject("valueCoding").isNull("display"))) {
+								theCoding.setDisplay(iExtensionJSON.getJSONObject(k).getJSONObject("valueCoding").getString("display"));
+							}
+							childExt.setValue(theCoding);
+						}
+						childList.add(childExt);
+					}
+					theExtension.setExtension(childList);
+				}
+				extension.add(theExtension);
+			}
+			patient.setExtension(extension);
+		}
+        
+        
         //Set identifier
         if(!(patientJSONObj.isNull("identifier"))) {
         	JSONArray identifierJSON = patientJSONObj.getJSONArray("identifier");
@@ -393,7 +470,9 @@ public class PatientResourceProvider implements IResourceProvider {
         if(!(patientJSONObj.isNull("active"))) {
             patient.setActive(patientJSONObj.getBoolean("active"));
         }
-                
+
+
+
         // Set name
         if(!(patientJSONObj.isNull("name"))) {
         	JSONArray nameJSON = patientJSONObj.getJSONArray("name");
@@ -418,14 +497,18 @@ public class PatientResourceProvider implements IResourceProvider {
             		List<StringType> givenList = new ArrayList<StringType>();
             		JSONArray givenNames = nameJSON.getJSONObject(n).getJSONArray("given");
             		for(int g = 0; g < givenNames.length(); g++) {
+
             			String givenName = givenNames.getString(g) ;
     				   	StringType givenStringType = new StringType();
     				   	givenStringType.setValue(givenName);
     				   	givenList.add(givenStringType);
+
+
             		}
             		name.setGiven(givenList); 
         		}
-        		
+
+
         		if(!(nameJSON.getJSONObject(n).isNull("prefix"))) {
             		List<StringType> prefixList = new ArrayList<StringType>();
             		JSONArray prefixNames = nameJSON.getJSONObject(n).getJSONArray("prefix");
@@ -447,7 +530,7 @@ public class PatientResourceProvider implements IResourceProvider {
     				   	suffixStringType.setValue(suffixName);
     				   	suffixList.add(suffixStringType);
             		}
-            		name.setSuffix(suffixList); 
+            		name.setSuffix(suffixList);
         		}
         		nameList.add(name);
         	}      
@@ -597,7 +680,6 @@ public class PatientResourceProvider implements IResourceProvider {
 	  						}
   	  						codingList.add(theCoding);
   	  					}
-  	  					
   	  					theCommunicationLanguage.setCoding(codingList);
   	  				}
   	  				theCommunication.setLanguage(theCommunicationLanguage);
@@ -793,6 +875,9 @@ public class PatientResourceProvider implements IResourceProvider {
         	}
         	patient.setLink(linksList);
         }
-        return patient;
+
+
+
+		return patient;
     }
 }

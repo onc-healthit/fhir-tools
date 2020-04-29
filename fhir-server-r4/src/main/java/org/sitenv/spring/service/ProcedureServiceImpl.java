@@ -18,13 +18,13 @@ public class ProcedureServiceImpl implements ProcedureService {
 	
 	@Override
     @Transactional
-    public DafProcedure getProcedureById(int id) {
+    public DafProcedure getProcedureById(String id) {
         return this.procedureDao.getProcedureById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafProcedure getProcedureByVersionId(int theId, String versionId) {
+	public DafProcedure getProcedureByVersionId(String theId, String versionId) {
 		return this.procedureDao.getProcedureByVersionId(theId, versionId);
 	}
 	
@@ -36,7 +36,7 @@ public class ProcedureServiceImpl implements ProcedureService {
 
    @Override
    @Transactional
-   public List<DafProcedure> getProcedureHistoryById(int theId) {
+   public List<DafProcedure> getProcedureHistoryById(String theId) {
 	   return this.procedureDao.getProcedureHistoryById(theId);
    }
 }

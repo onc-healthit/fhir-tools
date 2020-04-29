@@ -18,19 +18,19 @@ public class OrganizationServiceImpl implements OrganizationService {
 	
 	@Override
     @Transactional
-    public DafOrganization getOrganizationById(int id) {
+    public DafOrganization getOrganizationById(String id) {
     return this.organizationDao.getOrganizationById(id);
     }
 
 	@Override
 	@Transactional
-	public DafOrganization getOrganizationByVersionId(int theId, String versionId) {
+	public DafOrganization getOrganizationByVersionId(String theId, String versionId) {
     return this.organizationDao.getOrganizationByVersionId(theId, versionId);
 	}
 
 	@Override
 	@Transactional
-	public List<DafOrganization> getOrganizationHistoryById(int theId) {
+	public List<DafOrganization> getOrganizationHistoryById(String theId) {
 	return this.organizationDao.getOrganizationHistoryById(theId);
 	}
 

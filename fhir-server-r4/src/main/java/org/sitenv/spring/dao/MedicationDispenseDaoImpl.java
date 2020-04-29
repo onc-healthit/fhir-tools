@@ -24,7 +24,7 @@ public class MedicationDispenseDaoImpl extends AbstractDao implements Medication
 	 * @return : DafMedicationDispense object
 	 */
 	@Override
-	public DafMedicationDispense getMedicationDispenseById(int id) {
+	public DafMedicationDispense getMedicationDispenseById(String id) {
 		Criteria criteria = getSession().createCriteria(DafMedicationDispense.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafMedicationDispense) criteria.list().get(0);
@@ -37,7 +37,7 @@ public class MedicationDispenseDaoImpl extends AbstractDao implements Medication
 	 * @return : DafMedicationDispense object
 	 */
 	@Override
-	public DafMedicationDispense getMedicationDispenseByVersionId(int theId, String versionId) {
+	public DafMedicationDispense getMedicationDispenseByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafMedicationDispense.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -166,7 +166,7 @@ public class MedicationDispenseDaoImpl extends AbstractDao implements Medication
 	                Criterion orCond= null;
 	                if (status.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'")
+	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'")
 	                			);
 	                } 
 	                disjunction.add(orCond);
@@ -344,17 +344,19 @@ public class MedicationDispenseDaoImpl extends AbstractDao implements Medication
                     String handedOverDate = whenHandedOverDate.getValueAsString();
                     if(whenHandedOverDate.getPrefix() != null) {
                         if(whenHandedOverDate.getPrefix().getValue() == "gt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenHandedOver' > '"+handedOverDate+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenHandedOver')::DATE > '"+handedOverDate+ "'"));
                         }else if(whenHandedOverDate.getPrefix().getValue() == "lt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenHandedOver' < '"+handedOverDate+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenHandedOver')::DATE < '"+handedOverDate+ "'"));
                         }else if(whenHandedOverDate.getPrefix().getValue() == "ge"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenHandedOver' >= '"+handedOverDate+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenHandedOver')::DATE >= '"+handedOverDate+ "'"));
                         }else if(whenHandedOverDate.getPrefix().getValue() == "le"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenHandedOver' <= '"+handedOverDate+ "'"));
-                        }else {
-                        	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenHandedOver' = '"+handedOverDate+"'"));                    
-                        }
-                    }
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenHandedOver')::DATE <= '"+handedOverDate+ "'"));
+						}else if(whenHandedOverDate.getPrefix().getValue() == "eq"){
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenHandedOver')::DATE = '"+handedOverDate+ "'"));
+						}
+                    }else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenHandedOver')::DATE = '"+handedOverDate+"'"));
+					}
                 }            
             }
         }
@@ -374,17 +376,19 @@ public class MedicationDispenseDaoImpl extends AbstractDao implements Medication
                     String whenPreparedDate = whenPrepared.getValueAsString();
                     if(whenPrepared.getPrefix() != null) {
                         if(whenPrepared.getPrefix().getValue() == "gt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenPrepared' > '"+whenPreparedDate+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenPrepared')::DATE > '"+whenPreparedDate+ "'"));
                         }else if(whenPrepared.getPrefix().getValue() == "lt"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenPrepared' < '"+whenPreparedDate+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenPrepared')::DATE < '"+whenPreparedDate+ "'"));
                         }else if(whenPrepared.getPrefix().getValue() == "ge"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenPrepared' >= '"+whenPreparedDate+ "'"));
+                            criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenPrepared')::DATE >= '"+whenPreparedDate+ "'"));
                         }else if(whenPrepared.getPrefix().getValue() == "le"){
-                            criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenPrepared' <= '"+whenPreparedDate+ "'"));
-                        }else {
-                        	criteria.add(Restrictions.sqlRestriction("{alias}.data->>'whenPrepared' = '"+whenPreparedDate+"'"));                    
-                        }
-                    }
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenPrepared')::DATE <= '"+whenPreparedDate+ "'"));
+						}else if(whenPrepared.getPrefix().getValue() == "eq"){
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenPrepared')::DATE = '"+whenPreparedDate+ "'"));
+						}
+                    }else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'whenPrepared')::DATE = '"+whenPreparedDate+"'"));
+					}
                 }            
             }
         }
@@ -586,7 +590,7 @@ public class MedicationDispenseDaoImpl extends AbstractDao implements Medication
      */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafMedicationDispense> getMedicationDispenseHistoryById(int theId) {
+	public List<DafMedicationDispense> getMedicationDispenseHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafMedicationDispense.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafMedicationDispense>) criteria.list();

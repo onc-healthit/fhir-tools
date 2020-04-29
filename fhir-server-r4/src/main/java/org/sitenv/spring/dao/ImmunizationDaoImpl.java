@@ -24,7 +24,7 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 	 * @param id : ID of the resource
 	 * @return : DAF object of the Immunization
 	 */
-	public DafImmunization getImmunizationById(int id) {
+	public DafImmunization getImmunizationById(String id) {
 		List<DafImmunization> list = getSession().createNativeQuery(
 				"select * from immunization where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafImmunization.class)
 					.getResultList();
@@ -39,7 +39,7 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 	 * @param versionId : version of the Immunization record
 	 * @return : DAF object of the Immunization
 	 */
-	public DafImmunization getImmunizationByVersionId(int theId, String versionId) {
+	public DafImmunization getImmunizationByVersionId(String theId, String versionId) {
 		DafImmunization list = getSession().createNativeQuery(
 			"select * from immunization where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafImmunization.class)
 				.getSingleResult();
@@ -125,21 +125,16 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 					DateParam reactionDate = (DateParam) params;
 					String reactionDateFormat = reactionDate.getValueAsString();
 
-					if (reactionDate.getPrefix() != null) {
-						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'reactionDate' = '" + reactionDateFormat + "'"));
+					if (reactionDate.getPrefix().getValue() == "eq") {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'reactionDate')::DATE = '" + reactionDateFormat + "'"));
 					} else if (reactionDate.getPrefix().getValue() == "gt") {
-						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'reactionDate' > '" + reactionDateFormat + "'"));
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'reactionDate')::DATE > '" + reactionDateFormat + "'"));
 					} else if (reactionDate.getPrefix().getValue() == "lt") {
-						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'reactionDate' < '" + reactionDateFormat + "'"));
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'reactionDate')::DATE < '" + reactionDateFormat + "'"));
 					} else if (reactionDate.getPrefix().getValue() == "ge") {
-						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'reactionDate' >= '" + reactionDateFormat + "'"));
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'reactionDate')::DATE >= '" + reactionDateFormat + "'"));
 					} else if (reactionDate.getPrefix().getValue() == "le") {
-						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'reactionDate' <= '" + reactionDateFormat + "'"));
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'reactionDate')::DATE <= '" + reactionDateFormat + "'"));
 					} 
 				}
 
@@ -161,7 +156,7 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 					TokenParam status = (TokenParam) params;
 					if (!status.isEmpty()) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 					} else if (!status.getMissing()) {
@@ -688,25 +683,22 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 
 					if (date.getPrefix() != null) {
 						if (date.getPrefix().getValue() == "gt") {
-							criterion = Restrictions.or(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' > '" + dateFormat + "'"));
+							criterion = Restrictions.or(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE > '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "lt") {
-							criterion = Restrictions.or(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' < '" + dateFormat + "'"));
+							criterion = Restrictions.or(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE < '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "ge") {
-							criterion = Restrictions.or(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' >= '" + dateFormat + "'"));
+							criterion = Restrictions.or(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE >= '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "le") {
-							criterion = Restrictions.or(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' <= '" + dateFormat + "'"));
-						} else {
-							criterion = Restrictions.or(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' = '" + dateFormat + "'"));
+							criterion = Restrictions.or(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE <= '" + dateFormat + "'"));
+						} else if (date.getPrefix().getValue() == "eq") {
+							criterion = Restrictions.or(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE = '" + dateFormat + "'"));
 						}
-						disjunction.add(criterion);
+					}else {
+						criterion = Restrictions.or(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE = '" + dateFormat + "'"));
 					}
-					criteria.add(disjunction);
+					disjunction.add(criterion);
 				}
+				criteria.add(disjunction);
 			}
 		}
 	}
@@ -773,7 +765,7 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 	 * @return : List of Immunization DAF records
 	 */
 	@Override
-	public List<DafImmunization> getImmunizationHistoryById(int theId) {
+	public List<DafImmunization> getImmunizationHistoryById(String theId) {
 		List<DafImmunization> list = getSession().createNativeQuery(
 				"select * from immunization where data->>'id' = '"+theId+"' order by data->'meta'->>'versionId' desc",  DafImmunization.class).getResultList();
 		return list;

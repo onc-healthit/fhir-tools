@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface PractitionerService {
 	
-	public DafPractitioner getPractitionerById(int id);
+	public DafPractitioner getPractitionerById(String id);
 	
-	public DafPractitioner getPractitionerByVersionId(int theId, String versionId);
+	public DafPractitioner getPractitionerByVersionId(String theId, String versionId);
 	
-	public List<DafPractitioner> getPractitionerHistoryById(int theId);
+	public List<DafPractitioner> getPractitionerHistoryById(String theId);
 	
 	public List<DafPractitioner> search(SearchParameterMap paramMap);
 }

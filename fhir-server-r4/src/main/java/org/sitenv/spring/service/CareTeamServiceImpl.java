@@ -18,13 +18,13 @@ public class CareTeamServiceImpl implements CareTeamService {
 
 	@Override
 	@Transactional
-	public DafCareTeam getCareTeamById(int id) {
+	public DafCareTeam getCareTeamById(String id) {
         return this.careTeamDao.getCareTeamById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafCareTeam getCareTeamByVersionId(int theId, String versionId) {
+	public DafCareTeam getCareTeamByVersionId(String theId, String versionId) {
 		return this.careTeamDao.getCareTeamByVersionId(theId, versionId);
 	}
 	
@@ -35,7 +35,7 @@ public class CareTeamServiceImpl implements CareTeamService {
     }
 
 	@Override
-	public List<DafCareTeam> getCareTeamHistoryById(int theId) {
+	public List<DafCareTeam> getCareTeamHistoryById(String theId) {
 		return this.careTeamDao.getCareTeamHistoryById(theId);
 	}	
 }

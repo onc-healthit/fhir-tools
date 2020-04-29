@@ -31,7 +31,7 @@ import java.util.Set;
 public class ObservationResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Observation";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	ObservationService service;
 
@@ -65,10 +65,10 @@ public class ObservationResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public Observation readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafObservation dafObservation;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -103,9 +103,9 @@ public class ObservationResourceProvider implements IResourceProvider {
 	@History()
 	public List<Observation> getObservationHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -133,6 +133,7 @@ public class ObservationResourceProvider implements IResourceProvider {
 	 * @param theServletRequest
 	 * @param theId
 	 * @param theIdentifier
+	 * @param theDate
 	 * @param theSubject
 	 * @param theValueQuantity
 	 * @param theBasedOn
@@ -145,6 +146,8 @@ public class ObservationResourceProvider implements IResourceProvider {
 	 * @param theCategory
 	 * @param theCode
 	 * @param theIncludes
+	 * @param theRevIncludes
+	 * @param thePatient
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -162,12 +165,8 @@ public class ObservationResourceProvider implements IResourceProvider {
 			TokenAndListParam theIdentifier,
 
 			@Description(shortDefinition = "Obtained date/time. If the obtained element is a period, a date that falls in the period") 
-			@OptionalParam(name = Observation.SP_DATE) 
+			@OptionalParam(name = Observation.SP_DATE)
 			DateRangeParam theDate,
-
-			@Description(shortDefinition = "The reason why the expected value in the element Observation.value[x] or Observation.component.value[x] is missing.")
-			@OptionalParam(name = Observation.SP_COMBO_DATA_ABSENT_REASON) 
-			TokenAndListParam theComboDataAbsentReason,
 
 			@Description(shortDefinition = "The code of the observation type") 
 			@OptionalParam(name = Observation.SP_CODE) 
@@ -269,7 +268,11 @@ public class ObservationResourceProvider implements IResourceProvider {
 			@OptionalParam(name = Observation.SP_DEVICE) 
 			ReferenceAndListParam theDevice,
 
-			@IncludeParam(allow = { "*" }) Set<Include> theIncludes,
+			@IncludeParam(allow = { "*" })
+			Set<Include> theIncludes,
+
+			@IncludeParam(reverse=true, allow= {"*"})
+			Set<Include> theRevIncludes,
 
 			@Sort SortSpec theSort,
 
@@ -290,7 +293,8 @@ public class ObservationResourceProvider implements IResourceProvider {
 				paramMap.add(Observation.SP_CATEGORY, theCategory);
 				paramMap.add(Observation.SP_CODE, theCode);
 				paramMap.add(Observation.SP_PATIENT, thePatient);
-		
+				paramMap.add(Observation.SP_DATE, theDate);
+
 				paramMap.setIncludes(theIncludes);
 				paramMap.setSort(theSort);
 				paramMap.setCount(theCount);
@@ -303,8 +307,14 @@ public class ObservationResourceProvider implements IResourceProvider {
 					@Override
 					public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 						List<IBaseResource> observationList = new ArrayList<IBaseResource>();
+						List<String> ids = new ArrayList<String>();
 						for (DafObservation dafObservation : results) {
-							observationList.add(createObservationObject(dafObservation));
+							Observation observation = createObservationObject(dafObservation);
+							observationList.add(observation);
+							ids.add(((IdType)observation.getIdElement()).getResourceType()+"/"+((IdType)observation.getIdElement()).getIdPart());
+						}
+						if(theRevIncludes.size() >0 ){
+							observationList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
 						}
 						return observationList;
 					}
@@ -346,6 +356,8 @@ public class ObservationResourceProvider implements IResourceProvider {
 			if (!(observationJSON.getJSONObject("meta").isNull("versionId"))) {
 				observation.setId(new IdType(RESOURCE_TYPE, observationJSON.getString("id") + "",
 						observationJSON.getJSONObject("meta").getString("versionId")));
+			}else {
+				observation.setId(new IdType(RESOURCE_TYPE, observationJSON.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			observation.setId(new IdType(RESOURCE_TYPE, observationJSON.getString("id") + "", VERSION_ID));
@@ -541,14 +553,23 @@ public class ObservationResourceProvider implements IResourceProvider {
 		if (!observationJSON.isNull("subject")) {
 			JSONObject subjectJSON = observationJSON.getJSONObject("subject");
 			Reference theSubject = new Reference();
-			if (!subjectJSON.isNull("reference")) {
-				theSubject.setReference(subjectJSON.getString("reference"));
+			if (!subjectJSON.isNull("reference"))  theSubject.setReference(subjectJSON.getString("reference"));
+			if (!subjectJSON.isNull("display")) theSubject.setDisplay(subjectJSON.getString("display"));
+			observation.setSubject(theSubject);
+		}
+
+		// SetEncounter
+		if (!observationJSON.isNull("encounter")) {
+			JSONObject encounterJSON = observationJSON.getJSONObject("encounter");
+			Reference theEncounter = new Reference();
+			if (!encounterJSON .isNull("reference")) {
+				theEncounter.setReference(encounterJSON .getString("reference"));
 
 			}
-			if (!subjectJSON.isNull("display")) {
-				theSubject.setDisplay(subjectJSON.getString("display"));
+			if (!encounterJSON .isNull("display")) {
+				theEncounter.setDisplay(encounterJSON .getString("display"));
 			}
-			observation.setSubject(theSubject);
+			observation.setEncounter(theEncounter);
 		}
 
 		// set hasMember
@@ -591,6 +612,40 @@ public class ObservationResourceProvider implements IResourceProvider {
 			}
 			observation.setPerformer(performerList);
 		}
+
+		// set Code
+		if (!observationJSON.isNull("valueCodeableConcept")) {
+			JSONObject valueCodeableConceptJSON = observationJSON.getJSONObject("valueCodeableConcept");
+			CodeableConcept theCode = new CodeableConcept();
+			if (!valueCodeableConceptJSON.isNull("coding")) {
+				JSONArray codingJSON = valueCodeableConceptJSON.getJSONArray("coding");
+				List<Coding> codingLists = new ArrayList<Coding>();
+				int noOfCodings = codingJSON.length();
+				for (int i = 0; i < noOfCodings; i++) {
+					Coding theCoding = new Coding();
+					if (!codingJSON.getJSONObject(i).isNull("system")) {
+						theCoding.setSystem(codingJSON.getJSONObject(i).getString("system"));
+					}
+					if (!codingJSON.getJSONObject(i).isNull("code")) {
+						theCoding.setCode(codingJSON.getJSONObject(i).getString("code"));
+					}
+					if (!codingJSON.getJSONObject(i).isNull("display")) {
+						theCoding.setDisplay(codingJSON.getJSONObject(i).getString("display"));
+					}
+					if (!codingJSON.getJSONObject(i).isNull("userSelected")) {
+						theCoding.setUserSelected(codingJSON.getJSONObject(i).getBoolean("userSelected"));
+					}
+					codingLists.add(theCoding);
+				}
+				theCode.setCoding(codingLists);
+			}
+			if (!valueCodeableConceptJSON.isNull("text")) {
+				theCode.setText(valueCodeableConceptJSON.getString("text"));
+			}
+			observation.setValue(theCode);
+		}
+
+
 		// Set Value Quantity
 		if (!observationJSON.isNull("valueQuantity")) {
 			JSONObject valueQuantityJSON = observationJSON.getJSONObject("valueQuantity");
@@ -629,6 +684,142 @@ public class ObservationResourceProvider implements IResourceProvider {
 			observation.setDevice(theDevice);
 		}
 
+		//Set effectiveDateTime
+		if(!(observationJSON.isNull("effectiveDateTime"))) {
+			DateTimeType theEffectiveDateTime = new DateTimeType();
+			Date effectiveDateTime = CommonUtil.convertStringToDate(observationJSON.getString("effectiveDateTime"));
+			theEffectiveDateTime.setValue(effectiveDateTime);
+			observation.setEffective(theEffectiveDateTime);
+		}
+
+		//Set issuedDateTime
+		if(!(observationJSON.isNull("issued"))) {
+			Date issuedDateTime = CommonUtil.convertStringToDate(observationJSON.getString("issued"));
+			observation.setIssued(issuedDateTime);
+		}
+
+		//Set dataAbsentReason
+		if(!(observationJSON.isNull("dataAbsentReason"))) {
+			JSONObject dataAbsentReasonJSON = (JSONObject) observationJSON.getJSONObject("dataAbsentReason");
+			CodeableConcept theCode = new CodeableConcept();
+			//set Code
+			JSONArray codingJSON = dataAbsentReasonJSON.getJSONArray("coding");
+			List<Coding> codingLists = new ArrayList<Coding>();
+			int noOfCodings = codingJSON.length();
+			for (int j = 0; j < noOfCodings; j++) {
+				Coding theCoding = new Coding();
+				if (!codingJSON.getJSONObject(j).isNull("system")) {
+					theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+				}
+				if (!codingJSON.getJSONObject(j).isNull("code")) {
+					theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+				}
+				if (!codingJSON.getJSONObject(j).isNull("display")) {
+					theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+				}
+				codingLists.add(theCoding);
+			}
+			if (!dataAbsentReasonJSON.isNull("text")) {
+				theCode.setText(dataAbsentReasonJSON.getString("text"));
+			}
+			theCode.setCoding(codingLists);
+			observation.setDataAbsentReason(theCode);
+		}
+
+			//Set Component
+		if(!(observationJSON.isNull("component"))){
+			JSONArray componentJSON = observationJSON.getJSONArray("component");
+			List<Observation.ObservationComponentComponent> componentList = new ArrayList();
+
+			for(int i=0; i < componentJSON.length(); i++) {
+				Observation.ObservationComponentComponent compMap = new Observation.ObservationComponentComponent();
+
+				//Set Component.Code
+				if(!(componentJSON.getJSONObject(i).isNull("code"))){
+					JSONObject codeJSON = ((JSONObject) componentJSON.get(i)).getJSONObject("code");
+					CodeableConcept theCode = new CodeableConcept();
+					//set Code
+					JSONArray codingJSON = codeJSON.getJSONArray("coding");
+					List<Coding> codingLists = new ArrayList<Coding>();
+					int noOfCodings = codingJSON.length();
+					for (int j = 0; j < noOfCodings; j++) {
+						Coding theCoding = new Coding();
+						if (!codingJSON.getJSONObject(j).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(j).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(j).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+						}
+						codingLists.add(theCoding);
+					}
+					if (!codeJSON.isNull("text")) {
+						theCode.setText(codeJSON.getString("text"));
+					}
+					theCode.setCoding(codingLists);
+					compMap.setCode(theCode);
+				}
+
+				//Set Component.valueQuantity
+				if(!(componentJSON.getJSONObject(i).isNull("valueQuantity"))){
+					JSONObject valueQuantityJSON = ((JSONObject) componentJSON.get(i)).getJSONObject("valueQuantity");
+					JSONObject valueQty = new JSONObject();
+					Quantity theValueQuantity = new Quantity();
+
+					if (!valueQuantityJSON.isNull("value")) {
+						double double1 = valueQuantityJSON.getDouble("value");
+						theValueQuantity.setValue(double1);
+					}
+					if (!valueQuantityJSON.isNull("unit")) {
+						String string = valueQuantityJSON.getString("unit");
+						theValueQuantity.setUnit(string);
+					}
+					if (!valueQuantityJSON.isNull("system")) {
+						String string = valueQuantityJSON.getString("system");
+						theValueQuantity.setSystem(string);
+					}
+					if (!valueQuantityJSON.isNull("code")) {
+						String string = valueQuantityJSON.getString("code");
+						theValueQuantity.setCode(string);
+					}
+					compMap.setValue(theValueQuantity);
+				}
+
+				//Set Component.dataAbsentReason
+				if(!(componentJSON.getJSONObject(i).isNull("dataAbsentReason"))){
+					JSONObject dataAbsentReasonJSON = ((JSONObject) componentJSON.get(i)).getJSONObject("dataAbsentReason");
+					CodeableConcept theCode = new CodeableConcept();
+					//set Code
+					JSONArray codingJSON = dataAbsentReasonJSON.getJSONArray("coding");
+					List<Coding> codingLists = new ArrayList<Coding>();
+					int noOfCodings = codingJSON.length();
+					for (int j = 0; j < noOfCodings; j++) {
+						Coding theCoding = new Coding();
+						if (!codingJSON.getJSONObject(j).isNull("system")) {
+							theCoding.setSystem(codingJSON.getJSONObject(j).getString("system"));
+						}
+						if (!codingJSON.getJSONObject(j).isNull("code")) {
+							theCoding.setCode(codingJSON.getJSONObject(j).getString("code"));
+						}
+						if (!codingJSON.getJSONObject(j).isNull("display")) {
+							theCoding.setDisplay(codingJSON.getJSONObject(j).getString("display"));
+						}
+						codingLists.add(theCoding);
+					}
+					if (!dataAbsentReasonJSON.isNull("text")) {
+						theCode.setText(dataAbsentReasonJSON.getString("text"));
+					}
+					theCode.setCoding(codingLists);
+					compMap.setDataAbsentReason(theCode);
+				}
+				componentList.add(compMap);
+			}
+			observation.setComponent(componentList);
+		}
+
+
 		// set Derived from
 		if (!observationJSON.isNull("derivedFrom")) {
 			JSONArray derivedFromJSON = observationJSON.getJSONArray("derivedFrom");
@@ -648,6 +839,7 @@ public class ObservationResourceProvider implements IResourceProvider {
 				derivedFromList.add(theDerivedFrom);
 			}
 			observation.setDerivedFrom(derivedFromList);
+
 		}
 		return observation;
 	}

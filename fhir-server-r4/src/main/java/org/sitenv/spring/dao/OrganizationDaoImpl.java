@@ -25,7 +25,7 @@ public class OrganizationDaoImpl extends AbstractDao implements OrganizationDao 
 	 * @param id : ID of the resource
 	 * @return : DAF object of the organization
 	 */
-	public DafOrganization getOrganizationById(int id) {
+	public DafOrganization getOrganizationById(String id) {
 		Criteria criteria = getSession().createCriteria(DafOrganization.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
@@ -41,7 +41,7 @@ public class OrganizationDaoImpl extends AbstractDao implements OrganizationDao 
 	 * @return : DAF object of the organization
 	 */
 	@Override
-	public DafOrganization getOrganizationByVersionId(int theId, String versionId) {
+	public DafOrganization getOrganizationByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafOrganization.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
@@ -54,12 +54,12 @@ public class OrganizationDaoImpl extends AbstractDao implements OrganizationDao 
 	/**
 	 * This method builds criteria for fetching history of the organization by id
 	 * 
-	 * @param theId : ID of the organization
+	 * @param id : ID of the organization
 	 * @return : List of organization DAF records
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafOrganization> getOrganizationHistoryById(int id) {
+	public List<DafOrganization> getOrganizationHistoryById(String id) {
 		Criteria criteria = getSession().createCriteria(DafOrganization.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + id + "'"));

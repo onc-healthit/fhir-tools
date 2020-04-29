@@ -17,12 +17,12 @@ public class GoalServiceImpl implements GoalService {
     private GoalDao goalDao;
 
 	@Override
-	public DafGoal getGoalById(int id) {
+	public DafGoal getGoalById(String id) {
 		return this.goalDao.getGoalById(id);
 	}
 
 	@Override
-	public DafGoal getGoalByVersionId(int theId, String versionId) {
+	public DafGoal getGoalByVersionId(String theId, String versionId) {
 		return this.goalDao.getGoalByVersionId(theId, versionId);
 	}
 
@@ -32,7 +32,7 @@ public class GoalServiceImpl implements GoalService {
 	}
 
 	@Override
-	public List<DafGoal> getGoalHistoryById(int theId) {
+	public List<DafGoal> getGoalHistoryById(String theId) {
 		return this.goalDao.getGoalHistoryById(theId);
 	}
 

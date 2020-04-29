@@ -1,5 +1,6 @@
 package org.sitenv.spring;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -25,14 +26,12 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class DeviceResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Device";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	DeviceService service;
 
@@ -65,10 +64,10 @@ public class DeviceResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public Device readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafDevice dafDevice;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -102,9 +101,9 @@ public class DeviceResourceProvider implements IResourceProvider {
 	@History()
 	public List<Device> getDeviceHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -133,13 +132,14 @@ public class DeviceResourceProvider implements IResourceProvider {
 	 * @param theCarrier
 	 * @param theManufacturer
 	 * @param theExpirationDate
-	 * @param theLotNumber
 	 * @param theSerialNumber
 	 * @param theDeviceName
 	 * @param theType
 	 * @param theModelNumber
 	 * @param thePatient
 	 * @param theOwner
+	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -199,6 +199,12 @@ public class DeviceResourceProvider implements IResourceProvider {
 		@OptionalParam(name = "owner")
 		StringAndListParam theOwner,
 
+		@IncludeParam(allow = {"*"})
+		Set<Include> theIncludes,
+
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
 		@Sort SortSpec theSort,
 
 		@Count Integer theCount) {
@@ -228,8 +234,14 @@ public class DeviceResourceProvider implements IResourceProvider {
 			@Override
 			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 				List<IBaseResource> deviceList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
 				for (DafDevice dafDevice : results) {
-					deviceList.add(createDeviceObject(dafDevice));
+					Device device= createDeviceObject(dafDevice);
+					deviceList.add(device);
+					ids.add(((IdType)device.getIdElement()).getResourceType()+"/"+((IdType)device.getIdElement()).getIdPart());
+				}
+				if(theRevIncludes.size() >0 ){
+					deviceList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
 				}
 				return deviceList;
 			}
@@ -269,15 +281,37 @@ public class DeviceResourceProvider implements IResourceProvider {
 			if (!(deviceJSONObj.getJSONObject("meta").isNull("versionId"))) {
 				device.setId(new IdType(RESOURCE_TYPE, deviceJSONObj.getString("id") + "",
 						deviceJSONObj.getJSONObject("meta").getString("versionId")));
+			}else {
+				device.setId(new IdType(RESOURCE_TYPE, deviceJSONObj.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			device.setId(new IdType(RESOURCE_TYPE, deviceJSONObj.getString("id") + "", VERSION_ID));
 		}
 
 		// Set status
-		if (!(deviceJSONObj.isNull("status"))) {
+		if (!(deviceJSONObj.isNull("expirationDate"))) {
 			device.setStatus(Device.FHIRDeviceStatus.fromCode(deviceJSONObj.getString("status")));
 		}
+
+		// Set distinctIdentifier
+		if (!(deviceJSONObj.isNull("distinctIdentifier"))) {
+			device.setDistinctIdentifier(deviceJSONObj.getString("distinctIdentifier"));
+		}
+
+		// Set manufactureDate
+		if (!(deviceJSONObj.isNull("manufactureDate"))) {
+			String dateInStr = (String) deviceJSONObj.get("manufactureDate");
+			Date theManufactureDate = CommonUtil.convertStringToDate(dateInStr);
+			device.setManufactureDate(theManufactureDate);
+		}
+
+		// set expirationDate
+		if (!(deviceJSONObj.isNull("expirationDate"))) {
+			String dateInStr = (String) deviceJSONObj.get("expirationDate");
+			Date theExpirationDate = CommonUtil.convertStringToDate(dateInStr);
+			device.setExpirationDate(theExpirationDate);
+		}
+
 
 		 //Set identifier
         if(!(deviceJSONObj.isNull("identifier"))) {
@@ -394,6 +428,12 @@ public class DeviceResourceProvider implements IResourceProvider {
 				if (!(udiCarrierJSON.getJSONObject(i).isNull("carrierHRF"))) {
 					theUdiCarrier.setCarrierHRF(udiCarrierJSON.getJSONObject(i).getString("carrierHRF"));
 				}
+
+				if (!(udiCarrierJSON.getJSONObject(i).isNull("carrierAIDC"))) {
+					theUdiCarrier.setCarrierAIDC(Base64.getDecoder().decode(udiCarrierJSON.getJSONObject(i).getString("carrierAIDC")));
+				}
+
+
 				if (!(udiCarrierJSON.getJSONObject(i).isNull("entryType"))) {
 					theUdiCarrier.setEntryType(
 							Device.UDIEntryType.fromCode(udiCarrierJSON.getJSONObject(i).getString("entryType")));
@@ -469,12 +509,6 @@ public class DeviceResourceProvider implements IResourceProvider {
 			device.setOwner(theOwner);
 		}
 
-		// set expirationDate
-		if (!(deviceJSONObj.isNull("expirationDate"))) {
-			String dateInStr = (String) deviceJSONObj.get("expirationDate");
-			Date theExpirationDate = CommonUtil.convertStringToDate(dateInStr);
-			device.setExpirationDate(theExpirationDate);
-		}
 
 		// set type
 		if (!(deviceJSONObj.isNull("type"))) {

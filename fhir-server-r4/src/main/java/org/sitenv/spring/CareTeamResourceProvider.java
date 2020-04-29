@@ -35,7 +35,7 @@ import java.util.Set;
 public class CareTeamResourceProvider implements IResourceProvider {
 	
 	public static final String RESOURCE_TYPE = "CareTeam";
-    public static final String VERSION_ID = "4.0";
+    public static final String VERSION_ID = "1.0";
     AbstractApplicationContext context;
     CareTeamService service;
   
@@ -67,10 +67,10 @@ public class CareTeamResourceProvider implements IResourceProvider {
 	 */	
 	@Read(version=true)
     public CareTeam readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafCareTeam dafCareTeam;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -100,9 +100,9 @@ public class CareTeamResourceProvider implements IResourceProvider {
 	@History()
     public List<CareTeam> getCareTeamHistoryById( @IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-		    id = theId.getIdPartAsLong().intValue();
+		    id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 		    /*
 		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
@@ -128,11 +128,12 @@ public class CareTeamResourceProvider implements IResourceProvider {
 	 * @param theIdentifier
 	 * @param thePatient
 	 * @param theSubject
-	 * @param theContext
 	 * @param theEncounter
 	 * @param theCategory
 	 * @param theParticipant
 	 * @param theStatus
+	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @return
 	 */
 	@Search()
@@ -174,12 +175,14 @@ public class CareTeamResourceProvider implements IResourceProvider {
         @Description(shortDefinition="proposed | active | suspended | inactive | entered-in-error")
 		@OptionalParam(name = CareTeam.SP_STATUS)
 		TokenAndListParam theStatus, 
-  
-			
-        @IncludeParam(allow = {"CareTeam.managingOrganization", "*"})
+
+        @IncludeParam(allow = {"*"})
         Set<Include> theIncludes,
 
-        @Sort
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
+		@Sort
         SortSpec theSort,
 
         @Count
@@ -203,10 +206,16 @@ public class CareTeamResourceProvider implements IResourceProvider {
             @Override
             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
                 List<IBaseResource> careTeamList = new ArrayList<IBaseResource>();
-                for(DafCareTeam dafCareTeam : results){
-                	careTeamList.add(createCareTeamObject(dafCareTeam));
+				List<String> ids = new ArrayList<String>();
+				for(DafCareTeam dafCareTeam : results){
+					CareTeam careTeam = createCareTeamObject(dafCareTeam);
+					careTeamList.add(careTeam);
+					ids.add(((IdType)careTeam.getIdElement()).getResourceType()+"/"+((IdType)careTeam.getIdElement()).getIdPart());
                 }
-                return careTeamList;
+				if(theRevIncludes.size() >0 ){
+					careTeamList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+				}
+				return careTeamList;
             }
 
             @Override
@@ -245,7 +254,9 @@ public class CareTeamResourceProvider implements IResourceProvider {
 	    if(!careTeamJSONObj.isNull("meta")) {
 	    	if(!(careTeamJSONObj.getJSONObject("meta").isNull("versionId"))) {
 	    		careTeam.setId(new IdType(RESOURCE_TYPE, careTeamJSONObj.getString("id") + "", careTeamJSONObj.getJSONObject("meta").getString("versionId")));
-	    	}
+	    	}else {
+				careTeam.setId(new IdType(RESOURCE_TYPE, careTeamJSONObj.getString("id") + "", VERSION_ID));
+			}
 	    }
 	    else {
 	    	careTeam.setId(new IdType(RESOURCE_TYPE, careTeamJSONObj.getString("id") + "", VERSION_ID));

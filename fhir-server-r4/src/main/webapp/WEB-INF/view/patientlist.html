@@ -6,7 +6,7 @@
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<meta name="description" content="">
     	<meta name="author" content="">
-	
+
     	<title>FHIR Server</title>
 
 
@@ -96,7 +96,7 @@
 		            </tr>
 		        </thead>
 		        <tbody>
-		            
+
 		        </tbody>
     		</table>
 
@@ -159,7 +159,7 @@
                       <div class="modal-header">
                       </div>
                       <div class="modal-body" style="overflow:auto;" id="newscontent">
-                        
+
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -176,7 +176,7 @@
                       <div class="modal-header">
                       </div>
                       <div class="modal-body" style="overflow:auto;" id="releasecontent">
-                        
+
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -212,10 +212,10 @@
                         }
                     });
 			} );
-			
+
 			getParameterByName = function(name, url) {
 			    if (!url) url = window.location.href;
-			   // url = url.toLowerCase(); // This is just to avoid case sensitiveness  
+			   // url = url.toLowerCase(); // This is just to avoid case sensitiveness
 			    name = name.replace(/[\[\]]/g, "\\$&");// This is just to avoid case sensitiveness for query parameter name
 			    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 			        results = regex.exec(url);
@@ -240,7 +240,7 @@
 	     			"columns": [{
 	     					"data": function (data, type, row) {
 	     					   var firstColumn = JSON.parse(data.data);
-				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+firstColumn.id+"</div>";
+				               var userpoc = "<div onclick='patientId(\""+firstColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+firstColumn.id+"</div>";
 				               return userpoc;
 				           }
 	       				},{
@@ -249,17 +249,17 @@
 	       						//console.log("data--->", secondColumn.id);
 	       						if(secondColumn.name) {
 	       						   var family = secondColumn.name[0].family;
-	 	       					   var given = secondColumn.name[0].given[0];
+	 	       					   var given = secondColumn.name[0].given;
 	 	       					   var fullName = family+" "+given;
-	 	       					   var userpoc = "<div onclick='patientId("+secondColumn.id+")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
- 				            	   return userpoc;	 				              
+	 	       					   var userpoc = "<div onclick='patientId(\""+secondColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
+ 				            	   return userpoc;
 	       						}
-	       					   
+
 				           }
 	       				},{
 	       					"data": function (data, type, row) {
 	       					   var thirdColumn = JSON.parse(data.data);
-				               var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12' style='cursor:pointer'>"+thirdColumn.birthDate+"</div>";
+				               var userpoc = "<div onclick='patientId(\""+thirdColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+thirdColumn.birthDate+"</div>";
 				               return userpoc;
 				           }
 	       				}
@@ -279,7 +279,7 @@
 					},
 					error:function(e){
 						console.log(e);
-					} 
+					}
 				});
 
 			}

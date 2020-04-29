@@ -27,7 +27,7 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
 	 */
 
 	@Override
-	public DafLocation getLocationById(int id) {
+	public DafLocation getLocationById(String id) {
 		Criteria criteria = getSession().createCriteria(DafLocation.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
@@ -44,7 +44,7 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
 	 * @return : DAF object of the location
 	 */
 	@Override
-	public DafLocation getLocationByVersionId(int theId, String versionId) {
+	public DafLocation getLocationByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafLocation.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
@@ -63,7 +63,7 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafLocation> getLocationHistoryById(int theId) {
+	public List<DafLocation> getLocationHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafLocation.class)
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" + theId + "'"));
@@ -348,7 +348,7 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
 					if (!status.isEmpty()) {
 
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 

@@ -25,7 +25,7 @@ public class MedicationAdministrationDaoImpl extends AbstractDao implements Medi
 	 * @return : DafMedicationAdministration object
 	 */
 	@Override
-	public DafMedicationAdministration getMedicationAdministrationById(int id) {
+	public DafMedicationAdministration getMedicationAdministrationById(String id) {
 		Criteria criteria = getSession().createCriteria(DafMedicationAdministration.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafMedicationAdministration) criteria.list().get(0);
@@ -38,7 +38,7 @@ public class MedicationAdministrationDaoImpl extends AbstractDao implements Medi
 	 * @return : DafMedicationAdministration object
 	 */
 	@Override
-	public DafMedicationAdministration getMedicationAdministrationByVersionId(int theId, String versionId) {
+	public DafMedicationAdministration getMedicationAdministrationByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafMedicationAdministration.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -54,7 +54,7 @@ public class MedicationAdministrationDaoImpl extends AbstractDao implements Medi
      */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafMedicationAdministration> getMedicationAdministrationHistoryById(int theId) {
+	public List<DafMedicationAdministration> getMedicationAdministrationHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafMedicationAdministration.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafMedicationAdministration>) criteria.list();
@@ -176,7 +176,7 @@ public class MedicationAdministrationDaoImpl extends AbstractDao implements Medi
 	                Criterion orCond= null;
 	                if (status.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'")
+	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'")
 	                			);
 	                } 
 	                disjunction.add(orCond);
@@ -321,34 +321,39 @@ public class MedicationAdministrationDaoImpl extends AbstractDao implements Medi
                     String dateFormat = effectiveTime.getValueAsString();
                     Criterion orCond= null;
                     if(effectiveTime.getPrefix() != null) {
-                        if(effectiveTime.getPrefix().getValue() == "gt"){
+						if(effectiveTime.getPrefix().getValue() == "eq"){
+							orCond = Restrictions.or(
+									Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'start')::DATE = '"+dateFormat+ "'"),
+									Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'end')::DATE = '"+dateFormat+ "'")
+							);
+						}else if(effectiveTime.getPrefix().getValue() == "gt"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'start' > '"+dateFormat+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'end' > '"+dateFormat+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'start')::DATE > '"+dateFormat+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'end')::DATE > '"+dateFormat+ "'")
                         			);
                         }else if(effectiveTime.getPrefix().getValue() == "lt"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'start' < '"+dateFormat+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'end' < '"+dateFormat+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'start')::DATE < '"+dateFormat+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'end')::DATE < '"+dateFormat+ "'")
                         			);
                         }else if(effectiveTime.getPrefix().getValue() == "ge"){
                         	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'start' >= '"+dateFormat+ "'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'end' >= '"+dateFormat+ "'")
+                        				Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'start')::DATE >= '"+dateFormat+ "'"),
+                        				Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'end')::DATE >= '"+dateFormat+ "'")
                         			);
                         }else if(effectiveTime.getPrefix().getValue() == "le"){
                         	orCond = Restrictions.or(
-	                        			Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'start' <= '"+dateFormat+ "'"),
-	                        			Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'end' <= '"+dateFormat+ "'")
-                        			);
-                        }else {
-                        	orCond = Restrictions.or(
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'start' = '"+dateFormat+"'"),
-                        				Restrictions.sqlRestriction("{alias}.data->'effectivePeriod'->>'end' = '"+dateFormat+"'")
+	                        			Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'start')::DATE <= '"+dateFormat+ "'"),
+	                        			Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'end')::DATE <= '"+dateFormat+ "'")
                         			);
                         }
-                        disjunction.add(orCond);
-                     }
+                     }else {
+						orCond = Restrictions.or(
+								Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'start')::DATE = '"+dateFormat+"'"),
+								Restrictions.sqlRestriction("({alias}.data->'effectivePeriod'->>'end')::DATE = '"+dateFormat+"'")
+						);
+					}
+					disjunction.add(orCond);
                 }
                 criteria.add(disjunction);
             }

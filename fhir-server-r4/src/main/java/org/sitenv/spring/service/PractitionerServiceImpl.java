@@ -18,19 +18,19 @@ public class PractitionerServiceImpl implements PractitionerService {
 	
 	@Override
     @Transactional
-    public DafPractitioner getPractitionerById(int id) {
+    public DafPractitioner getPractitionerById(String id) {
         return this.practitionerDao.getPractitionerById(id);
     }
 	
 	@Override
 	@Transactional
-	public DafPractitioner getPractitionerByVersionId(int theId, String versionId) {
+	public DafPractitioner getPractitionerByVersionId(String theId, String versionId) {
 		return this.practitionerDao.getPractitionerByVersionId(theId, versionId);
 	}
 	
 	@Override
 	@Transactional
-	public List<DafPractitioner> getPractitionerHistoryById(int theId) {
+	public List<DafPractitioner> getPractitionerHistoryById(String theId) {
 		return this.practitionerDao.getPractitionerHistoryById(theId);
 	}
 	

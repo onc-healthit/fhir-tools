@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CareTeamService {
 	
-	public DafCareTeam getCareTeamById(int id);
+	public DafCareTeam getCareTeamById(String id);
 	
-	public DafCareTeam getCareTeamByVersionId(int theId, String versionId);
+	public DafCareTeam getCareTeamByVersionId(String theId, String versionId);
 	
 	public List<DafCareTeam> search(SearchParameterMap paramMap);
 	
-	public List<DafCareTeam> getCareTeamHistoryById(int theId);
+	public List<DafCareTeam> getCareTeamHistoryById(String theId);
 }

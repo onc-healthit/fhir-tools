@@ -1,5 +1,6 @@
 package org.sitenv.spring;
 
+import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.model.api.annotation.Description;
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.annotation.Count;
@@ -25,14 +26,12 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class DiagnosticReportResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "DiagnosticReport";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	DiagnosticReportService service;
 
@@ -67,10 +66,10 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public DiagnosticReport readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafDiagnosticReport dafDiagnosticReport;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -106,9 +105,9 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 	@History()
 	public List<DiagnosticReport> getDiagnosticReportHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -144,9 +143,9 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 	 * @param theResult
 	 * @param theBasedOn
 	 * @param theSpecimen
-	 * @param theResultInterpreter
-	 * @param theIssused
 	 * @param theDate
+	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -219,9 +218,15 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 		@OptionalParam(name = DiagnosticReport.SP_PATIENT) 
 		ReferenceAndListParam thePatient,
 
+		@IncludeParam(allow = {"*"})
+		Set<Include> theIncludes,
+
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
 		@Sort SortSpec theSort,
 		@Count Integer theCount) {
-		
+
 		SearchParameterMap paramMap = new SearchParameterMap();
 		paramMap.add(DiagnosticReport.SP_RES_ID, theId);
 		paramMap.add(DiagnosticReport.SP_IDENTIFIER, theIdentifier);
@@ -250,8 +255,14 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 			@Override
 			public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 				List<IBaseResource> diagnosticReportList = new ArrayList<IBaseResource>();
+				List<String> ids = new ArrayList<String>();
 				for (DafDiagnosticReport dafDiagnosticReport : results) {
-					diagnosticReportList.add(createDiagnosticReportObject(dafDiagnosticReport));
+					DiagnosticReport diagnosticReport = createDiagnosticReportObject(dafDiagnosticReport);
+					diagnosticReportList.add(diagnosticReport);
+					ids.add(((IdType)diagnosticReport.getIdElement()).getResourceType()+"/"+((IdType)diagnosticReport.getIdElement()).getIdPart());
+				}
+				if(theRevIncludes.size() >0 ){
+					diagnosticReportList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
 				}
 				return diagnosticReportList;
 			}
@@ -288,7 +299,7 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
      * This object contains the identity of the created resource.
      * Example URL to invoke this method (this would be invoked using an HTTP POST, 
      * with the resource in the POST body): http://<server name>/<context>/fhir/Questionnaire
-     * @param theQuestionnaire
+     * @param theDiagnosticReport
      * @return
      */
 	@Create
@@ -320,6 +331,8 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
 			if (!(diagnosticReportJSON.getJSONObject("meta").isNull("versionId"))) {
 				diagnosticReport.setId(new IdType(RESOURCE_TYPE, diagnosticReportJSON.getString("id") + "",
 						diagnosticReportJSON.getJSONObject("meta").getString("versionId")));
+			}else {
+				diagnosticReport.setId(new IdType(RESOURCE_TYPE, diagnosticReportJSON.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			diagnosticReport.setId(new IdType(RESOURCE_TYPE, diagnosticReportJSON.getString("id") + "", VERSION_ID));
@@ -607,6 +620,25 @@ public class DiagnosticReportResourceProvider implements IResourceProvider {
         	theEffectiveDateTime.setValue(theDate);
         	diagnosticReport.setEffective(theEffectiveDateTime);
 		}
-		return diagnosticReport;
+
+		//set presentedForm
+		if (!(diagnosticReportJSON.isNull("presentedForm"))) {
+			JSONArray presentedFormJSON = diagnosticReportJSON.getJSONArray("presentedForm");
+			List<Attachment> attachmentList = new ArrayList<Attachment>();
+			for (int i = 0; i < presentedFormJSON.length(); i++) {
+				Attachment theAttachment = new Attachment();
+				if(!(presentedFormJSON.getJSONObject(i).isNull("contentType"))){
+					theAttachment.setContentType(presentedFormJSON.getJSONObject(i).getString("contentType"));
+				}
+				if(!(presentedFormJSON.getJSONObject(i).isNull("data"))){
+					theAttachment.setData(Base64.getDecoder().decode(presentedFormJSON.getJSONObject(i).getString("data")));
+				}
+				attachmentList.add(theAttachment);
+			}
+			diagnosticReport.setPresentedForm(attachmentList);
+
+		}
+
+			return diagnosticReport;
 	}
 }

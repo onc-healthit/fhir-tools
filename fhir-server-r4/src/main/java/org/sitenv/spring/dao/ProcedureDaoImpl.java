@@ -22,7 +22,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 * @return : DAF object of the Procedure
 	 */
 	@Override
-	public DafProcedure getProcedureById(int id) {
+	public DafProcedure getProcedureById(String id) {
 		List<DafProcedure> list = getSession().createNativeQuery(
 				"select * from procedure where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafProcedure.class)
 					.getResultList();
@@ -36,7 +36,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 * @param versionId : version of the Procedure record
 	 * @return : DAF object of the Procedure
 	 */
-	public DafProcedure getProcedureByVersionId(int theId, String versionId) {
+	public DafProcedure getProcedureByVersionId(String theId, String versionId) {
 
 		DafProcedure list = getSession().createNativeQuery(
 				"select * from procedure where data->>'id' = '"+theId+"' and data->'meta'->>'versionId' = '"+versionId+"'", DafProcedure.class)
@@ -62,11 +62,11 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 		// build criteria for identifier
 		   buildIdentifierCriteria(theMap, criteria);
 
-		// build criteria for date
+		// build criteria for date -- used for performedPeriod
 		   buildDateCriteria(theMap, criteria);
 		
-		// build criteria for occurancedate
-		   buildOccurrenceDateTime(theMap, criteria);
+		// build criteria for occurancedate -- notused
+		//   buildOccurrenceDateTime(theMap, criteria);
 		
 		// build criteria for period
 		   buildPerformedPeriodCriteria(theMap, criteria);
@@ -262,7 +262,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 					TokenParam status = (TokenParam) params;
 					if (!status.isEmpty()) {
 						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'"));
+								.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'"));
 					} else if (status.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'status' IS NULL"));
 					} else if (!status.getMissing()) {
@@ -643,24 +643,20 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 					String dateFormat = date.getValueAsString();
 					if (date.getPrefix() != null) {
 						if (date.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'performedDateTime' > '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE > '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'performedDateTime' < '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE < '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'performedDateTime' >= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE >= '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'performedDateTime' <= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE <= '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "ne") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'performedDateTime' != '" + dateFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'performedDateTime' = '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE != '" + dateFormat + "'"));
+						}else if (date.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE = '" + dateFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->'performedPeriod'->>'start')::DATE = '" + dateFormat + "'"));
 					}
 				}
 			}
@@ -740,7 +736,7 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 	 * @return : List of Procedure DAF records
 	 */
 	@Override
-	public List<DafProcedure> getProcedureHistoryById(int theId) {
+	public List<DafProcedure> getProcedureHistoryById(String theId) {
 		List<DafProcedure> list = getSession().createNativeQuery(
 				"select * from procedure where data->>'id' = '" + theId + "' order by data->'meta'->>'versionId' desc",
 				DafProcedure.class).getResultList();
@@ -762,24 +758,20 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 					String dateFormat = date.getValueAsString();
 					if (date.getPrefix() != null) {
 						if (date.getPrefix().getValue() == "gt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' > '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE > '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "lt") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' < '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE < '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "ge") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' >= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE >= '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "le") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' <= '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE <= '" + dateFormat + "'"));
 						} else if (date.getPrefix().getValue() == "ne") {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' != '" + dateFormat + "'"));
-						} else {
-							criteria.add(Restrictions
-									.sqlRestriction("{alias}.data->>'occurrenceDateTime' = '" + dateFormat + "'"));
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE != '" + dateFormat + "'"));
+						}else if (date.getPrefix().getValue() == "eq") {
+							criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE = '" + dateFormat + "'"));
 						}
+					}else {
+						criteria.add(Restrictions.sqlRestriction("({alias}.data->>'occurrenceDateTime')::DATE = '" + dateFormat + "'"));
 					}
 				}
 			}

@@ -19,13 +19,13 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
 
 	@Override
 	@Transactional
-	public DafRiskAssessment getRiskAssessmentById(int id) {
+	public DafRiskAssessment getRiskAssessmentById(String id) {
         return this.riskAssessmentDao.getRiskAssessmentById(id);
 	}
 
 	@Override
 	@Transactional
-	public DafRiskAssessment getRiskAssessmentByVersionId(int theId, String versionId) {
+	public DafRiskAssessment getRiskAssessmentByVersionId(String theId, String versionId) {
 		return this.riskAssessmentDao.getRiskAssessmentByVersionId(theId, versionId);
 	}
 
@@ -36,7 +36,7 @@ public class RiskAssessmentServiceImpl implements RiskAssessmentService {
 	}
 
 	@Override
-	public List<DafRiskAssessment> getRiskAssessmentHistoryById(int id) {
+	public List<DafRiskAssessment> getRiskAssessmentHistoryById(String id) {
 		return this.riskAssessmentDao.getRiskAssessmentHistoryById(id);
 	}
 }

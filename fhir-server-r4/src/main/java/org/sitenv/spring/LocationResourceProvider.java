@@ -37,7 +37,7 @@ import java.util.Set;
 public class LocationResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Location";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	LocationService service;
 
@@ -69,10 +69,10 @@ public class LocationResourceProvider implements IResourceProvider {
 	
 	@Read(version = true)
 	public Location readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafLocation dafLocation;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 
 			  /*
@@ -104,9 +104,9 @@ public class LocationResourceProvider implements IResourceProvider {
 	@History()
 	public List<Location> getLocationHistoryById(@IdParam IdType theId) {
 
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -146,6 +146,7 @@ public class LocationResourceProvider implements IResourceProvider {
 	 * @param theNear
 	 * @param theStatus
 	 * @param theIncludes
+	 * @param theRevIncludes
 	 * @param theSort
 	 * @param theCount
 	 * @return
@@ -226,6 +227,9 @@ public class LocationResourceProvider implements IResourceProvider {
         @IncludeParam(allow = { "*"})
         Set<Include> theIncludes,
 
+		@IncludeParam(reverse=true, allow= {"*"})
+		Set<Include> theRevIncludes,
+
         @Sort
         SortSpec theSort,
 
@@ -259,10 +263,16 @@ public class LocationResourceProvider implements IResourceProvider {
 	             @Override
 	             public List<IBaseResource> getResources(int theFromIndex, int theToIndex) {
 	                 List<IBaseResource> locationList = new ArrayList<IBaseResource>();
-	                 for(DafLocation dafLocation : results){
-	                	 locationList.add(createLocationObject(dafLocation));
+					 List<String> ids = new ArrayList<String>();
+					 for(DafLocation dafLocation : results){
+						 Location location = createLocationObject(dafLocation);
+						 locationList.add(location);
+						 ids.add(((IdType)location.getIdElement()).getResourceType()+"/"+((IdType)location.getIdElement()).getIdPart());
 	                 }
-	                 return locationList;
+					 if(theRevIncludes.size() >0 ){
+						 locationList.addAll(new ProvenanceResourceProvider().getProvenanceByResourceId(ids));
+					 }
+					 return locationList;
 	             }
 				@Override
 				public InstantDt getPublished() {
@@ -300,6 +310,8 @@ public class LocationResourceProvider implements IResourceProvider {
 			if (!(locationJSON.getJSONObject("meta").isNull("versionId"))) {
 				location.setId(new IdType(RESOURCE_TYPE, locationJSON.getString("id") + "",
 						locationJSON.getJSONObject("meta").getString("versionId")));
+			}else {
+				location.setId(new IdType(RESOURCE_TYPE, locationJSON.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			location.setId(new IdType(RESOURCE_TYPE, locationJSON.getString("id") + "", VERSION_ID));
@@ -592,6 +604,24 @@ public class LocationResourceProvider implements IResourceProvider {
 			}
 			location.setPosition(thePosition);
 		}
+
+		if(!locationJSON.isNull("telecom")){
+			JSONArray telecomJSON = locationJSON.getJSONArray("telecom");
+			int noOfTelecoms = telecomJSON.length();
+			List<ContactPoint> contactPointDtList = new ArrayList<ContactPoint>();
+			for(int t = 0; t < noOfTelecoms; t++) {
+				ContactPoint phoneContact = new ContactPoint();
+				if(!(telecomJSON.getJSONObject(t).isNull("system"))) {
+					phoneContact.setSystem(ContactPoint.ContactPointSystem.fromCode(telecomJSON.getJSONObject(t).getString("system")));
+				}
+				if(!(telecomJSON.getJSONObject(t).isNull("value"))) {
+					phoneContact.setValue(telecomJSON.getJSONObject(t).getString("value"));
+				}
+				contactPointDtList.add(phoneContact);
+			}
+			location.setTelecom(contactPointDtList);
+		}
+
         return location;
       }
 }

@@ -35,7 +35,7 @@ import java.util.Set;
 public class MedicationResourceProvider implements IResourceProvider {
 
 	public static final String RESOURCE_TYPE = "Medication";
-	public static final String VERSION_ID = "4.0";
+	public static final String VERSION_ID = "1.0";
 	AbstractApplicationContext context;
 	MedicationService service;
 
@@ -69,10 +69,10 @@ public class MedicationResourceProvider implements IResourceProvider {
 	 */
 	@Read(version = true)
 	public Medication readOrVread(@IdParam IdType theId) {
-		int id;
+		String id;
 		DafMedication dafMedication;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -106,10 +106,9 @@ public class MedicationResourceProvider implements IResourceProvider {
 	 */
 	@History()
 	public List<Medication> getMedicationHistoryById(@IdParam IdType theId) {
-
-		int id;
+		String id;
 		try {
-			id = theId.getIdPartAsLong().intValue();
+			id = theId.getIdPart();
 		} catch (NumberFormatException e) {
 			/*
 			 * If we can't parse the ID as a long, it's not valid so this is an unknown
@@ -126,6 +125,18 @@ public class MedicationResourceProvider implements IResourceProvider {
 
 		return medicationList;
 	}
+
+	public List<Medication> getMedicationByResourceId(List<String> resourceID) {
+
+		List<DafMedication> results = service.getMedicationByResourceId(resourceID);
+		List<Medication> medicationList = new ArrayList<Medication>();
+
+		for (DafMedication dafMedication : results) {
+			medicationList.add(createMedicationObject(dafMedication));
+		}
+		return medicationList;
+	}
+
 
 	/**
 	 * The "@Search" annotation indicates that this method supports the search
@@ -266,6 +277,8 @@ public class MedicationResourceProvider implements IResourceProvider {
 			if (!(medicationJSONObj.getJSONObject("meta").isNull("versionId"))) {
 				medication.setId(new IdType(RESOURCE_TYPE, medicationJSONObj.getString("id") + "",
 						medicationJSONObj.getJSONObject("meta").getString("versionId")));
+			}else {
+				medication.setId(new IdType(RESOURCE_TYPE, medicationJSONObj.getString("id") + "", VERSION_ID));
 			}
 		} else {
 			medication.setId(new IdType(RESOURCE_TYPE, medicationJSONObj.getString("id") + "", VERSION_ID));

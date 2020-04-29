@@ -23,7 +23,7 @@ public class SpecimenDaoImpl extends AbstractDao implements SpecimenDao {
 	 * @return : DafSpecimen object
 	 */
 	@Override
-	public DafSpecimen getSpecimenById(int id) {
+	public DafSpecimen getSpecimenById(String id) {
 		Criteria criteria = getSession().createCriteria(DafSpecimen.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +id+"' order by {alias}.data->'meta'->>'versionId' desc"));
 		return (DafSpecimen) criteria.list().get(0);
@@ -36,7 +36,7 @@ public class SpecimenDaoImpl extends AbstractDao implements SpecimenDao {
 	 * @return : DafSpecimen object
 	 */
 	@Override
-	public DafSpecimen getSpecimenByVersionId(int theId, String versionId) {
+	public DafSpecimen getSpecimenByVersionId(String theId, String versionId) {
 		Criteria criteria = getSession().createCriteria(DafSpecimen.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		Conjunction versionConjunction = Restrictions.conjunction();
 		versionConjunction.add(Restrictions.sqlRestriction("{alias}.data->'meta'->>'versionId' = '" +versionId+"'"));
@@ -47,12 +47,12 @@ public class SpecimenDaoImpl extends AbstractDao implements SpecimenDao {
 
 	/**
 	 * This method invokes various methods for search
-	 * @param theMap : parameter for search
+	 * @param theId : parameter for search
 	 * @return criteria : DafSpecimen object
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DafSpecimen> getSpecimenHistoryById(int theId) {
+	public List<DafSpecimen> getSpecimenHistoryById(String theId) {
 		Criteria criteria = getSession().createCriteria(DafSpecimen.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		criteria.add(Restrictions.sqlRestriction("{alias}.data->>'id' = '" +theId+"'"));
 		return (List<DafSpecimen>)criteria.list();
@@ -456,7 +456,7 @@ public class SpecimenDaoImpl extends AbstractDao implements SpecimenDao {
 	                Criterion orCond= null;
 	                if (status.getValue() != null) {
 	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '%" + status.getValue() + "%'")
+	                    			Restrictions.sqlRestriction("{alias}.data->>'status' ilike '" + status.getValue() + "'")
 	                			);
 	                } 
 	                disjunction.add(orCond);

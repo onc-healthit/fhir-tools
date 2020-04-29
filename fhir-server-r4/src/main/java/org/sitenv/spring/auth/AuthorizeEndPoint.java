@@ -99,7 +99,8 @@ public class AuthorizeEndPoint extends HttpServlet {
 
             List<String> scopes = Arrays.asList(registeredScopes.split(","));
             logger.info("Scopes: " + scope);
-            scope = scope.replace(" ", ",");
+            //scope = scope.replace(" ", ",");
+            scope = scope.replaceAll("\\s+", ",");
             List<String> reqScopes = Arrays.asList(scope.split(","));
 
             if (scopes.containsAll(reqScopes)) {
@@ -204,7 +205,7 @@ public class AuthorizeEndPoint extends HttpServlet {
 
     @RequestMapping(value = "/launchpatient", method = RequestMethod.POST)
     @ResponseBody
-    public void authorizeAfterLaunchPatient(HttpServletRequest request, HttpServletResponse response, @RequestParam("transaction_id") String transactionId, @RequestParam("id") Integer launchPatientId) throws IOException, ServletException {
+    public void authorizeAfterLaunchPatient(HttpServletRequest request, HttpServletResponse response, @RequestParam("transaction_id") String transactionId, @RequestParam("id") String launchPatientId) throws IOException, ServletException {
         DafAuthtemp tempAuth = authTempService.getAuthenticationById(transactionId);
         tempAuth.setLaunchPatientId(launchPatientId);
         authTempService.saveOrUpdate(tempAuth);

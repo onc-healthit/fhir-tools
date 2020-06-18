@@ -1,0 +1,142 @@
+<div class="panel panel-default">
+  	<div class="panel-heading">Backend Client Registration</div>
+  		<div class="panel-body">
+    		<form class="form-horizontal" id="registerbackendclientdetails">
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Client App Name:</label>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" id="clientappname" data-toggle="tooltip" data-original-title='' data-fv-notempty name="clientappname">
+					</div> 							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Organization:</label>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" id="organization" data-toggle="tooltip" data-original-title='' data-fv-notempty name="organization">
+					</div> 							
+    			</div>
+    			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Client Issuer URL:</label>
+					<div class="col-sm-5">
+						<input type="text" class="form-control" id="issuerurl" data-toggle="tooltip" data-original-title='' data-fv-notempty name="issuerurl">
+					</div> 							
+    			</div>
+<!--     			<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Questions:</label>
+					<div class="col-sm-5 regbackendscopes">
+				    		<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" id="jwkquery" name="jquery" value="do u want jwk query?">do u want jwk query?</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" id="jwktoken" name="jtoken" value="do u have jwk?">do u have jwk?</label>
+							</div>
+						</div>
+					<div class="col-md-4"></div>
+					<div class="col-md-3"></div>
+    			</div> -->
+    			<div class="form-group fileGroup">
+    				<label for="inputEmail3" class="col-sm-3 control-label">Client Public Key URL/jku:</label>
+					<div class="col-sm-5">
+				    	<input type="text" class="form-control" id="jku" name="jkuorpublickey" data-fv-notempty>
+					</div>				    
+					<!--<div class="uploadfile input-group col-sm-5">
+				      	<input type="text" class="form-control input-lg" disabled placeholder="Upload Public Key">
+				      	<span class="input-group-btn">
+					        <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+					     </span>
+				    </div>-->
+				</div>
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Publickey:</label>
+					<div class="col-sm-5">
+						<textarea rows="5" cols="80" class="form-control" id="publickeytextarea" name="publickeyarea" data-fv-notempty></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Scope(s):</label>
+					<div class="col-sm-5 regbackendscopes">
+				    		
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Medication.read" onchange="removeerror();">system/Medication.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/AllergyIntolerance.read" onchange="removeerror();">system/AllergyIntolerance.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/CarePlan.read" onchange="removeerror();">system/CarePlan.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/CareTeam.read" onchange="removeerror();">system/CareTeam.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Condition.read" onchange="removeerror();">system/Condition.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Device.read" onchange="removeerror();">system/Device.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/DiagnosticReport.read" onchange="removeerror();">system/DiagnosticReport.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/DocumentReference.read" onchange="removeerror();">system/DocumentReference.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Encounter.read" onchange="removeerror();">system/Encounter.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Goal.read" onchange="removeerror();">system/Goal.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Immunization.read" onchange="removeerror();">system/Immunization.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Location.read" onchange="removeerror();">system/Location.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/MedicationRequest.read" onchange="removeerror();">system/MedicationRequest.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Observation.read" onchange="removeerror();">system/Observation.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Organization.read" onchange="removeerror();">system/Organization.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/system.read" onchange="removeerror();">system/system.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Practitioner.read" onchange="removeerror();">system/Practitioner.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/PractitionerRole.read" onchange="removeerror();">system/PractitionerRole.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Procedure.read" onchange="removeerror();">system/Procedure.read</label>
+							</div>
+							<div class="checkbox">
+								<label><input class="regscopesclass styled" type="checkbox" name="scopes[]" value="system/Provenance.read" onchange="removeerror();">system/Provenance.read</label>
+							</div>
+							
+							
+						</div>
+					<div class="col-md-4"></div>
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<p id="backendscopeserror" style="text-align:center;margin-top:20px;font-size:12px;color:#a94442;" class="center-block"></p>
+					</div>
+    			</div>
+    			<input type="submit" class="btn btn-primary center-block ladda-button" data-spinner-color="#fff" data-size="s" data-style="expand-right" id="registerbackendcli" style="width:100px;" value="Register" />
+    		</form>
+  		</div>
+	</div>
+	
+	<script>
+	function checkFun() {
+		let isjwkQuerySelected = document.getElementById('jwkquery').checked;
+		
+		if (isjwkQuerySelected) {
+			document.getElementById('jku').disabled = false;
+		} else {
+			document.getElementById('jku').disabled = true;
+		}
+	}
+	</script>

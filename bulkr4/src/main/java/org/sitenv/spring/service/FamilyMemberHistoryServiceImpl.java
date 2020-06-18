@@ -1,0 +1,51 @@
+package org.sitenv.spring.service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
+
+import org.sitenv.spring.dao.FamilyMemberHistoryDao;
+import org.sitenv.spring.model.DafFamilyMemberHistory;
+import org.sitenv.spring.util.SearchParameterMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service("familyMemberHistoryService")
+@Transactional
+public class FamilyMemberHistoryServiceImpl implements FamilyMemberHistoryService {
+	
+	@Autowired
+    private FamilyMemberHistoryDao familyMemberHistoryDao;
+
+	@Override
+	@Transactional
+	public DafFamilyMemberHistory getFamilyMemberHistoryById(String id) {
+		return this.familyMemberHistoryDao.getFamilyMemberHistoryById(id);
+	}
+
+	@Override
+	@Transactional
+	public DafFamilyMemberHistory getFamilyMemberHistoryByVersionId(String theId, String versionId) {
+		return this.familyMemberHistoryDao.getFamilyMemberHistoryByVersionId(theId, versionId);
+	}
+
+	@Override
+	@Transactional
+	public List<DafFamilyMemberHistory> search(SearchParameterMap paramMap) {
+		return this.familyMemberHistoryDao.search(paramMap);
+	}
+
+	@Override
+	@Transactional
+	public List<DafFamilyMemberHistory> getFamilyMemberHistoryHistoryById(String theId) {
+		return this.familyMemberHistoryDao.getFamilyMemberHistoryHistoryById(theId);
+	}
+
+	@Override
+	@Transactional
+	public List<DafFamilyMemberHistory> getFamilyMemberHistoryForBulkData(StringJoiner patients, Date start) {
+		return this.familyMemberHistoryDao.getFamilyMemberHistoryForBulkData(patients, start);
+	}
+
+}

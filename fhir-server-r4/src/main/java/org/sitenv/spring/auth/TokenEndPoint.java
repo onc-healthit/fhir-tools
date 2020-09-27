@@ -263,13 +263,14 @@ public class TokenEndPoint extends HttpServlet {
 							} else {
 									
 									final String accessToken = oauthIssuerImpl.accessToken();
-
+									final String refreshToken =oauthIssuerImpl.refreshToken();
 									JSONObject jsonOb = new JSONObject();
 									jsonOb.put("access_token", accessToken);
 									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 									jsonOb.put("token_type", "bearer");
 									jsonOb.put("expires_in", 3600); // 3600 second is 1hour
 									jsonOb.put("scope", stringScope.toString());
+									jsonOb.put("refresh_token", refreshToken);
 
 									// String refreshToken = null;
 									if (scopes.contains("launch/patient")) {
@@ -291,7 +292,7 @@ public class TokenEndPoint extends HttpServlet {
 									authTemp.setClient_secret(client_secret);
 									authTemp.setAccess_token(accessToken);
 									authTemp.setExpiry(timeStamp);
-									authTemp.setRefresh_token(authTemp.getRefresh_token());
+									authTemp.setRefresh_token(refreshToken);
 
 									authTempService.saveOrUpdate(authTemp);
 
@@ -420,13 +421,14 @@ public class TokenEndPoint extends HttpServlet {
 									out.println(response);
 								} else {
 									final String accessToken = oauthIssuerImpl.accessToken();
-
+									final String refreshToken =oauthIssuerImpl.refreshToken();
 									JSONObject jsonOb = new JSONObject();
 									jsonOb.put("access_token", accessToken);
 									jsonOb.put("patient", String.valueOf(authTemp.getLaunchPatientId()));
 									jsonOb.put("token_type", "bearer");
 									jsonOb.put("expires_in", 3600); // 3600 second is 1hour
 									jsonOb.put("scope", stringScope.toString());
+									jsonOb.put("refresh_token", refreshToken);
 
 									// String refreshToken = null;
 									if (scopes.contains("launch/patient")) {
@@ -448,7 +450,7 @@ public class TokenEndPoint extends HttpServlet {
 									authTemp.setClient_secret(client_secret);
 									authTemp.setAccess_token(accessToken);
 									authTemp.setExpiry(timeStamp);
-									authTemp.setRefresh_token(authTemp.getRefresh_token());
+									authTemp.setRefresh_token(refreshToken);
 
 									authTempService.saveOrUpdate(authTemp);
 

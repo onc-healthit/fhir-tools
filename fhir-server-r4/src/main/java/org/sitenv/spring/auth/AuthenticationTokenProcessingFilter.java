@@ -54,39 +54,73 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
                     Integer currentTime = Common.convertTimestampToUnixTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Timestamp(System.currentTimeMillis())));
                     if (Common.convertTimestampToUnixTime(expiryTime) + 1800 > currentTime) {
                         List<String> scopes = Arrays.asList(authentication.getScope().split(","));
-                       	if (scopes.contains("user/*.*") && httpRequest.getRequestURI().contains("/fhir/")){
+                       	if ((scopes.contains("user/*.*") || scopes.contains("user/*.read") || scopes.contains("patient/*.*") || scopes.contains("patient/*.read")) && httpRequest.getRequestURI().contains("/fhir/")){
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                       	}  else  if (scopes.contains("user/*.read") && httpRequest.getRequestURI().contains("/fhir/")){
+                       	} else if ((scopes.contains("patient/Patient.read") || scopes.contains("user/Patient.read")) && httpRequest.getRequestURI().contains("/fhir/Patient")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/*.*") && httpRequest.getRequestURI().contains("/fhir/")) {
+                        } else if ((scopes.contains("patient/AllergyIntolerance.read") || scopes.contains("user/AllergyIntolerance.read") )&& httpRequest.getRequestURI().contains("/fhir/AllergyIntolerance")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/*.read") && httpRequest.getRequestURI().contains("/fhir/")) {
+                        } else if ((scopes.contains("patient/CarePlan.read") || scopes.contains("user/CarePlan.read") )&& httpRequest.getRequestURI().contains("/fhir/CarePlan")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                        } else if ((scopes.contains("patient/CareTeam.read") || scopes.contains("user/CareTeam.read") )&& httpRequest.getRequestURI().contains("/fhir/CareTeam")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("user/Patient.read") && httpRequest.getRequestURI().contains("/fhir/Patient")) {
+                        } else if ((scopes.contains("patient/Condition.read") || scopes.contains("user/Condition.read"))&& httpRequest.getRequestURI().contains("/fhir/Condition")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/DocumentReference.read") && httpRequest.getRequestURI().contains("/fhir/DocumentReference")) {
+                        } else if ((scopes.contains("patient/Device.read") || scopes.contains("user/Device.read"))&& httpRequest.getRequestURI().contains("/fhir/Device")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/MedicationOrder.read") && httpRequest.getRequestURI().contains("/fhir/MedicationOrder")) {
+                        } else if ((scopes.contains("patient/DiagnosticReport.read") || scopes.contains("user/DiagnosticReport.read"))&& httpRequest.getRequestURI().contains("/fhir/DiagnosticReport")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/MedicationStatement.read") && httpRequest.getRequestURI().contains("/fhir/MedicationStatement")) {
+                        } else if ((scopes.contains("patient/DocumentReference.read") || scopes.contains("user/DocumentReference.read")) && httpRequest.getRequestURI().contains("/fhir/DocumentReference")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        } else if (scopes.contains("patient/Condition.read") && httpRequest.getRequestURI().contains("/fhir/Condition")) {
+                        } else if ((scopes.contains("patient/Encounter.read") || scopes.contains("user/Encounter.read")) && httpRequest.getRequestURI().contains("/fhir/Encounter")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
-                        }else if (scopes.contains("patient/Observation.read") && httpRequest.getRequestURI().contains("/fhir/Observation")) {
+                        } else if ((scopes.contains("patient/Goal.read") || scopes.contains("user/Goal.read")) && httpRequest.getRequestURI().contains("/fhir/Goal")) {
                             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
                             chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Immunization.read") || scopes.contains("user/Immunization.read")) && httpRequest.getRequestURI().contains("/fhir/Immunization")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Location.read") || scopes.contains("user/Location.read")) && httpRequest.getRequestURI().contains("/fhir/Location")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Medication.read") || scopes.contains("user/Medication.read")) && httpRequest.getRequestURI().contains("/fhir/Medication")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/MedicationRequest.read") || scopes.contains("user/MedicationRequest.read")) && httpRequest.getRequestURI().contains("/fhir/MedicationRequest")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Observation.read") || scopes.contains("user/Observation.read")) && httpRequest.getRequestURI().contains("/fhir/Observation")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Organization.read") || scopes.contains("user/Organization.read")) && httpRequest.getRequestURI().contains("/fhir/Organization")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Practitioner.read") || scopes.contains("user/Practitioner.read")) && httpRequest.getRequestURI().contains("/fhir/Practitioner")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/PractitionerRole.read") || scopes.contains("user/PractitionerRole.read")) && httpRequest.getRequestURI().contains("/fhir/PractitionerRole")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Procedure.read") || scopes.contains("user/Procedure.read")) && httpRequest.getRequestURI().contains("/fhir/Procedure")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/Provenance.read") || scopes.contains("user/Provenance.read")) && httpRequest.getRequestURI().contains("/fhir/Provenance")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                        } else if ((scopes.contains("patient/RelatedPerson.read") || scopes.contains("user/RelatedPerson.read")) && httpRequest.getRequestURI().contains("/fhir/Provenance")) {
+                            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+                            chain.doFilter(request, response);
+                            
                         } else {
                             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Access denied: scope is not valid to access the resource.");
                         }

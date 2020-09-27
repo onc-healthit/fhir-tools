@@ -53,8 +53,10 @@ public class SMARTController extends HttpServlet {
         wellKnownConfig.put("registration_endpoint", baseUrl + REGISTRATION_URL);
 
         String[] stringArrayMethods = { "client_secret_basic","client_secret_post" };
-        String[] stringArrayScopes = { "openid", "profile","fhirUser","launch","launch/patient","launch/encounter","patient/*.*","user/*.*","offline_access"};
-        String[] stringArrayResponce = {"code"};
+//      String[] stringArrayScopes = { "openid","profile","fhirUser","launch","launch/patient","launch/encounter","patient/*.*","user/*.*","offline_access"};
+		String[] stringArrayScopes = { "openid","profile","fhirUser","patient/*.*","user/*.*","offline_access","launch","launch/patient","patient/Medication.read","patient/AllergyIntolerance.read","patient/CarePlan.read","patient/CareTeam.read","patient/Condition.read","patient/Device.read","patient/DiagnosticReport.read","patient/DocumentReference.read","patient/Encounter.read","patient/Goal.read","patient/Immunization.read","patient/Location.read","patient/MedicationRequest.read","patient/Observation.read","patient/Organization.read","patient/Patient.read","patient/Practitioner.read","patient/PractitionerRole.read","patient/Procedure.read","patient/Provenance.read","user/Medication.read","user/AllergyIntolerance.read","user/CarePlan.read","user/CareTeam.read","user/Condition.read","user/Device.read","user/DiagnosticReport.read","user/DocumentReference.read","user/Encounter.read","user/Goal.read","user/Immunization.read","user/Location.read","user/MedicationRequest.read","user/Observation.read","user/Organization.read","user/Patient.read","user/Practitioner.read","user/PractitionerRole.read","user/Procedure.read","user/Provenance.read"};
+
+		String[] stringArrayResponce = {"code"};
         String[] stringArrayCapabilities = {"launch-ehr",
                 "launch-standalone",
                 "client-public",

@@ -45,71 +45,64 @@
                                 
                             <div class="form-group">
 								<label for="editscopes" class="col-sm-3 control-label">Scope(s):</label>
-							    <div class="col-sm-9">
-									<div class="col-sm-5 editregscopes">
-								    		<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch" onchange="removeerror();">launch</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch/patient" onchange="removeerror();">launch/patient</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/*.*" onchange="removeerror();">patient/*.*</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/*.read" onchange="removeerror();">patient/*.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Patient.read" onchange="removeerror();">patient/Patient.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/DocumentReference.read" onchange="removeerror();">patient/DocumentReference.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/MedicationOrder.read" onchange="removeerror();">patient/MedicationOrder.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/MedicationStatement.read" onchange="removeerror();">patient/MedicationStatement.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Condition.read" onchange="removeerror();">patient/Condition.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Observation.read" onchange="removeerror();">patient/Observation.read</label>
-											</div>
-								    	</div>
-								    	<div class="col-sm-5 editregscopes">
-								    		<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="fhir_complete" onchange="removeerror();">fhir_complete</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Patient.read" onchange="removeerror();">user/Patient.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/*.read" onchange="removeerror();">user/*.read</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/*.*" onchange="removeerror();">user/*.*</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="openid" onchange="removeerror();">openid</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="fhirUser" onchange="removeerror();">fhirUser</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value=profile onchange="removeerror();">profile</label>
-											</div>
-						
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="offline_access" onchange="removeerror();">offline_access</label>
-											</div>
-											<div class="checkbox">
-												<label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="online_access" onchange="removeerror();">online_access</label>
-											</div>
-								    	</div>
-							    </div> 
-							    <div class="col-md-3">
+								<div class="col-sm-11" style="padding-left: 100px;">
+									<div class="col-sm-3 editregscopes">
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch" onchange="removeerror();">launch</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="launch/patient" onchange="removeerror();">launch/patient</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="openid" onchange="removeerror();">openid</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="fhirUser" onchange="removeerror();">fhirUser</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="offline_access" onchange="removeerror();">offline_access</label></div>
+									</div>
+									<div class="col-sm-4 editregscopes">
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Patient.read" onchange="removeerror();">patient/Patient.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/AllergyIntolerance.read" onchange="removeerror();">patient/AllergyIntolerance.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/CarePlan.read" onchange="removeerror();">patient/CarePlan.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/CareTeam.read" onchange="removeerror();">patient/CareTeam.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Condition.read" onchange="removeerror();">patient/Condition.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Device.read" onchange="removeerror();">patient/Device.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/DiagnosticReport.read" onchange="removeerror();">patient/DiagnosticReport.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/DocumentReference.read" onchange="removeerror();">patient/DocumentReference.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Encounter.read" onchange="removeerror();">patient/Encounter.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Goal.read" onchange="removeerror();">patient/Goal.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Immunization.read" onchange="removeerror();">patient/Immunization.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Location.read" onchange="removeerror();">patient/Location.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Medication.read" onchange="removeerror();">patient/Medication.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/MedicationRequest.read" onchange="removeerror();">patient/MedicationRequest.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Observation.read" onchange="removeerror();">patient/Observation.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Organization.read" onchange="removeerror();">patient/Organization.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Practitioner.read" onchange="removeerror();">patient/Practitioner.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/PractitionerRole.read" onchange="removeerror();">patient/PractitionerRole.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Procedure.read" onchange="removeerror();">patient/Procedure.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/Provenance.read" onchange="removeerror();">patient/Provenance.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="patient/RelatedPerson.read" onchange="removeerror();">patient/RelatedPerson.read</label></div>
+									</div>
+
+									<div class="col-sm-4 editregscopes">
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Patient.read" onchange="removeerror();">user/Patient.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/AllergyIntolerance.read" onchange="removeerror();">user/AllergyIntolerance.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/CarePlan.read" onchange="removeerror();">user/CarePlan.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/CareTeam.read" onchange="removeerror();">user/CareTeam.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Condition.read" onchange="removeerror();">user/Condition.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Device.read" onchange="removeerror();">user/Device.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/DiagnosticReport.read" onchange="removeerror();">user/DiagnosticReport.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/DocumentReference.read" onchange="removeerror();">user/DocumentReference.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Encounter.read" onchange="removeerror();">user/Encounter.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Goal.read" onchange="removeerror();">user/Goal.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Immunization.read" onchange="removeerror();">user/Immunization.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Location.read" onchange="removeerror();">user/Location.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Medication.read" onchange="removeerror();">user/Medication.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/MedicationRequest.read" onchange="removeerror();">user/MedicationRequest.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Observation.read" onchange="removeerror();">user/Observation.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Organization.read" onchange="removeerror();">user/Organization.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Practitioner.read" onchange="removeerror();">user/Practitioner.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/PractitionerRole.read" onchange="removeerror();">user/PractitionerRole.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Procedure.read" onchange="removeerror();">user/Procedure.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/Provenance.read" onchange="removeerror();">user/Provenance.read</label></div>
+										<div class="checkbox"><label><input class="editregscopesclass" type="checkbox" name="editscopes[]" value="user/RelatedPerson.read" onchange="removeerror();">user/RelatedPerson.read</label></div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
 							    	
 							    </div>
 							    <div class="col-md-6">

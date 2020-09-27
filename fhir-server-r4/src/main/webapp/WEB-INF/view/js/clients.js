@@ -207,7 +207,7 @@
 			        	validators: {
 			            	choice: {
 			        	    	min: 1,
-			                	max:19,
+			                	max:53,
 			                	message: 'Please choose atleast one scope'
 			                }
 			            }
@@ -474,7 +474,7 @@
 		                	validators: {
 		                    	choice: {
 		                        	min: 1,
-		                        	max:19,
+		                        	max:53,
 		                        	message: 'Please choose atleast one scope'
 		                    	}
 		                	}
@@ -708,12 +708,7 @@
     	        });
     	 });
     	});
-        
-        
-        
-        
-        
-		
+
 		
 		removeerror = function(){
 			var val = [];
@@ -730,6 +725,7 @@
 	        $('.editregscopes :checkbox:checked').each(function(m){
 	          	editval[m] = $(this).val();
 	        });
+
 	        if(editval.length <= 0){
 	        	$('#editscopeserror').html('Please select atleast one scope');
 	        }else{

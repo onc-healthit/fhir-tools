@@ -326,6 +326,14 @@ public class ProcedureDaoImpl extends AbstractDao implements ProcedureDao {
 					ReferenceParam subject = (ReferenceParam) params;
 					Criterion criterion = null;
 					if (subject.getValue() != null) {
+						if (subject.getValue().contains("Patient/")) {
+							criterion = Restrictions.or(
+									Restrictions.sqlRestriction(
+											"{alias}.data->'subject'->>'reference' = '" + subject.getValue() + "'")
+//									Restrictions.sqlRestriction(
+//											"{alias}.data->'subject'->>'display' = '" + subject.getValue() + "'")
+									);
+						}else
 						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
 										"{alias}.data->'subject'->>'reference' = '"+"Patient/" + subject.getValue() + "'"),

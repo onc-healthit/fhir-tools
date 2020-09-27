@@ -323,6 +323,12 @@ public class ImmunizationDaoImpl extends AbstractDao implements ImmunizationDao 
 					ReferenceParam patient = (ReferenceParam) params;
 					Criterion criterion = null;
 					if (patient.getValue() != null) {
+						if (patient.getValue().contains("Patient/")) {
+							criterion = Restrictions.or(
+									Restrictions.sqlRestriction(
+											"{alias}.data->'patient'->>'reference' = '"+patient.getValue()+"'")
+							);	
+						}else
 						criterion = Restrictions.or(
 								Restrictions.sqlRestriction(
 										"{alias}.data->'patient'->>'reference' = '"+"Patient/"+patient.getValue()+"'"),

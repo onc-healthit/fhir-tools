@@ -238,6 +238,12 @@ public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticRe
 					ReferenceParam subject = (ReferenceParam) params;
 					Criterion orCond = null;
 					if (subject.getValue() != null) {
+						if(subject.getValue().contains("Patient/")) {
+							orCond = Restrictions.or(
+									Restrictions.sqlRestriction(
+											"{alias}.data->'subject'->>'reference' = '"+subject.getValue()+"'")
+							);
+						}else
 						orCond = Restrictions.or(
 								Restrictions.sqlRestriction(
 										"{alias}.data->'subject'->>'reference' = '"+"Patient/"+subject.getValue()+"'")

@@ -141,26 +141,30 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	 */
 	private void buildIdentifierCriteria(SearchParameterMap theMap, Criteria criteria) {
 	    List<List<? extends IQueryParameterType>> list = theMap.get("identifier");
-	
+
 	    if (list != null) {
+			StringBuffer inSql = new StringBuffer();
 	        for (List<? extends IQueryParameterType> values : list) {
-	            Disjunction disjunction = Restrictions.disjunction();
 	            for (IQueryParameterType params : values) {
 	                TokenParam identifier = (TokenParam) params;
-	                Criterion orCond= null;
-	                if (identifier.getValue() != null) {
-	                	orCond = Restrictions.or(
-	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'system' ilike '%" + identifier.getSystem() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->0->>'value' ilike '%" + identifier.getValue() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'system' ilike '%" + identifier.getSystem() + "%'"),
-	                    			Restrictions.sqlRestriction("{alias}.data->'identifier'->1->>'value' ilike '%" + identifier.getValue() + "%'")
-	                			);
-	                } 
-	                disjunction.add(orCond);
+					inSql.append(" (");
+					if (identifier.getValue() != null) {
+						inSql.append(" segment ->>'value' = '" + identifier.getValue() + "' ");
+						if (identifier.getSystem() != null) inSql.append(" and ");
+					}
+
+					if (identifier.getSystem() != null) {
+						inSql.append(" segment ->>'system' = '" + identifier.getSystem() + "' ");
+					}
+					inSql.append(") ");
 	            }
-	            criteria.add(disjunction);
 	        }
-	    }
+
+	        if(StringUtils.isNotEmpty(inSql.toString())){
+				String inSqlStr = "select distinct(id) from patient r, LATERAL json_array_elements(r.data->'identifier') segment WHERE " +inSql.toString();
+				criteria.add(Restrictions.sqlRestriction("{alias}.id in ("+inSqlStr+")"));
+			}
+		}
 	}
     
 	/**

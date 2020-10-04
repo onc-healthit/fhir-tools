@@ -853,11 +853,12 @@ public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao 
 	//	List<String> arrayToList = new ArrayList<String>();
 		try {
 			StringBuffer stb = new StringBuffer();
-			stb.append("select * from practitioner where data->").append("'").append("patient").append("'").append("->>")
-					.append("'").append("reference").append("'").append("in (");
-
-			stb.append(patients);
-			stb.append(")");
+			stb.append("select * from practitioner ");
+//					+ "where data->").append("'").append("patient").append("'").append("->>")
+//					.append("'").append("reference").append("'").append("in (");
+//
+//			stb.append(patients);
+//			stb.append(")");
 			String query = stb.toString();
 			list = getSession().createNativeQuery(query, DafPractitioner.class).getResultList();
 		} catch (Exception e) {

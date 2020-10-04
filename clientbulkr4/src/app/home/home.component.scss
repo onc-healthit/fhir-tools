@@ -1,0 +1,69 @@
+.mat-card {
+  margin: 20px 30px;
+}
+
+.mat-card-title {
+  text-align: center;
+  font-size: 36px;
+}
+
+.mat-card-content {
+  margin-top: 20px;
+}
+
+.information {
+  width: 50%;
+  float: left;
+  padding: 0 15px;
+}
+
+.instructions {
+  width: 50%;
+  float: left;
+  padding: 0 15px;
+}
+
+.flex-row-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.information h1,
+.instructions h1 {
+  font-size: 24px;
+}
+
+.information li {
+  font-size: 16px;
+}
+
+.instructions li {
+  font-size: 16px;
+}
+
+.mat-card-content {
+  padding-top: 20px;
+}
+
+.sandbox-description p,
+.sandbox-description li {
+  font-size: 16px;
+}
+
+.sandbox-usage p {
+  font-size: 16px;
+}
+
+.panel-heading h3,
+.panel-heading h4 {
+  margin: 0px;
+}
+
+h3 {
+  color: #3f51b5;
+}
+
+h4 {
+  color: #3f51b5;
+  margin-left: 15px;
+}

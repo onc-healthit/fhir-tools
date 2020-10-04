@@ -1,0 +1,177 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step label="Authorization" [editable]="true">
+    <h2>General</h2>
+    <p>Request URL: https://fhirprod.sitenv.org/secure-fhir/fhir/token</p>
+    <p>Request Method: POST</p>
+    <p>Status Code: 200</p>
+
+    <mat-tab-group>
+      <mat-tab label="Request">
+        <p style="margin-top:7px">content-type: text/plain;charset=UTF-8
+        </p>
+        <p>Accept-Encoding: gzip, deflate</p>
+        <p>Accept-Language: en-GB,en-US;q=0.9,en;q=0.8</p>
+        <p>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139
+          Safari/537.36
+        </p>
+        <h2>Request Body</h2>
+        <pre style="word-break: break-all;">grant_type=client_credentials&scope=system/:resourceType.(read|write|*)&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&client_assertion=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJiYWNrZW5kZmhpclB6SGM4NlZOQTEiLCJpYXQiOjE1MjY1NzYzNjAsImlzcyI6Imh0dHBzOi8vc2l0ZW52Lm9yZyIsImF1ZCI6Imh0dHBzOi8vZmhpcnRlc3Quc2l0ZW52Lm9yZy9zZWN1cmUtZmhpci90b2tlbiJ9.PHTxuEV8OEa5jFvFOMSTUId2IPhlRzVX21XVGXajngKo4detbTy2YL7epNXcQsRfbkvfZWSqNcHF7bD_ZN1aKoLmQZ8TlahDvtNko5M2fVvx1ikaplfjOLvCI6HTK5N6APhbATfCU873MwUbf8nT_dmFtLffnmyDvyxk0NI3x6yKI01ERsTpcuJsUAXQ62PZmUD0AholxzWs5BJ6PQBDXvMCgIhrzZ38IF4duLKF_1CdDudZkjcbrqaFA6v1qiP5b5ocTpaMaWNl4y2L8JJbbtHI23IFXzbQeVx5gHHurbntHqPNiwNR2R_ck5cbbX0ksI_aW0Y-ghaG80xYhXxqDQ</pre>
+      </mat-tab>
+      <mat-tab label="Response">
+        <p style="margin-top:7px">Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Prefer, Authorization</p>
+        <p>Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS, DELETE</p>
+        <p>Access-Control-Allow-Origin: *</p>
+        <p>Access-Control-Max-Age: 3600</p>
+        <p>Content-Length: 0
+        </p>
+        <p>Date:
+          <span>{{now}}</span>
+        </p>
+        <p>server:Apache-Coyote/1.1</p>
+        <p>x-powered-by:HAPI FHIR 1.6 REST Server (FHIR Server; FHIR 1.0.2/DSTU2)</p>
+        <h2>Response Body</h2>
+        <pre>{{respBodyJSON|json}}</pre>
+
+      </mat-tab>
+      <!--<mat-tab label="Request Body">
+        <pre style="word-break: break-all;">grant_type=client_credentials&scope=system/:resourceType.(read|write|*)&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&client_assertion=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJiYWNrZW5kZmhpclB6SGM4NlZOQTEiLCJpYXQiOjE1MjY1NzYzNjAsImlzcyI6Imh0dHBzOi8vc2l0ZW52Lm9yZyIsImF1ZCI6Imh0dHBzOi8vZmhpcnRlc3Quc2l0ZW52Lm9yZy9zZWN1cmUtZmhpci90b2tlbiJ9.PHTxuEV8OEa5jFvFOMSTUId2IPhlRzVX21XVGXajngKo4detbTy2YL7epNXcQsRfbkvfZWSqNcHF7bD_ZN1aKoLmQZ8TlahDvtNko5M2fVvx1ikaplfjOLvCI6HTK5N6APhbATfCU873MwUbf8nT_dmFtLffnmyDvyxk0NI3x6yKI01ERsTpcuJsUAXQ62PZmUD0AholxzWs5BJ6PQBDXvMCgIhrzZ38IF4duLKF_1CdDudZkjcbrqaFA6v1qiP5b5ocTpaMaWNl4y2L8JJbbtHI23IFXzbQeVx5gHHurbntHqPNiwNR2R_ck5cbbX0ksI_aW0Y-ghaG80xYhXxqDQ</pre>
+      </mat-tab>
+      <mat-tab label="Response Body">
+        <pre>{{respBodyJSON|json}}</pre>
+      </mat-tab>-->
+    </mat-tab-group>
+    <div>
+      <button mat-raised-button color="primary" matStepperNext style="float: right">Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step label="Get API $Export" [editable]="true">
+    <h2>General</h2>
+    <p>Request URL:{{url}}</p>
+    <p>Request Method: GET</p>
+    <p>Status Code: 200</p>
+    <mat-tab-group>
+      <mat-tab label="Request">
+        <p style="margin-top:7px"> Accept: application/fhir+json</p>
+        <p>Accept-Encoding: gzip, deflate, br</p>
+        <p> Accept-Language: en,en-US;q=0.9</p>
+        <p> Connection: keep-alive</p>
+        <p> Origin: https://fhirprod.sitenv.org</p>
+        <p>Prefer: respond-async</p>
+        <p>Authorization: Bearer a74a10835af12af436c843495912aa79</p>
+        <p>Referer: https://fhirprod.sitenv.org</p>
+        <p> User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170
+          Safari/537.36
+        </p>
+
+      </mat-tab>
+      <mat-tab label="Response">
+        <p style="margin-top:7px"> Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Prefer, Authorization</p>
+        <p>Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS, DELETE</p>
+        <p>Access-Control-Allow-Origin: *</p>
+        <p>access-control-expose-headers: Content-Location,Link,X-Progress,Prefer,Origin, X-Requested-With, Content-Type, Accept,Access-Control-Max-Age,Access-Control-Allow-Methods,Access-Control-Allow-Origin
+        </p>
+        <p>Access-Control-Max-Age: 3600</p>
+        <p>Connection: close</p>
+        <p>Connection: close</p>
+        <p>Content-Disposition: Attachment;</p>
+        <p>Content-Length: 0</p>
+        <p>Content-Location: https://fhirprod.sitenv.org/backend-app-secure/bulkdata/444</p>
+        <p>Content-Type: application/fhir+ndjson;charset=UTF-8</p>
+        <p>Date:
+          <span>{{now}}</span>
+        </p>
+        <p>Expires:
+          <span>{{expirydate}}</span>
+        </p>
+        <p>Server: Apache-Coyote/1.1</p>
+        <p>Set-Cookie: JSESSIONID=49C27D2A34CD0E6964BC0495C54667A8; Path=/open-fhir/; Secure; HttpOnly</p>
+        <p>X-Powered-By: HAPI FHIR 1.6 REST Server (FHIR Server; FHIR 1.0.2/DSTU2)</p>
+      </mat-tab>
+    </mat-tab-group>
+    <div>
+      <button mat-raised-button color="primary" matStepperPrevious style="float: left">Back</button>
+      <button mat-raised-button color="primary" matStepperNext style="float: right">Next</button>
+    </div>
+
+  </mat-step>
+  <mat-step label="Poll Content Location" [editable]="true">
+    <h2>General</h2>
+    <p>Request URL: https://fhirprod.sitenv.org/backend-app-secure/bulkdata/444</p>
+    <p>Request Method: GET</p>
+    <p>Status Code: 200</p>
+
+    <mat-tab-group>
+      <mat-tab label="Request">
+        <!-- <h2>Request</h2> -->
+        <p style="margin-top:7px"> Accept: application/json, text/plain, */*</p>
+        <p>Accept-Encoding: gzip, deflate, br</p>
+        <p>Accept-Language: en,en-US;q=0.9</p>
+        <p>Connection: keep-alive</p>
+        <p>Host: fhirprod.sitenv.org</p>
+        <p>Origin: https://fhirprod.sitenv.org</p>
+        <p>Referer: https://fhirprod.sitenv.org</p>
+        <p>Authorization: Bearer a74a10835af12af436c843495912aa79</p>
+        <p>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170
+          Safari/537.36
+        </p>
+      </mat-tab>
+      <mat-tab label="Response">
+        <h2>202 Response</h2>
+        <p style="margin-top:7px"> Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Prefer, Authorization</p>
+        <p> Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS, DELETE</p>
+        <p>Access-Control-Allow-Origin: *</p>
+        <p>access-control-expose-headers: Content-Location,Link,X-Progress,Prefer,Origin, X-Requested-With, Content-Type, Accept,Access-Control-Max-Age,Access-Control-Allow-Methods,Access-Control-Allow-Origin
+        </p>
+        <p>Access-Control-Max-Age: 3600</p>
+        <p>Content-Length: 0</p>
+        <p>Content-Type: application/json;charset=UTF-8</p>
+        <p>Date:
+          <span>{{now}}</span>
+        </p>
+        <p>Server: Apache-Coyote/1.1</p>
+        <p>Set-Cookie: JSESSIONID=9F15508DD6A01AC730B8520AF502EDC3; Path=/open-fhir/; Secure; HttpOnly</p>
+        <p>X-Progress: In Progress</p>
+        <h2>200 Response</h2>
+        <p style="margin-top:7px"> Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Prefer, Authorization</p>
+        <p> Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS, DELETE</p>
+        <p>Access-Control-Allow-Origin: *</p>
+        <p>access-control-expose-headers: Content-Location,Link,X-Progress,Prefer,Origin, X-Requested-With, Content-Type, Accept,Access-Control-Max-Age,Access-Control-Allow-Methods,Access-Control-Allow-Origin
+        </p>
+        <p>Access-Control-Max-Age: 3600</p>
+        <p>Content-Length: 2185</p>
+        <p>Content-Type: application/json;charset=UTF-8</p>
+        <p>Date:
+          <span>{{now}}</span>
+        </p>
+        <p>Server: Apache-Coyote/1.1</p>
+        <p> Set-Cookie: JSESSIONID=7C3BDF3F599F459CBBB90C1C4D656A04; Path=/open-fhir/; Secure; HttpOnly</p>
+        <p>X-Progress: Completed</p>
+      </mat-tab>
+      <mat-tab label="Body">
+        <pre style="height: 300px;">{{jsonview|json}}</pre>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div>
+      <button mat-raised-button color="primary" matStepperPrevious style="float: left">Back</button>
+      <button mat-raised-button color="primary" matStepperNext style="float: right">Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Download Content" [editable]="true">
+    <!--<span>{{myData}}</span>-->
+    <h3>Download NdJson Data</h3>
+    <div class="before">
+      <div *ngFor="let item of myData" class="resourceContainer col-md-3">
+        <span>
+          <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
+            <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
+        </span>
+      </div>
+    </div>
+    <div style="margin-top:120px">
+      <button mat-raised-button color="primary" matStepperPrevious style="float: left">Back</button>
+
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

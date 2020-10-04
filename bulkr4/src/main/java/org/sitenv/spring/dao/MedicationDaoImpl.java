@@ -508,11 +508,12 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 		List<DafMedication> list = null;
 		try {
 			StringBuffer stb = new StringBuffer();
-			stb.append("select * from medication where data->").append("'").append("subject").append("'").append("->>")
-					.append("'").append("reference").append("'").append("in (");
-
-			stb.append(patients);
-			stb.append(")");
+			stb.append("select * from medication ");
+//					+ "where data->").append("'").append("subject").append("'").append("->>")
+//					.append("'").append("reference").append("'").append("in (");
+//
+//			stb.append(patients);
+//			stb.append(")");
 			String query = stb.toString();
 			list = getSession().createNativeQuery(query, DafMedication.class).getResultList();
 		} catch (Exception e) {

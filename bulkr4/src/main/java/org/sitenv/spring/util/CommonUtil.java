@@ -15,42 +15,41 @@ import org.apache.commons.io.IOUtils;
 import org.hl7.fhir.r4.model.DateTimeType;
 
 public class CommonUtil {
-    private static final String CHAR_LIST =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
+	private static final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
-    // private static final int RANDOM_STRING_LENGTH = 250;
+	// private static final int RANDOM_STRING_LENGTH = 250;
 
-    public static String generateRandomString(int length) {
+	public static String generateRandomString(int length) {
 
-        StringBuffer randStr = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            int number = getRandomNumber();
-            char ch = CHAR_LIST.charAt(number);
-            randStr.append(ch);
-        }
-        return randStr.toString();
-    }
+		StringBuffer randStr = new StringBuffer();
+		for (int i = 0; i < length; i++) {
+			int number = getRandomNumber();
+			char ch = CHAR_LIST.charAt(number);
+			randStr.append(ch);
+		}
+		return randStr.toString();
+	}
 
-    private static int getRandomNumber() {
-        int randomInt = 0;
-        Random randomGenerator = new Random();
-        randomInt = randomGenerator.nextInt(CHAR_LIST.length());
-        if (randomInt - 1 == -1) {
-            return randomInt;
-        } else {
-            return randomInt - 1;
-        }
-    }
+	private static int getRandomNumber() {
+		int randomInt = 0;
+		Random randomGenerator = new Random();
+		randomInt = randomGenerator.nextInt(CHAR_LIST.length());
+		if (randomInt - 1 == -1) {
+			return randomInt;
+		} else {
+			return randomInt - 1;
+		}
+	}
 
-    public static String base64Encoder(String string) {
+	public static String base64Encoder(String string) {
 
-        //encoding  byte array into base 64
-        byte[] encoded = Base64.encodeBase64(string.getBytes());
+		// encoding byte array into base 64
+		byte[] encoded = Base64.encodeBase64(string.getBytes());
 
-        return new String(encoded);
-    }
+		return new String(encoded);
+	}
 
-    public static Date convertStringToDate(String dateInString) {
+	public static Date convertStringToDate(String dateInString) {
 		Date date = null;
 		try {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -60,8 +59,9 @@ public class CommonUtil {
 		}
 		return date;
 	}
-    public static Date convertStringToDateYear(String dateInString) {
- 		Date dateYear = null;
+
+	public static Date convertStringToDateYear(String dateInString) {
+		Date dateYear = null;
 		try {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
 			dateYear = formatter.parse(dateInString);
@@ -74,61 +74,63 @@ public class CommonUtil {
 	public static DateTimeType convertStringToDateTimeType(String dateInStr) {
 		DateTimeType dateTimeType = null;
 		try {
-			dateTimeType =	new	DateTimeType(dateInStr);
-			} catch (Exception e) {
+			dateTimeType = new DateTimeType(dateInStr);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return dateTimeType;
 	}
-    
+
 	public static String base64Decoder(String encodedString) {
 
-        //decoding byte array into base64
-        byte[] decoded = Base64.decodeBase64(encodedString);
+		// decoding byte array into base64
+		byte[] decoded = Base64.decodeBase64(encodedString);
 
-        return new String(decoded);
+		return new String(decoded);
 
-    }
-	
-	public static int downloadFIleByName(File downloadFile, HttpServletResponse response) throws IOException{
-		 
-		if(downloadFile.exists()){
-		FileInputStream inputStream = null;
-		OutputStream outStream = null;
-		
-		try {
-			inputStream = new FileInputStream(downloadFile);
- 
-			response.setContentLength((int) downloadFile.length());
-			//response.setContentType(context.getMimeType("C:/JavaHonk/CustomJar.jar"));			
- 
-			// response header
-			String headerKey = "Content-Disposition";
-			String headerValue = String.format("attachment; filename=\"%s\"",downloadFile.getName());
-			response.setHeader(headerKey, headerValue);
- 
-			// Write response
-			outStream = response.getOutputStream();
-			return IOUtils.copy(inputStream, outStream);
-			
- 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+	}
+
+	public static int downloadFIleByName(File downloadFile, HttpServletResponse response) throws IOException {
+
+		if (downloadFile.exists()) {
+			FileInputStream inputStream = null;
+			OutputStream outStream = null;
+
 			try {
-				if (null != inputStream)
-					inputStream.close();
-				if (null != inputStream)
-					outStream.close();
-			} catch (IOException e) {
+				inputStream = new FileInputStream(downloadFile);
+
+				response.setContentLength((int) downloadFile.length());
+				// response.setContentType(context.getMimeType("C:/JavaHonk/CustomJar.jar"));
+
+				// response header
+				String headerKey = "Content-Disposition";
+				String headerValue = String.format("attachment; filename=\"%s\"", downloadFile.getName());
+				response.setHeader(headerKey, headerValue);
+
+				// Write response
+				outStream = response.getOutputStream();
+				return IOUtils.copy(inputStream, outStream);
+
+			} catch (Exception e) {
 				e.printStackTrace();
+			} finally {
+				try {
+					if (null != inputStream)
+						inputStream.close();
+					if (null != inputStream)
+						outStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 			}
- 
-		}
-		return 1;
-		}else{
+			return 1;
+		} else {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found.");
-		return 404;	
+			return 404;
 		}
-}
+	}
+	
+	
+	
 }

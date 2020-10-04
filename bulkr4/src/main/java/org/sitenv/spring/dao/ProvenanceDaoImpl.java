@@ -270,11 +270,12 @@ public class ProvenanceDaoImpl extends AbstractDao implements ProvenanceDao {
 		List<DafProvenance> list = null;
 		try {
 			StringBuffer stb = new StringBuffer();
-			stb.append("select * from Provenance where data->").append("'").append("target").append("'").append("->>")
-					.append("'").append("reference").append("'").append("in (");
-
-			stb.append(patients);
-			stb.append(")");
+			stb.append("select * from Provenance");
+//					+ " where data->").append("'").append("target").append("'").append("->>")
+//					.append("'").append("reference").append("'").append("in (");
+//
+//			stb.append(patients);
+//			stb.append(")");
 			String query = stb.toString();
 			list = getSession().createNativeQuery(query, DafProvenance.class).getResultList();
 		} catch (Exception e) {

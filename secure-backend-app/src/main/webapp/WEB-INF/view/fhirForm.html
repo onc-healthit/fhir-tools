@@ -1,0 +1,44 @@
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="js/bootstrap.min.js" rel="stylesheet" type="text/css" />
+		<link href="js/jquery.min.js" rel="stylesheet" type="text/css" />
+<div class="container">
+  <h2>Enter the Details of FHIR Server</h2>
+  <form>
+    <div class="form-group">
+      <label for="FHIR_Server_URL">Base URL of FHIR Server:</label>
+      <input type="text" class="form-control" id="FHIR_Server_URL" placeholder="Base Url" name="FHIR_Server_URL">
+    </div>
+    <div class="form-group">
+      <label for="client_id">client id:</label>
+      <input type="text" class="form-control" id="client_id" placeholder="Enter clientId" name="client_id">
+    </div>
+    <div class="form-group">
+      <label for="Token_endpoint">Token Endpoint:</label>
+      <input type="text" class="form-control" id="Token_endpoint" placeholder="Enter Token endpoint" name="Token_endpoint">
+    </div>
+
+		<div class="form-group">
+			<label for="inputEmail3" class="col-sm-3 control-label">Scope:</label>
+			<div class="col-sm-9">
+				<div class="col-sm-5 editregscopes">
+					<div class="checkbox">
+						<label><input class="editregscopesclass" type="checkbox"
+							name="editscopes[]" value="launch" onchange="removeerror();">launch</label>
+					</div>
+					<div class="checkbox">
+						<label><input class="editregscopesclass" type="checkbox"
+							name="editscopes[]" value="launch/patient"
+							onchange="removeerror();">launch/patient</label>
+					</div>
+					
+			</div>
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<p id="editscopeserror"
+					style="text-align: center; margin-top: 20px; font-size: 12px; color: #a94442;"
+					class="center-block"></p>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>

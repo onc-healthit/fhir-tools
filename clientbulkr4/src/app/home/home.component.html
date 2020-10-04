@@ -1,0 +1,75 @@
+<mat-card>
+  <mat-card-title>FHIR Bulk Data API Example Code</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <!-- <h3>FHIR Bulk Data API Example Code</h3> -->
+    <div class="sandbox-description">
+      <p>This sandbox offers example code and demonstration capabilities following the emerging FHIR bulk data implementation
+        guide. The current version of the developing specification is available at
+        <a href="https://github.com/smart-on-fhir/fhir-bulk-data-docs" target="_blank">https://github.com/smart-on-fhir/fhir-bulk-data-docs</a>
+      </p>
+      <h3>Beginners Looking to Learn</h3>
+      <p>Try the
+        <a href="{{origin}}/bulkdataclient/#/run-test" target="_blank">Bulk Data API's Simulation</a>
+        and inspect the API request and response for each step in the sequence. Note how the body of the response points to the ndjson
+        (newline delimited JSON) resources. Download and inspect the sample data returned.
+      </p>
+      <h3>Experts Looking to Test</h3>
+      <p>The sandbox contains three components as described below:</p>
+      <ol>
+        <li>A SITE FHIR Server that conforms to the Bulk Data API Server implementation. The code base can be found at</li>
+        <ul>
+          <li>
+            <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulk-api-v2" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulk-api-v2</a>
+          </li>
+        </ul>
+        <li>A FHIR Client that conforms to the Bulk Data API Client Implementation.The code base can be found at</li>
+        <ul>
+          <li>
+            <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/secure-backend-app" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/secure-backend-app</a>
+          </li>
+        </ul>
+        <li>This User Interface (not part of the specification.) If you are new to the Bulk Data API's, see the “Bulk Data API's
+          Simulation” on the left navigation menu.The code base for the User Interface can be found at
+        </li>
+        <ul>
+          <li>
+            <a href="https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulkdataclient" target="_blank">https://github.com/siteadmin/fhir-tools/tree/bulk-api-v2/bulkdataclient</a>
+          </li>
+        </ul>
+      </ol>
+      <p>The User Interface interacts with Bulk Data Client using RESTful interfaces, which in turn communicates with the SITE
+        FHIR Server using the FHIR Bulk Data APIs to satisfy the requests. </p>
+      <p>
+        <a href="https://github.com/smart-on-fhir/fhir-bulk-data-docs/blob/master/authorization.md" target="_blank"> The SMART Backend Services authorization guide </a>
+        is implemented between the Bulk Data Client and the SITE FHIR Server.
+      </p>
+      <!-- <h3>Data Provided for the Examples</h3>
+      <p>The Bulk Data API sandbox contains two databases</p>
+      <ol>
+        <li>One with 100 patients for vendors to download and experiment.You can download and view the data in
+          <a href="{{origin}}/bulkdataclient/download/SampleData.xlsx" target="_blank">Excel</a> or
+          <a href="{{origin}}/bulkdataclient/download/SampleJSONData.rar" target="_blank">JSON</a> formats.</li>
+        <li>
+          One with 100000 patients for vendors to perform load testing and tuning. You can download and view the data in
+          <a href="{{origin}}/bulkdataclient/download/SamplePatientsData.xlsx" target="_blank">Excel</a> format.
+        </li>
+        <li>
+          One with 500000 patients for vendors to perform load testing and tuning. You can download and view the data in
+          <a href="{{origin}}/bulkdataclient/download/PatientsBulkData.xlsx" target="_blank">Excel</a> format.
+        </li>
+      </ol> -->
+      <h3>Bulk Data API Sandbox Usage</h3>
+      <p>The Sanbox can be used by using:</p>
+      <ol>
+        <li>FHIR client to connect to the SITE FHIR Server provided.
+          <ul>
+            <li>Secure FHIR Server URL: {{origin}}/bulkr4/fhir</li>
+          </ul>
+        </li>
+        <!-- <li>See “Bulk Data API’s Simulation” on the left navigation menu to understand how the FHIR Bulk Data APIs function.</li> -->
+      </ol>
+
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,110 @@
+<mat-card>
+  <mat-card-title>Bulk Data Extract</mat-card-title>
+  <mat-divider></mat-divider>
+  <mat-card-content>
+    <mat-radio-group class="example-radio-group">
+      <mat-radio-button class="example-radio-button" *ngFor="let option of radioOptions" [value]="option" (change)="optionselect($event)">
+        {{option}}
+      </mat-radio-button>
+    </mat-radio-group>
+  </mat-card-content>
+</mat-card>
+
+<div class="table-container" *ngIf="displayByGroup">
+  <mat-table #table [dataSource]="dataSource" class="mat-elevation-z4">
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef>Id</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        {{group.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Group Name</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        {{group.name}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="patientList">
+      <mat-header-cell *matHeaderCellDef>List of Patients</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        {{group.patientList}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        {{group.status}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="requestId">
+      <mat-header-cell *matHeaderCellDef>Request Id</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        {{group.requestId}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        <!-- {{group.dob}} -->
+        <button mat-raised-button color="primary" (click)="extractByGroup(group);" [disabled]="group.exported">Extract</button>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="data">
+      <mat-header-cell *matHeaderCellDef>Extracted Resource Data in Ndjson Format</mat-header-cell>
+      <mat-cell *matCellDef="let group">
+        <div *ngFor="let item of group.data" class="resourceContainer">
+          <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
+            <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
+          <!-- <a href="{{item.resourceLink}}">
+            <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a> -->
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+
+  <!-- <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" class="mat-elevation-z4">
+  </mat-paginator> -->
+</div>
+
+<mat-card *ngIf="displayExtractAll">
+  <mat-card-content>
+    <div class="row requestBody">
+      <!-- <div class="col-md-3">
+        <p>Status Code:</p>
+      </div>
+      <div class="col-md-9">
+        <p>{{extractAllResponseCode}}</p>
+      </div> -->
+      <!-- <div class="col-md-3">
+        <p>Response Body:</p>
+      </div>
+      <div class="col-md-9">
+        <pre style="max-height: 300px;">{{extractAllResponse|json}}</pre>
+      </div> -->
+      <div class="col-md-3">
+        <p>Extracted Resource Data In Ndjson Format:</p>
+      </div>
+      <div class="col-md-9">
+        <div *ngFor="let item of extractAllData" class="resourceContainer col-md-3">
+          <span>
+            <a (click)="getSelectedNdJson(item.resourceName,item.resourceLink);">
+              <i class="material-icons">insert_drive_file</i> {{item.resourceName}}</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<app-loading [isLoading]="isLoadingResults"></app-loading>

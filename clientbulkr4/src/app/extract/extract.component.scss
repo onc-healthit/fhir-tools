@@ -1,0 +1,76 @@
+.mat-card {
+  margin: 20px 30px;
+}
+
+.title,
+.table-container {
+  padding: 10px 30px;
+}
+
+.table-container .mat-checkbox,
+.table-container .mat-header-cell .mat-checkbox {
+  transition: none;
+}
+
+.table-container .mat-column-data {
+  // min-width: 360px;
+}
+
+.table-container .mat-column-id {
+  max-width: 50px;
+}
+
+.table-container .mat-column-data .resourceContainer {
+  width: 50%;
+  float: left;
+}
+
+.table-container .mat-column-data {
+  min-width: 400px;
+}
+
+.title .header-title {
+  // float: left;
+  margin: 0;
+}
+
+.resourceContainer .material-icons {
+  font-size: 12px;
+}
+
+.resourceContainer a {
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
+.table-container .mat-column-patientList {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-container .mat-header-cell {
+  font-weight: bold;
+  font-size: 16px;
+  color: #000000;
+}
+
+.example-radio-button {
+  padding-right: 10px;
+  margin-left: 100px;
+  margin-top: 20px;
+}
+
+@media(max-width:800px) {
+  .mat-card {
+    width: 900px;
+  }
+  .mat-table {
+    width: 900px;
+  }
+  .mat-paginator {
+    width: 900px;
+  }
+}

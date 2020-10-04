@@ -29,7 +29,6 @@ import org.sitenv.spring.service.GroupService;
 import org.sitenv.spring.util.CommonUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -246,6 +245,7 @@ public class BulkDataRequestProvider {
 			destDir.mkdirs();
 		}
 
+//		System.out.println(destDir);
 		if (bdr.getResourceName() != null && bdr.getResourceName().equalsIgnoreCase("GROUP")) {
 
 			DafGroup dafGroup = groupService.getGroupById(bdr.getResourceId());

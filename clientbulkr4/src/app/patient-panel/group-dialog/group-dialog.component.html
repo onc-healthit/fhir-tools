@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Enter Group Name</h2>
+<mat-dialog-content>
+
+  <form [formGroup]="groupNameForm">
+    <mat-form-field class="example-full-width">
+      <input matInput type="text" formControlName="groupName" placeholder="Group Name" required>
+      <div *ngIf="groupNameForm.controls['groupName'].errors && !groupNameForm.controls['groupName'].pristine" class="error-msg">
+        <div [hidden]="!groupNameForm.controls['groupName'].errors.required">Group Name is required.</div>
+      </div>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-raised-button color="primary" (click)="onClose();" [disabled]="groupNameForm.invalid">Create Panel</button>
+</mat-dialog-actions>

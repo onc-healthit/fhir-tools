@@ -1,0 +1,14 @@
+<div class="flex-row">
+  <h3>{{ndjsonname}}</h3>
+  <a mat-raised-button color="primary" href="{{ndjsonlink}}" *ngIf="ndjsondata !== null && ndjsondata !== ''">
+    <mat-icon>file_download</mat-icon> Download</a>
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <pre *ngIf="ndjsondata !== null && ndjsondata !== ''">{{ndjsondata|json}}</pre>
+  <pre *ngIf="ndjsondata === null || ndjsondata === ''">No data is available, select close to continue.</pre>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions>
+  <button mat-raised-button mat-dialog-close color="accent">Close</button>
+</mat-dialog-actions>

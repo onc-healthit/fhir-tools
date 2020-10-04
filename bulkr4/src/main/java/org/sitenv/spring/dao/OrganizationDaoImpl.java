@@ -683,11 +683,12 @@ public class OrganizationDaoImpl extends AbstractDao implements OrganizationDao 
 		List<DafOrganization> list = null;
 		try {
 			StringBuffer stb = new StringBuffer();
-			stb.append("select * from organization where data->").append("'").append("subject").append("'")
-					.append("->>").append("'").append("reference").append("'").append("in (");
+			stb.append("select * from organization ");
+//					+ "where data->").append("'").append("subject").append("'")
+//					.append("->>").append("'").append("reference").append("'").append("in (");
 
-			stb.append(patients);
-			stb.append(")");
+//			stb.append(patients);
+//			stb.append(")");
 			String query = stb.toString();
 			list = getSession().createNativeQuery(query, DafOrganization.class).getResultList();
 		} catch (Exception e) {

@@ -1,0 +1,27 @@
+<section class="main-container">
+  <app-header></app-header>
+  <app-top-nav></app-top-nav>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav [opened]="screenWidth > 840" [mode]="(screenWidth > 840) ? 'side' : 'over'">
+      <app-navbar></app-navbar>
+    </mat-sidenav>
+    <div class="row" style="margin: 0px;">
+      <div class="col-md-12" [ngStyle]="{'display' : (screenWidth > 840) ? 'none' : 'block'}">
+        <!-- <button type="button" md-button (click)="sidenav.open()">
+          Toggle sidenav when display is block
+        </button> -->
+        <button type="button" class="navbar-toggle" mat-raised-button color='primary' (click)="sidenav.open()" style="padding: 0px;min-width:50px;margin-top:15px;">
+          <mat-icon>reorder</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="changing-content custom-scrollbar">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </mat-sidenav-container>
+  <simple-notifications [options]="notificationOptions"></simple-notifications>
+  <app-footer></app-footer>
+</section>

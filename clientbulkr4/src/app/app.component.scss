@@ -1,0 +1,36 @@
+mat-sidenav-container {
+  min-height: 100vh;
+}
+
+.mat-sidenav {
+  border-right: 1px solid #dddddd;
+  box-shadow: 0px 0 5px #ddd;
+}
+
+mat-sidenav-container .mat-sidenav-content {
+  background-color: #f5f7fa;
+}
+
+.main-content {
+  display: flex;
+  height: 100%;
+}
+
+.main-container {
+  min-height: 100%;
+}
+
+.mat-sidenav-container {
+  height: 100%;
+}
+
+.main-content .changing-content {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  overflow: auto;
+  margin-left: 5px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  min-height: 100vh;
+}

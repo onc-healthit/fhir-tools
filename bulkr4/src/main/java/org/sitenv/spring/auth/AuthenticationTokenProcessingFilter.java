@@ -101,7 +101,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 //        } else if (httpRequest.getServletPath().contains("bulkdata/") || httpRequest.getServletPath().contains("bulkdata/download")) {
 //            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
 //            chain.doFilter(request, response); //temporal solution
-            
+//            
 
 
         }else  if (authToken != null && "bearer".equalsIgnoreCase(authToken.split(" ", 2)[0].toString())) {

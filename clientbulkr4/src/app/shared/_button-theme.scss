@@ -1,0 +1,32 @@
+@import 'custom-theme';
+@mixin mat-button-color($theme) {
+  $accent: map-get($theme, accent);
+  $primary: map-get($theme, primary);
+  $primary-color: mat-color($primary);
+  .primary-color {
+    color: mat-color($primary);
+  }
+  .accent-color {
+    color: mat-color($accent);
+  }
+  button {
+    &.secondary-button {
+      color: mat-color($accent) !important;
+      border: 1px solid mat-color($accent) !important;
+      background-color: white !important;
+      &[disabled] {
+        color: mat-color($accent, 100) !important;
+      }
+    }
+    &.primary-button {
+      background-color: mat-color($accent) !important;
+      color: white !important;
+      &[disabled] {
+        background-color: mat-color($accent, 100) !important;
+      }
+    }
+    .loading {
+      background-image: linear-gradient( 90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 60%, mat-color($accent, 100) 61%);
+    }
+  }
+}

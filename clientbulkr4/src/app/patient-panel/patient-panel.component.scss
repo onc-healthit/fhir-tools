@@ -1,0 +1,47 @@
+.title,
+.table-container {
+  padding: 10px 30px;
+}
+
+.table-container .mat-checkbox,
+.table-container .mat-header-cell .mat-checkbox {
+  transition: none;
+}
+
+.table-container .mat-header-cell {
+  font-weight: bold;
+  font-size: 16px;
+  color: #000000;
+}
+
+.mat-column-select {
+  overflow: visible;
+  max-width: 60px;
+}
+
+.create-report {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+}
+
+.title .header-title {
+  float: left;
+  margin: 0;
+}
+
+.mat-column-id {
+  max-width: 70px;
+}
+
+// .mat-table {
+//   width: 100%
+// }
+@media(max-width:800px) {
+  .mat-table {
+    width: 900px;
+  }
+  .mat-paginator {
+    width: 900px;
+  }
+}

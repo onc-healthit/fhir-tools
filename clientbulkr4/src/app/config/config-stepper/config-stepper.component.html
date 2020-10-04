@@ -1,0 +1,89 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step label="GET API $Export" [editable]="true">
+    <h2>General</h2>
+    <p>Request URL:{{getApiData.getApiUrl}}</p>
+    <p>Request Method: GET</p>
+    <p>Status Code: 200</p>
+    <mat-tab-group>
+      <mat-tab label="Request">
+        <p style="margin-top:7px"> Accept: application/fhir+json</p>
+        <p>Accept-Encoding: gzip, deflate, br</p>
+        <p> Accept-Language: en,en-US;q=0.9</p>
+        <p> Connection: keep-alive</p>
+        <p>Prefer: respond-async</p>
+        <p> User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170
+          Safari/537.36
+        </p>
+      </mat-tab>
+      <mat-tab label="Response">
+        <p style="margin-top:7px">Access-Control-Allow-Methods: {{getApiData.responseHeaders.allowMethods}}</p>
+        <p>Access-Control-Allow-Origin: {{getApiData.responseHeaders.allowOrigin}}</p>
+        <p>Access-Control-Max-Age: {{getApiData.responseHeaders.maxAge}}</p>
+        <p>Content-Location: {{getApiData.responseHeaders.contentLocation}}</p>
+        <p>Content-Type: {{getApiData.responseHeaders.contentType}}</p>
+        <p>Expires:
+          <span>{{getApiData.responseHeaders.expires}}</span>
+        </p>
+      </mat-tab>
+    </mat-tab-group>
+    <div>
+      <button mat-raised-button color="primary" matStepperNext style="float: right">Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Poll Content Location" [editable]="true">
+    <h2>General</h2>
+    <p>Request URL: {{getPollData.getApiUrl}}</p>
+    <p>Request Method: GET</p>
+    <p>Status Code: 200</p>
+
+    <mat-tab-group>
+      <mat-tab label="Request">
+        <!-- <h2>Request</h2> -->
+        <p style="margin-top:7px"> Accept: application/json, text/plain, */*</p>
+        <p>Accept-Encoding: gzip, deflate, br</p>
+        <p>Accept-Language: en,en-US;q=0.9</p>
+        <p>Connection: keep-alive</p>
+        <p>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170
+          Safari/537.36
+        </p>
+      </mat-tab>
+      <mat-tab label="Response">
+        <h2 *ngIf="getPollData.acceptedResponseHeaders">202 Response</h2>
+        <div *ngIf="getPollData.acceptedResponseHeaders">
+          <p style="margin-top:7px"> Access-Control-Allow-Methods: {{getPollData.acceptedResponseHeaders.allowMethods}}</p>
+          <p>Access-Control-Allow-Origin: {{getPollData.acceptedResponseHeaders.allowOrigin}}</p>
+          <p>Access-Control-Max-Age: {{getPollData.acceptedResponseHeaders.maxAge}}</p>
+          <p>Content-Type: {{getPollData.acceptedResponseHeaders.contentType}}</p>
+          <p>X-Progress: {{getPollData.acceptedResponseHeaders.xProgress}}</p>
+        </div>
+        <h2>200 Response</h2>
+        <p style="margin-top:7px"> Access-Control-Allow-Methods: {{getPollData.completedResponseHeaders.allowMethods}}</p>
+        <p>Access-Control-Allow-Origin: {{getPollData.completedResponseHeaders.allowOrigin}}</p>
+        <p>Access-Control-Max-Age: {{getPollData.completedResponseHeaders.maxAge}}</p>
+        <p>Content-Type: {{getPollData.completedResponseHeaders.contentType}}</p>
+        <p>Link: {{getPollData.completedResponseHeaders.link}}</p>
+      </mat-tab>
+      <mat-tab label="Body">
+        <pre style="height: 300px;">{{getDownloadData|json}}</pre>
+      </mat-tab>
+    </mat-tab-group>
+    <div>
+      <button mat-raised-button color="primary" matStepperPrevious style="float: left">Back</button>
+      <button mat-raised-button color="primary" matStepperNext style="float: right">Next</button>
+    </div>
+  </mat-step>
+  <mat-step label="Download Content" [editable]="true">
+    <h3>Download NdJson Data</h3>
+    <div class="before">
+      <div *ngFor="let item of downloadContent" class="resourceContainer col-md-3">
+        <span>
+          <a (click)="getSelectedNdJson(item.type,getPollData.getApiUrl +'/download'+ '?q='+ item.url);">
+            <i class="material-icons">insert_drive_file</i>{{item.type}}</a>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-12" style="margin-top:30px;padding-left:0px;">
+      <button mat-raised-button color="primary" matStepperPrevious style="float: left">Back</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

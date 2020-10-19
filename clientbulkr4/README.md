@@ -12,7 +12,7 @@ Follow the instructions to install the packages and build the node application.
 Clone the project as follows:
 
 ```
-$ git clone git clone -b bulk-api-v2 https://github.com/siteadmin/fhir-tools.git
+$ git clone -b master https://github.com/onc-healthit/fhir-tools/
 $ cd {node-application-root-folder}
 ```
 

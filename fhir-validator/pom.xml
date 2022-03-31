@@ -21,7 +21,7 @@
 
     <properties>
 		<java-version>1.7</java-version>
-		<springframework.version>4.3.0.RELEASE</springframework.version>
+		<springframework.version>5.3.18</springframework.version>
 		<jackson.version>2.7.5</jackson.version>
         <fhir.version>2.5-SNAPSHOT</fhir.version>
 	</properties>

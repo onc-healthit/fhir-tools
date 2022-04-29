@@ -171,30 +171,35 @@ public class AuthorizeEndPoint extends HttpServlet {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public void getAuthentication(HttpServletRequest request, HttpServletResponse response, @RequestParam("transaction_id") String transactionId) throws IOException {
+        String[] scopeList = request.getParameterValues("scopeList");
+        String button = request.getParameter("submit");
 
-        String button = request.getParameter("Allow");
+        // Convert the List of String to String
+        String commaSeparatedScope = String.join(",", scopeList);
 
-        DafAuthtemp tempAuth = authTempService.getAuthenticationById(transactionId);
-
+        DafAuthtemp tempAuth = this.authTempService.getAuthenticationById(transactionId);
         if (button != null && button.equalsIgnoreCase("Allow")) {
+            tempAuth.setScope(commaSeparatedScope);
+            this.authTempService.saveOrUpdate(tempAuth);
 
             if (tempAuth != null) {
                 List<String> scopes = Arrays.asList(tempAuth.getScope().split(","));
-                if (scopes.contains("launch/patient") || scopes.contains("launch") ) {
-
-                    String baseUrl = Common.getBaseUrl(request);
+                String baseUrl;
+                if (!scopes.contains("launch/patient") && !scopes.contains("launch")) {
+                    baseUrl = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode().trim() + "&state=" + tempAuth.getState().trim();
+                    response.sendRedirect(baseUrl);
+                } else {
+                    baseUrl = Common.getBaseUrl(request);
                     String url = baseUrl + "/view/patientlist.html?transaction_id=" + tempAuth.getTransaction_id().trim();
                     response.sendRedirect(url.trim());
-
-                } else {
-                    String url = tempAuth.getRedirect_uri().trim() + "?code=" + tempAuth.getAuthCode().trim() + "&state=" + tempAuth.getState().trim();
-                    response.sendRedirect(url);
                 }
             }
         } else {
             String url = tempAuth.getRedirect_uri().trim() + "?error=Access Denied&error_description=Access Denied&state=" + tempAuth.getState().trim();
             response.sendRedirect(url.trim());
         }
+
+
     }
 
     @RequestMapping(value = "/launchpatient", method = RequestMethod.GET)

@@ -223,7 +223,7 @@
 
         // TO display Version and Released date in footer
         $.ajax({
-            url: "https://raw.githubusercontent.com/siteadmin/SITE-Content/master/Version.md",
+            url: "https://raw.githubusercontent.com/onc-healthit/site-content/master/Version.md",
             type: "GET",
             success: function (data, status, xhr) {
                 var md_content = data;
@@ -239,7 +239,7 @@
 
     opennewsmodal = function () {
         $.ajax({
-            url: "https://raw.githubusercontent.com/siteadmin/SITE-Content/master/NewsAndAnnouncements.md",
+            url: "https://raw.githubusercontent.com/onc-healthit/site-content/master/NewsAndAnnouncements.md",
             type: "GET",
             success: function (data, status, xhr) {
                 var md_content = data;
@@ -256,7 +256,7 @@
 
     openreleasemodal = function () {
         $.ajax({
-            url: "https://raw.githubusercontent.com/siteadmin/SITE-Content/master/ReleaseNotes.md",
+            url: "https://raw.githubusercontent.com/onc-healthit/site-content/master/ReleaseNotes.md",
             type: "GET",
             success: function (data, status, xhr) {
                 var md_content = data;

@@ -111,24 +111,17 @@
 
 				<div>
 					<!-- <h4>Requesting access with the following scopes:</h4> -->
-
 					<h4>Requested scopes are :</h4>
-
+					<span> <input type="checkbox" id="selectAll" checked> <label class="col-sm-3 control-label"> Select All </label>  <br /></span><br>
 					<%
 						String[] array = request.getParameter("scope").split(",");
-					%>
-
-
-					<%
 						for (int i = 0; i < array.length; i++) {
 					%>
 					<span> <input class="messageCheckbox" type="checkbox"
 						name="scopeList" value="<%=array[i]%>" checked> <label
 						for="<%=array[i]%>" class="col-sm-3 control-label"> "<%=array[i]%>"
 					</label> <br> <br /></span>
-					<%
-						}
-					%>
+					<% }%>
 
 				</div>
 			</div>
@@ -198,13 +191,10 @@
 	<script
 		src="${pageContext.request.contextPath}/view/js/jquery-1.11.1.js"></script>
 
-	<link href="${pageContext.request.contextPath}/view/css/bootstrap.css"
-		rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/view/css/bootstrap.css"	rel="stylesheet" type="text/css" />
 	<script src="${pageContext.request.contextPath}/view/js/bootstrap.js"></script>
-	<link href="${pageContext.request.contextPath}/view/css/fhir.css"
-		rel="stylesheet">
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/view/js/remarkable.min.js"></script>
+	<link href="${pageContext.request.contextPath}/view/css/fhir.css" rel="stylesheet">
+	<script type="text/javascript" src="${pageContext.request.contextPath}/view/js/remarkable.min.js"></script>
 	<!-- <script src="view/js/hoverMenu.js"></script> -->
 
 	<!-- News and Announcements Modal -->
@@ -252,7 +242,7 @@
 							// TO display Version and Released date in footer
 							$
 									.ajax({
-										url : "https://raw.githubusercontent.com/siteadmin/SITE-Content/master/Version.md",
+										url : "https://raw.githubusercontent.com/onc-healthit/site-content/master/Version.md",
 										type : "GET",
 										success : function(data, status, xhr) {
 											var md_content = data;
@@ -270,7 +260,7 @@
 		opennewsmodal = function() {
 			$
 					.ajax({
-						url : "https://raw.githubusercontent.com/siteadmin/SITE-Content/master/NewsAndAnnouncements.md",
+						url : "https://raw.githubusercontent.com/onc-healthit/site-content/master/NewsAndAnnouncements.md",
 						type : "GET",
 						success : function(data, status, xhr) {
 							var md_content = data;
@@ -287,7 +277,7 @@
 		openreleasemodal = function() {
 			$
 					.ajax({
-						url : "https://raw.githubusercontent.com/siteadmin/SITE-Content/master/ReleaseNotes.md",
+						url : "https://raw.githubusercontent.com/onc-healthit/site-content/master/ReleaseNotes.md",
 						type : "GET",
 						success : function(data, status, xhr) {
 							var md_content = data;
@@ -301,6 +291,34 @@
 						}
 					});
 		}
+
+
+
+		$(document).ready(function(){
+			// Check or Uncheck All checkboxes
+			$("#selectAll").change(function(){
+				var checked = $(this).is(':checked');
+				if(checked){
+					$(".messageCheckbox").each(function(){
+						$(this).prop("checked",true);
+					});
+				}else{
+					$(".messageCheckbox").each(function(){
+						$(this).prop("checked",false);
+					});
+				}
+			});
+
+			$(".messageCheckbox").click(function(){
+				if($(".messageCheckbox").length == $(".messageCheckbox:checked").length) {
+					$("#selectAll").prop("checked", true);
+				} else {
+					$("#selectAll").prop("checked", false);
+				}
+
+			});
+		});
+
 	</script>
 
 </body>

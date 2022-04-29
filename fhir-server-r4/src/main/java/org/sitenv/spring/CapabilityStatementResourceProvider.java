@@ -33,8 +33,8 @@ public class CapabilityStatementResourceProvider extends ServerCapabilityStateme
 
         CapabilityStatement conformance = super.getServerConformance(request,theRequestDetails);
         conformance.getFhirVersion();
-        conformance.setId("ONC FHIR Server");
-        conformance.setUrl("/fhir/metadata");
+        conformance.setId("ONC-FHIR-Server");
+        conformance.setUrl(uri+"/fhir/metadata");
         conformance.setVersion("2.0");
         conformance.setName("ONC Argonaut FHIR Metadata");
         conformance.setStatus(PublicationStatus.ACTIVE);

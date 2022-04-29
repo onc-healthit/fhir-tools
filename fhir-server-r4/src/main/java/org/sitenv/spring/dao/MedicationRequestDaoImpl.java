@@ -241,8 +241,9 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 	private void buildIntentCriteria(SearchParameterMap theMap, Criteria criteria) {
 		List<List<? extends IQueryParameterType>> list = theMap.get("intent");
 		if (list != null) {
-
 			for (List<? extends IQueryParameterType> values : list) {
+				Disjunction disjunction = Restrictions.disjunction();
+				boolean orCond= false;
 				for (IQueryParameterType params : values) {
 					TokenParam intent = (TokenParam) params;
 					if (intent.getModifier() != null) {
@@ -252,17 +253,21 @@ public class MedicationRequestDaoImpl extends AbstractDao implements MedicationR
 									.sqlRestriction("{alias}.data->>'intent' not ilike '" + intent.getValue() + "'"));
 						}
 					} else if (StringUtils.isNoneEmpty(intent.getValue())) {
-						criteria.add(Restrictions
-								.sqlRestriction("{alias}.data->>'intent' ilike '%" + intent.getValue() + "%'"));
+						disjunction.add(Restrictions.or(
+									Restrictions.sqlRestriction("{alias}.data->>'intent' ilike '%" + intent.getValue() + "%'")
+								));
+						orCond = true;
 					} else if (intent.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'intent' IS NULL"));
 					} else if (!intent.getMissing()) {
 						criteria.add(Restrictions.sqlRestriction("{alias}.data->>'intent' IS NOT NULL"));
 					}
 				}
+				if(orCond) criteria.add(disjunction);
 			}
 		}
 	}
+
 
 	/**
 	 * This method builds criteria for MedicationRequest category

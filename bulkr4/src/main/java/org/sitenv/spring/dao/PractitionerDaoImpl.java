@@ -856,7 +856,7 @@ public class PractitionerDaoImpl extends AbstractDao implements PractitionerDao 
 			stb.append("select * from practitioner ");
 //					+ "where data->").append("'").append("patient").append("'").append("->>")
 //					.append("'").append("reference").append("'").append("in (");
-//
+
 //			stb.append(patients);
 //			stb.append(")");
 			String query = stb.toString();

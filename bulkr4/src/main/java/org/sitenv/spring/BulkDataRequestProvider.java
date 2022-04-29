@@ -245,7 +245,6 @@ public class BulkDataRequestProvider {
 			destDir.mkdirs();
 		}
 
-//		System.out.println(destDir);
 		if (bdr.getResourceName() != null && bdr.getResourceName().equalsIgnoreCase("GROUP")) {
 
 			DafGroup dafGroup = groupService.getGroupById(bdr.getResourceId());

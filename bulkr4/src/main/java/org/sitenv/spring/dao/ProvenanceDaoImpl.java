@@ -273,7 +273,7 @@ public class ProvenanceDaoImpl extends AbstractDao implements ProvenanceDao {
 			stb.append("select * from Provenance");
 //					+ " where data->").append("'").append("target").append("'").append("->>")
 //					.append("'").append("reference").append("'").append("in (");
-//
+
 //			stb.append(patients);
 //			stb.append(")");
 			String query = stb.toString();

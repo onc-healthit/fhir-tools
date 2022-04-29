@@ -723,7 +723,7 @@ public class LocationDaoImpl extends AbstractDao implements LocationDao {
 			stb.append("select * from location");
 //					+ " where data->").append("'").append("patient").append("'").append("->>")
 //					.append("'").append("reference").append("'").append("in (");
-//
+
 //			stb.append(patients);
 //			stb.append(")");
 			String query = stb.toString();

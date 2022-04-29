@@ -464,7 +464,7 @@ public class ProvenanceResourceProvider implements IResourceProvider {
         	for(int i = 0; i < noOfAgents; i++) {
         		ProvenanceAgentComponent theAgent = new ProvenanceAgentComponent();
         		//Set agent type
-        		if(!(agentJSON.getJSONObject(i).isNull(" type"))) {
+        		if(!(agentJSON.getJSONObject(i).isNull("type"))) {
         			JSONObject typeJSON = agentJSON.getJSONObject(i).getJSONObject("type");
         			CodeableConcept theType = new CodeableConcept();
             		if(!(typeJSON.isNull("coding"))) {

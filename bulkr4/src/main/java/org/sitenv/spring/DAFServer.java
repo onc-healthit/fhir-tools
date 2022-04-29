@@ -88,6 +88,7 @@ public class DAFServer extends RestfulServer {
         setDefaultPrettyPrint(true);
         setDefaultResponseEncoding(EncodingEnum.JSON);
 
+
     }
 
 }

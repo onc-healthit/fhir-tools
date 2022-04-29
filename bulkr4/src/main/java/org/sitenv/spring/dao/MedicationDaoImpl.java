@@ -511,7 +511,7 @@ public class MedicationDaoImpl extends AbstractDao implements MedicationDao {
 			stb.append("select * from medication ");
 //					+ "where data->").append("'").append("subject").append("'").append("->>")
 //					.append("'").append("reference").append("'").append("in (");
-//
+
 //			stb.append(patients);
 //			stb.append(")");
 			String query = stb.toString();

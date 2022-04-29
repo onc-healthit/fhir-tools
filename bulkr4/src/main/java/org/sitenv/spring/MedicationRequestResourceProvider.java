@@ -1320,21 +1320,13 @@ public class MedicationRequestResourceProvider implements IResourceProvider {
 			reported.setReference(medicationRequestJSON.getJSONObject("reported").getString("reference"));
 			medicationRequest.setReported(reported);
 		}
-//		try {
-			//set reportedBoolean
 		    if(!(medicationRequestJSON.isNull("reportedBoolean"))) {
 		    	BooleanType reportedBoolean = new BooleanType();
 		    	boolean reportedB = medicationRequestJSON.getBoolean("reportedBoolean");
-//		    	System.out.println("test...."+reportedB);
 		    	reportedBoolean.setValue(reportedB);
 		    	medicationRequest.setReported(reportedBoolean);
 		    }
 
-			
-//		}catch (Exception e){
-//			e.printStackTrace();
-//		}
-		
 			//Set medicationCodeableConcept
        	if(!(medicationRequestJSON.isNull("medicationCodeableConcept"))) {
     		JSONObject medicationCodeableConceptJSON = medicationRequestJSON.getJSONObject("medicationCodeableConcept");

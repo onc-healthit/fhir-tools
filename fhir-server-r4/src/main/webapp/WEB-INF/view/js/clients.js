@@ -1,5 +1,5 @@
 (function(){
-	var main_url = geturl()+"/r4/";
+	var main_url = geturl()+"/r4";
 	//var main_url = geturl();
 	
 	checkCookie = function() {

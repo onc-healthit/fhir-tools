@@ -7,7 +7,7 @@
 	<artifactId>stu3</artifactId>
 	<name>daf3</name>
 	<packaging>war</packaging>
-	<version>2.5-SNAPSHOT</version>
+	<version>4.2.0</version>
 	<properties>
 		<!-- <java-version>1.7</java-version> -->
 		<spring.version>4.0.7.RELEASE</spring.version>

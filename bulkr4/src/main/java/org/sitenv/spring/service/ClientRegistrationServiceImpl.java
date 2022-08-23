@@ -1,12 +1,6 @@
 package org.sitenv.spring.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import net.minidev.json.JSONObject;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.sitenv.spring.dao.ClientRegistrationDao;
 import org.sitenv.spring.exception.FHIRHapiException;
@@ -16,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.gson.Gson;
-
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Service("clientRegistrationService")
 @Transactional

@@ -1,20 +1,10 @@
 package org.sitenv.spring;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.TimeZone;
-import java.util.concurrent.Future;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.primitive.DateDt;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ch.qos.logback.classic.Logger;
+import com.google.gson.Gson;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -36,12 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.primitive.DateDt;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
-import ch.qos.logback.classic.Logger;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.Future;
 
 @Controller
 @RequestMapping("/bulkdata")

@@ -1,14 +1,13 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.annotation.WebServlet;
-
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
+
+import javax.servlet.annotation.WebServlet;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @WebServlet(urlPatterns = {"/fhir/*"}, displayName = "FHIR Server")

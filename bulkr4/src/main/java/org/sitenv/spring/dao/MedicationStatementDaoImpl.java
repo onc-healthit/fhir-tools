@@ -1,11 +1,8 @@
 package org.sitenv.spring.dao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.StringJoiner;
-
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.rest.param.ReferenceParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
@@ -15,9 +12,9 @@ import org.sitenv.spring.model.DafMedicationStatement;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.TokenParam;
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Repository("medicationStatementDao")
 public class MedicationStatementDaoImpl extends AbstractDao implements MedicationStatementDao {

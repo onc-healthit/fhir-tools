@@ -1,11 +1,11 @@
 package org.sitenv.spring.service;
 
-import javax.transaction.Transactional;
-
 import org.sitenv.spring.dao.GroupDao;
 import org.sitenv.spring.model.DafGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service("groupService")
 @Transactional

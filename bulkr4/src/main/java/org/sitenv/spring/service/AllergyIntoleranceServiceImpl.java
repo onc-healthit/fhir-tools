@@ -1,15 +1,15 @@
 package org.sitenv.spring.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.StringJoiner;
-
 import org.sitenv.spring.dao.AllergyIntoleranceDao;
 import org.sitenv.spring.model.DafAllergyIntolerance;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Service("AllergyIntoleranceService")
 @Transactional

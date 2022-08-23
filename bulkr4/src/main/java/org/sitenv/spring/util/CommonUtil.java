@@ -1,5 +1,10 @@
 package org.sitenv.spring.util;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.hl7.fhir.r4.model.DateTimeType;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,12 +12,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
-import org.hl7.fhir.r4.model.DateTimeType;
 
 public class CommonUtil {
     private static final String CHAR_LIST =

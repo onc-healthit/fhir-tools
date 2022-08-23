@@ -1,11 +1,12 @@
 package org.sitenv.spring.jwtservice;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.util.concurrent.UncheckedExecutionException;
+import com.nimbusds.jose.jwk.JWKSet;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONObject;
 import org.sitenv.spring.keystore.JWKSStore;
 import org.sitenv.spring.model.DafClientRegister;
 import org.sitenv.spring.service.ClientRegistrationService;
@@ -16,13 +17,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.util.concurrent.UncheckedExecutionException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.nimbusds.jose.jwk.JWKSet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class JWKSCache {

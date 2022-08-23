@@ -1,40 +1,8 @@
 package org.sitenv.spring.service;
 
 
-import java.io.File;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.concurrent.Future;
-
-import org.sitenv.spring.AllergyIntoleranceResourceProvider;
-import org.sitenv.spring.BulkDataRequestProvider;
-import org.sitenv.spring.CarePlanResourceProvider;
-import org.sitenv.spring.CareTeamResourceProvider;
-import org.sitenv.spring.ConditionResourceProvider;
-import org.sitenv.spring.DeviceResourceProvider;
-import org.sitenv.spring.DiagnosticReportResourceProvider;
-import org.sitenv.spring.DocumentReferenceResourceProvider;
-import org.sitenv.spring.EncounterResourceProvider;
-import org.sitenv.spring.FamilyMemberHistoryResourceProvider;
-import org.sitenv.spring.GoalResourceProvider;
-import org.sitenv.spring.HealthcareServiceResourceProvider;
-import org.sitenv.spring.ImagingStudyResourceProvider;
-import org.sitenv.spring.ImmunizationResourceProvider;
-import org.sitenv.spring.LocationResourceProvider;
-import org.sitenv.spring.MedicationAdministrationResourceProvider;
-import org.sitenv.spring.MedicationDispenseResourceProvider;
-import org.sitenv.spring.MedicationRequestResourceProvider;
-import org.sitenv.spring.MedicationResourceProvider;
-import org.sitenv.spring.MedicationStatementResourceProvider;
-import org.sitenv.spring.ObservationResourceProvider;
-import org.sitenv.spring.OrganizationResourceProvider;
-import org.sitenv.spring.PatientResourceProvider;
-import org.sitenv.spring.PractitionerResourceProvider;
-import org.sitenv.spring.PractitionerRoleResourceProvider;
-import org.sitenv.spring.ProcedureResourceProvider;
-import org.sitenv.spring.ProvenanceResourceProvider;
-import org.sitenv.spring.RiskAssessmentResourceProvider;
-import org.sitenv.spring.SpecimenResourceProvider;
+import ca.uhn.fhir.context.FhirContext;
+import org.sitenv.spring.*;
 import org.sitenv.spring.model.DafBulkDataRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +10,15 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import ca.uhn.fhir.context.FhirContext;
+import java.io.File;
+import java.util.Date;
+import java.util.StringJoiner;
+import java.util.concurrent.Future;
 
 
 @Service
 public class AsyncService {
-	Logger log = (Logger) LoggerFactory.getLogger(AsyncService.class);
+	Logger log = LoggerFactory.getLogger(AsyncService.class);
 	BulkDataRequestProvider bdd = new BulkDataRequestProvider();
 
 	@Async("asyncExecutor")

@@ -1,6 +1,5 @@
 package org.sitenv.spring.dao;
 
-import org.sitenv.spring.model.DafPractitioner;
 import org.sitenv.spring.model.DafPractitionerRole;
 import org.sitenv.spring.util.SearchParameterMap;
 

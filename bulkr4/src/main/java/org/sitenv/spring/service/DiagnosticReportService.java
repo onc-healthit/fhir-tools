@@ -1,12 +1,12 @@
 package org.sitenv.spring.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.StringJoiner;
-
 import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.sitenv.spring.model.DafDiagnosticReport;
 import org.sitenv.spring.util.SearchParameterMap;
+
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 public interface DiagnosticReportService {
 

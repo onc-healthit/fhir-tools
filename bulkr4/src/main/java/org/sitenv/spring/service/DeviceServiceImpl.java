@@ -1,16 +1,15 @@
 package org.sitenv.spring.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.StringJoiner;
-
-import javax.transaction.Transactional;
-
 import org.sitenv.spring.dao.DeviceDao;
 import org.sitenv.spring.model.DafDevice;
 import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Service("deviceService")
 @Transactional

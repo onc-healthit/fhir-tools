@@ -1,9 +1,6 @@
 package org.sitenv.spring.configuration;
 
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import ca.uhn.fhir.context.FhirContext;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +13,8 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import ca.uhn.fhir.context.FhirContext;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 

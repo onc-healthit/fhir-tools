@@ -1,16 +1,15 @@
 package org.sitenv.spring.keystore;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.util.List;
-
-import org.springframework.core.io.Resource;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
+import org.springframework.core.io.Resource;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.util.List;
 
 public class JWKSStore {
 

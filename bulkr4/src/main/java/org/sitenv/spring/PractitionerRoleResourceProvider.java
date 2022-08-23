@@ -8,7 +8,6 @@ import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.ReferenceAndListParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
@@ -19,7 +18,6 @@ import org.hl7.fhir.r4.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.sitenv.spring.configuration.AppConfig;
-import org.sitenv.spring.model.DafMedicationDispense;
 import org.sitenv.spring.model.DafPractitionerRole;
 import org.sitenv.spring.service.PractitionerRoleService;
 import org.sitenv.spring.util.SearchParameterMap;
@@ -32,11 +30,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.StringJoiner;
+import java.util.*;
 
 
 public class PractitionerRoleResourceProvider implements IResourceProvider {

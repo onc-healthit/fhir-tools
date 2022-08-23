@@ -1,27 +1,15 @@
 package org.sitenv.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
-import org.hl7.fhir.r4.model.CapabilityStatement;
-import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestComponent;
-import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestResourceComponent;
-import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestResourceOperationComponent;
-import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementRestSecurityComponent;
-import org.hl7.fhir.r4.model.CapabilityStatement.CapabilityStatementSoftwareComponent;
-import org.hl7.fhir.r4.model.CapabilityStatement.RestfulCapabilityMode;
-import org.hl7.fhir.r4.model.CodeableConcept;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
-import org.hl7.fhir.r4.model.Extension;
-import org.hl7.fhir.r4.model.Type;
-import org.hl7.fhir.r4.model.UriType;
-
 import ca.uhn.fhir.rest.annotation.Metadata;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import org.hl7.fhir.r4.hapi.rest.server.ServerCapabilityStatementProvider;
+import org.hl7.fhir.r4.model.*;
+import org.hl7.fhir.r4.model.CapabilityStatement.*;
+import org.hl7.fhir.r4.model.Enumerations.PublicationStatus;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CapabilityStatementResourceProvider extends ServerCapabilityStatementProvider {
 

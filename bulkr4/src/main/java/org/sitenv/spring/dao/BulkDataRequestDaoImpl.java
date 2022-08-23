@@ -1,12 +1,12 @@
 package org.sitenv.spring.dao;
 
-import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.sitenv.spring.model.DafBulkDataRequest;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("bulkDataRequestDao")
 public class BulkDataRequestDaoImpl extends AbstractDao implements BulkDataRequestDao {

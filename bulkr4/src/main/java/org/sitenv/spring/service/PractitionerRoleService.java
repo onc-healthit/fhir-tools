@@ -1,6 +1,5 @@
 package org.sitenv.spring.service;
 
-import org.sitenv.spring.model.DafMedicationDispense;
 import org.sitenv.spring.model.DafPractitionerRole;
 import org.sitenv.spring.util.SearchParameterMap;
 

@@ -1,14 +1,9 @@
 package org.sitenv.spring.dao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.StringJoiner;
-
-import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
-
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.api.IQueryParameterType;
+import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.param.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -22,14 +17,11 @@ import org.sitenv.spring.util.SearchParameterMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.api.IQueryParameterType;
-import ca.uhn.fhir.parser.IParser;
-import ca.uhn.fhir.rest.param.DateParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import ca.uhn.fhir.rest.param.TokenParamModifier;
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Repository("diagosticReportDao")
 public class DiagnosticReportDaoImpl extends AbstractDao implements DiagnosticReportDao {

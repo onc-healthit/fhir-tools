@@ -37,11 +37,11 @@
                 <nav class="collapse navbar-collapse" id="navigation">
                     <ul class="nav navbar-nav">
                         <li><a routerlink="/" routerlinkactive="active"
-                               tabindex="1" title="SITE Home" href="https://sitenv.org/home" class="active">Home</a></li>
-                        <li><a href="https://ttpedge.sitenv.org/ttp/#/home"
+                               tabindex="1" title="SITE Home" href="https://site.healthit.gov/home" class="active">Home</a></li>
+                        <li><a href="https://ett.healthit.gov/ett/#/home"
                                tabindex="1" target="_blank" title="ETT">ETT</a></li>
                         <li><a routerlink="test-tools" tabindex="1"
-                               title="TestTools" href="https://sitenv.org/test-tools">TestTools</a></li>
+                               title="TestTools" href="https://site.healthit.gov/test-tools">TestTools</a></li>
                         <li><a href="https://www.healthit.gov/techlab/"
                                tabindex="1" target="_blank" title="TechLab">TechLab</a></li>
                     </ul>
@@ -49,7 +49,7 @@
                 <breadcrumb prefix="SITE">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a role="button" href="https://sitenv.org/home">SITE</a>
+                            <a role="button" href="https://site.healthit.gov/home">SITE</a>
                         </li>
                         <li class="breadcrumb-item active">
                             <span>FHIR Server</span>
@@ -197,7 +197,7 @@
 <%-- Footer Starts here --%>
 
 <site-footer ng-version="2.4.7" _nghost-vni-31=""  style="height: 52px;">
-<footer _ngcontent-vni-31="">
+    <footer _ngcontent-vni-31="">
         <div _ngcontent-vni-31="" class="container" role="contentinfo">
             <div _ngcontent-vni-31="" class="row">
                 <div _ngcontent-vni-31="" class="col-sm-6 text-left">
@@ -207,7 +207,7 @@
                     </site-version>
                 </div>
                 <div _ngcontent-vni-31="" class="col-sm-6 text-right">
-                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:TestingServices@sitenv.org" tabindex="100">TestingServices@sitenv.org</a>
+                    Inquiries or questions, email <a _ngcontent-vni-31="" href="mailto:edge-test-tool@googlegroups.com" tabindex="100">edge-test-tool@googlegroups.com</a>
                 </div>
             </div>
             <div _ngcontent-vni-31="" class="row">
@@ -231,7 +231,6 @@
         </div>
     </footer>
 </site-footer>
-
 <%-- Footer ends here --%>
 
 <script src="${pageContext.request.contextPath}/view/js/jquery-1.11.1.js"></script>
@@ -317,7 +316,7 @@
 
             // TO display Version and Released date in footer
             $.ajax({
-                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/Version.md",
+                url:"https://raw.githubusercontent.com/onc-healthit/site-content/master/Version.md",
                 type:"GET",
                 success:function(data,status,xhr){
                     var md_content = data;
@@ -369,7 +368,7 @@
 
      opennewsmodal = function(){
             $.ajax({
-                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/NewsAndAnnouncements.md",
+                url:"https://raw.githubusercontent.com/onc-healthit/site-content/master/NewsAndAnnouncements.md",
                 type:"GET",
                 success:function(data,status,xhr){
                     var md_content = data;
@@ -386,7 +385,7 @@
 
         openreleasemodal = function(){
             $.ajax({
-                url:"https://raw.githubusercontent.com/siteadmin/SITE-Content/master/ReleaseNotes.md",
+                url:"https://raw.githubusercontent.com/onc-healthit/site-content/master/ReleaseNotes.md",
                 type:"GET",
                 success:function(data,status,xhr){
                     var md_content = data;

@@ -65,7 +65,7 @@
 	}*/
 
     userlogin = function(){
-        var uname = $('#regname').val();
+        var uname = $('#username').val();
         var pass = $('#userpass').val();
         if(uname != '' && pass != ''){
             $.ajax({

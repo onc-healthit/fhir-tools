@@ -6,7 +6,7 @@ import org.sitenv.spring.model.DafAuthtemp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -40,7 +40,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
 
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         String authToken = httpRequest.getHeader("Authorization");
         String method = httpRequest.getMethod();
 

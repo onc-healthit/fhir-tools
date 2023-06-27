@@ -23,11 +23,16 @@ public class PatientDaoImpl extends AbstractDao implements PatientDao {
 	 */
 	@Override
 	public DafPatient getPatientById(String id) {
+		DafPatient dafPatient;
 		List<DafPatient> list = getSession().createNativeQuery(
 			"select * from patient where data->>'id' = '"+id+"' order by data->'meta'->>'versionId' desc", DafPatient.class)
 				.getResultList();
-		return list.get(0);
-    }
+		if(list.size() > 0)
+			dafPatient = list.get(0);
+		else
+			dafPatient = new DafPatient();
+		return dafPatient;
+    	}
 	
 	/**
 	 * This method builds criteria for fetching particular version of the patient record by id.

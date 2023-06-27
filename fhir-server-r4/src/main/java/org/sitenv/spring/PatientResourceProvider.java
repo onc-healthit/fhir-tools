@@ -7,7 +7,10 @@ import ca.uhn.fhir.rest.annotation.Count;
 import ca.uhn.fhir.rest.annotation.*;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateRangeParam;
+import ca.uhn.fhir.rest.param.ReferenceAndListParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -17,7 +20,6 @@ import org.hl7.fhir.r4.model.Patient.PatientCommunicationComponent;
 import org.hl7.fhir.r4.model.Patient.PatientLinkComponent;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.parboiled.common.StringUtils;
 import org.sitenv.spring.configuration.AppConfig;
 import org.sitenv.spring.model.DafPatient;
 import org.sitenv.spring.service.PatientService;
@@ -67,23 +69,22 @@ public class PatientResourceProvider implements IResourceProvider {
     public Patient readOrVread(@IdParam IdType theId) {
 		String id;
 		DafPatient dafPatient;
-		try {
-		    id = theId.getIdPart();
-		} catch (NumberFormatException e) {
-		    /*
-		     * If we can't parse the ID as a long, it's not valid so this is an unknown resource
-			 */
-		    throw new ResourceNotFoundException(theId);
-		}
+		id = theId.getIdPart();
+
 		if (theId.hasVersionIdPart()) {
 		   // this is a vread  
 		   dafPatient = service.getPatientByVersionId(id, theId.getVersionIdPart());
-		   
 		} else {
 		   // this is a read
 	       dafPatient = service.getPatientById(id);
 		}
-		return createPatientObject(dafPatient);
+
+		if (dafPatient.getId() == null) {
+			throw new ResourceNotFoundException(theId);
+		}else{
+			return createPatientObject(dafPatient);
+
+		}
     }
 	
 	/**

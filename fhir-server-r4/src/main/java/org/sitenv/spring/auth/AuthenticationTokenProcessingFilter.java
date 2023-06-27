@@ -171,6 +171,9 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         } else if (httpRequest.getServletPath().contains("/client")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
+        } else if (httpRequest.getServletPath().contains("/fonts")) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
+            chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains(".jsp")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);

@@ -159,14 +159,14 @@
                                                                     <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-	                 %>/open/r4/fhir/Patient/1" target="_blank"><%=request.getScheme() + "://" +
+	                 %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6" target="_blank"><%=request.getScheme() + "://" +
                                                                             request.getServerName() +
-                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/1</a> - XML format.</li>
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6</a> - XML format.</li>
                                                                     <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
-	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/1?_format=json" target="_blank"><%=request.getScheme() + "://" +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6?_format=json" target="_blank"><%=request.getScheme() + "://" +
                                                                             request.getServerName() +
-                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/1?_format=json</a> - JSON format.</li>
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6?_format=json</a> - JSON format.</li>
                                                                 </ul>
                                                             </li>
                                                             <li>
@@ -174,14 +174,14 @@
                                                                 <ul style="list-style:outside none disc;margin-bottom:8px;">
                                                                     <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
-	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1" target="_blank"><%=request.getScheme() + "://" +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6" target="_blank"><%=request.getScheme() + "://" +
                                                                             request.getServerName() +
-                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1</a> - XML format.</li>
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6</a> - XML format.</li>
                                                                     <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
-	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1&_format=json" target="_blank"><%=request.getScheme() + "://" +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6&_format=json" target="_blank"><%=request.getScheme() + "://" +
                                                                             request.getServerName() +
-                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=1_format=json</a> -  JSON format.</li>
+                                                                            ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6_format=json</a> -  JSON format.</li>
                                                                 </ul>
                                                             </li>
                                                             <li style="margin-bottom:8px;">

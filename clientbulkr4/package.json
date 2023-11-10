@@ -28,7 +28,7 @@
     "angular-marked": "^1.2.2",
     "angular2-notifications": "^1.0.0",
     "core-js": "^2.4.1",
-    "moment": "^2.19.2",
+    "moment": "^2.29.4",
     "ndjson-to-json-text": "^1.0.2",
     "ng2-bs3-modal": "^0.13.0",
     "rxjs": "^5.5.6",

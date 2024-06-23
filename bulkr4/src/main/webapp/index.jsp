@@ -92,13 +92,13 @@
                             The server URI for open mode is : <%=request.getScheme() + "://" +
                                 request.getServerName() +
                                 ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-                        %>/open/fhir
+                        %>/open/r4/fhir
                         </li>
                         <li>
                             The server URI for secure mode is : <%=request.getScheme() + "://" +
                                 request.getServerName() +
                                 ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-                        %>/secure/fhir
+                        %>/secure/r4/fhir
                         </li>
                     </ol>
                 </div>
@@ -117,14 +117,14 @@
                                             <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
 	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() )
-	                 %>/open/fhir/Patient/1" target="_blank"><%=request.getScheme() + "://" +
+	                 %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6" target="_blank"><%=request.getScheme() + "://" +
                                                     request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1</a> - XML format.</li>
+                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6</a> - XML format.</li>
                                             <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
-	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json" target="_blank"><%=request.getScheme() + "://" +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6?_format=json" target="_blank"><%=request.getScheme() + "://" +
                                                     request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/1?_format=json</a> - JSON format.</li>
+                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/123d41e1-0f71-4e9f-8eb2-d1b1330201a6?_format=json</a> - JSON format.</li>
                                         </ul>
                                     </li>
                                     <li>
@@ -132,14 +132,14 @@
                                         <ul style="list-style:outside none disc;margin-bottom:8px;">
                                             <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
-	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1" target="_blank"><%=request.getScheme() + "://" +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6" target="_blank"><%=request.getScheme() + "://" +
                                                     request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1</a> - XML format.</li>
+                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6</a> - XML format.</li>
                                             <li>GET <a href="<%=request.getScheme() + "://" +
 	                request.getServerName() +
-	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json" target="_blank"><%=request.getScheme() + "://" +
+	                ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6&_format=json" target="_blank"><%=request.getScheme() + "://" +
                                                     request.getServerName() +
-                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/fhir/Patient/?_id=1&_format=json</a> -  JSON format.</li>
+                                                    ("http".equals(request.getScheme()) && request.getServerPort() == 80 || "https".equals(request.getScheme()) && request.getServerPort() == 443 ? "" : ":" + request.getServerPort() ) %>/open/r4/fhir/Patient/?_id=123d41e1-0f71-4e9f-8eb2-d1b1330201a6&_format=json</a> -  JSON format.</li>
                                         </ul>
                                     </li>
                                     <li style="margin-bottom:8px;">
@@ -344,21 +344,31 @@
             "bPaginate": false,
             "bFilter":false,
             "info":false,
-            "ajax":"/open/authorize/launchpatient",
+            "ajax":"/open/r4/authorize/launchpatient",
             "sAjaxDataProp": "",
             "columns": [{
                 "data": function (data, type, row) {
-                    var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12'>"+data.id+"</div>";
+                    var firstColumn = JSON.parse(data.data);
+                    var userpoc = "<div onclick='patientId(\""+firstColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+firstColumn.id+"</div>";
                     return userpoc;
                 }
             },{
                 "data": function (data, type, row) {
-                    var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12'>"+data.fullName+"</div>";
-                    return userpoc;
+                    var secondColumn = JSON.parse(data.data);
+                    //console.log("data--->", secondColumn.id);
+                    if(secondColumn.name) {
+                        var family = secondColumn.name[0].family;
+                        var given = secondColumn.name[0].given;
+                        var fullName = family+" "+given;
+                        var userpoc = "<div onclick='patientId(\""+secondColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+fullName+"</div>";
+                        return userpoc;
+                    }
+
                 }
             },{
                 "data": function (data, type, row) {
-                    var userpoc = "<div onclick='patientId("+data.id+")' class='col-md-12'>"+data.birthDate+"</div>";
+                    var thirdColumn = JSON.parse(data.data);
+                    var userpoc = "<div onclick='patientId(\""+thirdColumn.id+"\")' class='col-md-12' style='cursor:pointer'>"+thirdColumn.birthDate+"</div>";
                     return userpoc;
                 }
             }
@@ -400,8 +410,5 @@
             });
         }
 </script>
-
-
-
 </body>
 </html>

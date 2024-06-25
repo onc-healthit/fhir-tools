@@ -11,10 +11,9 @@
 	<version>4.2.0</version>
 	<properties>
 		<!-- <java-version>1.8</java-version> -->
-		
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring.version>5.3.19</spring.version>
-		<spring.security.version>5.3.4.RELEASE</spring.security.version>
+		<spring.version>5.3.37</spring.version>
+		<spring.security.version>5.3.8.RELEASE</spring.security.version>
 		<org.aspectj-version>1.7.4</org.aspectj-version>
 		<hibernate.version>5.4.2.Final</hibernate.version>
 	</properties>
@@ -206,19 +205,19 @@
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.2</version>
+			<version>1.9.13</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
-			<version>1.9.2</version>
+			<version>1.9.13</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.3</version>
+			<version>2.13.4.2</version>
 		</dependency>
 		<!-- Apache Commons DBCP -->
 		<dependency>
@@ -231,7 +230,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.4.2</version>
+			<version>42.4.4</version>
 		</dependency>
 		<!-- AspectJ -->
 		<dependency>
@@ -338,7 +337,7 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.4</version>
+			<version>1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -387,14 +386,14 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.2.11</version>
+			<version>1.2.13</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>19.0</version>
+			<version>32.0.0-android</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
@@ -403,8 +402,6 @@
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.70</version>
 		</dependency>
-
-
 	</dependencies>
 	<build>
 		<plugins>

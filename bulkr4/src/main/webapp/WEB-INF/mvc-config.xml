@@ -29,20 +29,6 @@
     	<mvc:annotation-driven />
     	
     	
-    	<!-- <mvc:interceptors>
-            <mvc:interceptor>
-            <mvc:mapping path="/fhir/*"></mvc:mapping>
-            <bean class="org.sitenv.spring.PatientAndAdminAuthorizationInterceptor" > </bean>
-            </mvc:interceptor>
-            </mvc:interceptors>
-            
-            
-         
-        <mvc:interceptors>
-    	<bean class="org.sitenv.spring.PatientAndAdminAuthorizationInterceptor" />
-    	</mvc:interceptors> -->
-    	
-    	
     	<task:annotation-driven />
     	
 		<mvc:resources mapping="/view/**" location="/WEB-INF/view/" />

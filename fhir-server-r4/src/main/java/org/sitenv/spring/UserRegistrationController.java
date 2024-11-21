@@ -31,7 +31,7 @@ public class UserRegistrationController {
      * @param user
      * @return This method will return the registered user.
      */
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public String registerUser(@RequestBody DafUserRegister user) {
 

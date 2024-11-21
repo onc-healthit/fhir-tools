@@ -13,7 +13,7 @@
 		<!-- <java-version>1.8</java-version> -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>5.3.37</spring.version>
-		<spring.security.version>5.3.8.RELEASE</spring.security.version>
+		<spring.security.version>5.7.13</spring.security.version>
 		<org.aspectj-version>1.7.4</org.aspectj-version>
 		<hibernate.version>5.4.2.Final</hibernate.version>
 	</properties>

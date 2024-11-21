@@ -9,6 +9,8 @@ import java.io.IOException;
 
 @Component
 public class CorsFilters implements Filter {
+
+    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
@@ -16,16 +18,20 @@ public class CorsFilters implements Filter {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+
+        // Allow OPTIONS requests to pass through without further processing
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
-        } else {
-            chain.doFilter(req, res);
+            response.getWriter().flush();  // Ensure response is sent immediately
+            return;
         }
+
+        chain.doFilter(req, res);
     }
 
-    public void init(FilterConfig filterConfig) {
-    }
+    @Override
+    public void init(FilterConfig filterConfig) {}
 
-    public void destroy() {
-    }
+    @Override
+    public void destroy() {}
 }

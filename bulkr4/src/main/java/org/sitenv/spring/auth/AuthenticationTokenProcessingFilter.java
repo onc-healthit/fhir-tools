@@ -8,13 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet
+@Component
 public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
 
     @Autowired
@@ -44,15 +44,7 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         String authToken = httpRequest.getHeader("Authorization");
         String method = httpRequest.getMethod();
 
-        //This condition is applicable in the case of BULK Data Api
-		/*
-		 * if(httpRequest.getRequestURI().contains("/fhir/")) {
-		 * SecurityContextHolder.getContext().setAuthentication(new
-		 * UsernamePasswordAuthenticationToken("user", "password", authorities));
-		 * chain.doFilter(request, response);
-		 * 
-		 * } else
-		 */ if (httpRequest.getRequestURI().contains("/open-fhir/")) {
+        if (httpRequest.getRequestURI().contains("/open-fhir/")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
         } else if (httpRequest.getServletPath().contains("/authorize")) {
@@ -94,15 +86,6 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean {
         } else if (httpRequest.getServletPath().contains("woff2") || httpRequest.getServletPath().contains("woff") || httpRequest.getServletPath().contains("ttf")) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
             chain.doFilter(request, response);
-//        } else if (httpRequest.getServletPath().contains("bulkdata/load/request") || httpRequest.getServletPath().contains("bulkdata/download")) {
-//            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
-//            chain.doFilter(request, response);
-//        } else if (httpRequest.getServletPath().contains("bulkdata/") || httpRequest.getServletPath().contains("bulkdata/download")) {
-//            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "password", authorities));
-//            chain.doFilter(request, response); //temporal solution
-            
-
-
         }else  if (authToken != null && "bearer".equalsIgnoreCase(authToken.split(" ", 2)[0].toString())) {
                 authToken = authToken.substring(7);
                 DafAuthtemp authentication = dao.validateAccessToken(authToken);

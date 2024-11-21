@@ -138,7 +138,7 @@
             var cpassword = $('#cpassword').val();
             var data = {"user_name":username,"user_email":email,"user_full_name":fname,"user_password":password};
             $.ajax({
-              url:main_url+"/user/",
+              url:main_url+"/user/create",
               type:"POST",
               headers:{
                 "Content-Type":"application/json"
